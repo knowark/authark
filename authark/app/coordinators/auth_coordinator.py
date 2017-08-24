@@ -1,8 +1,6 @@
-from abc import ABC, abstractmethod
 
 
-class AuthCoordinator(ABC):
+class AuthCoordinator:
 
-    @abstractmethod
-    def authenticate(self, uid: str) -> None:
-        ...
+    def authenticate(self, uid: str, passwd: str) -> None:
+        pass

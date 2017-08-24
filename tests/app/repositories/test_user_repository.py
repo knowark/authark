@@ -1,4 +1,4 @@
-from authark.app.repositories import UserRepository
+from authark.app.repositories.user_repository import UserRepository
 
 
 def test_user_repository() -> None:
