@@ -1,5 +1,4 @@
 from aiohttp import web
-from app.models.user import User
 
 
 async def handle(request: web.Request) -> web.Response:
@@ -20,11 +19,6 @@ async def login(request: web.Request) -> web.Response:
         return web.json_response({})
 
     params = await request.json()
-    user = User(name="Esteban EP", email="abc@xyz.com")
-    user = params.get('username', None)
-    password = params.get('password', None)
-    print("user:", user)
-    print("password:", password)
 
     resp = {
         "name": "Esteban",

@@ -1,5 +1,5 @@
 from aiohttp import web
-import infra.web.routes as routes
+import authark.infra.web.routes as routes
 
 
 app = web.Application()
