@@ -6,7 +6,14 @@ from authark.app.models.user import User
 
 @fixture
 def mock_user_repository() -> UserRepository:
+
     class MockUserRepository(UserRepository):
+        def __init__(self) -> None:
+            self.user_dict = {
+                "valenep": User('valenep', 'valenep@gmail.com', "PASS1"),
+                "tebanep": User('tebanep', 'tebanep@gmail.com', "PASS2"),
+                "gabecheve": User('gabecheve', 'gabecheve@gmail.com', "PASS3")
+            }
 
         def get(self, username: str) -> User:
             user = self.user_dict.get(username)
@@ -20,6 +27,17 @@ def mock_user_repository() -> UserRepository:
     return MockUserRepository()
 
 
-def test_auth_coordinator(mock_user_repository: UserRepository) -> None:
+def test_auth_coordinator_creation(
+        mock_user_repository: UserRepository) -> None:
     auth_coordinator = AuthCoordinator(mock_user_repository)
     assert hasattr(auth_coordinator, 'authenticate')
+
+
+def test_auth_coordinator_authenticate(
+        mock_user_repository: UserRepository) -> None:
+
+    auth_coordinator = AuthCoordinator(mock_user_repository)
+
+    authenticated = auth_coordinator.authenticate("tebanep", "PASS2")
+
+    assert authenticated
