@@ -11,9 +11,9 @@ def test_memory_user_repository_implementation() -> None:
 @fixture
 def user_dict() -> dict:
     user_dict = {
-        "ID001": User("ID001", 'Valentina', 'valenep@gmail.com'),
-        "ID002": User("ID002", 'Esteban', 'tebanep@gmail.com'),
-        "ID003": User("ID003", 'Gabriel', 'gabecheve@gmail.com')
+        "ID001": User("ID001", 'Valentina', 'valenep@gmail.com', "PASS1"),
+        "ID002": User("ID002", 'Esteban', 'tebanep@gmail.com', "PASS2"),
+        "ID003": User("ID003", 'Gabriel', 'gabecheve@gmail.com', "PASS3")
     }
     return user_dict
 
@@ -40,7 +40,7 @@ def test_memory_user_repository_get_user(user_dict: dict) -> None:
 def test_memory_user_repository_save_user() -> None:
     memory_user_repository = MemoryUserRepository()
 
-    user = User("ID004", "Miguel", "mvp@gmail.com")
+    user = User("ID004", "Miguel", "mvp@gmail.com", "QWERTY")
 
     is_saved = memory_user_repository.save(user)
 
