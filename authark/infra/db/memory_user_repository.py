@@ -8,13 +8,13 @@ class MemoryUserRepository(UserRepository):
     def __init__(self) -> None:
         self.user_dict = {}  # type: Dict[str, User]
 
-    def get(self, uid: str) -> User:
-        user = self.user_dict.get(uid)
+    def get(self, username: str) -> User:
+        user = self.user_dict.get(username)
         return user
 
     def save(self, user: User) -> bool:
-        uid = user.uid
-        self.user_dict[uid] = user
+        username = user.username
+        self.user_dict[username] = user
         return True
 
     def load(self, user_dict: Dict[str, User]) -> None:

@@ -11,9 +11,9 @@ def test_memory_user_repository_implementation() -> None:
 @fixture
 def user_dict() -> dict:
     user_dict = {
-        "ID001": User("ID001", 'Valentina', 'valenep@gmail.com', "PASS1"),
-        "ID002": User("ID002", 'Esteban', 'tebanep@gmail.com', "PASS2"),
-        "ID003": User("ID003", 'Gabriel', 'gabecheve@gmail.com', "PASS3")
+        "valenep": User('valenep', 'valenep@gmail.com', "PASS1"),
+        "tebanep": User('tebanep', 'tebanep@gmail.com', "PASS2"),
+        "gabecheve": User('gabecheve', 'gabecheve@gmail.com', "PASS3")
     }
     return user_dict
 
@@ -30,21 +30,20 @@ def test_memory_user_repository_get_user(user_dict: dict) -> None:
     memory_user_repository = MemoryUserRepository()
 
     memory_user_repository.load(user_dict)
-    user = memory_user_repository.get("ID001")
+    user = memory_user_repository.get("valenep")
 
-    assert user.uid == "ID001"
-    assert user.name == "Valentina"
+    assert user.username == "valenep"
     assert user.email == "valenep@gmail.com"
 
 
 def test_memory_user_repository_save_user() -> None:
     memory_user_repository = MemoryUserRepository()
 
-    user = User("ID004", "Miguel", "mvp@gmail.com", "QWERTY")
+    user = User("mvp", "mvp@gmail.com", "QWERTY")
 
     is_saved = memory_user_repository.save(user)
 
     assert len(memory_user_repository.user_dict) == 1
     assert is_saved
-    assert "ID004" in memory_user_repository.user_dict.keys()
+    assert "mvp" in memory_user_repository.user_dict.keys()
     assert user in memory_user_repository.user_dict.values()

@@ -4,7 +4,7 @@ from authark.app.models.user import User
 
 class UserRepository(ABC):
     @abstractmethod
-    def get(self, uid: str) -> User:
+    def get(self, username: str) -> User:
         ...
 
     @abstractmethod
