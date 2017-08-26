@@ -6,3 +6,7 @@ class UserRepository(ABC):
     @abstractmethod
     def get(self, uid: str) -> User:
         ...
+
+    @abstractmethod
+    def save(self, user: User) -> bool:
+        ...
