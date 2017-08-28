@@ -10,7 +10,7 @@ class AuthCoordinator:
         user = self.user_repository.get(username)
 
         authenticated = False
-        if user.password == password:
+        if user and user.password == password:
             authenticated = True
 
         return authenticated

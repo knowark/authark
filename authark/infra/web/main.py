@@ -1,10 +1,11 @@
-from aiohttp import web
+from flask import Flask
 import authark.infra.web.routes as routes
 
 
-app = web.Application()
-routes.set_routes(app)
+def main(config: dict = None) -> Flask:
 
+    app = Flask(__name__)
 
-def main() -> None:
-    web.run_app(app)
+    routes.set_routes(app)
+
+    return app
