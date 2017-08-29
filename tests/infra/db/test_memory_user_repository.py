@@ -47,3 +47,15 @@ def test_memory_user_repository_save_user() -> None:
     assert is_saved
     assert "mvp" in memory_user_repository.user_dict.keys()
     assert user in memory_user_repository.user_dict.values()
+
+
+def test_memory_user_repository_save_user_duplicate() -> None:
+    memory_user_repository = MemoryUserRepository()
+
+    user = User("mvp", "mvp@gmail.com", "QWERTY")
+
+    is_saved = memory_user_repository.save(user)
+    assert is_saved
+    is_saved = memory_user_repository.save(user)
+    assert not is_saved
+    assert len(memory_user_repository.user_dict) == 1
