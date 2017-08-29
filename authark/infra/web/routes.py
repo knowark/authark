@@ -2,7 +2,7 @@ from flask import Flask
 from flask_restful import Api
 from authark.app.coordinators.auth_coordinator import AuthCoordinator
 from authark.infra.db.memory_user_repository import MemoryUserRepository
-from authark.infra.web.resources import AuthResource
+from authark.infra.web.resources.auth_resource import AuthResource
 
 
 def set_routes(app: Flask) -> None:
