@@ -1,4 +1,5 @@
 from authark.app.repositories.user_repository import UserRepository
+from authark.app.models.user import User
 
 
 class AuthCoordinator:
@@ -14,3 +15,10 @@ class AuthCoordinator:
             authenticated = True
 
         return authenticated
+
+    def register(self, username: str, email: str, password: str) -> bool:
+
+        user = User(username=username, email=email, password=password)
+        self.user_repository.save(user)
+
+        return user

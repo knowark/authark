@@ -12,7 +12,7 @@ class MemoryUserRepository(UserRepository):
         user = self.user_dict.get(username)
         return user
 
-    def save(self, user: User) -> bool:
+    def save_(self, user: User) -> bool:
         username = user.username
         self.user_dict[username] = user
         return True

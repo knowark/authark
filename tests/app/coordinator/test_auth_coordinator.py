@@ -4,40 +4,53 @@ from authark.app.repositories.user_repository import UserRepository
 from authark.app.models.user import User
 
 
+###########
+# FIXTURES
+###########
 @fixture
 def mock_user_repository() -> UserRepository:
+    # Use the in-memory repository for testing
+    from authark.infra.db.memory_user_repository import MemoryUserRepository
 
-    class MockUserRepository(UserRepository):
-        def __init__(self) -> None:
-            self.user_dict = {
-                "valenep": User('valenep', 'valenep@gmail.com', "PASS1"),
-                "tebanep": User('tebanep', 'tebanep@gmail.com', "PASS2"),
-                "gabecheve": User('gabecheve', 'gabecheve@gmail.com', "PASS3")
-            }
+    MockUserRepository = MemoryUserRepository
+    user_dict = {
+        "valenep": User('valenep', 'valenep@gmail.com', "PASS1"),
+        "tebanep": User('tebanep', 'tebanep@gmail.com', "PASS2"),
+        "gabecheve": User('gabecheve', 'gabecheve@gmail.com', "PASS3")
+    }
+    mock_user_repository = MemoryUserRepository()
+    mock_user_repository.load(user_dict)
 
-        def get(self, username: str) -> User:
-            user = self.user_dict.get(username)
-            return user
-
-        def save(self, user: User) -> bool:
-            username = user.username
-            self.user_dict[username] = user
-            return True
-
-    return MockUserRepository()
+    return mock_user_repository
 
 
+@fixture
+def auth_coordinator(mock_user_repository: UserRepository) -> AuthCoordinator:
+    return AuthCoordinator(mock_user_repository)
+
+
+########
+# TESTS
+########
 def test_auth_coordinator_creation(
-        mock_user_repository: UserRepository) -> None:
-    auth_coordinator = AuthCoordinator(mock_user_repository)
+        auth_coordinator: AuthCoordinator) -> None:
     assert hasattr(auth_coordinator, 'authenticate')
 
 
 def test_auth_coordinator_authenticate(
-        mock_user_repository: UserRepository) -> None:
-
-    auth_coordinator = AuthCoordinator(mock_user_repository)
+        auth_coordinator: AuthCoordinator) -> None:
 
     authenticated = auth_coordinator.authenticate("tebanep", "PASS2")
 
     assert authenticated
+
+
+def test_auth_coordinator_register(
+        auth_coordinator: AuthCoordinator) -> None:
+
+    user = auth_coordinator.register(
+        "mvp", "mvp@gmail.com", "PASS4")
+
+    assert user
+    assert isinstance(user, User)
+    assert len(auth_coordinator.user_repository.user_dict) == 4
