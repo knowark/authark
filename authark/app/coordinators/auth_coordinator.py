@@ -16,7 +16,7 @@ class AuthCoordinator:
 
         return authenticated
 
-    def register(self, username: str, email: str, password: str) -> bool:
+    def register(self, username: str, email: str, password: str) -> User:
 
         user = User(username=username, email=email, password=password)
         self.user_repository.save(user)

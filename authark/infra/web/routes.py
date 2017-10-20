@@ -20,7 +20,7 @@ def set_routes(app: Flask) -> None:
 
     api.add_resource(
         AuthResource,
-        '/auth', '/login',
+        '/auth', '/login', '/token',
         resource_class_kwargs={
             'auth_coordinator': auth_coordinator
         })
