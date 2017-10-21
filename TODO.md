@@ -14,3 +14,4 @@
 - [ ] Ensure token expiration
 - [ ] Use protocols instead of abstract base classes :D
 - [ ] Add mypy file
+- [ ] Refactor to a standalone app by integrating gunicorn
