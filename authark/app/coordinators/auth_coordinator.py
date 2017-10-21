@@ -1,4 +1,5 @@
 from authark.app.repositories.user_repository import UserRepository
+from authark.app.models.token import Token
 from authark.app.models.user import User
 
 
@@ -22,3 +23,8 @@ class AuthCoordinator:
         self.user_repository.save(user)
 
         return user
+
+    def _generate_token(self) -> Token:
+        token_value = "encoded_value"
+        token = Token(token_value)
+        return token

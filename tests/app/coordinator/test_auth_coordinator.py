@@ -2,6 +2,7 @@ from pytest import fixture
 from authark.app.coordinators.auth_coordinator import AuthCoordinator
 from authark.app.repositories.user_repository import UserRepository
 from authark.app.models.user import User
+from authark.app.models.token import Token
 
 
 ###########
@@ -54,3 +55,12 @@ def test_auth_coordinator_register(
     assert user
     assert isinstance(user, User)
     assert len(auth_coordinator.user_repository.user_dict) == 4
+
+
+def test_auth_coordinator_generate_token(
+        auth_coordinator: AuthCoordinator) -> None:
+
+    token = auth_coordinator._generate_token()
+
+    assert token
+    assert isinstance(token, Token)
