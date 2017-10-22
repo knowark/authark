@@ -1,3 +1,4 @@
+from typing import Dict
 from pytest import fixture
 from authark.app.models.user import User
 from authark.app.repositories.user_repository import UserRepository
@@ -9,7 +10,7 @@ def test_memory_user_repository_implementation() -> None:
 
 
 @fixture
-def user_dict() -> dict:
+def user_dict() -> Dict[str, User]:
     user_dict = {
         "valenep": User('valenep', 'valenep@gmail.com', "PASS1"),
         "tebanep": User('tebanep', 'tebanep@gmail.com', "PASS2"),
@@ -18,7 +19,7 @@ def user_dict() -> dict:
     return user_dict
 
 
-def test_memory_user_repository_load_user(user_dict: dict) -> None:
+def test_memory_user_repository_load_user(user_dict: Dict[str, User]) -> None:
     memory_user_repository = MemoryUserRepository()
 
     memory_user_repository.load(user_dict)
@@ -26,7 +27,7 @@ def test_memory_user_repository_load_user(user_dict: dict) -> None:
     assert memory_user_repository.user_dict == user_dict
 
 
-def test_memory_user_repository_get_user(user_dict: dict) -> None:
+def test_memory_user_repository_get_user(user_dict: Dict[str, User]) -> None:
     memory_user_repository = MemoryUserRepository()
 
     memory_user_repository.load(user_dict)
