@@ -13,5 +13,5 @@ class PyJWTTokenService(TokenService):
     def generate_token(self, payload: Dict[str, str]) -> Token:
         payload = payload or {}
         value = jwt.encode(payload, self.secret, algorithm=self.algorithm)
-        token = Token(value)
+        token = Token(str(value, 'utf-8'))
         return token
