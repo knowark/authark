@@ -26,26 +26,22 @@ def mock_user_repository() -> UserRepository:
     return mock_user_repository
 
 
-# @fixture
-# def mock_token_service() -> UserRepository:
-#     # Use the crypto.pyjwt_token_service for testing
-#     from authark.infra.crypto.pyjwt_token_service import PyJWTTokenService
-#
-#     class MockTokenService(TokenService):
-#
-#         def generate_token(self):
-#
-#
-#     MockTokenService = PyJWTTokenService
-#     mock_token_service = mock_token_service()
-#     mock_user_repository.load(user_dict)
-#
-#     return mock_user_repository
+@fixture
+def mock_token_service() -> UserRepository:
+    class MockTokenService(TokenService):
+        def generate_token(self) -> Token:
+            token = Token(b'XYZ098')
+            return token
+
+    mock_token_service = MockTokenService()
+
+    return mock_token_service
 
 
 @fixture
-def auth_coordinator(mock_user_repository: UserRepository) -> AuthCoordinator:
-    return AuthCoordinator(mock_user_repository)
+def auth_coordinator(mock_user_repository: UserRepository,
+                     mock_token_service: TokenService) -> AuthCoordinator:
+    return AuthCoordinator(mock_user_repository, mock_token_service)
 
 
 ########

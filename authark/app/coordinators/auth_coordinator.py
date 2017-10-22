@@ -1,12 +1,15 @@
 from authark.app.repositories.user_repository import UserRepository
+from authark.app.services.token_service import TokenService
 from authark.app.models.token import Token
 from authark.app.models.user import User
 
 
 class AuthCoordinator:
 
-    def __init__(self, user_repository: UserRepository) -> None:
+    def __init__(self, user_repository: UserRepository,
+                 token_service: TokenService) -> None:
         self.user_repository = user_repository
+        self.token_service = token_service
 
     def authenticate(self, username: str, password: str) -> bool:
         user = self.user_repository.get(username)
