@@ -6,12 +6,14 @@ from authark.app.models.token import Token
 
 class PyJWTTokenService(TokenService):
 
-    def __init__(self, secret: str, algorithm: str) -> None:
+    def __init__(self, payload: Dict[str, str], secret: str,
+                 algorithm: str) -> None:
+        self.payload = payload
         self.secret = secret
         self.algorithm = algorithm
 
-    def generate_token(self, payload: Dict[str, str]) -> Token:
-        payload = payload or {}
-        value = jwt.encode(payload, self.secret, algorithm=self.algorithm)
+    def generate_token(self) -> Token:
+        payload = self.payload or {}
+        value = jwt.encode(self.payload, self.secret, algorithm=self.algorithm)
         token = Token(value)
         return token

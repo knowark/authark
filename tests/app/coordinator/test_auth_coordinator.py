@@ -1,6 +1,7 @@
 from pytest import fixture
 from authark.app.coordinators.auth_coordinator import AuthCoordinator
 from authark.app.repositories.user_repository import UserRepository
+from authark.app.services.token_service import TokenService
 from authark.app.models.user import User
 from authark.app.models.token import Token
 
@@ -23,6 +24,23 @@ def mock_user_repository() -> UserRepository:
     mock_user_repository.load(user_dict)
 
     return mock_user_repository
+
+
+# @fixture
+# def mock_token_service() -> UserRepository:
+#     # Use the crypto.pyjwt_token_service for testing
+#     from authark.infra.crypto.pyjwt_token_service import PyJWTTokenService
+#
+#     class MockTokenService(TokenService):
+#
+#         def generate_token(self):
+#
+#
+#     MockTokenService = PyJWTTokenService
+#     mock_token_service = mock_token_service()
+#     mock_user_repository.load(user_dict)
+#
+#     return mock_user_repository
 
 
 @fixture

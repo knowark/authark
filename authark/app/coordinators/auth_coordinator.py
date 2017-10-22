@@ -25,6 +25,6 @@ class AuthCoordinator:
         return user
 
     def _generate_token(self) -> Token:
-        token_value = "encoded_value"
+        token_value = b"encoded_value"
         token = Token(token_value)
         return token
