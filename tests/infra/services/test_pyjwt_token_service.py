@@ -17,10 +17,8 @@ def test_pyjwt_token_service_generate_token_with_payload() -> None:
     pyjwt_service = PyJWTTokenService(secret=secret, algorithm=algorithm)
     token = pyjwt_service.generate_token(payload)
     value = token.value
-    print("--->>>", value)
 
     decoded_payload = jwt.decode(value, secret, algorithms=[algorithm])
-    print("|||||--->>>", decoded_payload)
 
     assert isinstance(token, Token)
     assert value
