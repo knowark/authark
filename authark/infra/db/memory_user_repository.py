@@ -1,4 +1,4 @@
-from typing import Dict
+from typing import Dict, Optional
 from authark.app.models.user import User
 from authark.app.repositories.user_repository import UserRepository
 
@@ -8,7 +8,7 @@ class MemoryUserRepository(UserRepository):
     def __init__(self) -> None:
         self.user_dict = {}  # type: Dict[str, User]
 
-    def get(self, username: str) -> User:
+    def get(self, username: str) -> Optional[User]:
         user = self.user_dict.get(username)
         return user
 
