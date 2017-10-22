@@ -27,4 +27,4 @@ class AuthResource(Resource):
         except Exception as e:
             return '', 401
 
-        return token.value, 200
+        return str(token.value), 200
