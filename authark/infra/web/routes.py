@@ -3,6 +3,7 @@ from flask_restful import Api
 from authark.app.coordinators.auth_coordinator import AuthCoordinator
 from authark.infra.db.memory_user_repository import MemoryUserRepository
 from authark.infra.web.resources.auth_resource import AuthResource
+from authark.infra.crypto.pyjwt_token_service import PyJWTTokenService
 
 
 def set_routes(app: Flask) -> None:
@@ -16,7 +17,8 @@ def set_routes(app: Flask) -> None:
 
     # Auth resource
     user_repository = MemoryUserRepository()
-    auth_coordinator = AuthCoordinator(user_repository)
+    token_service = PyJWTTokenService('DEVSECRET123', 'HS256')
+    auth_coordinator = AuthCoordinator(user_repository, token_service)
 
     api.add_resource(
         AuthResource,
