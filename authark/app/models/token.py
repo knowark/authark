@@ -1,3 +1,3 @@
 class Token:
-    def __init__(self, value: str) -> None:
+    def __init__(self, value: bytes) -> None:
         self.value = value
