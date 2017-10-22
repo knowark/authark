@@ -1,5 +1,6 @@
 from authark.app.repositories.user_repository import UserRepository
 from authark.app.services.token_service import TokenService
+from authark.app.models.error import AuthError
 from authark.app.models.token import Token
 from authark.app.models.user import User
 
@@ -11,14 +12,17 @@ class AuthCoordinator:
         self.user_repository = user_repository
         self.token_service = token_service
 
-    def authenticate(self, username: str, password: str) -> bool:
+    def authenticate(self, username: str, password: str) -> Token:
         user = self.user_repository.get(username)
 
-        authenticated = False
-        if user and user.password == password:
-            authenticated = True
+        if not (user and user.password == password):
+            raise AuthError("Authentication Error!")
 
-        return authenticated
+        payload = {'user': user.username, 'email': user.email}
+
+        token = self.token_service.generate_token(payload)
+
+        return token
 
     def register(self, username: str, email: str, password: str) -> User:
 
@@ -26,8 +30,3 @@ class AuthCoordinator:
         self.user_repository.save(user)
 
         return user
-
-    def _generate_token(self) -> Token:
-        token_value = b"encoded_value"
-        token = Token(token_value)
-        return token

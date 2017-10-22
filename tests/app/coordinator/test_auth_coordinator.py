@@ -1,7 +1,9 @@
-from pytest import fixture
+from typing import Dict
+from pytest import fixture, raises
 from authark.app.coordinators.auth_coordinator import AuthCoordinator
 from authark.app.repositories.user_repository import UserRepository
 from authark.app.services.token_service import TokenService
+from authark.app.models.error import AuthError
 from authark.app.models.user import User
 from authark.app.models.token import Token
 
@@ -29,7 +31,7 @@ def mock_user_repository() -> UserRepository:
 @fixture
 def mock_token_service() -> UserRepository:
     class MockTokenService(TokenService):
-        def generate_token(self) -> Token:
+        def generate_token(self, payload: Dict[str, str]) -> Token:
             token = Token(b'XYZ098')
             return token
 
@@ -55,9 +57,16 @@ def test_auth_coordinator_creation(
 def test_auth_coordinator_authenticate(
         auth_coordinator: AuthCoordinator) -> None:
 
-    authenticated = auth_coordinator.authenticate("tebanep", "PASS2")
+    token = auth_coordinator.authenticate("tebanep", "PASS2")
 
-    assert authenticated
+    assert isinstance(token, Token)
+
+
+def test_auth_coordinator_fail_to_authenticate(
+        auth_coordinator: AuthCoordinator) -> None:
+
+    with raises(AuthError):
+        token = auth_coordinator.authenticate("tebanep", "WRONG_PASSWORD")
 
 
 def test_auth_coordinator_register(
@@ -69,12 +78,3 @@ def test_auth_coordinator_register(
     assert user
     assert isinstance(user, User)
     assert len(auth_coordinator.user_repository.user_dict) == 4
-
-
-def test_auth_coordinator_generate_token(
-        auth_coordinator: AuthCoordinator) -> None:
-
-    token = auth_coordinator._generate_token()
-
-    assert token
-    assert isinstance(token, Token)
