@@ -1,0 +1,59 @@
+{
+    "docs": [
+        {
+            "location": "/",
+            "text": "Authark\n\n\nAuthentication and authorization server.\n\n\nNOTE: Under Development - Not Production Ready\n\n\nDesign\n\n\nAuthark\n is designed to return an authentication \ntoken\n when authentication against it is successful. A \nprivate secret\n should be shared among all the \napplications\n that would like to use Authark as its authentication and authorization server.\n\n\nUsage\n\n\nTo run authark you should use gunicorn or any other wsgi compatible http server.\n\n\nFor example:\n\n\ngunicorn authark.main:app\n\n\n\n\nYou can register a new account by posting to the \n/register\n endpoint providing a \nusername\n and \npassword\n in a \njson\n document.\n\n\nTo get a \ntoken\n, use the \n/login\n or \n/auth\n endpoint. This token is generated from a \nprivate secret\n that should be \nshared\n between \nAuthark\n and the \nprotected resource applications\n.",
+            "title": "Introduction"
+        },
+        {
+            "location": "/#authark",
+            "text": "Authentication and authorization server.  NOTE: Under Development - Not Production Ready",
+            "title": "Authark"
+        },
+        {
+            "location": "/#design",
+            "text": "Authark  is designed to return an authentication  token  when authentication against it is successful. A  private secret  should be shared among all the  applications  that would like to use Authark as its authentication and authorization server.",
+            "title": "Design"
+        },
+        {
+            "location": "/#usage",
+            "text": "To run authark you should use gunicorn or any other wsgi compatible http server.  For example:  gunicorn authark.main:app  You can register a new account by posting to the  /register  endpoint providing a  username  and  password  in a  json  document.  To get a  token , use the  /login  or  /auth  endpoint. This token is generated from a  private secret  that should be  shared  between  Authark  and the  protected resource applications .",
+            "title": "Usage"
+        },
+        {
+            "location": "/architecture/",
+            "text": "Architecture\n\n\nThis project has been constructed following the guidelines of the Clean Architecture by Uncle Bob as exposed in: \nhttps://8thlight.com/blog/uncle-bob/2012/08/13/the-clean-architecture.html\n.\n\n\nThere are basically two structural namespaces inside of the \n'authark'\n package which are \n'app'\n and \n'infra'\n. In essence, nothing inside \n'app'\n can refer to something outside it and should use abstractions and dependency inversion patterns to represent such dependencies. The \n'infra'\n package provides concrete implementations of the interfaces exposed in the application and logical layer (i.e. \n'app'\n package), keeping the latter technology agnostic and improving its testability.\n\n\nProject layout\n\n\nauthark/\n  app/               # Application and logic\n    coordinators/    \n    models/\n    repositories/\n    services/\n  infra/             # Infrastructure and implementation\n  docs/              # Documentation\n  setup/             # Setup and deployment helpers\n  tests/             # Unit and integration tests",
+            "title": "Architecture"
+        },
+        {
+            "location": "/architecture/#architecture",
+            "text": "This project has been constructed following the guidelines of the Clean Architecture by Uncle Bob as exposed in:  https://8thlight.com/blog/uncle-bob/2012/08/13/the-clean-architecture.html .  There are basically two structural namespaces inside of the  'authark'  package which are  'app'  and  'infra' . In essence, nothing inside  'app'  can refer to something outside it and should use abstractions and dependency inversion patterns to represent such dependencies. The  'infra'  package provides concrete implementations of the interfaces exposed in the application and logical layer (i.e.  'app'  package), keeping the latter technology agnostic and improving its testability.",
+            "title": "Architecture"
+        },
+        {
+            "location": "/architecture/#project-layout",
+            "text": "authark/\n  app/               # Application and logic\n    coordinators/    \n    models/\n    repositories/\n    services/\n  infra/             # Infrastructure and implementation\n  docs/              # Documentation\n  setup/             # Setup and deployment helpers\n  tests/             # Unit and integration tests",
+            "title": "Project layout"
+        },
+        {
+            "location": "/roadmap/",
+            "text": "Project Roadmap\n\n\n\n\n[ ] Login\n\n\n[x] Add endpoint receiving a username and password\n\n\n[x] Add 'auth' as an alias of 'login'\n\n\n[x] Return an access token if authenticated\n\n\n[x] Encode token\n\n\n[ ] Decode token\n\n\n[x] User registration\n\n\n[x] Create endpoint for user registration 'register'\n\n\n[ ] Create a 'users' endpoint\n\n\n[ ] Ensure token expiration\n\n\n[ ] Use protocols instead of abstract base classes :D\n\n\n[ ] Add mypy file\n\n\n[ ] Refactor to a standalone app by integrating gunicorn",
+            "title": "Roadmap"
+        },
+        {
+            "location": "/roadmap/#project-roadmap",
+            "text": "[ ] Login  [x] Add endpoint receiving a username and password  [x] Add 'auth' as an alias of 'login'  [x] Return an access token if authenticated  [x] Encode token  [ ] Decode token  [x] User registration  [x] Create endpoint for user registration 'register'  [ ] Create a 'users' endpoint  [ ] Ensure token expiration  [ ] Use protocols instead of abstract base classes :D  [ ] Add mypy file  [ ] Refactor to a standalone app by integrating gunicorn",
+            "title": "Project Roadmap"
+        },
+        {
+            "location": "/about/",
+            "text": "About Authark\n\n\nAuthark is an authentication and authorization server that aims to be simple, flexible and easy to manage. It is designed to play well with different applications as part of a bigger system by focusing exclusively in its precise purpose of identifying users.",
+            "title": "About"
+        },
+        {
+            "location": "/about/#about-authark",
+            "text": "Authark is an authentication and authorization server that aims to be simple, flexible and easy to manage. It is designed to play well with different applications as part of a bigger system by focusing exclusively in its precise purpose of identifying users.",
+            "title": "About Authark"
+        }
+    ]
+}
