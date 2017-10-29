@@ -2,13 +2,13 @@
     "docs": [
         {
             "location": "/",
-            "text": "Authark\n\n\nAuthentication and authorization server.\n\n\nNOTE: Under Development - Not Production Ready\n\n\nDesign\n\n\nAuthark\n is designed to return an authentication \ntoken\n when authentication against it is successful. A \nprivate secret\n should be shared among all the \napplications\n that would like to use Authark as its authentication and authorization server.\n\n\nUsage\n\n\nTo run authark you should use gunicorn or any other wsgi compatible http server.\n\n\nFor example:\n\n\ngunicorn authark.main:app\n\n\n\n\nYou can register a new account by posting to the \n/register\n endpoint providing a \nusername\n and \npassword\n in a \njson\n document.\n\n\nTo get a \ntoken\n, use the \n/login\n or \n/auth\n endpoint. This token is generated from a \nprivate secret\n that should be \nshared\n between \nAuthark\n and the \nprotected resource applications\n.",
+            "text": "Authark (0.1.0-alpha.5)\n\n\nAuthentication and authorization server.\n\n\nNOTE: Under Development - Not Production Ready\n\n\nDesign\n\n\nAuthark\n is designed to return an authentication \ntoken\n when authentication against it is successful. A \nprivate secret\n should be shared among all the \napplications\n that would like to use Authark as its authentication and authorization server.\n\n\nUsage\n\n\nTo run authark you should use gunicorn or any other wsgi compatible http server.\n\n\nFor example:\n\n\ngunicorn authark.main:app\n\n\n\n\nYou can register a new account by posting to the \n/register\n endpoint providing a \nusername\n and \npassword\n in a \njson\n document.\n\n\nTo get a \ntoken\n, use the \n/login\n or \n/auth\n endpoint. This token is generated from a \nprivate secret\n that should be \nshared\n between \nAuthark\n and the \nprotected resource applications\n.",
             "title": "Introduction"
         },
         {
-            "location": "/#authark",
+            "location": "/#authark-010-alpha5",
             "text": "Authentication and authorization server.  NOTE: Under Development - Not Production Ready",
-            "title": "Authark"
+            "title": "Authark (0.1.0-alpha.5)"
         },
         {
             "location": "/#design",
