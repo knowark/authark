@@ -2,14 +2,14 @@
 # Project TODOs
 
 
-- [] login
+- [ ] Login
   - [x] Add endpoint receiving a username and password
   - [x] Add 'auth' as an alias of 'login'
-  - [ ] Return an access token if authenticated
-  - [ ] Encode token
+  - [x] Return an access token if authenticated
+  - [x] Encode token
   - [ ] Decode token
-- [ ] User registration
-  - [ ] Create endpoint for user registration 'register'
+- [x] User registration
+  - [x] Create endpoint for user registration 'register'
 - [ ] Create a 'users' endpoint
 - [ ] Ensure token expiration
 - [ ] Use protocols instead of abstract base classes :D
