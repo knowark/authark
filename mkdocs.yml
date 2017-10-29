@@ -2,5 +2,6 @@ site_name: Authark
 pages:
   - Introduction: index.md
   - Architecture: architecture.md
+  - Roadmap: roadmap.md
   - About: about.md
 theme: readthedocs
