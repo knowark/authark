@@ -1,6 +1,6 @@
 site_name: Authark
 pages:
-  - Home: index.md
+  - Introduction: index.md
   - Architecture: architecture.md
   - About: about.md
 theme: readthedocs
