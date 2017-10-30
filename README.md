@@ -1,5 +1,4 @@
-[![Build Status](https://travis-ci.org/nubark/authark.svg?branch=master)](https://travis-ci.org/nubark/authark) [![Coverage Status](https://coveralls.io/repos/nubark/authark/badge.svg?branch=master)](https://coveralls.io/r/nubark/authark?branch=master)
-[![codecov](https://codecov.io/gh/nubark/authark/branch/master/graph/badge.svg)](https://codecov.io/gh/nubark/authark)
+[![Build Status](https://travis-ci.org/nubark/authark.svg?branch=master)](https://travis-ci.org/nubark/authark) [![codecov](https://codecov.io/gh/nubark/authark/branch/master/graph/badge.svg)](https://codecov.io/gh/nubark/authark)
 
 
 # Authark
