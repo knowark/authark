@@ -5,7 +5,12 @@ python:
 install:
   - pip install -r requirements.txt
 script:
+  # Application layer tests
   - pytest --cov-branch --cov authark.app tests/
+  - bash <(curl -s https://codecov.io/bash) -cF application
+  # All tests
   - pytest --cov-branch --cov authark tests/
+  - bash <(curl -s https://codecov.io/bash) -cF all
 after_success:
   - coveralls
+  - codecov
