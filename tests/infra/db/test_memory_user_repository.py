@@ -33,8 +33,8 @@ def test_memory_user_repository_get_user(user_dict: Dict[str, User]) -> None:
     memory_user_repository.load(user_dict)
     user = memory_user_repository.get("valenep")
 
-    assert user.username == "valenep"
-    assert user.email == "valenep@gmail.com"
+    assert user and user.username == "valenep"
+    assert user and user.email == "valenep@gmail.com"
 
 
 def test_memory_user_repository_save_user() -> None:
