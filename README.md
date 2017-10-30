@@ -8,6 +8,10 @@ Authentication and authorization server.
 
 [Authark Documentation](https://nubark.github.io/authark/)
 
+# Coverage
+
+[![codecov](https://codecov.io/gh/nubark/authark/branch/master/graph/sunburst.svg)](https://codecov.io/gh/nubark/authark)
+
 # License
 
 GNU Lesser General Public License v3.0
