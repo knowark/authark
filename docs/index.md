@@ -1,4 +1,4 @@
-# Authark (0.1.0-alpha.9)
+# Authark (0.1.0-alpha.10)
 
 Authentication and authorization server.
 
