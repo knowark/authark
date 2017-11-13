@@ -2,7 +2,7 @@ from typing import Dict
 from pytest import fixture
 from authark.app.models.user import User
 from authark.app.repositories.user_repository import UserRepository
-from authark.infra.db.memory_user_repository import MemoryUserRepository
+from authark.app.repositories.user_repository import MemoryUserRepository
 
 
 def test_memory_user_repository_implementation() -> None:

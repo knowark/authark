@@ -2,6 +2,7 @@ from typing import Dict
 from pytest import fixture, raises
 from authark.app.coordinators.auth_coordinator import AuthCoordinator
 from authark.app.repositories.user_repository import UserRepository
+from authark.app.repositories.user_repository import MemoryUserRepository
 from authark.app.services.token_service import TokenService
 from authark.app.models.error import AuthError
 from authark.app.models.user import User
@@ -13,9 +14,6 @@ from authark.app.models.token import Token
 ###########
 @fixture
 def mock_user_repository() -> UserRepository:
-    # Use the in-memory repository for testing
-    from authark.infra.db.memory_user_repository import MemoryUserRepository
-
     MockUserRepository = MemoryUserRepository
     user_dict = {
         "valenep": User('valenep', 'valenep@gmail.com', "PASS1"),

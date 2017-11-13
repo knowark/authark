@@ -6,7 +6,7 @@ from authark.infra.web.registry import Registry
 from authark.infra.web.main import main
 
 from authark.app.coordinators.auth_coordinator import AuthCoordinator
-from authark.infra.db.memory_user_repository import MemoryUserRepository
+from authark.app.repositories.user_repository import MemoryUserRepository
 from authark.infra.crypto.pyjwt_token_service import PyJWTTokenService
 
 

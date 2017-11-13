@@ -3,7 +3,7 @@ from typing import Any, Dict
 from authark.app.models.user import User
 
 from authark.app.coordinators.auth_coordinator import AuthCoordinator
-from authark.infra.db.memory_user_repository import MemoryUserRepository
+from authark.app.repositories.user_repository import MemoryUserRepository
 from authark.infra.crypto.pyjwt_token_service import PyJWTTokenService
 
 
