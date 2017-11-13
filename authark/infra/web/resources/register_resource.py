@@ -14,10 +14,7 @@ class RegisterResource(Resource):
         email = data.get('email')
         password = data.get('password')
 
-        try:
-            user = self.auth_coordinator.register(username, email, password)
-        except Exception as e:
-            return '', 400
+        user = self.auth_coordinator.register(username, email, password)
 
         response = 'Account Created: username<{0}> - email<{1}>'.format(
             username, email)

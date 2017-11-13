@@ -79,3 +79,18 @@ def test_auth_post_route_successful_authentication(app: Flask) -> None:
 
     assert response.status_code == 200
     assert len(response.get_data()) > 0
+
+
+def test_register_post_route(app: Flask) -> None:
+    response = app.post(
+        '/register',
+        data=json.dumps(dict(
+            username="gecheverry",
+            email="gecheverry@gmail.com",
+            password="POI123"
+        )),
+        content_type='application/json')
+
+    assert response.status_code == 201
+    assert b"username<gecheverry>" in response.get_data()
+    assert b"email<gecheverry@gmail.com>" in response.get_data()
