@@ -4,10 +4,11 @@ import authark.infra.web.routes as routes
 from authark.infra.web.registry import Registry
 
 
-def main(config: Dict[str, str] = None) -> Flask:
+def main(config: Dict[str, str] = None, registry: Registry = None) -> Flask:
 
     app = Flask(__name__)
-    registry = Registry()
+    if registry is None:
+        registry = Registry()
     routes.set_routes(app, registry)
 
     return app
