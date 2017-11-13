@@ -5,9 +5,10 @@ from authark.infra.db.memory_user_repository import MemoryUserRepository
 from authark.infra.web.resources.auth_resource import AuthResource
 from authark.infra.web.resources.register_resource import RegisterResource
 from authark.infra.crypto.pyjwt_token_service import PyJWTTokenService
+from authark.infra.web.registry import Registry
 
 
-def set_routes(app: Flask) -> None:
+def set_routes(app: Flask, registry: Registry) -> None:
 
     @app.route('/')
     def index() -> str:
@@ -17,9 +18,7 @@ def set_routes(app: Flask) -> None:
     api = Api(app)
 
     # Services
-    user_repository = MemoryUserRepository()
-    token_service = PyJWTTokenService('DEVSECRET123', 'HS256')
-    auth_coordinator = AuthCoordinator(user_repository, token_service)
+    auth_coordinator = registry['auth_coordinator']
 
     # Auth resource
     api.add_resource(
