@@ -4,6 +4,7 @@ from authark.app.coordinators.auth_coordinator import AuthCoordinator
 from authark.app.repositories.user_repository import UserRepository
 from authark.app.repositories.user_repository import MemoryUserRepository
 from authark.app.services.token_service import TokenService
+from authark.app.services.token_service import MemoryTokenService
 from authark.app.models.error import AuthError
 from authark.app.models.user import User
 from authark.app.models.token import Token
@@ -28,13 +29,7 @@ def mock_user_repository() -> UserRepository:
 
 @fixture
 def mock_token_service() -> UserRepository:
-    class MockTokenService(TokenService):
-        def generate_token(self, payload: Dict[str, str]) -> Token:
-            token = Token(b'XYZ098')
-            return token
-
-    mock_token_service = MockTokenService()
-
+    mock_token_service = MemoryTokenService()
     return mock_token_service
 
 
