@@ -1,13 +1,14 @@
 import json
 from pytest import fixture
 from flask import Flask
-from authark.app.models.user import User
-from authark.infra.web.registry import Registry
-from authark.infra.web.main import main
+from authark.application.models.user import User
+from authark.infrastructure.web.registry import Registry
+from authark.infrastructure.web.main import main
 
-from authark.app.coordinators.auth_coordinator import AuthCoordinator
-from authark.app.repositories.user_repository import MemoryUserRepository
-from authark.infra.crypto.pyjwt_token_service import PyJWTTokenService
+from authark.application.coordinators.auth_coordinator import AuthCoordinator
+from authark.application.repositories.user_repository import (
+    MemoryUserRepository)
+from authark.infrastructure.crypto.pyjwt_token_service import PyJWTTokenService
 
 
 class MockRegistry(Registry):

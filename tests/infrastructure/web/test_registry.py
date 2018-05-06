@@ -1,6 +1,6 @@
 from pytest import fixture
-from authark.app.coordinators.auth_coordinator import AuthCoordinator
-from authark.infra.web.registry import Registry
+from authark.application.coordinators.auth_coordinator import AuthCoordinator
+from authark.infrastructure.web.registry import Registry
 
 
 def test_registry_type() -> None:

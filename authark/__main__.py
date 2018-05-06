@@ -2,9 +2,9 @@
 Authark entrypoint
 """
 import sys
-from authark.infra.web.base import create_app
-from authark.infra.web.server import Application
-from authark.infra.config.config import (
+from authark.infrastructure.web.base import create_app
+from authark.infrastructure.web.server import Application
+from authark.infrastructure.config.config import (
     DevelopmentConfig)
 
 

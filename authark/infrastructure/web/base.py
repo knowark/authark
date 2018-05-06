@@ -1,7 +1,7 @@
 from flask import Flask
 from flask_cors import CORS
-from authark.infra.config.config import Config
-from authark.infra.web.routes import set_routes
+from authark.infrastructure.config.config import Config
+from authark.infrastructure.web.routes import set_routes
 
 
 def create_app(config) -> Flask:

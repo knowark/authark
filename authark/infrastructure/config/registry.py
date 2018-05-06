@@ -5,7 +5,7 @@ from authark.application.models.user import User
 from authark.application.coordinators.auth_coordinator import AuthCoordinator
 from authark.application.repositories.user_repository import (
     MemoryUserRepository)
-from authark.infra.crypto.pyjwt_token_service import PyJWTTokenService
+from authark.infrastructure.crypto.pyjwt_token_service import PyJWTTokenService
 
 
 RegistryConfig = Dict[str, Any]

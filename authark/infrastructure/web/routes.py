@@ -3,10 +3,11 @@ from flask_restful import Api
 from authark.application.coordinators.auth_coordinator import AuthCoordinator
 from authark.application.repositories.user_repository import (
     MemoryUserRepository)
-from authark.infra.web.resources.auth_resource import AuthResource
-from authark.infra.web.resources.register_resource import RegisterResource
-from authark.infra.crypto.pyjwt_token_service import PyJWTTokenService
-from authark.infra.config.registry import Registry
+from authark.infrastructure.web.resources.auth_resource import AuthResource
+from authark.infrastructure.web.resources.register_resource import (
+    RegisterResource)
+from authark.infrastructure.crypto.pyjwt_token_service import PyJWTTokenService
+from authark.infrastructure.config.registry import Registry
 
 
 def set_routes(app: Flask, registry: Registry) -> None:

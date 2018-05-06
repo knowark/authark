@@ -3,7 +3,7 @@ from typing import Dict, Any
 from abc import ABC, abstractmethod
 from json import loads, JSONDecodeError
 from pathlib import Path
-from authark.infra.config.registry import (
+from authark.infrastructure.config.registry import (
     Registry
 )
 
