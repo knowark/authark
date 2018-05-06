@@ -2,10 +2,11 @@ import json
 from pytest import fixture
 from flask import Flask
 from authark.application.models.user import User
-from authark.infrastructure.web.registry import Registry
-from authark.infrastructure.web.main import main
+from authark.infrastructure.config.registry import Registry
+from authark.infrastructure.web.base import create_app
 
 from authark.application.coordinators.auth_coordinator import AuthCoordinator
+from authark.infrastructure.config.config import TrialConfig
 from authark.application.repositories.user_repository import (
     MemoryUserRepository)
 from authark.infrastructure.crypto.pyjwt_token_service import PyJWTTokenService
@@ -35,10 +36,11 @@ class MockRegistry(Registry):
 @fixture
 def app() -> Flask:
     """Create app testing client"""
-
+    config = TrialConfig()
     mock_registry = MockRegistry()
+    config['registry'] = mock_registry
 
-    app = main(registry=mock_registry)
+    app = create_app(config=config)
     app.testing = True
     app = app.test_client()
 

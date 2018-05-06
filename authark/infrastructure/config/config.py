@@ -38,6 +38,15 @@ class Config(dict, ABC):
         self['registry'] = registry(self)
 
 
+class TrialConfig(Config):
+    def __init__(self):
+        super().__init__()
+        self['mode'] = TEST
+        self['gunicorn'].update({
+            'debug': True
+        })
+
+
 class DevelopmentConfig(Config):
     def __init__(self):
         super().__init__()
