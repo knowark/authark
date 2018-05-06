@@ -1,7 +1,8 @@
 from flask import Flask
 from flask_restful import Api
-from authark.app.coordinators.auth_coordinator import AuthCoordinator
-from authark.app.repositories.user_repository import MemoryUserRepository
+from authark.application.coordinators.auth_coordinator import AuthCoordinator
+from authark.application.repositories.user_repository import (
+    MemoryUserRepository)
 from authark.infra.web.resources.auth_resource import AuthResource
 from authark.infra.web.resources.register_resource import RegisterResource
 from authark.infra.crypto.pyjwt_token_service import PyJWTTokenService

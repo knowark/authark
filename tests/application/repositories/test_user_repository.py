@@ -1,9 +1,10 @@
 from typing import Dict
 from pytest import fixture
 from inspect import signature
-from authark.app.models.user import User
-from authark.app.repositories.user_repository import UserRepository
-from authark.app.repositories.user_repository import MemoryUserRepository
+from authark.application.models.user import User
+from authark.application.repositories.user_repository import UserRepository
+from authark.application.repositories.user_repository import (
+    MemoryUserRepository)
 
 
 def test_user_repository_methods() -> None:

@@ -1,5 +1,5 @@
 import pytest
-from authark.app.models.error import AuthError
+from authark.application.models.error import AuthError
 
 
 def test_auth_error_raises() -> None:

@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from typing import Dict, Optional
-from authark.app.models.user import User
+from authark.application.models.user import User
 
 
 class UserRepository(ABC):

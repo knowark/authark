@@ -1,4 +1,4 @@
-from authark.app.models.token import Token
+from authark.application.models.token import Token
 
 
 def test_token_creation() -> None:

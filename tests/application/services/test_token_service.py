@@ -1,7 +1,7 @@
 from inspect import signature
-from authark.app.models.token import Token
-from authark.app.services.token_service import TokenService
-from authark.app.services.token_service import MemoryTokenService
+from authark.application.models.token import Token
+from authark.application.services.token_service import TokenService
+from authark.application.services.token_service import MemoryTokenService
 
 
 def test_token_service() -> None:

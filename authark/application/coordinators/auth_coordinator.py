@@ -1,8 +1,8 @@
-from authark.app.repositories.user_repository import UserRepository
-from authark.app.services.token_service import TokenService
-from authark.app.models.error import AuthError
-from authark.app.models.token import Token
-from authark.app.models.user import User
+from authark.application.repositories.user_repository import UserRepository
+from authark.application.services.token_service import TokenService
+from authark.application.models.error import AuthError
+from authark.application.models.token import Token
+from authark.application.models.user import User
 
 
 class AuthCoordinator:

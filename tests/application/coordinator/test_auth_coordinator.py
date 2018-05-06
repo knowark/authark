@@ -1,13 +1,14 @@
 from typing import Dict
 from pytest import fixture, raises
-from authark.app.coordinators.auth_coordinator import AuthCoordinator
-from authark.app.repositories.user_repository import UserRepository
-from authark.app.repositories.user_repository import MemoryUserRepository
-from authark.app.services.token_service import TokenService
-from authark.app.services.token_service import MemoryTokenService
-from authark.app.models.error import AuthError
-from authark.app.models.user import User
-from authark.app.models.token import Token
+from authark.application.coordinators.auth_coordinator import AuthCoordinator
+from authark.application.repositories.user_repository import UserRepository
+from authark.application.repositories.user_repository import (
+    MemoryUserRepository)
+from authark.application.services.token_service import TokenService
+from authark.application.services.token_service import MemoryTokenService
+from authark.application.models.error import AuthError
+from authark.application.models.user import User
+from authark.application.models.token import Token
 
 
 ###########

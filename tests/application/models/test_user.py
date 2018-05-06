@@ -1,4 +1,4 @@
-from authark.app.models.user import User
+from authark.application.models.user import User
 
 
 def test_user_creation() -> None:
