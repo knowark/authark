@@ -5,7 +5,7 @@ from authark.app.repositories.user_repository import MemoryUserRepository
 from authark.infra.web.resources.auth_resource import AuthResource
 from authark.infra.web.resources.register_resource import RegisterResource
 from authark.infra.crypto.pyjwt_token_service import PyJWTTokenService
-from authark.infra.web.registry import Registry
+from authark.infra.config.registry import Registry
 
 
 def set_routes(app: Flask, registry: Registry) -> None:

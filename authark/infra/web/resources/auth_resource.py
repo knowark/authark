@@ -13,10 +13,9 @@ class AuthResource(Resource):
 
     def post(self) -> Tuple[str, int]:
         data = request.get_json()
-        username = data.get('username')
-        password = data.get('password')
-
         try:
+            username = data.get('username')
+            password = data.get('password')
             token = self.auth_coordinator.authenticate(username, password)
         except Exception as e:
             return '', 401

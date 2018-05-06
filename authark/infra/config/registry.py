@@ -7,9 +7,12 @@ from authark.app.repositories.user_repository import MemoryUserRepository
 from authark.infra.crypto.pyjwt_token_service import PyJWTTokenService
 
 
+RegistryConfig = Dict[str, Any]
+
+
 class Registry(Dict[str, Any]):
 
-    def __init__(self) -> None:
+    def __init__(self, config: RegistryConfig) -> None:
 
         # Services
         user_repository = MemoryUserRepository()
