@@ -1,4 +1,6 @@
 
+clean:
+	find . -name '__pycache__' -exec rm -fr {} +
 
 test:
 	pytest
@@ -8,3 +10,4 @@ coverage-application:
 
 coverage-infrastructure: 
 	pytest -x --cov=authark/infrastructure tests/infrastructure/
+
