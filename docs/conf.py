@@ -153,3 +153,8 @@ texinfo_documents = [
      author, 'Authark', 'One line description of project.',
      'Miscellaneous'),
 ]
+
+
+# HTML
+
+html_copy_source = False
