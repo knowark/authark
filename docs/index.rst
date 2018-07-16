@@ -29,14 +29,15 @@ authentication and authorization server.
 Usage
 -----
 
-To run authark you should use gunicorn or any other wsgi compatible
-http server.
+To run Authark you should use Python 3 and install the requirements.txt file
+in your virtualenv. 
 
-For example:
+Then, run the application with:
 
-```
-gunicorn authark.main:app
-```
+.. code-block:: bash
+    
+   python -m authark
+
 
 You can register a new account by posting to the */register* endpoint
 providing a *username* and *password* in a *json* document.

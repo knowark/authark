@@ -2,16 +2,33 @@ Project Roadmap
 ###############
 
 
+Version 1.0
+===========
+
 - [ ] Login
-  - [x] Add endpoint receiving a username and password
-  - [x] Add 'auth' as an alias of 'login'
-  - [x] Return an access token if authenticated
-  - [x] Encode token
+
+  - [X] Add endpoint receiving a username and password
+  - [X] Add 'auth' as an alias of 'login'
+  - [X] Return an access token if authenticated
+  - [X] Encode token
   - [ ] Decode token
-- [x] User registration
-  - [x] Create endpoint for user registration 'register'
-- [ ] Create a 'users' endpoint
-- [ ] Ensure token expiration
-- [ ] Use protocols instead of abstract base classes :D
+
+- [X] User registration
+
+  - [X] Create endpoint for user registration 'register'
+
+  - [ ] Create a 'users' endpoint
+
+- [X] Refactor to a standalone app by integrating gunicorn
+
+Version 1.1
+===========
+
 - [ ] Add mypy file
-- [ ] Refactor to a standalone app by integrating gunicorn
+
+- [ ] Ensure token expiration
+
+Later
+=====
+
+- [ ] Use protocols instead of abstract base classes :D
