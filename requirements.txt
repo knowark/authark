@@ -8,6 +8,7 @@ codecov==2.0.9
 coverage==4.4.1
 docutils==0.14
 Flask==0.12.2
+Flask-Cors==3.0.6
 Flask-RESTful==0.3.6
 gevent==1.2.2
 greenlet==0.4.12
