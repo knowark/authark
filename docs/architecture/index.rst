@@ -14,18 +14,9 @@ The **'infra'** package provides concrete implementations of the interfaces
 exposed in the application and logical layer (i.e. **'app'** package), keeping
 the latter technology agnostic and improving its testability.
 
-Project layout
---------------
+.. toctree::
+   :maxdepth: 2
+   :caption: Contents:
 
-.. code-block:: bash
-
-    authark/
-      app/               # Application and logic
-        coordinators/    
-        models/
-        repositories/
-        services/
-      infra/             # Infrastructure and implementation
-      docs/              # Documentation
-      setup/             # Setup and deployment helpers
-      tests/             # Unit and integration tests
+   domain.rst
+   layout.rst

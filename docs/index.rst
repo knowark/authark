@@ -14,7 +14,7 @@ Authentication and authorization server.
    :maxdepth: 2
    :caption: Contents:
 
-   architecture.rst
+   architecture/index.rst
    roadmap.rst
    about.rst
 
