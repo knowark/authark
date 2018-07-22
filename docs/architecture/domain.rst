@@ -45,3 +45,7 @@ core, and so are the **Provider** and **Group**.
 
     }
 
+
+Providers can have multiple groups for authorization purposes, each been able
+to hold multiple users. As a user can as well belong to multiple groups, the 
+**Role** structure is the responsible of representing such binding.
