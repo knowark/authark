@@ -34,7 +34,6 @@ class JsonJwtRegistry(Dict[str, Any]):
     def __init__(self, config: Config) -> None:
         database_config = config.get("database")
         database_path = database_config.get("url")
-        print("===>>", database_path)
 
         # Services
         user_repository = JsonUserRepository(database_path)

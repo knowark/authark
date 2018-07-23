@@ -47,8 +47,6 @@ def test_json_user_repository_save_user(
         data = loads(f.read())
         users_dict = data.get("users")
 
-        print("user_dictt ==", users_dict)
-
         user_dict = users_dict.get('matiasve')
 
         assert user_dict.get('username') == user.username
