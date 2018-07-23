@@ -3,17 +3,11 @@ from typing import Dict, Any
 from abc import ABC, abstractmethod
 from json import loads, JSONDecodeError
 from pathlib import Path
-from authark.infrastructure.config.registry import (
-    Registry
-)
+
 
 TEST = 'TEST'
 DEV = 'DEV'
 PROD = 'PROD'
-
-REGISTRY_DICT = {
-    DEV: Registry,
-}
 
 
 class Config(dict, ABC):
@@ -21,7 +15,7 @@ class Config(dict, ABC):
     def __init__(self):
         self['mode'] = 'BASE'
         self['environment'] = {
-            'home': '/opt/serproser'
+            'home': '/opt/authark'
         }
         self['gunicorn'] = {
             'bind': '%s:%s' % ('0.0.0.0', '8080'),
@@ -31,11 +25,6 @@ class Config(dict, ABC):
         }
         self['flask'] = {}
         self['database'] = {}
-        self['registry'] = {}
-
-    def resolve_registry(self) -> None:
-        registry = REGISTRY_DICT[self['mode']]
-        self['registry'] = registry(self)
 
 
 class TrialConfig(Config):
@@ -54,3 +43,37 @@ class DevelopmentConfig(Config):
         self['gunicorn'].update({
             'debug': True
         })
+
+
+class ProductionConfig(Config):
+    def __init__(self):
+        super().__init__()
+        self['mode'] = PROD
+        self['gunicorn'].update({
+            'debug': False
+        })
+        self['database'] = {
+            'type': 'json',
+            'url': './authark_data.json'
+        }
+        self.read_configuration_files()
+
+    def read_configuration_files(self):
+        config_filename = '/config.json'
+        paths = [
+            '/etc/opt/authark' + config_filename,
+            '/etc/authark' + config_filename,
+            self['environment']['home'] + config_filename,
+            '.' + config_filename
+        ]
+        for path in paths:
+            config_dict = {}
+            config_file = Path(path)
+            if config_file.is_file():
+                with config_file.open() as f:
+                    try:
+                        data = f.read()
+                        config_dict = loads(data)
+                    except JSONDecodeError:
+                        pass
+            self.update(config_dict)
