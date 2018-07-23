@@ -1,3 +1,4 @@
+import os
 from abc import ABC, abstractmethod
 from json import load, dump
 from typing import Dict, Optional
@@ -8,6 +9,10 @@ from authark.application.repositories.user_repository import UserRepository
 class JsonUserRepository(UserRepository):
     def __init__(self, file_path: str) -> None:
         self.file_path = file_path
+        if os.path.exists(self.file_path):
+            return
+        with open(self.file_path, 'w') as f:
+            dump({'users': {}}, f)
 
     def get(self, username: str) -> Optional[User]:
         user = None
