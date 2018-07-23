@@ -1,4 +1,4 @@
-from json import dumps
+from json import dumps, loads
 from pytest import fixture
 from authark.application.models.user import User
 from authark.application.repositories.user_repository import UserRepository
@@ -34,3 +34,23 @@ def test_json_user_repository_get_user(
 
     assert user and user.username == "valenep"
     assert user and user.email == "valenep@gmail.com"
+
+
+def test_json_user_repository_save_user(
+        user_repository: JsonUserRepository) -> None:
+
+    user = User('matiasve', 'matiasve@gmail.com', "PASS4")
+    user_repository.save(user)
+
+    file_path = user_repository.file_path
+    with open(file_path) as f:
+        data = loads(f.read())
+        users_dict = data.get("users")
+
+        print("user_dictt ==", users_dict)
+
+        user_dict = users_dict.get('matiasve')
+
+        assert user_dict.get('username') == user.username
+        assert user_dict.get('email') == user.email
+        assert user_dict.get('password') == user.password
