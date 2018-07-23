@@ -7,6 +7,7 @@ from authark.infrastructure.web.base import create_app
 
 from authark.application.coordinators.auth_coordinator import AuthCoordinator
 from authark.infrastructure.config.config import TrialConfig
+from authark.infrastructure.config.context import Context
 from authark.application.repositories.user_repository import (
     MemoryUserRepository)
 from authark.infrastructure.crypto.pyjwt_token_service import PyJWTTokenService
@@ -38,9 +39,9 @@ def app() -> Flask:
     """Create app testing client"""
     config = TrialConfig()
     mock_registry = MockRegistry()
-    config['registry'] = mock_registry
+    context = Context(config, mock_registry)
 
-    app = create_app(config=config)
+    app = create_app(context=context)
     app.testing = True
     app = app.test_client()
 
