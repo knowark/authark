@@ -27,19 +27,6 @@ def test_json_user_repository_implementation() -> None:
     assert issubclass(JsonUserRepository, UserRepository)
 
 
-def test_json_user_repository_initialization(tmpdir) -> None:
-    assert issubclass(JsonUserRepository, UserRepository)
-
-    file_path = str(tmpdir.mkdir("authark").join('init_data.json'))
-    user_repository = JsonUserRepository(file_path=file_path)
-
-    with open(file_path) as f:
-        data = loads(f.read())
-
-    assert 'users' in data
-    assert isinstance(data.get('users'), dict)
-
-
 def test_json_user_repository_get_user(
         user_repository: JsonUserRepository) -> None:
 
