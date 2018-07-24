@@ -37,7 +37,7 @@ class JsonJwtRegistry(Dict[str, Any]):
         database_path = database_config.get("url")
 
         # Initialize Json Database
-        # init_json_database(database_path)
+        init_json_database(database_path)
 
         # Services
         user_repository = JsonUserRepository(database_path)
