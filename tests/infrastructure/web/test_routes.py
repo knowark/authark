@@ -2,14 +2,15 @@ import json
 from pytest import fixture
 from flask import Flask
 from authark.application.models.user import User
-from authark.infrastructure.config.registry import Registry
-from authark.infrastructure.web.base import create_app
-
-from authark.application.coordinators.auth_coordinator import AuthCoordinator
-from authark.infrastructure.config.config import TrialConfig
-from authark.infrastructure.config.context import Context
 from authark.application.repositories.user_repository import (
     MemoryUserRepository)
+from authark.application.coordinators.auth_coordinator import AuthCoordinator
+from authark.application.services.hash_service import MemoryHashService
+from authark.infrastructure.config.registry import Registry
+from authark.infrastructure.web.base import create_app
+from authark.infrastructure.config.config import TrialConfig
+from authark.infrastructure.config.context import Context
+
 from authark.infrastructure.crypto.pyjwt_token_service import PyJWTTokenService
 
 
@@ -29,7 +30,9 @@ class MockRegistry(Registry):
             )
         })
         token_service = PyJWTTokenService('TESTSECRET', 'HS256')
-        auth_coordinator = AuthCoordinator(user_repository, token_service)
+        hash_service = MemoryHashService()
+        auth_coordinator = AuthCoordinator(user_repository,
+                                           hash_service, token_service)
 
         self['auth_coordinator'] = auth_coordinator
 

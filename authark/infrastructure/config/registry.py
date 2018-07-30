@@ -5,6 +5,8 @@ from authark.application.models.user import User
 from authark.application.coordinators.auth_coordinator import AuthCoordinator
 from authark.application.repositories.user_repository import (
     MemoryUserRepository)
+from authark.application.services.token_service import MemoryTokenService
+from authark.application.services.hash_service import MemoryHashService
 from authark.infrastructure.crypto.pyjwt_token_service import PyJWTTokenService
 from authark.infrastructure.data.init_json_database import init_json_database
 from authark.infrastructure.data.json_user_repository import (
@@ -18,14 +20,17 @@ class Registry(dict, ABC):
         pass
 
 
-class MemoryJwtRegistry(Dict[str, Any]):
+class MemoryRegistry(Dict[str, Any]):
 
     def __init__(self, config: Config) -> None:
 
         # Services
         user_repository = MemoryUserRepository()
-        token_service = PyJWTTokenService('DEVSECRET123', 'HS256')
-        auth_coordinator = AuthCoordinator(user_repository, token_service)
+        hash_service = MemoryHashService()
+        token_service = MemoryTokenService()
+
+        auth_coordinator = AuthCoordinator(user_repository,
+                                           hash_service, token_service)
 
         self['auth_coordinator'] = auth_coordinator
 
@@ -42,6 +47,8 @@ class JsonJwtRegistry(Dict[str, Any]):
         # Services
         user_repository = JsonUserRepository(database_path)
         token_service = PyJWTTokenService('DEVSECRET123', 'HS256')
-        auth_coordinator = AuthCoordinator(user_repository, token_service)
+        hash_service = MemoryHashService()
+        auth_coordinator = AuthCoordinator(user_repository,
+                                           hash_service, token_service)
 
         self['auth_coordinator'] = auth_coordinator
