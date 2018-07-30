@@ -25,6 +25,7 @@ MarkupSafe==1.0
 mkdocs==0.17.0
 mypy==0.540
 packaging==17.1
+passlib==1.7.1
 pathtools==0.1.2
 pep8==1.7.1
 port-for==0.3.1
