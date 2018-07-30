@@ -8,15 +8,16 @@ class TokenResource(Resource):
     def __init__(self, **kwargs: Any) -> None:
         self.auth_coordinator = kwargs['auth_coordinator']
 
+    def get(self) -> str:
+        return "Authentication endpoint. Please 'Post' to '/auth'"
+
     def post(self) -> Tuple[str, int]:
         data = request.get_json()
-        username = data.get('username')
-        email = data.get('email')
-        password = data.get('password')
+        try:
+            username = data.get('username')
+            password = data.get('password')
+            token = self.auth_coordinator.authenticate(username, password)
+        except Exception as e:
+            return '', 401
 
-        user = self.auth_coordinator.register(username, email, password)
-
-        response = 'Account Created: username<{0}> - email<{1}>'.format(
-            username, email)
-
-        return response, 201
+        return str(token.value), 200
