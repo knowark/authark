@@ -3,7 +3,7 @@ from flask import request
 from flask_restful import Resource
 
 
-class AuthResource(Resource):
+class TokenResource(Resource):
 
     def __init__(self, **kwargs: Any) -> None:
         self.auth_coordinator = kwargs['auth_coordinator']
