@@ -9,7 +9,7 @@ from authark.infrastructure.config.context import Context
 from authark.infrastructure.config.config import (
     DevelopmentConfig, ProductionConfig)
 from authark.infrastructure.config.registry import (
-    MemoryJwtRegistry, JsonJwtRegistry)
+    MemoryRegistry, JsonJwtRegistry)
 
 
 def main() -> None:
@@ -23,7 +23,7 @@ def main() -> None:
 
     if args.developement:
         ConfigClass = DevelopmentConfig
-        RegistryClass = MemoryJwtRegistry
+        RegistryClass = MemoryRegistry
 
     try:
         config = ConfigClass()

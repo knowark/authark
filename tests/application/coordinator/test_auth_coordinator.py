@@ -4,8 +4,10 @@ from authark.application.coordinators.auth_coordinator import AuthCoordinator
 from authark.application.repositories.user_repository import UserRepository
 from authark.application.repositories.user_repository import (
     MemoryUserRepository)
-from authark.application.services.token_service import TokenService
-from authark.application.services.token_service import MemoryTokenService
+from authark.application.services.token_service import (
+    TokenService, MemoryTokenService)
+from authark.application.services.hash_service import (
+    HashService, MemoryHashService)
 from authark.application.models.error import AuthError
 from authark.application.models.user import User
 from authark.application.models.token import Token
@@ -18,9 +20,9 @@ from authark.application.models.token import Token
 def mock_user_repository() -> UserRepository:
     MockUserRepository = MemoryUserRepository
     user_dict = {
-        "valenep": User('valenep', 'valenep@gmail.com', "PASS1"),
-        "tebanep": User('tebanep', 'tebanep@gmail.com', "PASS2"),
-        "gabecheve": User('gabecheve', 'gabecheve@gmail.com', "PASS3")
+        "valenep": User('valenep', 'valenep@gmail.com', "HASHED: PASS1"),
+        "tebanep": User('tebanep', 'tebanep@gmail.com', "HASHED: PASS2"),
+        "gabecheve": User('gabecheve', 'gabecheve@gmail.com', "HASHED: PASS3")
     }
     mock_user_repository = MemoryUserRepository()
     mock_user_repository.load(user_dict)
@@ -29,15 +31,23 @@ def mock_user_repository() -> UserRepository:
 
 
 @fixture
-def mock_token_service() -> UserRepository:
+def mock_token_service() -> TokenService:
     mock_token_service = MemoryTokenService()
     return mock_token_service
 
 
 @fixture
+def mock_hash_service() -> HashService:
+    mock_hash_service = MemoryHashService()
+    return mock_hash_service
+
+
+@fixture
 def auth_coordinator(mock_user_repository: UserRepository,
+                     mock_hash_service: HashService,
                      mock_token_service: TokenService) -> AuthCoordinator:
-    return AuthCoordinator(mock_user_repository, mock_token_service)
+    return AuthCoordinator(mock_user_repository,
+                           mock_hash_service, mock_token_service)
 
 
 ########
