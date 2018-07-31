@@ -10,3 +10,6 @@ class PasslibHashService(HashService):
 
     def generate_hash(self, value: str) -> str:
         return pbkdf2_sha256.hash(value)
+
+    def verify_password(self, password: str, hash: str) -> bool:
+        return pbkdf2_sha256.verify(password, hash)
