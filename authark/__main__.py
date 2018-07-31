@@ -6,7 +6,7 @@ import argparse
 from authark.infrastructure.web.base import create_app
 from authark.infrastructure.web.server import Application
 from authark.infrastructure.config.context import Context
-from authark.infrastructure.terminal.base import create_panel
+from authark.infrastructure.terminal.panel import Panel
 from authark.infrastructure.config.config import (
     DevelopmentConfig, ProductionConfig)
 from authark.infrastructure.config.registry import (
@@ -41,7 +41,7 @@ def main() -> None:
         sys.exit("Configuration loading error: {0} {1}".format(type(e), e))
 
     if args.terminal:
-        app = create_panel(context)
+        app = Panel(context)
         app.run()
     else:
         app = create_app(context)
