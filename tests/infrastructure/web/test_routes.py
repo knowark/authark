@@ -22,11 +22,11 @@ class MockRegistry(Registry):
             'eecheverry': User(
                 "eecheverry",
                 "eecheverry@nubark.com",
-                "ABC1234"),
+                "HASHED: ABC1234"),
             'mvivas': User(
                 "mvivas",
                 "mvivas@gmail.com",
-                "XYZ098"
+                "HASHED: XYZ098"
             )
         })
         token_service = PyJWTTokenService('TESTSECRET', 'HS256')

@@ -20,9 +20,9 @@ from authark.application.models.token import Token
 def mock_user_repository() -> UserRepository:
     MockUserRepository = MemoryUserRepository
     user_dict = {
-        "valenep": User('valenep', 'valenep@gmail.com', "PASS1"),
-        "tebanep": User('tebanep', 'tebanep@gmail.com', "PASS2"),
-        "gabecheve": User('gabecheve', 'gabecheve@gmail.com', "PASS3")
+        "valenep": User('valenep', 'valenep@gmail.com', "HASHED: PASS1"),
+        "tebanep": User('tebanep', 'tebanep@gmail.com', "HASHED: PASS2"),
+        "gabecheve": User('gabecheve', 'gabecheve@gmail.com', "HASHED: PASS3")
     }
     mock_user_repository = MemoryUserRepository()
     mock_user_repository.load(user_dict)

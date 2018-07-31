@@ -18,7 +18,8 @@ class AuthCoordinator:
     def authenticate(self, username: str, password: str) -> Token:
         user = self.user_repository.get(username)
 
-        if not (user and user.password == password):
+        if not (user and self.hash_service.verify_password(
+                password, user.password)):
             raise AuthError("Authentication Error!")
 
         payload = {'user': user.username, 'email': user.email}
