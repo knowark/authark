@@ -6,6 +6,7 @@ import argparse
 from authark.infrastructure.web.base import create_app
 from authark.infrastructure.web.server import Application
 from authark.infrastructure.config.context import Context
+from authark.infrastructure.terminal.base import create_panel
 from authark.infrastructure.config.config import (
     DevelopmentConfig, ProductionConfig)
 from authark.infrastructure.config.registry import (
@@ -14,8 +15,14 @@ from authark.infrastructure.config.registry import (
 
 def main() -> None:
     parser = argparse.ArgumentParser()
-    parser.add_argument("-dev", "--developement", help="Development Mode.",
-                        action="store_true")
+    parser.add_argument(
+        "-dev", "--developement",
+        help="Development Mode.",
+        action="store_true")
+    parser.add_argument(
+        "-t", "--terminal",
+        help="Terminal User Interface.",
+        action="store_true")
     args = parser.parse_args()
 
     ConfigClass = ProductionConfig
@@ -33,8 +40,12 @@ def main() -> None:
     except Exception as e:
         sys.exit("Configuration loading error: {0} {1}".format(type(e), e))
 
-    app = create_app(context)
-    Application(app, gunicorn_config).run()
+    if args.terminal:
+        app = create_panel(context)
+        app.run()
+    else:
+        app = create_app(context)
+        Application(app, gunicorn_config).run()
 
 
 if __name__ == '__main__':
