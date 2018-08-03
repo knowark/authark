@@ -81,3 +81,12 @@ def test_memory_user_repository_search_all(user_dict):
     users = memory_user_repository.search([])
 
     assert len(users) == 3
+
+
+def test_memory_user_repository_search_limit(user_dict):
+    memory_user_repository = MemoryUserRepository()
+    memory_user_repository.load(user_dict)
+
+    users = memory_user_repository.search([], limit=2)
+
+    assert len(users) == 2

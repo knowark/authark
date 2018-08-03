@@ -21,7 +21,8 @@ class UserRepository(ABC):
         "Internal save method to be implemented."
 
     @abstractmethod
-    def search(self, domain: QueryDomain) -> List[User]:
+    def search(self, domain: QueryDomain,
+               limit: int, offset: int) -> List[User]:
         "Search users matching a query domain"
 
 
@@ -38,8 +39,10 @@ class MemoryUserRepository(UserRepository):
         self.user_dict[username] = user
         return True
 
-    def search(self, domain: QueryDomain) -> List[User]:
+    def search(self, domain: QueryDomain, limit=100, offset=0) -> List[User]:
         users = list(self.user_dict.values())
+        if limit:
+            users = users[:limit]
         return users
 
     def load(self, user_dict: Dict[str, User]) -> None:
