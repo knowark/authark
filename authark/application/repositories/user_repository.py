@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
-from typing import Dict, Optional
+from typing import List, Dict, Optional
+from authark.application.utilities.type_definitions import QueryDomain
 from authark.application.models.user import User
 
 
@@ -19,6 +20,10 @@ class UserRepository(ABC):
     def save_(self, user: User) -> bool:
         "Internal save method to be implemented."
 
+    @abstractmethod
+    def search(self, domain: QueryDomain) -> List[User]:
+        "Search users matching a query domain"
+
 
 class MemoryUserRepository(UserRepository):
     def __init__(self) -> None:
@@ -32,6 +37,10 @@ class MemoryUserRepository(UserRepository):
         username = user.username
         self.user_dict[username] = user
         return True
+
+    def search(self, domain: QueryDomain) -> List[User]:
+        users = list(self.user_dict.values())
+        return users
 
     def load(self, user_dict: Dict[str, User]) -> None:
         self.user_dict = user_dict

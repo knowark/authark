@@ -11,6 +11,7 @@ def test_user_repository_methods() -> None:
     methods = UserRepository.__abstractmethods__
     assert 'get' in methods
     assert 'save_' in methods
+    assert 'search' in methods
 
     sig = signature(UserRepository.save)
     assert sig.parameters.get('user')
@@ -71,3 +72,12 @@ def test_memory_user_repository_save_user_duplicate() -> None:
     is_saved = memory_user_repository.save(user)
     assert not is_saved
     assert len(memory_user_repository.user_dict) == 1
+
+
+def test_memory_user_repository_search_all(user_dict):
+    memory_user_repository = MemoryUserRepository()
+    memory_user_repository.load(user_dict)
+
+    users = memory_user_repository.search([])
+
+    assert len(users) == 3
