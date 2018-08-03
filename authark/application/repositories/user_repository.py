@@ -43,6 +43,8 @@ class MemoryUserRepository(UserRepository):
         users = list(self.user_dict.values())
         if limit:
             users = users[:limit]
+        if offset:
+            users = users[offset:]
         return users
 
     def load(self, user_dict: Dict[str, User]) -> None:
