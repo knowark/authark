@@ -1,8 +1,9 @@
 import os
 from abc import ABC, abstractmethod
 from json import load, dump
-from typing import Dict, Optional
+from typing import Dict, List, Optional, Any
 from authark.application.models.user import User
+from authark.application.utilities.type_definitions import QueryDomain
 from authark.application.repositories.user_repository import UserRepository
 
 
@@ -21,10 +22,22 @@ class JsonUserRepository(UserRepository):
         return user
 
     def save_(self, user: User) -> bool:
-        data = {}
+        data = {}  # type: Dict[str, Any]
         with open(self.file_path, 'r') as f:
             data = load(f)
         data['users'].update({user.username: vars(user)})
         with open(self.file_path, 'w') as f:
             dump(data, f)
         return True
+
+    def search(self, domain: QueryDomain, limit=100, offset=0) -> List[User]:
+        with open(self.file_path, 'r') as f:
+            data = load(f)
+            user_dict = data.get('users', {})
+
+        users = list(user_dict.values())
+        if limit:
+            users = users[:limit]
+        if offset:
+            users = users[offset:]
+        return users
