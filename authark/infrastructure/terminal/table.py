@@ -4,7 +4,7 @@ from typing import List, Dict, Any
 
 class Table(urwid.WidgetWrap):
 
-    def __init__(self, data_list: List[Dict[str, Any]]):
+    def __init__(self, data_list: List[Dict[str, Any]]) -> None:
         header = self._build_header(data_list[0])
         widget_list = [header]
         for row_dict in data_list:
@@ -43,7 +43,7 @@ class Table(urwid.WidgetWrap):
 
 class TableRow(urwid.WidgetWrap):
 
-    def __init__(self, row_dict: Dict[str, Any]):
+    def __init__(self, row_dict: Dict[str, Any]) -> None:
         items_list = []
         for key, value in row_dict.items():
             widget = urwid.Text(str(value), align='center')
@@ -54,5 +54,5 @@ class TableRow(urwid.WidgetWrap):
 
         super().__init__(widget)
 
-    # def keypress(self, size, key):
-    #     print("SUPERRRR!!!!  <<<<")
+    def keypress(self, size, key):
+        print("SUPERRRR!!!!  <<<<")
