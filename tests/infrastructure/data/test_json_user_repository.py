@@ -52,3 +52,21 @@ def test_json_user_repository_save_user(
         assert user_dict.get('username') == user.username
         assert user_dict.get('email') == user.email
         assert user_dict.get('password') == user.password
+
+
+def test_json_user_repository_search_all(user_repository):
+    users = user_repository.search([])
+
+    assert len(users) == 3
+
+
+def test_json_user_repository_search_limit(user_repository):
+    users = user_repository.search([], limit=2)
+
+    assert len(users) == 2
+
+
+def test_json_user_repository_search_offset(user_repository):
+    users = user_repository.search([], offset=2)
+
+    assert len(users) == 1
