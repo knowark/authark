@@ -50,15 +50,29 @@ core, and so are the **Provider** and **Role**.
     <table border="0" cellborder="1" cellspacing="0">
     <tr><td><i>Policy</i></td></tr>
     <tr><td port="id">id</td></tr>
+    <tr><td port="type">type</td></tr> 
+    <tr><td port="user_id">user_id</td></tr>  
+    <tr><td port="role_id">role_id</td></tr>
+    <tr><td port="value">value</td></tr>
     </table>>];
 
     Permission [label=<
     <table border="0" cellborder="1" cellspacing="0">
     <tr><td><i>Permission</i></td></tr>
     <tr><td port="id">id</td></tr>
+    <tr><td port="match">match</td></tr> 
     <tr><td port="resource_id">resource_id</td></tr> 
     <tr><td port="policy_id">policy_id</td></tr> 
     </table>>];
+
+    RolePermission [label=<
+    <table border="0" cellborder="1" cellspacing="0">
+    <tr><td><i>RolePermission</i></td></tr>
+    <tr><td port="id">id</td></tr>
+    <tr><td port="role_id">role_id</td></tr> 
+    <tr><td port="permission_id">permission_id</td></tr> 
+    </table>>];
+
 
     UserRole:user_id -> User:id;
     UserRole:role_id -> Role:id;
@@ -66,6 +80,10 @@ core, and so are the **Provider** and **Role**.
     Resource:provider_id -> Provider:id;
     Permission:resource_id -> Resource:id; 
     Permission:policy_id -> Policy:id;
+    RolePermission:role_id -> Role:id;
+    RolePermission:permission_id -> Permission:id;
+    Policy:user_id -> User:id;
+    Policy:role_id -> Role:id;
     }
 
 
@@ -77,3 +95,6 @@ A service or data **Provider** may have one or more **Resources** to which it
 can give access. To do that, **Policies** are created to filter out the kind
 of records a user can get access to, and a set of **Permissions** link them to
 the specified **Resource**.
+
+The **Policy** type may be one of *user*, *role*, *time* or *domain*.
+**Permissions** should define a *match* attribute which can be *all* or *any*.
