@@ -18,11 +18,11 @@ from authark.infrastructure.config.config import Config
 
 class Registry(dict, ABC):
     @abstractmethod
-    def __init__(self, config: Config):
+    def __init__(self, config: Config) -> None:
         pass
 
 
-class MemoryRegistry(Dict[str, Any]):
+class MemoryRegistry(Registry):
 
     def __init__(self, config: Config) -> None:
 
@@ -37,7 +37,7 @@ class MemoryRegistry(Dict[str, Any]):
         self['auth_coordinator'] = auth_coordinator
 
 
-class JsonJwtRegistry(Dict[str, Any]):
+class JsonJwtRegistry(Registry):
 
     def __init__(self, config: Config) -> None:
         database_config = config.get("database")

@@ -3,14 +3,15 @@ Authark entrypoint
 """
 import sys
 import argparse
+from typing import Type
 from authark.infrastructure.web.base import create_app
 from authark.infrastructure.web.server import Application
 from authark.infrastructure.config.context import Context
-from authark.infrastructure.terminal.panel import Panel
+from authark.infrastructure.terminal.main import Main
 from authark.infrastructure.config.config import (
-    DevelopmentConfig, ProductionConfig)
+    Config, DevelopmentConfig, ProductionConfig)
 from authark.infrastructure.config.registry import (
-    MemoryRegistry, JsonJwtRegistry)
+    Registry, MemoryRegistry, JsonJwtRegistry)
 
 
 def main() -> None:
@@ -25,8 +26,8 @@ def main() -> None:
         action="store_true")
     args = parser.parse_args()
 
-    ConfigClass = ProductionConfig
-    RegistryClass = JsonJwtRegistry
+    ConfigClass = ProductionConfig  # type: Type[Config]
+    RegistryClass = JsonJwtRegistry  # type: Type[Registry]
 
     if args.developement:
         ConfigClass = DevelopmentConfig
@@ -41,7 +42,7 @@ def main() -> None:
         sys.exit("Configuration loading error: {0} {1}".format(type(e), e))
 
     if args.terminal:
-        app = Panel(context)
+        app = Main(context)
         app.run()
     else:
         app = create_app(context)
