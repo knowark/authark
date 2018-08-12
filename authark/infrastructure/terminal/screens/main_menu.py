@@ -2,7 +2,7 @@ import urwid
 from typing import Dict, Callable
 from authark.infrastructure.terminal.framework.screen import Screen
 from authark.infrastructure.terminal.framework.environment import Environment
-from authark.infrastructure.terminal.screens.users import UsersScreen
+from authark.infrastructure.terminal.screens.users.users import UsersScreen
 
 
 class MainMenu(Screen):

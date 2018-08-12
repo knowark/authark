@@ -9,9 +9,11 @@ logging.basicConfig(level=logging.DEBUG, filename='/tmp/authark.log')
 
 class Screen(urwid.WidgetWrap):
 
-    def __init__(self, name: str, env: Environment) -> None:
+    def __init__(self, name: str, env: Environment,
+                 parent: 'Screen' = None) -> None:
         self.name = name
         self.env = env
+        self.parent = parent
         self.logger = logging.getLogger()
 
         widget = self._build_widget()
@@ -35,3 +37,8 @@ class Screen(urwid.WidgetWrap):
             previous = self.env.stack.pop()
             self.env.holder.original_widget = previous
         self.logger.debug("BACK: %s", self.env.stack)
+
+    def keypress(self, size, key):
+        if key in ('b', 'B', 'left'):
+            return self._back()
+        return super().keypress(size, key)
