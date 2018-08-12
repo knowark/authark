@@ -15,7 +15,7 @@ class UsersScreen(Screen):
             "Press (", ("add button", "A"), ") to add a new record. ",
             "Press (", ("update button", "U"), ") to update a record. ",
             "Press (", ("remove button", "R"), ") to remove a record. "
-            "Press (", ("back button", "B"), ") to go back. "
+            "Press (", ("back button", "Esc"), ") to go back. "
         ])
 
         # Create the contents table

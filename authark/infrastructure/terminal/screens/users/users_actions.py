@@ -11,7 +11,8 @@ class UsersAddScreen(Screen):
             urwid.Text(self.name, align='center'), 'titlebar')
 
         footer = urwid.Text([
-            "Press (", ("back button", "B"), ") to go back. "
+            "Press (", ("add button", "Enter"), ") to save. "
+            "Press (", ("back button", "Esc"), ") to go back. "
         ])
 
         body = urwid.Pile([

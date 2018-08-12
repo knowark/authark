@@ -39,6 +39,6 @@ class Screen(urwid.WidgetWrap):
         self.logger.debug("BACK: %s", self.env.stack)
 
     def keypress(self, size, key):
-        if key in ('b', 'B', 'left'):
+        if key == 'esc':
             return self._back()
         return super().keypress(size, key)
