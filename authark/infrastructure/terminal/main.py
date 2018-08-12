@@ -14,7 +14,7 @@ class Main:
         self.context = context
         self.holder = urwid.WidgetPlaceholder(urwid.SolidFill('/'))
         self.stack = []  # type: List[urwid.Widget]
-        self.env = Environment(self.holder, self.stack)
+        self.env = Environment(self.holder, self.stack, self.context)
 
         self.top = self._build_top(self.holder)
         self.loop = urwid.MainLoop(
