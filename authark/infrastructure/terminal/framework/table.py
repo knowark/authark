@@ -24,18 +24,6 @@ class Table(urwid.WidgetWrap):
         return urwid.Columns(headers_list)
 
     def keypress(self, size, key):
-        # print("superr")
-
-        # text = urwid.Text("YUPIII")
-        # frame = urwid.Frame(text)
-        # overlay = urwid.Overlay(
-        #     frame, self,
-        #     align='center', width=('relative', 80),
-        #     valign='middle', height=('relative', 80),
-        # )
-
-        # return overlay
-
         if key == 'home':
             self._w.set_focus(1)
             key = None
@@ -65,12 +53,3 @@ class TableRow(urwid.WidgetWrap):
             urwid.Columns(items_list), None, focus_map='reversed')
 
         super().__init__(widget)
-
-    def keypress(self, size, key):
-        text = urwid.Text("YUPIII")
-        frame = urwid.Frame(text)
-        overlay = urwid.Overlay(frame, self)
-
-        return popup.create_pop_up()
-
-        # print("SUPERRRR!!!!  <<<<")

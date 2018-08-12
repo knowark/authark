@@ -21,12 +21,11 @@ class Main:
             self.top,
             palette=palette,
             unhandled_input=self._unhandled_input)
-        # self._set_main_menu()
 
     def _build_top(self, holder: urwid.Widget) -> urwid.Overlay:
-        content = MainMenu("Main Menu", self.env)
+        holder.original_widget = MainMenu("Main Menu", self.env)
         top = urwid.Overlay(
-            content, urwid.SolidFill('\N{MEDIUM SHADE}'),
+            holder, urwid.SolidFill('\N{MEDIUM SHADE}'),
             align='center', width=('relative', 95),
             valign='middle', height=('relative', 95),
             min_width=20, min_height=9)
