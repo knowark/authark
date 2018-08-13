@@ -16,6 +16,8 @@ from authark.application.models.token import Token
 ###########
 # FIXTURES
 ###########
+
+
 @fixture
 def mock_user_repository() -> UserRepository:
     MockUserRepository = MemoryUserRepository
@@ -63,7 +65,7 @@ def test_auth_coordinator_authenticate(
 
     token = auth_coordinator.authenticate("tebanep", "PASS2")
 
-    assert isinstance(token, Token)
+    assert isinstance(token, str)
 
 
 def test_auth_coordinator_fail_to_authenticate(
@@ -80,5 +82,5 @@ def test_auth_coordinator_register(
         "mvp", "mvp@gmail.com", "PASS4")
 
     assert user
-    assert isinstance(user, User)
+    assert isinstance(user, dict)
     assert len(auth_coordinator.user_repository.user_dict) == 4

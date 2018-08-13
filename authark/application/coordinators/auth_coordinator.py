@@ -4,6 +4,8 @@ from authark.application.services.hash_service import HashService
 from authark.application.models.error import AuthError
 from authark.application.models.token import Token
 from authark.application.models.user import User
+from authark.application.utilities.type_definitions import (
+    TokenString, UserDict)
 
 
 class AuthCoordinator:
@@ -15,7 +17,7 @@ class AuthCoordinator:
         self.hash_service = hash_service
         self.token_service = token_service
 
-    def authenticate(self, username: str, password: str) -> Token:
+    def authenticate(self, username: str, password: str) -> TokenString:
         user = self.user_repository.get(username)
 
         if not (user and self.hash_service.verify_password(
@@ -26,13 +28,13 @@ class AuthCoordinator:
 
         token = self.token_service.generate_token(payload)
 
-        return token
+        return token.value
 
-    def register(self, username: str, email: str, password: str) -> User:
+    def register(self, username: str, email: str, password: str) -> UserDict:
 
         hashed_password = self.hash_service.generate_hash(password)
 
         user = User(username=username, email=email, password=hashed_password)
         self.user_repository.save(user)
 
-        return user
+        return vars(user)

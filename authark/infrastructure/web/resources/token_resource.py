@@ -20,4 +20,4 @@ class TokenResource(Resource):
         except Exception as e:
             return '', 401
 
-        return str(token.value), 200
+        return token, 200
