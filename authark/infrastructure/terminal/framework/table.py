@@ -13,7 +13,7 @@ class Table(urwid.WidgetWrap):
             widget_list.append(row_widget)
 
         widget = urwid.ListBox(urwid.SimpleFocusListWalker(widget_list))
-        widget.set_focus(1)
+        widget.set_focus(0)
         super().__init__(widget)
 
     def _build_header(self, headers_list: List[str]) -> urwid.Widget:
@@ -26,13 +26,13 @@ class Table(urwid.WidgetWrap):
 
     def keypress(self, size, key):
         if key == 'home':
-            self._w.set_focus(1)
+            self._w.set_focus(0)
             key = None
         elif key == 'end':
             self._w.set_focus(len(self._w.body) - 1)
             key = None
         elif key == 'up':
-            position = max(1, self._w.focus_position - 1)
+            position = max(0, self._w.focus_position - 1)
             self._w.set_focus(position)
             key = None
         elif key == 'down':
