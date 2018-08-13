@@ -8,6 +8,7 @@ from authark.infrastructure.terminal.screens.users.users_actions import (
 class UsersScreen(Screen):
 
     def _build_widget(self) -> urwid.Widget:
+        self.auth_reporter = self.env.context.registry['auth_reporter']
         header = urwid.AttrMap(
             urwid.Text(self.name, align='center'), 'heading')
 
@@ -18,14 +19,10 @@ class UsersScreen(Screen):
             "Press (", ("back button", "Esc"), ") to go back. "
         ])
 
-        # Create the contents table
-        data = [
-            {'name': "Esteban", 'surname': "Echeverry", 'age': 29},
-            {'name': "Gabriel", 'surname': "Echeverry", 'age': 26},
-            {'name': "Valentina", 'surname': "Echeverry", 'age': 34}
-        ]
-        data = data * 5
-        self.table = Table(data)
+        headers_list = ['username', 'email']
+        data = self.auth_reporter.search_users([])
+
+        self.table = Table(data, headers_list)
         body = self.table
 
         frame = urwid.Frame(header=header, body=body, footer=footer)

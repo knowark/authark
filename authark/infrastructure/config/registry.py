@@ -3,6 +3,8 @@ from typing import Any, Dict
 from abc import ABC, abstractmethod
 from authark.application.models.user import User
 from authark.application.coordinators.auth_coordinator import AuthCoordinator
+from authark.application.reporters.authark_reporter import (
+    AutharkReporter, MemoryAutharkReporter)
 from authark.application.repositories.user_repository import (
     MemoryUserRepository)
 from authark.application.services.token_service import MemoryTokenService
@@ -13,6 +15,8 @@ from authark.infrastructure.crypto.passlib_hash_service import (
 from authark.infrastructure.data.init_json_database import init_json_database
 from authark.infrastructure.data.json_user_repository import (
     JsonUserRepository)
+from authark.infrastructure.data.json_authark_reporter import (
+    JsonAutharkReporter)
 from authark.infrastructure.config.config import Config
 
 
@@ -33,8 +37,10 @@ class MemoryRegistry(Registry):
 
         auth_coordinator = AuthCoordinator(user_repository,
                                            hash_service, token_service)
+        auth_reporter = MemoryAutharkReporter(user_repository)
 
         self['auth_coordinator'] = auth_coordinator
+        self['auth_reporter'] = auth_reporter
 
 
 class JsonJwtRegistry(Registry):
@@ -52,5 +58,7 @@ class JsonJwtRegistry(Registry):
         hash_service = PasslibHashService()
         auth_coordinator = AuthCoordinator(user_repository,
                                            hash_service, token_service)
+        auth_reporter = JsonAutharkReporter(user_repository)
 
         self['auth_coordinator'] = auth_coordinator
+        self['auth_reporter'] = auth_reporter

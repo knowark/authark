@@ -35,7 +35,7 @@ class JsonUserRepository(UserRepository):
             data = load(f)
             user_dict = data.get('users', {})
 
-        users = list(user_dict.values())
+        users = [User(**user_dict) for user_dict in user_dict.values()]
         if limit:
             users = users[:limit]
         if offset:

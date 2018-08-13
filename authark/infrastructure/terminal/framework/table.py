@@ -4,24 +4,25 @@ from typing import List, Dict, Any
 
 class Table(urwid.WidgetWrap):
 
-    def __init__(self, data_list: List[Dict[str, Any]]) -> None:
-        header = self._build_header(data_list[0])
+    def __init__(self, data_list: List[Dict[str, Any]],
+                 headers_list: List[str]) -> None:
+        header = self._build_header(headers_list)
         widget_list = [header]
         for row_dict in data_list:
-            row_widget = TableRow(row_dict)
+            row_widget = TableRow(row_dict, headers_list)
             widget_list.append(row_widget)
 
         widget = urwid.ListBox(urwid.SimpleFocusListWalker(widget_list))
         widget.set_focus(1)
         super().__init__(widget)
 
-    def _build_header(self, header_dict: Dict[str, Any]) -> urwid.Widget:
-        headers_list = [urwid.Pile([
-            urwid.Text(key.upper(), align='center'),
-            urwid.Text('-' * len(key), align='center')])
-            for key in header_dict.keys()]
+    def _build_header(self, headers_list: List[str]) -> urwid.Widget:
+        headers_widgets = [urwid.Pile([
+            urwid.Text(header.upper(), align='center'),
+            urwid.Text('-' * len(header), align='center')])
+            for header in headers_list]
 
-        return urwid.Columns(headers_list)
+        return urwid.Columns(headers_widgets)
 
     def keypress(self, size, key):
         if key == 'home':
@@ -43,10 +44,11 @@ class Table(urwid.WidgetWrap):
 
 class TableRow(urwid.WidgetWrap):
 
-    def __init__(self, row_dict: Dict[str, Any]) -> None:
+    def __init__(self, row_dict: Dict[str, Any],
+                 headers_list: List[str]) -> None:
         items_list = []
-        for key, value in row_dict.items():
-            widget = urwid.Text(str(value), align='center')
+        for key in headers_list:
+            widget = urwid.Text(str(row_dict[key]), align='center')
             items_list.append(widget)
 
         widget = urwid.AttrMap(
