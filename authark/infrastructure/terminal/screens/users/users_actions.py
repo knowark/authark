@@ -15,13 +15,17 @@ class UsersAddScreen(Screen):
             "Press (", ("back button", "Esc"), ") to go back. "
         ])
 
+        self.username = urwid.Edit()
+        self.email = urwid.Edit()
+        self.password = urwid.Edit()
+
         body = urwid.Pile([
             urwid.Columns([
-                urwid.Text("Username: ", align='center'), urwid.Edit()]),
+                urwid.Text("Username: ", align='center'), self.username]),
             urwid.Columns([
-                urwid.Text("Email: ", align='center'), urwid.Edit()]),
+                urwid.Text("Email: ", align='center'), self.email]),
             urwid.Columns([
-                urwid.Text("Password: ", align='center'), urwid.Edit()]),
+                urwid.Text("Password: ", align='center'), self.password]),
         ])
         body = urwid.Padding(urwid.Filler(body), align='center', width=80)
 
@@ -34,3 +38,13 @@ class UsersAddScreen(Screen):
             min_width=20, min_height=9)
 
         return widget
+
+    def keypress(self, size, key):
+        if key == 'enter':
+            username = self.username.edit_text
+            email = self.email.edit_text
+            password = self.password.edit_text
+            user = self.auth_coordinator.register(username, email, password)
+            self.logger.debug("User -->> %s", user)
+            self._back()
+        return super().keypress(size, key)
