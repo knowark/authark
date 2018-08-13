@@ -47,4 +47,7 @@ class UsersAddScreen(Screen):
             user = self.auth_coordinator.register(username, email, password)
             self.logger.debug("User -->> %s", user)
             self._back()
+            main_menu = self.env.stack.pop()
+            main_menu.show_users_screen()
+
         return super().keypress(size, key)

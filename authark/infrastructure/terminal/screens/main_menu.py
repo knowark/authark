@@ -13,7 +13,7 @@ class MainMenu(Screen):
         widget_list = [
             header,
             urwid.Divider(),
-            self._build_menu_option('Users', self._show_users_screen)
+            self._build_menu_option('Users', self.show_users_screen)
         ]
 
         widget = urwid.ListBox(urwid.SimpleFocusListWalker(widget_list))
@@ -26,7 +26,7 @@ class MainMenu(Screen):
         urwid.connect_signal(button, 'click', callback)
         return urwid.AttrMap(button, 'reversed')
 
-    def _show_users_screen(self, button):
+    def show_users_screen(self, button=None):
         screen = UsersScreen('USERS', self.env)
         self.logger.debug('SCREEN: %s', screen)
         return self._open_screen(screen)
