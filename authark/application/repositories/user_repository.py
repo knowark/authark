@@ -10,8 +10,8 @@ class UserRepository(ABC):
         "Get method to be implemented."
 
     def save(self, user: User) -> bool:
-        existing_user = self.get(user.username)
-        if existing_user and existing_user.username:
+        existing_user = self.get(user.id)
+        if existing_user and existing_user.id:
             return False
 
         return self.save_(user)
@@ -35,8 +35,8 @@ class MemoryUserRepository(UserRepository):
         return user
 
     def save_(self, user: User) -> bool:
-        username = user.username
-        self.user_dict[username] = user
+        id = user.id
+        self.user_dict[id] = user
         return True
 
     def search(self, domain: QueryDomain, limit=100, offset=0) -> List[User]:
