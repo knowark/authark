@@ -24,9 +24,9 @@ def test_memory_user_repository_implementation() -> None:
 @fixture
 def user_dict() -> Dict[str, User]:
     user_dict = {
-        "valenep": User('1', 'valenep', 'valenep@gmail.com', "PASS1"),
-        "tebanep": User('2', 'tebanep', 'tebanep@gmail.com', "PASS2"),
-        "gabeche": User('3', 'gabeche', 'gabeche@gmail.com', "PASS3")
+        "1": User('1', 'valenep', 'valenep@gmail.com', "PASS1"),
+        "2": User('2', 'tebanep', 'tebanep@gmail.com', "PASS2"),
+        "3": User('3', 'gabeche', 'gabeche@gmail.com', "PASS3")
     }
     return user_dict
 
@@ -43,7 +43,7 @@ def test_memory_user_repository_get_user(user_dict: Dict[str, User]) -> None:
     memory_user_repository = MemoryUserRepository()
 
     memory_user_repository.load(user_dict)
-    user = memory_user_repository.get("valenep")
+    user = memory_user_repository.get("1")
 
     assert user and user.username == "valenep"
     assert user and user.email == "valenep@gmail.com"

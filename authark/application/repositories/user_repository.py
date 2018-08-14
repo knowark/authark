@@ -6,7 +6,7 @@ from authark.application.models.user import User
 
 class UserRepository(ABC):
     @abstractmethod
-    def get(self, username: str) -> User:
+    def get(self, id: str) -> User:
         "Get method to be implemented."
 
     def save(self, user: User) -> bool:
@@ -30,8 +30,8 @@ class MemoryUserRepository(UserRepository):
     def __init__(self) -> None:
         self.user_dict = {}  # type: Dict[str, User]
 
-    def get(self, username: str) -> Optional[User]:
-        user = self.user_dict.get(username)
+    def get(self, id: str) -> Optional[User]:
+        user = self.user_dict.get(id)
         return user
 
     def save_(self, user: User) -> bool:
