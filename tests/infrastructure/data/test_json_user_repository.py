@@ -8,9 +8,9 @@ from authark.infrastructure.data.json_user_repository import JsonUserRepository
 @fixture
 def user_repository(tmpdir) -> JsonUserRepository:
     user_dict = {
-        "valenep": vars(User('1', 'valenep', 'valenep@gmail.com', "PASS1")),
-        "tebanep": vars(User('2', 'tebanep', 'tebanep@gmail.com', "PASS2")),
-        "gabeche": vars(User('3', 'gabeche', 'gabeche@gmail.com', "PASS3"))
+        "1": vars(User('1', 'valenep', 'valenep@gmail.com', "PASS1")),
+        "2": vars(User('2', 'tebanep', 'tebanep@gmail.com', "PASS2")),
+        "3": vars(User('3', 'gabeche', 'gabeche@gmail.com', "PASS3"))
     }
 
     file_path = str(tmpdir.mkdir("authark").join('authark_data.json'))
@@ -30,7 +30,7 @@ def test_json_user_repository_implementation() -> None:
 def test_json_user_repository_get_user(
         user_repository: JsonUserRepository) -> None:
 
-    user = user_repository.get("valenep")
+    user = user_repository.get("1")
 
     assert user and user.username == "valenep"
     assert user and user.email == "valenep@gmail.com"
@@ -39,7 +39,7 @@ def test_json_user_repository_get_user(
 def test_json_user_repository_save_user(
         user_repository: JsonUserRepository) -> None:
 
-    user = User('', 'matiasve', 'matiasve@gmail.com', "PASS4")
+    user = User('5', 'matiasve', 'matiasve@gmail.com', "PASS4")
     user_repository.save(user)
 
     file_path = user_repository.file_path
@@ -47,7 +47,7 @@ def test_json_user_repository_save_user(
         data = loads(f.read())
         users_dict = data.get("users")
 
-        user_dict = users_dict.get('matiasve')
+        user_dict = users_dict.get('5')
 
         assert user_dict.get('username') == user.username
         assert user_dict.get('email') == user.email

@@ -11,12 +11,12 @@ class JsonUserRepository(UserRepository):
     def __init__(self, file_path: str) -> None:
         self.file_path = file_path
 
-    def get(self, username: str) -> Optional[User]:
+    def get(self, id: str) -> Optional[User]:
         user = None
         with open(self.file_path) as f:
             data = load(f)
             users = data.get('users') or {}
-            user = users.get(username)
+            user = users.get(id)
             if user:
                 user = User(**user)
         return user
@@ -25,7 +25,7 @@ class JsonUserRepository(UserRepository):
         data = {}  # type: Dict[str, Any]
         with open(self.file_path, 'r') as f:
             data = load(f)
-        data['users'].update({user.username: vars(user)})
+        data['users'].update({user.id: vars(user)})
         with open(self.file_path, 'w') as f:
             dump(data, f)
         return True
