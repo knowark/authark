@@ -6,6 +6,7 @@ from authark.application.repositories.user_repository import (
     MemoryUserRepository)
 from authark.application.coordinators.auth_coordinator import AuthCoordinator
 from authark.application.services.hash_service import MemoryHashService
+from authark.application.services.id_service import StandardIdService
 from authark.infrastructure.config.registry import Registry
 from authark.infrastructure.web.base import create_app
 from authark.infrastructure.config.config import TrialConfig
@@ -20,10 +21,12 @@ class MockRegistry(Registry):
         user_repository = MemoryUserRepository()
         user_repository.load({
             'eecheverry': User(
+                "",
                 "eecheverry",
                 "eecheverry@nubark.com",
                 "HASHED: ABC1234"),
             'mvivas': User(
+                "",
                 "mvivas",
                 "mvivas@gmail.com",
                 "HASHED: XYZ098"
@@ -31,8 +34,9 @@ class MockRegistry(Registry):
         })
         token_service = PyJWTTokenService('TESTSECRET', 'HS256')
         hash_service = MemoryHashService()
-        auth_coordinator = AuthCoordinator(user_repository,
-                                           hash_service, token_service)
+        id_service = StandardIdService()
+        auth_coordinator = AuthCoordinator(user_repository, hash_service,
+                                           token_service, id_service)
 
         self['auth_coordinator'] = auth_coordinator
 

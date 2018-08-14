@@ -8,6 +8,8 @@ from authark.application.services.token_service import (
     TokenService, MemoryTokenService)
 from authark.application.services.hash_service import (
     HashService, MemoryHashService)
+from authark.application.services.id_service import (
+    IdService, StandardIdService)
 from authark.application.models.error import AuthError
 from authark.application.models.user import User
 from authark.application.models.token import Token
@@ -22,9 +24,9 @@ from authark.application.models.token import Token
 def mock_user_repository() -> UserRepository:
     MockUserRepository = MemoryUserRepository
     user_dict = {
-        "valenep": User('valenep', 'valenep@gmail.com', "HASHED: PASS1"),
-        "tebanep": User('tebanep', 'tebanep@gmail.com', "HASHED: PASS2"),
-        "gabecheve": User('gabecheve', 'gabecheve@gmail.com', "HASHED: PASS3")
+        "valenep": User('1', 'valenep', 'valenep@gmail.com', "HASHED: PASS1"),
+        "tebanep": User('2', 'tebanep', 'tebanep@gmail.com', "HASHED: PASS2"),
+        "gabeche": User('3', 'gabeche', 'gabeche@gmail.com', "HASHED: PASS3")
     }
     mock_user_repository = MemoryUserRepository()
     mock_user_repository.load(user_dict)
@@ -45,11 +47,18 @@ def mock_hash_service() -> HashService:
 
 
 @fixture
+def mock_id_service() -> IdService:
+    mock_id_service = StandardIdService()
+    return mock_id_service
+
+
+@fixture
 def auth_coordinator(mock_user_repository: UserRepository,
                      mock_hash_service: HashService,
-                     mock_token_service: TokenService) -> AuthCoordinator:
-    return AuthCoordinator(mock_user_repository,
-                           mock_hash_service, mock_token_service)
+                     mock_token_service: TokenService,
+                     mock_id_service: IdService) -> AuthCoordinator:
+    return AuthCoordinator(mock_user_repository, mock_hash_service,
+                           mock_token_service, mock_id_service)
 
 
 ########

@@ -15,9 +15,9 @@ def test_authark_reporter_methods():
 def user_repository() -> UserRepository:
     user_repository = MemoryUserRepository()
     user_repository.load({
-        "valenep": User('valenep', 'valenep@gmail.com', "PASS1"),
-        "tebanep": User('tebanep', 'tebanep@gmail.com', "PASS2"),
-        "gabecheve": User('gabecheve', 'gabecheve@gmail.com', "PASS3")
+        "valenep": User('1', 'valenep', 'valenep@gmail.com', "PASS1"),
+        "tebanep": User('2', 'tebanep', 'tebanep@gmail.com', "PASS2"),
+        "gabeche": User('3', 'gabeche', 'gabeche@gmail.com', "PASS3")
     })
     return user_repository
 
