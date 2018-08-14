@@ -8,9 +8,9 @@ from authark.infrastructure.data.json_user_repository import JsonUserRepository
 @fixture
 def user_repository(tmpdir) -> JsonUserRepository:
     user_dict = {
-        "valenep": vars(User('valenep', 'valenep@gmail.com', "PASS1")),
-        "tebanep": vars(User('tebanep', 'tebanep@gmail.com', "PASS2")),
-        "gabecheve": vars(User('gabecheve', 'gabecheve@gmail.com', "PASS3"))
+        "valenep": vars(User('1', 'valenep', 'valenep@gmail.com', "PASS1")),
+        "tebanep": vars(User('2', 'tebanep', 'tebanep@gmail.com', "PASS2")),
+        "gabeche": vars(User('3', 'gabeche', 'gabeche@gmail.com', "PASS3"))
     }
 
     file_path = str(tmpdir.mkdir("authark").join('authark_data.json'))
@@ -39,7 +39,7 @@ def test_json_user_repository_get_user(
 def test_json_user_repository_save_user(
         user_repository: JsonUserRepository) -> None:
 
-    user = User('matiasve', 'matiasve@gmail.com', "PASS4")
+    user = User('', 'matiasve', 'matiasve@gmail.com', "PASS4")
     user_repository.save(user)
 
     file_path = user_repository.file_path
