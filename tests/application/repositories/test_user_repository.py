@@ -12,6 +12,7 @@ def test_user_repository_methods() -> None:
     assert 'get' in methods
     assert 'save_' in methods
     assert 'search' in methods
+    assert 'delete' in methods
 
     sig = signature(UserRepository.save)
     assert sig.parameters.get('user')
@@ -99,3 +100,27 @@ def test_memory_user_repository_search_offset(user_dict):
     users = memory_user_repository.search([], offset=2)
 
     assert len(users) == 1
+
+
+def test_memory_user_repository_delete_user_true(user_dict):
+    memory_user_repository = MemoryUserRepository()
+    memory_user_repository.load(user_dict)
+
+    user = memory_user_repository.user_dict["2"]
+    deleted = memory_user_repository.delete(user)
+
+    assert deleted is True
+    assert len(memory_user_repository.user_dict) == 2
+    assert "2" not in memory_user_repository.user_dict
+
+
+def test_memory_user_repository_delete_user_false(user_dict):
+    memory_user_repository = MemoryUserRepository()
+    memory_user_repository.load(user_dict)
+
+    user = User(**{'id': '6', 'username': 'MISSING',
+                   'email': '', 'password': ''})
+    deleted = memory_user_repository.delete(user)
+
+    assert deleted is False
+    assert len(memory_user_repository.user_dict) == 3
