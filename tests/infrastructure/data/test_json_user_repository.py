@@ -2,6 +2,7 @@ from json import dumps, loads
 from pytest import fixture
 from authark.application.models.user import User
 from authark.application.repositories.user_repository import UserRepository
+from authark.application.repositories.expression_parser import ExpressionParser
 from authark.infrastructure.data.json_user_repository import JsonUserRepository
 
 
@@ -18,7 +19,9 @@ def user_repository(tmpdir) -> JsonUserRepository:
         data = dumps({'users': user_dict})
         f.write(data)
 
-    user_repository = JsonUserRepository(file_path=file_path)
+    parser = ExpressionParser()
+    user_repository = JsonUserRepository(file_path=file_path,
+                                         parser=parser)
 
     return user_repository
 
@@ -52,6 +55,17 @@ def test_json_user_repository_save_user(
         assert user_dict.get('username') == user.username
         assert user_dict.get('email') == user.email
         assert user_dict.get('password') == user.password
+
+
+def test_json_user_repository_search(user_repository):
+    domain = [('username', '=', "gabeche")]
+
+    users = user_repository.search(domain)
+
+    assert len(users) == 1
+    for user in users:
+        assert user.id == '3'
+        assert user.username == "gabeche"
 
 
 def test_json_user_repository_search_all(user_repository):
