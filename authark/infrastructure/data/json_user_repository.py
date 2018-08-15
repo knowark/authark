@@ -41,3 +41,21 @@ class JsonUserRepository(UserRepository):
         if offset:
             users = users[offset:]
         return users
+
+    def delete(self, user: User) -> bool:
+        with open(self.file_path, 'r') as f:
+            data = load(f)
+            users_dict = data.get('users')
+
+        print("DATA ====>>", data)
+        if user.id not in users_dict:
+            return False
+
+        del users_dict[user.id]
+
+        print("uSERS DICT", users_dict)
+        print("NEW DATA DICT", data, len(data['users']))
+
+        with open(self.file_path, 'w') as f:
+            dump(data, f)
+        return True

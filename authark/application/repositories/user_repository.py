@@ -25,6 +25,10 @@ class UserRepository(ABC):
                limit: int, offset: int) -> List[User]:
         "Search users matching a query domain"
 
+    @abstractmethod
+    def delete(self, user: User) -> bool:
+        "Delete method to be implemented."
+
 
 class MemoryUserRepository(UserRepository):
     def __init__(self) -> None:
@@ -46,6 +50,12 @@ class MemoryUserRepository(UserRepository):
         if offset:
             users = users[offset:]
         return users
+
+    def delete(self, user: User) -> bool:
+        if user.id not in self.user_dict:
+            return False
+        del self.user_dict[user.id]
+        return True
 
     def load(self, user_dict: Dict[str, User]) -> None:
         self.user_dict = user_dict

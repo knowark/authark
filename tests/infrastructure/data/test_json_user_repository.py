@@ -70,3 +70,36 @@ def test_json_user_repository_search_offset(user_repository):
     users = user_repository.search([], offset=2)
 
     assert len(users) == 1
+
+
+def test_json_user_repository_delete_user_true(user_repository):
+    file_path = user_repository.file_path
+    with open(file_path) as f:
+        data = loads(f.read())
+        users_dict = data.get("users")
+        user_dict = users_dict.get('2')
+
+    user = User(**user_dict)
+    deleted = user_repository.delete(user)
+
+    with open(file_path) as f:
+        data = loads(f.read())
+        users_dict = data.get("users")
+
+    assert deleted is True
+    assert len(users_dict) == 2
+    assert "2" not in users_dict.keys()
+
+
+def test_json_user_repository_delete_user_false(user_repository):
+    file_path = user_repository.file_path
+    user = User(**{'id': '6', 'username': 'MISSING',
+                   'email': '', 'password': ''})
+    deleted = user_repository.delete(user)
+
+    with open(file_path) as f:
+        data = loads(f.read())
+        users_dict = data.get("users")
+
+    assert deleted is False
+    assert len(users_dict) == 3
