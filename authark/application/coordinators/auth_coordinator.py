@@ -21,7 +21,7 @@ class AuthCoordinator:
         self.id_service = id_service
 
     def authenticate(self, username: str, password: str) -> TokenString:
-        user = self.user_repository.get(username)
+        user = self.user_repository.search([('username', '=', username)])[0]
 
         if not (user and self.hash_service.verify_password(
                 password, user.password)):
@@ -42,3 +42,10 @@ class AuthCoordinator:
         self.user_repository.save(user)
 
         return vars(user)
+
+    def deregister(self, user_id: str) -> bool:
+        user = self.user_repository.get(user_id)
+        if not user:
+            return False
+        self.user_repository.delete(user)
+        return True
