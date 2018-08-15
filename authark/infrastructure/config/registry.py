@@ -7,6 +7,7 @@ from authark.application.reporters.authark_reporter import (
     AutharkReporter, MemoryAutharkReporter)
 from authark.application.repositories.user_repository import (
     MemoryUserRepository)
+from authark.application.repositories.expression_parser import ExpressionParser
 from authark.application.services.token_service import MemoryTokenService
 from authark.application.services.hash_service import MemoryHashService
 from authark.application.services.id_service import StandardIdService
@@ -32,7 +33,8 @@ class MemoryRegistry(Registry):
     def __init__(self, config: Config) -> None:
 
         # Services
-        user_repository = MemoryUserRepository()
+        parser = ExpressionParser()
+        user_repository = MemoryUserRepository(parser)
         hash_service = MemoryHashService()
         token_service = MemoryTokenService()
         id_service = StandardIdService()
@@ -55,7 +57,8 @@ class JsonJwtRegistry(Registry):
         init_json_database(database_path)
 
         # Services
-        user_repository = JsonUserRepository(database_path)
+        parser = ExpressionParser()
+        user_repository = JsonUserRepository(database_path, parser)
         token_service = PyJWTTokenService('DEVSECRET123', 'HS256')
         hash_service = PasslibHashService()
         id_service = StandardIdService()

@@ -2,6 +2,7 @@ from abc import ABC, abstractmethod
 from typing import List, Dict, Optional
 from authark.application.utilities.type_definitions import QueryDomain
 from authark.application.models.user import User
+from authark.application.repositories.expression_parser import ExpressionParser
 
 
 class UserRepository(ABC):
@@ -31,8 +32,9 @@ class UserRepository(ABC):
 
 
 class MemoryUserRepository(UserRepository):
-    def __init__(self) -> None:
+    def __init__(self, parser: ExpressionParser) -> None:
         self.user_dict = {}  # type: Dict[str, User]
+        self.parser = parser
 
     def get(self, id: str) -> Optional[User]:
         user = self.user_dict.get(id)
@@ -44,7 +46,12 @@ class MemoryUserRepository(UserRepository):
         return True
 
     def search(self, domain: QueryDomain, limit=100, offset=0) -> List[User]:
-        users = list(self.user_dict.values())
+        users = []
+        filter_function = self.parser.parse(domain)
+        for user in list(self.user_dict.values()):
+            if filter_function(user):
+                users.append(user)
+
         if limit:
             users = users[:limit]
         if offset:

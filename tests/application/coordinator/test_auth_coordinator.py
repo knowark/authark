@@ -2,6 +2,7 @@ from typing import Dict
 from pytest import fixture, raises
 from authark.application.coordinators.auth_coordinator import AuthCoordinator
 from authark.application.repositories.user_repository import UserRepository
+from authark.application.repositories.expression_parser import ExpressionParser
 from authark.application.repositories.user_repository import (
     MemoryUserRepository)
 from authark.application.services.token_service import (
@@ -22,13 +23,13 @@ from authark.application.models.token import Token
 
 @fixture
 def mock_user_repository() -> UserRepository:
-    MockUserRepository = MemoryUserRepository
+    parser = ExpressionParser()
     user_dict = {
-        "valenep": User('1', 'valenep', 'valenep@gmail.com', "HASHED: PASS1"),
-        "tebanep": User('2', 'tebanep', 'tebanep@gmail.com', "HASHED: PASS2"),
-        "gabeche": User('3', 'gabeche', 'gabeche@gmail.com', "HASHED: PASS3")
+        "1": User('1', 'valenep', 'valenep@gmail.com', "HASHED: PASS1"),
+        "2": User('2', 'tebanep', 'tebanep@gmail.com', "HASHED: PASS2"),
+        "3": User('3', 'gabeche', 'gabeche@gmail.com', "HASHED: PASS3")
     }
-    mock_user_repository = MemoryUserRepository()
+    mock_user_repository = MemoryUserRepository(parser)
     mock_user_repository.load(user_dict)
 
     return mock_user_repository
@@ -93,3 +94,23 @@ def test_auth_coordinator_register(
     assert user
     assert isinstance(user, dict)
     assert len(auth_coordinator.user_repository.user_dict) == 4
+
+
+def test_auth_coordinator_deregister(
+        auth_coordinator: AuthCoordinator, mock_user_repository) -> None:
+
+    user = mock_user_repository.get('2')
+    unregistered = auth_coordinator.deregister(user.id)
+
+    assert unregistered is True
+    assert len(auth_coordinator.user_repository.user_dict) == 2
+
+
+def test_auth_coordinator_deregister_missing(
+        auth_coordinator: AuthCoordinator, mock_user_repository) -> None:
+
+    user = User('5', 'missing', 'missing@gmail.com', "HASHED: MISSING")
+    unregistered = auth_coordinator.deregister(user.id)
+
+    assert unregistered is False
+    assert len(auth_coordinator.user_repository.user_dict) == 3
