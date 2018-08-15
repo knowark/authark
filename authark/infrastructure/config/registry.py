@@ -5,6 +5,7 @@ from authark.application.models.user import User
 from authark.application.coordinators.auth_coordinator import AuthCoordinator
 from authark.application.repositories.user_repository import (
     MemoryUserRepository)
+from authark.application.repositories.expression_parser import ExpressionParser
 from authark.application.services.token_service import MemoryTokenService
 from authark.application.services.hash_service import MemoryHashService
 from authark.application.services.id_service import StandardIdService
@@ -28,7 +29,8 @@ class MemoryRegistry(Dict[str, Any]):
     def __init__(self, config: Config) -> None:
 
         # Services
-        user_repository = MemoryUserRepository()
+        parser = ExpressionParser()
+        user_repository = MemoryUserRepository(parser)
         hash_service = MemoryHashService()
         token_service = MemoryTokenService()
         id_service = StandardIdService()

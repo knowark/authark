@@ -4,6 +4,7 @@ from flask import Flask
 from authark.application.models.user import User
 from authark.application.repositories.user_repository import (
     MemoryUserRepository)
+from authark.application.repositories.expression_parser import ExpressionParser
 from authark.application.coordinators.auth_coordinator import AuthCoordinator
 from authark.application.services.hash_service import MemoryHashService
 from authark.application.services.id_service import StandardIdService
@@ -18,7 +19,8 @@ from authark.infrastructure.crypto.pyjwt_token_service import PyJWTTokenService
 class MockRegistry(Registry):
 
     def __init__(self) -> None:
-        user_repository = MemoryUserRepository()
+        parser = ExpressionParser()
+        user_repository = MemoryUserRepository(parser)
         user_repository.load({
             'eecheverry': User(
                 "",
