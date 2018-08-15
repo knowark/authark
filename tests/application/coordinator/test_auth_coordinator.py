@@ -2,6 +2,7 @@ from typing import Dict
 from pytest import fixture, raises
 from authark.application.coordinators.auth_coordinator import AuthCoordinator
 from authark.application.repositories.user_repository import UserRepository
+from authark.application.repositories.expression_parser import ExpressionParser
 from authark.application.repositories.user_repository import (
     MemoryUserRepository)
 from authark.application.services.token_service import (
@@ -22,13 +23,13 @@ from authark.application.models.token import Token
 
 @fixture
 def mock_user_repository() -> UserRepository:
-    MockUserRepository = MemoryUserRepository
+    parser = ExpressionParser()
     user_dict = {
         "valenep": User('1', 'valenep', 'valenep@gmail.com', "HASHED: PASS1"),
         "tebanep": User('2', 'tebanep', 'tebanep@gmail.com', "HASHED: PASS2"),
         "gabeche": User('3', 'gabeche', 'gabeche@gmail.com', "HASHED: PASS3")
     }
-    mock_user_repository = MemoryUserRepository()
+    mock_user_repository = MemoryUserRepository(parser)
     mock_user_repository.load(user_dict)
 
     return mock_user_repository

@@ -3,6 +3,7 @@ from pytest import fixture
 from inspect import signature
 from authark.application.models.user import User
 from authark.application.repositories.user_repository import UserRepository
+from authark.application.repositories.expression_parser import ExpressionParser
 from authark.application.repositories.user_repository import (
     MemoryUserRepository)
 
@@ -32,18 +33,20 @@ def user_dict() -> Dict[str, User]:
     return user_dict
 
 
-def test_memory_user_repository_load_user(user_dict: Dict[str, User]) -> None:
-    memory_user_repository = MemoryUserRepository()
+@fixture
+def memory_user_repository(user_dict) -> MemoryUserRepository:
+    parser = ExpressionParser()
+    user_repository = MemoryUserRepository(parser)
+    user_repository.load(user_dict)
+    return user_repository
 
-    memory_user_repository.load(user_dict)
 
+def test_memory_user_repository_load_user(memory_user_repository,
+                                          user_dict) -> None:
     assert memory_user_repository.user_dict == user_dict
 
 
-def test_memory_user_repository_get_user(user_dict: Dict[str, User]) -> None:
-    memory_user_repository = MemoryUserRepository()
-
-    memory_user_repository.load(user_dict)
+def test_memory_user_repository_get_user(memory_user_repository) -> None:
     user = memory_user_repository.get("1")
 
     assert user and user.username == "valenep"
@@ -51,7 +54,8 @@ def test_memory_user_repository_get_user(user_dict: Dict[str, User]) -> None:
 
 
 def test_memory_user_repository_save_user() -> None:
-    memory_user_repository = MemoryUserRepository()
+    parser = ExpressionParser()
+    memory_user_repository = MemoryUserRepository(parser)
 
     user = User("4", "mvp", "mvp@gmail.com", "QWERTY")
 
@@ -64,7 +68,8 @@ def test_memory_user_repository_save_user() -> None:
 
 
 def test_memory_user_repository_save_user_duplicate() -> None:
-    memory_user_repository = MemoryUserRepository()
+    parser = ExpressionParser()
+    memory_user_repository = MemoryUserRepository(parser)
 
     user = User("4", "mvp", "mvp@gmail.com", "QWERTY")
 
@@ -75,37 +80,36 @@ def test_memory_user_repository_save_user_duplicate() -> None:
     assert len(memory_user_repository.user_dict) == 1
 
 
-def test_memory_user_repository_search_all(user_dict):
-    memory_user_repository = MemoryUserRepository()
-    memory_user_repository.load(user_dict)
+def test_memory_user_repository_search(memory_user_repository):
+    domain = [('username', '=', "gabeche")]
 
+    users = memory_user_repository.search(domain)
+
+    assert len(users) == 1
+    for user in users:
+        assert user.id == '3'
+        assert user.username == "gabeche"
+
+
+def test_memory_user_repository_search_all(memory_user_repository):
     users = memory_user_repository.search([])
 
     assert len(users) == 3
 
 
-def test_memory_user_repository_search_limit(user_dict):
-    memory_user_repository = MemoryUserRepository()
-    memory_user_repository.load(user_dict)
-
+def test_memory_user_repository_search_limit(memory_user_repository):
     users = memory_user_repository.search([], limit=2)
 
     assert len(users) == 2
 
 
-def test_memory_user_repository_search_offset(user_dict):
-    memory_user_repository = MemoryUserRepository()
-    memory_user_repository.load(user_dict)
-
+def test_memory_user_repository_search_offset(memory_user_repository):
     users = memory_user_repository.search([], offset=2)
 
     assert len(users) == 1
 
 
-def test_memory_user_repository_delete_user_true(user_dict):
-    memory_user_repository = MemoryUserRepository()
-    memory_user_repository.load(user_dict)
-
+def test_memory_user_repository_delete_user_true(memory_user_repository):
     user = memory_user_repository.user_dict["2"]
     deleted = memory_user_repository.delete(user)
 
@@ -114,10 +118,7 @@ def test_memory_user_repository_delete_user_true(user_dict):
     assert "2" not in memory_user_repository.user_dict
 
 
-def test_memory_user_repository_delete_user_false(user_dict):
-    memory_user_repository = MemoryUserRepository()
-    memory_user_repository.load(user_dict)
-
+def test_memory_user_repository_delete_user_false(memory_user_repository):
     user = User(**{'id': '6', 'username': 'MISSING',
                    'email': '', 'password': ''})
     deleted = memory_user_repository.delete(user)
