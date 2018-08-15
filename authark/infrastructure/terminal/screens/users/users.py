@@ -2,7 +2,7 @@ import urwid
 from authark.infrastructure.terminal.framework.table import Table
 from authark.infrastructure.terminal.framework.screen import Screen
 from authark.infrastructure.terminal.screens.users.users_actions import (
-    UsersAddScreen)
+    UsersAddScreen, UsersDeleteScreen)
 
 
 class UsersScreen(Screen):
@@ -32,5 +32,8 @@ class UsersScreen(Screen):
     def keypress(self, size, key):
         if key in ('a', 'A'):
             screen = UsersAddScreen('ADD USER', self.env, self)
+            return self._open_screen(screen)
+        if key in ('d', 'D'):
+            screen = UsersDeleteScreen('DELETE USER', self.env, self)
             return self._open_screen(screen)
         return super().keypress(size, key)

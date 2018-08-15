@@ -6,9 +6,10 @@ class Table(urwid.WidgetWrap):
 
     def __init__(self, data_list: List[Dict[str, Any]],
                  headers_list: List[str]) -> None:
+        self.data_list = data_list
         header = self._build_header(headers_list)
         widget_list = [header]
-        for row_dict in data_list:
+        for row_dict in self.data_list:
             row_widget = TableRow(row_dict, headers_list)
             widget_list.append(row_widget)
 
@@ -40,6 +41,13 @@ class Table(urwid.WidgetWrap):
             self._w.set_focus(position)
             key = None
         return key
+
+    def get_selected_item(self):
+        item = {}
+        position = self._w.focus_position
+        if position:
+            item = self.data_list[position - 1]
+        return item
 
 
 class TableRow(urwid.WidgetWrap):
