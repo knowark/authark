@@ -69,10 +69,14 @@ class UsersDeleteScreen(Screen):
         ])
 
         table = self.parent.table
-        selected_item = table.get_selected_item()
+        self.selected_item = table.get_selected_item()
         body = urwid.Pile([
-            urwid.Text("Hello: " + str(table)),
-            urwid.Text("World: " + str(selected_item)),
+            urwid.Text("Are you sure you want to delete the following user?"),
+            urwid.Divider(),
+            urwid.Text(
+                "Username: {username}".format(**self.selected_item)),
+            urwid.Text(
+                "ID: {id}".format(**self.selected_item)),
         ])
         body = urwid.Padding(urwid.Filler(body), align='center', width=80)
 
@@ -88,11 +92,9 @@ class UsersDeleteScreen(Screen):
 
     def keypress(self, size, key):
         if key == 'enter':
-            username = self.username.edit_text
-            email = self.email.edit_text
-            password = self.password.edit_text
-            user = self.auth_coordinator.register(username, email, password)
-            self.logger.debug("User -->> %s", user)
+            id = self.selected_item.get('id')
+            user = self.auth_coordinator.deregister(id)
+            self.logger.debug("User: %s has been unregistered!", user)
             self._go_back()
         return super().keypress(size, key)
 
