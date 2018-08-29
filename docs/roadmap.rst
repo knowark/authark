@@ -5,7 +5,7 @@ Project Roadmap
 Version 1.0
 ===========
 
-- [ ] Login
+- [X] Login
 
   - [X] Add endpoint receiving a username and password
   - [X] Add 'auth' as an alias of 'login'
@@ -18,7 +18,8 @@ Version 1.0
   - [ ] Create a 'users' endpoint
   - [ ] Persist users in json format with a encrypted password
 
-- [ ] Providers, Groups and Roles
+- [ ] Credentials, Providers, Groups and Roles
+  - [ ] Define Credentials
   - [ ] Define Providers
   - [ ] Define Groups
   - [ ] Define Roles
@@ -28,7 +29,7 @@ Version 1.0
   - [ ] Create Authark's basic groups
   - [ ] Decode authentication token to use in Authark
 
-- [ ] Manage system's setup through configuration files 
+- [X] Manage system's setup through configuration files 
 - [X] Refactor to a standalone app by integrating gunicorn
 
 Version 1.1
