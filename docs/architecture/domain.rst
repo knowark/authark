@@ -13,6 +13,12 @@ core, and so are the **Provider** and **Role**.
     node [shape=plain]
     rankdir=LR;
 
+    Token [label=<
+    <table border="0" cellborder="1" cellspacing="0">
+    <tr><td><i>Token</i></td></tr>
+    <tr><td port="value">value</td></tr>
+    </table>>];
+
     User [label=<
     <table border="0" cellborder="1" cellspacing="0">
     <tr><td><i>User</i></td></tr>
@@ -113,3 +119,9 @@ the specified **Resource**.
 
 The **Policy** type may be one of *user*, *role*, *time* or *domain*.
 **Permissions** should define a *match* attribute which can be *all* or *any*.
+
+**Tokens** are issued as value objects by Authark in return of a successful
+authentication transaction initiated by a Client application. This **Token**
+will be used independently and in a stateless manner to concede access to
+protected applications and resources using **Authark** as their authentication
+and authorization server.
