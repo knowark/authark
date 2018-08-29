@@ -26,6 +26,16 @@ core, and so are the **Provider** and **Role**.
     <tr><td port="role_id">role_id</td></tr>
     </table>>];
 
+    Credential [label=<
+    <table border="0" cellborder="1" cellspacing="0">
+    <tr><td><i>Credential</i></td></tr>
+    <tr><td port="id">id</td></tr>
+    <tr><td port="provider_id">provider_id</td></tr>
+    <tr><td port="user_id">user_id</td></tr>
+    <tr><td port="type">type</td></tr>
+    <tr><td port="value">value</td></tr>
+    </table>>];
+
     Role [label=<
     <table border="0" cellborder="1" cellspacing="0">
     <tr><td><i>Role</i></td></tr>
@@ -51,8 +61,8 @@ core, and so are the **Provider** and **Role**.
     <tr><td><i>Policy</i></td></tr>
     <tr><td port="id">id</td></tr>
     <tr><td port="type">type</td></tr> 
-    <tr><td port="user_id">user_id</td></tr>  
-    <tr><td port="role_id">role_id</td></tr>
+    <tr><td port="user_id">user_id (nullable)</td></tr>  
+    <tr><td port="role_id">role_id (nullable)</td></tr>
     <tr><td port="value">value</td></tr>
     </table>>];
 
@@ -69,13 +79,15 @@ core, and so are the **Provider** and **Role**.
     <table border="0" cellborder="1" cellspacing="0">
     <tr><td><i>RolePermission</i></td></tr>
     <tr><td port="id">id</td></tr>
+    <tr><td port="permission_id">permission_id</td></tr>
     <tr><td port="role_id">role_id</td></tr> 
-    <tr><td port="permission_id">permission_id</td></tr> 
     </table>>];
 
 
     UserRole:user_id -> User:id;
     UserRole:role_id -> Role:id;
+    Credential:provider_id ->  Provider:id;
+    Credential:user_id -> User:id;
     Role:provider_id -> Provider:id;
     Resource:provider_id -> Provider:id;
     Permission:resource_id -> Resource:id; 
@@ -89,7 +101,10 @@ core, and so are the **Provider** and **Role**.
 
 Providers can have multiple roles for authorization purposes, each been able
 to hold multiple users. As a user can as well belong to multiple groups, the 
-**UserRole** structure is the responsible of representing such binding.
+**UserRole** structure is the responsible of representing such binding. A user
+may have multiple **Credentials** to authenticate against Authark. Each 
+**Credential** must be either of the type 'password' or 'token' (i.e. refresh
+token) and belong to a single **Provider**.
 
 A service or data **Provider** may have one or more **Resources** to which it
 can give access. To do that, **Policies** are created to filter out the kind
