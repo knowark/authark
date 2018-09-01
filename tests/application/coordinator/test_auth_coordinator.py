@@ -122,6 +122,7 @@ def test_auth_coordinator_deregister(
 
     assert unregistered is True
     assert len(auth_coordinator.user_repository.user_dict) == 2
+    assert len(auth_coordinator.credential_repository.credentials_dict) == 2
 
 
 def test_auth_coordinator_deregister_missing(

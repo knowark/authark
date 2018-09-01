@@ -58,4 +58,10 @@ class AuthCoordinator:
         if not user:
             return False
         self.user_repository.delete(user)
+
+        credentials = self.credential_repository.search(
+            [('user_id', '=', user.id)])
+        for credential in credentials:
+            self.credential_repository.remove(credential)
+
         return True
