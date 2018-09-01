@@ -1,10 +1,13 @@
 from authark.application.repositories.user_repository import UserRepository
+from authark.application.repositories.credential_repository import (
+    CredentialRepository)
 from authark.application.services.token_service import TokenService
 from authark.application.services.hash_service import HashService
 from authark.application.services.id_service import IdService
 from authark.application.models.error import AuthError
 from authark.application.models.token import Token
 from authark.application.models.user import User
+from authark.application.models.credential import Credential
 from authark.application.utilities.type_definitions import (
     TokenString, UserDict)
 
@@ -12,10 +15,12 @@ from authark.application.utilities.type_definitions import (
 class AuthCoordinator:
 
     def __init__(self, user_repository: UserRepository,
+                 credential_repository: CredentialRepository,
                  hash_service: HashService,
                  token_service: TokenService,
                  id_service: IdService) -> None:
         self.user_repository = user_repository
+        self.credential_repository = credential_repository
         self.hash_service = hash_service
         self.token_service = token_service
         self.id_service = id_service
@@ -35,11 +40,16 @@ class AuthCoordinator:
 
     def register(self, username: str, email: str, password: str) -> UserDict:
         hashed_password = self.hash_service.generate_hash(password)
-        id_ = self.id_service.generate_id()
+        user_id = self.id_service.generate_id()
 
-        user = User(id=id_, username=username,
+        user = User(id=user_id, username=username,
                     email=email, password=hashed_password)
+
+        credential_id = self.id_service.generate_id()
+        credential = Credential(id=credential_id, user_id=user_id,
+                                value=hashed_password)
         self.user_repository.save(user)
+        self.credential_repository.add(credential)
 
         return vars(user)
 

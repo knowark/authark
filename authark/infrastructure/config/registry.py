@@ -7,6 +7,8 @@ from authark.application.reporters.authark_reporter import (
     AutharkReporter, MemoryAutharkReporter)
 from authark.application.repositories.user_repository import (
     MemoryUserRepository)
+from authark.application.repositories.credential_repository import (
+    MemoryCredentialRepository)
 from authark.application.repositories.expression_parser import ExpressionParser
 from authark.application.services.token_service import MemoryTokenService
 from authark.application.services.hash_service import MemoryHashService
@@ -17,6 +19,8 @@ from authark.infrastructure.crypto.passlib_hash_service import (
 from authark.infrastructure.data.init_json_database import init_json_database
 from authark.infrastructure.data.json_user_repository import (
     JsonUserRepository)
+from authark.infrastructure.data.json_credential_repository import (
+    JsonCredentialRepository)
 from authark.infrastructure.data.json_authark_reporter import (
     JsonAutharkReporter)
 from authark.infrastructure.config.config import Config
@@ -35,13 +39,15 @@ class MemoryRegistry(Registry):
         # Services
         parser = ExpressionParser()
         user_repository = MemoryUserRepository(parser)
+        credential_repository = MemoryCredentialRepository(parser)
         hash_service = MemoryHashService()
         token_service = MemoryTokenService()
         id_service = StandardIdService()
 
         auth_reporter = MemoryAutharkReporter(user_repository)
-        auth_coordinator = AuthCoordinator(user_repository, hash_service,
-                                           token_service, id_service)
+        auth_coordinator = AuthCoordinator(
+            user_repository, credential_repository,
+            hash_service, token_service, id_service)
 
         self['auth_coordinator'] = auth_coordinator
         self['auth_reporter'] = auth_reporter
@@ -59,13 +65,15 @@ class JsonJwtRegistry(Registry):
         # Services
         parser = ExpressionParser()
         user_repository = JsonUserRepository(database_path, parser)
+        credential_repository = JsonCredentialRepository(database_path, parser)
         token_service = PyJWTTokenService('DEVSECRET123', 'HS256')
         hash_service = PasslibHashService()
         id_service = StandardIdService()
 
         auth_reporter = JsonAutharkReporter(user_repository)
-        auth_coordinator = AuthCoordinator(user_repository, hash_service,
-                                           token_service, id_service)
+        auth_coordinator = AuthCoordinator(
+            user_repository, credential_repository,
+            hash_service, token_service, id_service)
 
         self['auth_coordinator'] = auth_coordinator
         self['auth_reporter'] = auth_reporter

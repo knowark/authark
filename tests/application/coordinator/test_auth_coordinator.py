@@ -1,10 +1,11 @@
 from typing import Dict
 from pytest import fixture, raises
 from authark.application.coordinators.auth_coordinator import AuthCoordinator
-from authark.application.repositories.user_repository import UserRepository
 from authark.application.repositories.expression_parser import ExpressionParser
 from authark.application.repositories.user_repository import (
-    MemoryUserRepository)
+    UserRepository, MemoryUserRepository)
+from authark.application.repositories.credential_repository import (
+    CredentialRepository, MemoryCredentialRepository)
 from authark.application.services.token_service import (
     TokenService, MemoryTokenService)
 from authark.application.services.hash_service import (
@@ -13,6 +14,7 @@ from authark.application.services.id_service import (
     IdService, StandardIdService)
 from authark.application.models.error import AuthError
 from authark.application.models.user import User
+from authark.application.models.credential import Credential
 from authark.application.models.token import Token
 
 
@@ -36,6 +38,19 @@ def mock_user_repository() -> UserRepository:
 
 
 @fixture
+def mock_credential_repository() -> CredentialRepository:
+    credentials_dict = {
+        "1": Credential(id='1', user_id='1', value="HASHED: PASS1"),
+        "2": Credential(id='2', user_id='2', value="HASHED: PASS2"),
+        "3": Credential(id='3', user_id='3', value="HASHED: PASS3"),
+    }
+    parser = ExpressionParser()
+    credential_repository = MemoryCredentialRepository(parser)
+    credential_repository.load(credentials_dict)
+    return credential_repository
+
+
+@fixture
 def mock_token_service() -> TokenService:
     mock_token_service = MemoryTokenService()
     return mock_token_service
@@ -55,11 +70,13 @@ def mock_id_service() -> IdService:
 
 @fixture
 def auth_coordinator(mock_user_repository: UserRepository,
+                     mock_credential_repository: CredentialRepository,
                      mock_hash_service: HashService,
                      mock_token_service: TokenService,
                      mock_id_service: IdService) -> AuthCoordinator:
-    return AuthCoordinator(mock_user_repository, mock_hash_service,
-                           mock_token_service, mock_id_service)
+    return AuthCoordinator(mock_user_repository, mock_credential_repository,
+                           mock_hash_service, mock_token_service,
+                           mock_id_service)
 
 
 ########
@@ -88,12 +105,13 @@ def test_auth_coordinator_fail_to_authenticate(
 def test_auth_coordinator_register(
         auth_coordinator: AuthCoordinator) -> None:
 
-    user = auth_coordinator.register(
+    user_dict = auth_coordinator.register(
         "mvp", "mvp@gmail.com", "PASS4")
 
-    assert user
-    assert isinstance(user, dict)
+    assert user_dict
+    assert isinstance(user_dict, dict)
     assert len(auth_coordinator.user_repository.user_dict) == 4
+    assert len(auth_coordinator.credential_repository.credentials_dict) == 4
 
 
 def test_auth_coordinator_deregister(

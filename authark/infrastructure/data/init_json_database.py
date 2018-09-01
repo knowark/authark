@@ -2,7 +2,8 @@ import os
 from json import dump
 
 JSON_DATABASE_SCHEMA = {  # type: ignore
-    'users': {}
+    'users': {},
+    'credentials': {}
 }
 
 
