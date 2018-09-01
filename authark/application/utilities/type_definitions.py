@@ -9,3 +9,7 @@ TokenString = str
 UserDict = Dict[str, Any]
 
 UserDictList = List[UserDict]
+
+CredentialDict = Dict[str, Any]
+
+CredentialDictList = List[CredentialDict]

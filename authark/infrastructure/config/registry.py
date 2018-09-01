@@ -44,7 +44,8 @@ class MemoryRegistry(Registry):
         token_service = MemoryTokenService()
         id_service = StandardIdService()
 
-        auth_reporter = MemoryAutharkReporter(user_repository)
+        auth_reporter = MemoryAutharkReporter(user_repository,
+                                              credential_repository)
         auth_coordinator = AuthCoordinator(
             user_repository, credential_repository,
             hash_service, token_service, id_service)
@@ -70,7 +71,8 @@ class JsonJwtRegistry(Registry):
         hash_service = PasslibHashService()
         id_service = StandardIdService()
 
-        auth_reporter = JsonAutharkReporter(user_repository)
+        auth_reporter = JsonAutharkReporter(user_repository,
+                                            credential_repository)
         auth_coordinator = AuthCoordinator(
             user_repository, credential_repository,
             hash_service, token_service, id_service)
