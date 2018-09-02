@@ -2,7 +2,7 @@ import urwid
 from authark.infrastructure.terminal.framework.table import Table
 from authark.infrastructure.terminal.framework.screen import Screen
 from authark.infrastructure.terminal.screens.users.users_actions import (
-    UsersAddScreen, UsersDeleteScreen)
+    UsersAddScreen, UsersDeleteScreen, UsersCredentialsScreen)
 
 
 class UsersScreen(Screen):
@@ -15,6 +15,7 @@ class UsersScreen(Screen):
         footer = urwid.Text([
             "Press (", ("add button", "A"), ") to add a new record. ",
             "Press (", ("update button", "U"), ") to update a record. ",
+            "Press (", ("update button", "C"), ") to show credentials. ",
             "Press (", ("remove button", "R"), ") to remove a record. "
             "Press (", ("back button", "Esc"), ") to go back. "
         ])
@@ -35,5 +36,9 @@ class UsersScreen(Screen):
             return self._open_screen(screen)
         if key in ('d', 'D'):
             screen = UsersDeleteScreen('DELETE USER', self.env, self)
+            return self._open_screen(screen)
+        if key in ('c', 'C', 'enter'):
+            screen = UsersCredentialsScreen(
+                "USER'S CREDENTIALS", self.env, self)
             return self._open_screen(screen)
         return super().keypress(size, key)

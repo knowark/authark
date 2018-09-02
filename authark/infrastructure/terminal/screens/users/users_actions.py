@@ -1,5 +1,6 @@
 import urwid
 from authark.infrastructure.terminal.framework.screen import Screen
+from authark.infrastructure.terminal.framework.table import Table
 
 
 class UsersAddScreen(Screen):
@@ -102,3 +103,40 @@ class UsersDeleteScreen(Screen):
         self._back()
         main_menu = self.env.stack.pop()
         main_menu.show_users_screen()
+
+
+class UsersCredentialsScreen(Screen):
+
+    def _build_widget(self) -> urwid.Widget:
+        self.auth_coordinator = self.env.context.registry['auth_coordinator']
+        self.auth_reporter = self.env.context.registry['auth_reporter']
+
+        self.selected_item = self.parent.table.get_selected_item()
+        username = self.selected_item.get('username')
+        title = "{}: {}".format(self.name, username)
+
+        header = urwid.AttrMap(
+            urwid.Text(title, align='center'), 'titlebar')
+
+        footer = urwid.Text([
+            "Press (", ("back button", "Esc"), ") to go back. "
+        ])
+
+        # Credentials
+        headers_list = ['id', 'type', 'value']
+        data = self.auth_reporter.search_credentials(
+            [('user_id', '=', self.selected_item.get('id'))])
+
+        body = Table(data, headers_list)
+
+        frame = urwid.Frame(header=header, body=body, footer=footer)
+
+        text = urwid.Filler(urwid.Text("YUHUUUU CREDDD"))
+
+        widget = urwid.Overlay(
+            frame, self.parent,
+            align='center', width=('relative', 70),
+            valign='middle', height=('relative', 70),
+            min_width=20, min_height=9)
+
+        return widget

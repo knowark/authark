@@ -32,7 +32,7 @@ class Main:
         return top
 
     def _unhandled_input(self, key: str):
-        if key in ('q', 'Q'):
+        if key == 'ctrl c':
             self.exit(key)
 
     def _set_main_menu(self):
