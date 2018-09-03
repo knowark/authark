@@ -102,6 +102,13 @@ def test_auth_coordinator_fail_to_authenticate(
         token = auth_coordinator.authenticate("tebanep", "WRONG_PASSWORD")
 
 
+def test_auth_coordinator_fail_to_authenticate_missing_user(
+        auth_coordinator: AuthCoordinator) -> None:
+
+    with raises(AuthError):
+        token = auth_coordinator.authenticate("MISSING_USER", "WRONG_PASSWORD")
+
+
 def test_auth_coordinator_register(
         auth_coordinator: AuthCoordinator) -> None:
 

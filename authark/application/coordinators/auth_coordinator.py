@@ -26,11 +26,17 @@ class AuthCoordinator:
         self.id_service = id_service
 
     def authenticate(self, username: str, password: str) -> TokenString:
-        user = self.user_repository.search([('username', '=', username)])[0]
+        users = self.user_repository.search([('username', '=', username)])
+        if not users:
+            raise AuthError("Authentication Error: User not found.")
 
-        if not (user and self.hash_service.verify_password(
-                password, user.password)):
-            raise AuthError("Authentication Error!")
+        user = users[0]
+        credentials = self.credential_repository.search([
+            ('user_id', '=', user.id), ('type', '=', 'password')])
+
+        user_password = credentials[0].value
+        if not self.hash_service.verify_password(password, user_password):
+            raise AuthError("Authentication Error: Password mismatch.")
 
         payload = {'user': user.username, 'email': user.email}
 
