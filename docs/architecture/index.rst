@@ -20,3 +20,4 @@ the latter technology agnostic and improving its testability.
 
    domain.rst
    layout.rst
+   protocol.rst
