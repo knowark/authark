@@ -6,14 +6,19 @@ Protocol
 
    seqdiag {
       # On initialization or refresh token expiration
-      Consumer ->  Authark  [label = "POST /token\n{username, password}"];
-      Consumer <-- Authark  [label = "{access_token,\nrefresh_token}"];
-      Consumer ->  Provider [label = "GET /resource\n{access_token}"];
+      Consumer ->  Authark  [label = "POST /refresh-token
+      {username,password}"];
+      Consumer <-- Authark  [label = "{refresh_token}"];
+      Consumer ->  Authark  [label = "POST /access-token
+      {refresh_token}"];
+      Consumer <-- Authark  [label = "{access_token}"];
+      Consumer ->  Provider [label = "GET /resource
+      {access_token}"];
       Consumer <-- Provider [label = "{data}"];
       
       # On access token expiration
       Consumer ->  Authark  [label = "POST /token\n{refresh_token}"];
-      Consumer <-- Authark  [label = "{access_token,\nrefresh_token}"];
+      Consumer <-- Authark  [label = "{refresh_token}"];
       Consumer ->  Provider [label = "POST /resource\n{access_token, data}"];
       Consumer <-- Provider [label = "{ok}"];
       
