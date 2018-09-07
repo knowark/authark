@@ -109,6 +109,15 @@ def test_auth_coordinator_fail_to_authenticate_missing_user(
         token = auth_coordinator.authenticate("MISSING_USER", "WRONG_PASSWORD")
 
 
+def test_auth_coordinator_fail_to_authenticate_missing_credentials(
+        auth_coordinator: AuthCoordinator) -> None:
+
+    auth_coordinator.credential_repository.credentials_dict = {}
+
+    with raises(AuthError):
+        token = auth_coordinator.authenticate("tebanep", "NO_CREDENTIALS")
+
+
 def test_auth_coordinator_register(
         auth_coordinator: AuthCoordinator) -> None:
 

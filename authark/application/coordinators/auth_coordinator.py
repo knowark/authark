@@ -34,6 +34,9 @@ class AuthCoordinator:
         credentials = self.credential_repository.search([
             ('user_id', '=', user.id), ('type', '=', 'password')])
 
+        if not credentials:
+            raise AuthError("Authentication Error: No credentials found.")
+
         user_password = credentials[0].value
         if not self.hash_service.verify_password(password, user_password):
             raise AuthError("Authentication Error: Password mismatch.")
