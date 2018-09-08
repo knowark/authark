@@ -6,6 +6,8 @@ QueryDomain = List[Union[str, TermTuple]]
 
 TokenString = str
 
+TokensDict = Dict[str, Any]
+
 UserDict = Dict[str, Any]
 
 UserDictList = List[UserDict]

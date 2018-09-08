@@ -2,6 +2,7 @@ import json
 from pytest import fixture
 from flask import Flask
 from authark.application.models.user import User
+from authark.application.models.credential import Credential
 from authark.application.repositories.user_repository import (
     MemoryUserRepository)
 from authark.application.repositories.credential_repository import (
@@ -26,16 +27,20 @@ class MockRegistry(Registry):
         credential_repository = MemoryCredentialRepository(parser)
         user_repository.load({
             'eecheverry': User(
-                "",
+                "1",
                 "eecheverry",
                 "eecheverry@nubark.com",
                 "HASHED: ABC1234"),
             'mvivas': User(
-                "",
+                "2",
                 "mvivas",
                 "mvivas@gmail.com",
                 "HASHED: XYZ098"
             )
+        })
+        credential_repository.load({
+            "1": Credential(id='1', user_id='1', value="HASHED: ABC1234"),
+            "2": Credential(id='2', user_id='2', value="HASHED: XYZ098"),
         })
         token_service = PyJWTTokenService('TESTSECRET', 'HS256')
         hash_service = MemoryHashService()
@@ -93,9 +98,9 @@ def test_auth_post_route_successful_authentication(app: Flask) -> None:
             password="ABC1234"
         )),
         content_type='application/json')
-
     assert response.status_code == 200
-    assert len(response.get_data()) > 0
+    data = response.get_data()
+    assert len(data) > 0
 
 
 def test_register_post_route(app: Flask) -> None:

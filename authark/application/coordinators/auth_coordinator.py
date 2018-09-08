@@ -9,7 +9,7 @@ from authark.application.models.token import Token
 from authark.application.models.user import User
 from authark.application.models.credential import Credential
 from authark.application.utilities.type_definitions import (
-    TokenString, UserDict)
+    TokenString, TokensDict, UserDict)
 
 
 class AuthCoordinator:
@@ -25,7 +25,7 @@ class AuthCoordinator:
         self.token_service = token_service
         self.id_service = id_service
 
-    def authenticate(self, username: str, password: str) -> TokenString:
+    def authenticate(self, username: str, password: str) -> TokensDict:
         users = self.user_repository.search([('username', '=', username)])
         if not users:
             raise AuthError("Authentication Error: User not found.")
@@ -41,11 +41,33 @@ class AuthCoordinator:
         if not self.hash_service.verify_password(password, user_password):
             raise AuthError("Authentication Error: Password mismatch.")
 
-        payload = {'user': user.username, 'email': user.email}
+        access_payload = {'user': user.username, 'email': user.email}
+        access_token = self.token_service.generate_token(access_payload)
 
-        token = self.token_service.generate_token(payload)
+        # Create new refresh token
+        refresh_token_str = self._generate_refresh_token(user.id)
 
-        return token.value
+        return {
+            'refresh_token': refresh_token_str,
+            'access_token': access_token.value
+        }
+
+    def _generate_refresh_token(self, user_id: str) -> TokenString:
+        credential_id = self.id_service.generate_id()
+        refresh_payload = {'type': 'refresh_token'}
+        refresh_token = self.token_service.generate_token(refresh_payload)
+
+        # Remove previous refresh tokens as a user should have only one
+        previous_tokens = self.credential_repository.search([
+            ('user_id', '=', user_id), ('type', '=', 'refresh_token')])
+        for token in previous_tokens:
+            self.credential_repository.remove(token)
+
+        credential = Credential(credential_id, user_id, refresh_token.value,
+                                type='refresh_token')
+        self.credential_repository.add(credential)
+
+        return refresh_token.value
 
     def register(self, username: str, email: str, password: str) -> UserDict:
         hashed_password = self.hash_service.generate_hash(password)

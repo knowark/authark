@@ -90,9 +90,33 @@ def test_auth_coordinator_creation(
 def test_auth_coordinator_authenticate(
         auth_coordinator: AuthCoordinator) -> None:
 
-    token = auth_coordinator.authenticate("tebanep", "PASS2")
+    tokens = auth_coordinator.authenticate("tebanep", "PASS2")
 
-    assert isinstance(token, str)
+    assert isinstance(tokens, dict)
+    assert 'refresh_token' in tokens.keys()
+    assert 'access_token' in tokens.keys()
+
+
+def test_generate_refresh_token(auth_coordinator: AuthCoordinator) -> None:
+    user_id = '1'
+    refresh_token = auth_coordinator._generate_refresh_token(user_id)
+    credential_repository = auth_coordinator.credential_repository
+
+    assert isinstance(refresh_token, str)
+    assert len(credential_repository.credentials_dict) == 4
+
+
+def test_generate_refresh_token_only_one(
+        auth_coordinator: AuthCoordinator) -> None:
+    user_id = '1'
+    credential_repository = auth_coordinator.credential_repository
+    credential_repository.credentials_dict['4'] = Credential(
+        id='4', user_id=user_id, value="PREVIOUS_TOKEN", type='refresh_token')
+
+    assert len(credential_repository.credentials_dict) == 4
+    refresh_token = auth_coordinator._generate_refresh_token(user_id)
+    assert isinstance(refresh_token, str)
+    assert len(credential_repository.credentials_dict) == 4
 
 
 def test_auth_coordinator_fail_to_authenticate(

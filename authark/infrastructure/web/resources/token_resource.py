@@ -16,8 +16,8 @@ class TokenResource(Resource):
         try:
             username = data.get('username')
             password = data.get('password')
-            token = self.auth_coordinator.authenticate(username, password)
+            tokens = self.auth_coordinator.authenticate(username, password)
         except Exception as e:
             return '', 401
 
-        return token, 200
+        return tokens, 200
