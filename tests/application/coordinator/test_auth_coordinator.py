@@ -97,6 +97,33 @@ def test_auth_coordinator_authenticate(
     assert 'access_token' in tokens.keys()
 
 
+def test_auth_coordinator_refresh_authenticate(
+        auth_coordinator: AuthCoordinator) -> None:
+    user_id = '1'
+    refresh_token = "PREVIOUS_TOKEN"
+    credential_repository = auth_coordinator.credential_repository
+    credential_repository.credentials_dict['4'] = Credential(
+        id='4', user_id=user_id, value=refresh_token, type='refresh_token')
+
+    tokens = auth_coordinator.refresh_authenticate(refresh_token)
+
+    assert isinstance(tokens, dict)
+    assert 'refresh_token' in tokens.keys()
+    assert 'access_token' in tokens.keys()
+
+
+def test_auth_coordinator_refresh_authenticate_refresh_token_not_found(
+        auth_coordinator: AuthCoordinator) -> None:
+    user_id = '1'
+    refresh_token = "GOOD_TOKEN"
+    credential_repository = auth_coordinator.credential_repository
+    credential_repository.credentials_dict['4'] = Credential(
+        id='4', user_id=user_id, value=refresh_token, type='refresh_token')
+
+    with raises(AuthError):
+        tokens = auth_coordinator.refresh_authenticate("BAD_TOKEN")
+
+
 def test_generate_refresh_token(auth_coordinator: AuthCoordinator) -> None:
     user_id = '1'
     refresh_token = auth_coordinator._generate_refresh_token(user_id)

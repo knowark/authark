@@ -52,6 +52,27 @@ class AuthCoordinator:
             'access_token': access_token.value
         }
 
+    def refresh_authenticate(self, refresh_token: TokenString) -> TokensDict:
+        # Remove previous refresh tokens as a user should have only one
+        credentials = self.credential_repository.search([
+            ('value', '=', refresh_token), ('type', '=', 'refresh_token')])
+        if not credentials:
+            raise AuthError("Authentication Error: Refresh token not found.")
+
+        credential = credentials[0]
+        user = self.user_repository.get(credential.user_id)
+
+        # Create new refresh token
+        refresh_token_str = self._generate_refresh_token(user.id)
+
+        access_payload = {'user': user.username, 'email': user.email}
+        access_token = self.token_service.generate_token(access_payload)
+
+        return {
+            'refresh_token': refresh_token_str,
+            'access_token': access_token.value
+        }
+
     def _generate_refresh_token(self, user_id: str) -> TokenString:
         credential_id = self.id_service.generate_id()
         refresh_payload = {'type': 'refresh_token'}
