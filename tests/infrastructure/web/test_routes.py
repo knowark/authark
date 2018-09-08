@@ -26,12 +26,12 @@ class MockRegistry(Registry):
         user_repository = MemoryUserRepository(parser)
         credential_repository = MemoryCredentialRepository(parser)
         user_repository.load({
-            'eecheverry': User(
+            '1': User(
                 "1",
                 "eecheverry",
                 "eecheverry@nubark.com",
                 "HASHED: ABC1234"),
-            'mvivas': User(
+            '2': User(
                 "2",
                 "mvivas",
                 "mvivas@gmail.com",
@@ -41,6 +41,8 @@ class MockRegistry(Registry):
         credential_repository.load({
             "1": Credential(id='1', user_id='1', value="HASHED: ABC1234"),
             "2": Credential(id='2', user_id='2', value="HASHED: XYZ098"),
+            "3": Credential(id='3', user_id='1', value="REFRESH_TOKEN",
+                            type='refresh_token'),
         })
         token_service = PyJWTTokenService('TESTSECRET', 'HS256')
         hash_service = MemoryHashService()
@@ -96,6 +98,19 @@ def test_auth_post_route_successful_authentication(app: Flask) -> None:
         data=json.dumps(dict(
             username="eecheverry",
             password="ABC1234"
+        )),
+        content_type='application/json')
+    assert response.status_code == 200
+    data = response.get_data()
+    assert len(data) > 0
+
+
+def test_auth_post_route_with_refresh_token(app: Flask) -> None:
+    response = app.post(
+        '/auth',
+        data=json.dumps(dict(
+            type="refresh_token",
+            value="REFRESH_TOKEN"
         )),
         content_type='application/json')
     assert response.status_code == 200
