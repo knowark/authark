@@ -73,23 +73,6 @@ class AuthCoordinator:
             'access_token': access_token.value
         }
 
-    def _generate_refresh_token(self, user_id: str) -> TokenString:
-        credential_id = self.id_service.generate_id()
-        refresh_payload = {'type': 'refresh_token'}
-        refresh_token = self.token_service.generate_token(refresh_payload)
-
-        # Remove previous refresh tokens as a user should have only one
-        previous_tokens = self.credential_repository.search([
-            ('user_id', '=', user_id), ('type', '=', 'refresh_token')])
-        for token in previous_tokens:
-            self.credential_repository.remove(token)
-
-        credential = Credential(credential_id, user_id, refresh_token.value,
-                                type='refresh_token')
-        self.credential_repository.add(credential)
-
-        return refresh_token.value
-
     def register(self, username: str, email: str, password: str) -> UserDict:
         hashed_password = self.hash_service.generate_hash(password)
         user_id = self.id_service.generate_id()
@@ -117,3 +100,20 @@ class AuthCoordinator:
             self.credential_repository.remove(credential)
 
         return True
+
+    def _generate_refresh_token(self, user_id: str) -> TokenString:
+        credential_id = self.id_service.generate_id()
+        refresh_payload = {'type': 'refresh_token'}
+        refresh_token = self.token_service.generate_token(refresh_payload)
+
+        # Remove previous refresh tokens as a user should have only one
+        previous_tokens = self.credential_repository.search([
+            ('user_id', '=', user_id), ('type', '=', 'refresh_token')])
+        for token in previous_tokens:
+            self.credential_repository.remove(token)
+
+        credential = Credential(credential_id, user_id, refresh_token.value,
+                                type='refresh_token')
+        self.credential_repository.add(credential)
+
+        return refresh_token.value
