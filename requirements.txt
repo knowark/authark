@@ -9,7 +9,7 @@ click==6.7
 codecov==2.0.9
 coverage==4.4.1
 docutils==0.14
-Flask==0.12.2
+Flask==1.0.2
 Flask-Cors==3.0.6
 Flask-RESTful==0.3.6
 gevent==1.2.2
@@ -18,12 +18,12 @@ gunicorn==19.7.1
 idna==2.6
 imagesize==1.0.0
 itsdangerous==0.24
-Jinja2==2.9.6
+Jinja2==2.10
 livereload==2.5.1
 Markdown==2.6.9
 MarkupSafe==1.0
 mkdocs==0.17.0
-mypy==0.540
+mypy==0.620
 packaging==17.1
 passlib==1.7.1
 pathtools==0.1.2
@@ -50,4 +50,4 @@ typed-ast==1.1.0
 urllib3==1.22
 urwid==2.0.1
 watchdog==0.8.3
-Werkzeug==0.12.2
+Werkzeug==0.14.1
