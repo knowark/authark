@@ -2,6 +2,7 @@ from collections import UserDict
 from typing import Any, Dict
 from abc import ABC, abstractmethod
 from authark.application.models.user import User
+from authark.application.models.credential import Credential
 from authark.application.coordinators.auth_coordinator import AuthCoordinator
 from authark.application.reporters.authark_reporter import (
     AutharkReporter, MemoryAutharkReporter)
@@ -57,7 +58,7 @@ class MemoryRegistry(Registry):
 class JsonJwtRegistry(Registry):
 
     def __init__(self, config: Config) -> None:
-        database_config = config.get("database")
+        database_config = config.get("database", {})
         database_path = database_config.get("url")
 
         # Initialize Json Database
@@ -65,8 +66,10 @@ class JsonJwtRegistry(Registry):
 
         # Services
         parser = ExpressionParser()
-        user_repository = JsonUserRepository(database_path, parser)
-        credential_repository = JsonCredentialRepository(database_path, parser)
+        user_repository = JsonUserRepository(
+            database_path, parser, 'users', User)
+        credential_repository = JsonCredentialRepository(
+            database_path, parser, 'credentials', Credential)
         token_service = PyJWTTokenService('DEVSECRET123', 'HS256')
         hash_service = PasslibHashService()
         id_service = StandardIdService()

@@ -1,0 +1,72 @@
+import os
+from json import load, dump
+from typing import Dict, List, Optional, Any, Type, TypeVar, Callable, Generic
+from authark.application.repositories.repository import Repository
+from authark.application.utilities.type_definitions import QueryDomain
+from authark.application.repositories.expression_parser import ExpressionParser
+
+
+T = TypeVar('T')
+
+
+class JsonRepository(Repository, Generic[T]):
+    def __init__(self, file_path: str, parser: ExpressionParser,
+                 collection_name: str, item_class: Type[T]) -> None:
+        self.file_path = file_path
+        self.parser = parser
+        self.collection_name = collection_name
+        self.item_class = item_class  # type: Callable[..., T]
+
+    def get(self, id: str) -> Optional[T]:
+        item = None
+        with open(self.file_path) as f:
+            data = load(f)
+            items = data.get(self.collection_name, {})
+            item_dict = items.get(id)
+            if item_dict:
+                item = self.item_class(**item_dict)
+        return item
+
+    def add(self, item: T) -> bool:
+        data = {}  # type: Dict[str, Any]
+        with open(self.file_path, 'r') as f:
+            data = load(f)
+        id = getattr(item, 'id')
+        data[self.collection_name].update({id: vars(item)})
+        with open(self.file_path, 'w') as f:
+            dump(data, f)
+        return True
+
+    def search(self, domain: QueryDomain, limit=100, offset=0) -> List[T]:
+        with open(self.file_path, 'r') as f:
+            data = load(f)
+            items_dict = data.get(self.collection_name, {})
+
+        items = []
+        filter_function = self.parser.parse(domain)
+        for item_dict in items_dict.values():
+            item = self.item_class(**item_dict)
+
+            if filter_function(item):
+                items.append(item)
+
+        if limit:
+            items = items[:limit]
+        if offset:
+            items = items[offset:]
+        return items
+
+    def remove(self, item: T) -> bool:
+        with open(self.file_path, 'r') as f:
+            data = load(f)
+            items_dict = data.get(self.collection_name)
+
+        id = getattr(item, 'id')
+        if id not in items_dict:
+            return False
+
+        del items_dict[id]
+
+        with open(self.file_path, 'w') as f:
+            dump(data, f)
+        return True
