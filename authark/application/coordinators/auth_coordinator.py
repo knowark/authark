@@ -83,7 +83,7 @@ class AuthCoordinator:
         credential_id = self.id_service.generate_id()
         credential = Credential(id=credential_id, user_id=user_id,
                                 value=hashed_password)
-        self.user_repository.save(user)
+        self.user_repository.add(user)
         self.credential_repository.add(credential)
 
         return vars(user)
@@ -92,7 +92,7 @@ class AuthCoordinator:
         user = self.user_repository.get(user_id)
         if not user:
             return False
-        self.user_repository.delete(user)
+        self.user_repository.remove(user)
 
         credentials = self.credential_repository.search(
             [('user_id', '=', user.id)])

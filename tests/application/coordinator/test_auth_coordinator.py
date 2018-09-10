@@ -177,7 +177,7 @@ def test_auth_coordinator_register(
 
     assert user_dict
     assert isinstance(user_dict, dict)
-    assert len(auth_coordinator.user_repository.user_dict) == 4
+    assert len(auth_coordinator.user_repository.items) == 4
     assert len(auth_coordinator.credential_repository.credentials_dict) == 4
 
 
@@ -188,7 +188,7 @@ def test_auth_coordinator_deregister(
     unregistered = auth_coordinator.deregister(user.id)
 
     assert unregistered is True
-    assert len(auth_coordinator.user_repository.user_dict) == 2
+    assert len(auth_coordinator.user_repository.items) == 2
     assert len(auth_coordinator.credential_repository.credentials_dict) == 2
 
 
@@ -199,4 +199,4 @@ def test_auth_coordinator_deregister_missing(
     unregistered = auth_coordinator.deregister(user.id)
 
     assert unregistered is False
-    assert len(auth_coordinator.user_repository.user_dict) == 3
+    assert len(auth_coordinator.user_repository.items) == 3
