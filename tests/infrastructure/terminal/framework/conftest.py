@@ -4,6 +4,7 @@ from authark.infrastructure.config.context import Context
 from authark.infrastructure.terminal.framework.environment import Environment
 from authark.infrastructure.terminal.framework.screen import Screen
 from authark.infrastructure.terminal.framework.table import Table
+from authark.infrastructure.terminal.framework.themes import palette
 
 
 @fixture
@@ -33,3 +34,8 @@ def table():
     ]
     headers_list = ['name', 'age']
     return Table(data_list, headers_list)
+
+
+@fixture
+def themes():
+    return palette
