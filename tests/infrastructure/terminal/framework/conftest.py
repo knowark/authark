@@ -30,7 +30,8 @@ def screen(environment):
 def table():
     data_list = [
         {'name': 'Esteban', 'age': 29},
-        {'name': 'Adriana', 'age': 59}
+        {'name': 'Adriana', 'age': 59},
+        {'name': 'Cesar', 'age': 61}
     ]
     headers_list = ['name', 'age']
     return Table(data_list, headers_list)
