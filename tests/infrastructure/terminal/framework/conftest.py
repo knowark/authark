@@ -21,7 +21,7 @@ def environment(context):
 def screen(environment):
     class MockScreen(Screen):
         def _build_widget(self):
-            pass
+            return urwid.Button('Mock')
 
     return MockScreen('Mock', environment)
 
