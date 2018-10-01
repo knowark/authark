@@ -9,9 +9,6 @@ def test_table_instantiation(table):
 def test_table_build_header(table):
     headers_list = ['name', 'age', 'height']
     result = table._build_header(headers_list)
-
-    print('Result -->>', result)
-    print(result.render((40,)).text)
     rendered_result = result.render((40,)).text
     assert result is not None
     assert len(rendered_result) == 2
