@@ -12,8 +12,13 @@ def test_main_unhandled_input(main):
         main._unhandled_input('ctrl c')
 
 
-def test_main_set_main_menu(main):
-    with raises(urwid.ExitMainLoop):
-        main._unhandled_input('ctrl c')
+def test_main_run(main):
+    called = False
 
-    assert isinstance(main.holder.original_widget, MainMenu)
+    class MockLoop:
+        def run(self):
+            nonlocal called
+            called = True
+    main.loop = MockLoop()
+    main.run()
+    assert called
