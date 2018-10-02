@@ -14,7 +14,7 @@ from authark.infrastructure.config.registry import (
     Registry, MemoryRegistry, JsonJwtRegistry)
 
 
-def main() -> None:
+def main() -> None:  # pragma: no cover
     parser = argparse.ArgumentParser()
     parser.add_argument(
         "-dev", "--developement",
@@ -49,5 +49,5 @@ def main() -> None:
         Application(app, gunicorn_config).run()
 
 
-if __name__ == '__main__':
+if __name__ == '__main__':  # pragma: no cover
     main()
