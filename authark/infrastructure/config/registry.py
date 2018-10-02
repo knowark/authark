@@ -68,9 +68,9 @@ class JsonJwtRegistry(Registry):
         # Services
         parser = ExpressionParser()
         user_repository = JsonUserRepository(
-            database_path, parser, 'users', User)
+            database_path, parser)
         credential_repository = JsonCredentialRepository(
-            database_path, parser, 'credentials', Credential)
+            database_path, parser)
         token_service = PyJWTTokenService('DEVSECRET123', 'HS256')
         hash_service = PasslibHashService()
         id_service = StandardIdService()
