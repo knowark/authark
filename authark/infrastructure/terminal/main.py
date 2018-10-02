@@ -35,26 +35,6 @@ class Main:
         if key == 'ctrl c':
             self.exit(key)
 
-    def _set_main_menu(self):
-        main_menu = MainMenu("AUTHARK", self._get_options())
-        self.holder.original_widget = main_menu
-
-    def _get_options(self):
-        return OrderedDict([
-            ("USERS", self.option_callback),
-            ("ROLES", self.option_callback),
-            ("GROUPS", self.option_callback),
-            ("PROVIDERS", self.option_callback)
-        ])
-
-    def option_callback(self, button: urwid.Button, choice: str):
-        response = urwid.Text([u'You chose ', choice, u'\n'])
-        done = urwid.Button(u'Ok')
-        urwid.connect_signal(done, 'click', self.exit)
-        self.holder.original_widget = urwid.Filler(
-            urwid.Pile([response, urwid.AttrMap(
-                done, None, focus_map='reversed')]))
-
     def exit(self, key: str):
         raise urwid.ExitMainLoop()
 
