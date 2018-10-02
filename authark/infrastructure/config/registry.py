@@ -36,7 +36,7 @@ class Registry(dict, ABC):
 class MemoryRegistry(Registry):
 
     def __init__(self, config: Config) -> None:
-
+        super().__init__(config)
         # Services
         parser = ExpressionParser()
         user_repository = MemoryUserRepository(parser)
@@ -58,6 +58,7 @@ class MemoryRegistry(Registry):
 class JsonJwtRegistry(Registry):
 
     def __init__(self, config: Config) -> None:
+        super().__init__(config)
         database_config = config.get("database", {})
         database_path = database_config.get("url")
 
