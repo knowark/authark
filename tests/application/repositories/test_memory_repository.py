@@ -72,6 +72,12 @@ def test_memory_repository_search_limit(memory_repository):
     assert len(items) == 2
 
 
+def test_memory_repository_search_limit_zero(memory_repository):
+    items = memory_repository.search([], limit=0)
+
+    assert len(items) == 3
+
+
 def test_memory_repository_search_offset(memory_repository):
     items = memory_repository.search([], offset=2)
 

@@ -20,8 +20,9 @@ class MemoryRepository(Repository, Generic[T]):
         self.items[id] = item
         return True
 
-    def search(self, domain: QueryDomain, limit=100, offset=0) -> List[T]:
+    def search(self, domain: QueryDomain, limit=0, offset=0) -> List[T]:
         items = []
+        limit = int(limit) if limit > 0 else 100
         filter_function = self.parser.parse(domain)
         for item in list(self.items.values()):
             if filter_function(item):
