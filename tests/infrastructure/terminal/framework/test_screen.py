@@ -23,6 +23,7 @@ def test_screen_open_screen(screen):
 
 
 def test_screen_back(screen):
+    assert screen.env.holder.original_widget == screen
     stack = [urwid.Text('One'), urwid.Text('Two')]
     screen.env.stack = list(stack)
     screen._back()

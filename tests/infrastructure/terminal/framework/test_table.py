@@ -31,6 +31,8 @@ def test_table_keypress(table):
 
 
 def test_table_get_selected_item(table):
+    result = table.get_selected_item()
+    assert result == {}
     table.keypress(None, 'down')
     result = table.get_selected_item()
     assert result['name'] == 'Esteban'

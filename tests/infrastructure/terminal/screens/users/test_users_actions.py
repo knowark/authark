@@ -44,6 +44,9 @@ def test_users_add_screen_keypress(main, users_add_screen):
     users_add_screen.email.edit_text = 'jplozano@example.com'
     users_add_screen.password.edit_text = '123'
 
+    result = users_add_screen.keypress((40, 40), 'ctrl')
+    assert result == 'ctrl'
+
     users_add_screen.keypress((40, 40), 'enter')
 
     assert len(users_add_screen.auth_coordinator.user_repository.items) == 2
@@ -67,6 +70,10 @@ def test_users_delete_screen_keypress(main, users_delete_screen):
 
     users_delete_screen.env.stack = [MockMainMenu(
         'Mock', main.env), urwid.Text('Mock')]
+
+    result = users_delete_screen.keypress((40, 40), 'ctrl')
+    assert result == 'ctrl'
+
     users_delete_screen.keypress((40, 40), 'enter')
 
     assert len(users_delete_screen.auth_coordinator
