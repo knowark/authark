@@ -37,12 +37,14 @@ class JsonRepository(Repository, Generic[T]):
             dump(data, f)
         return True
 
-    def search(self, domain: QueryDomain, limit=100, offset=0) -> List[T]:
+    def search(self, domain: QueryDomain, limit=0, offset=0) -> List[T]:
         with open(self.file_path, 'r') as f:
             data = load(f)
             items_dict = data.get(self.collection_name, {})
 
         items = []
+        limit = int(limit) if limit > 0 else 100
+        offset = int(offset) if offset > 0 else 0
         filter_function = self.parser.parse(domain)
         for item_dict in items_dict.values():
             item = self.item_class(**item_dict)
@@ -50,10 +52,9 @@ class JsonRepository(Repository, Generic[T]):
             if filter_function(item):
                 items.append(item)
 
-        if limit:
-            items = items[:limit]
-        if offset:
-            items = items[offset:]
+        items = items[:limit]
+        items = items[offset:]
+
         return items
 
     def remove(self, item: T) -> bool:

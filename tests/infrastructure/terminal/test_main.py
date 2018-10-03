@@ -8,6 +8,7 @@ def test_main_instantiation(main):
 
 
 def test_main_unhandled_input(main):
+    assert main._unhandled_input('enter') is None
     with raises(urwid.ExitMainLoop):
         main._unhandled_input('ctrl c')
 

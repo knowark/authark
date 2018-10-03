@@ -1,10 +1,7 @@
-import logging
 import urwid
 from abc import ABC, abstractmethod
 from typing import List
 from authark.infrastructure.terminal.framework.environment import Environment
-
-logging.basicConfig(level=logging.DEBUG, filename='/tmp/authark.log')
 
 
 class Screen(urwid.WidgetWrap):
@@ -14,7 +11,6 @@ class Screen(urwid.WidgetWrap):
         self.name = name
         self.env = env
         self.parent = parent
-        self.logger = logging.getLogger()
 
         widget = self._build_widget()
         super().__init__(widget)
@@ -30,13 +26,11 @@ class Screen(urwid.WidgetWrap):
     def _open_screen(self, screen: 'Screen' = None) -> None:
         self.env.stack.append(self)
         self.env.holder.original_widget = screen
-        self.logger.debug("OPEN: %s", self.env.stack)
 
     def _back(self):
         if self.env.stack:
             previous = self.env.stack.pop()
             self.env.holder.original_widget = previous
-        self.logger.debug("BACK: %s", self.env.stack)
 
     def keypress(self, size, key):
         if key in ['esc', 'left']:

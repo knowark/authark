@@ -46,7 +46,6 @@ class UsersAddScreen(Screen):
             email = self.email.edit_text
             password = self.password.edit_text
             user = self.auth_coordinator.register(username, email, password)
-            self.logger.debug("User -->> %s", user)
             self._go_back()
         return super().keypress(size, key)
 
@@ -68,6 +67,9 @@ class UsersDeleteScreen(Screen):
             "Press (", ("remove button", "Enter"), ") to delete. "
             "Press (", ("back button", "Esc"), ") to go back. "
         ])
+
+        if not self.parent:
+            return
 
         table = self.parent.table
         self.selected_item = table.get_selected_item()
@@ -95,7 +97,6 @@ class UsersDeleteScreen(Screen):
         if key == 'enter':
             id = self.selected_item.get('id')
             user = self.auth_coordinator.deregister(id)
-            self.logger.debug("User: %s has been unregistered!", user)
             self._go_back()
         return super().keypress(size, key)
 
@@ -110,6 +111,9 @@ class UsersCredentialsScreen(Screen):
     def _build_widget(self) -> urwid.Widget:
         self.auth_coordinator = self.env.context.registry['auth_coordinator']
         self.auth_reporter = self.env.context.registry['auth_reporter']
+
+        if not self.parent:
+            return
 
         self.selected_item = self.parent.table.get_selected_item()
         username = self.selected_item.get('username')

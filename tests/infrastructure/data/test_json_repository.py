@@ -42,6 +42,11 @@ def test_json_repository_get(json_repository):
     assert item and item.field_1 == "value_1"
 
 
+def test_json_repository_get_not_found(json_repository):
+    item = json_repository.get("99")
+    assert item is None
+
+
 def test_json_repository_add(json_repository):
     item = DummyEntity('5', 'value_5')
     json_repository.add(item)
@@ -74,6 +79,11 @@ def test_json_repository_search_all(json_repository):
 def test_json_repository_search_limit(json_repository):
     items = json_repository.search([], limit=2)
     assert len(items) == 2
+
+
+def test_json_repository_search_limit_zero(json_repository):
+    items = json_repository.search([], limit=0)
+    assert len(items) == 3
 
 
 def test_json_repository_search_offset(json_repository):
