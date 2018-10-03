@@ -21,12 +21,10 @@ class MainMenu(Screen):
         return widget
 
     def _build_menu_option(self, name, callback):
-        self.logger.debug('Build Menu: %s', name)
         button = urwid.Button(name)
         urwid.connect_signal(button, 'click', callback)
         return urwid.AttrMap(button, 'reversed')
 
     def show_users_screen(self, button=None):
         screen = UsersScreen('USERS', self.env)
-        self.logger.debug('SCREEN: %s', screen)
         return self._open_screen(screen)

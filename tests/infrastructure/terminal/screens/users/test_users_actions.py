@@ -7,6 +7,14 @@ from authark.infrastructure.terminal.screens.users.users_actions import (
     UsersAddScreen, UsersDeleteScreen, UsersCredentialsScreen)
 
 
+class MockParent:
+    def __init__(self):
+        self.table = Table([
+            {'id': '1', 'username': 'eecheverry', 'password': '123'}
+        ], ['id', 'username', 'password'])
+        self.table.keypress(None, 'down')
+
+
 @fixture
 def users_add_screen(main):
     return UsersAddScreen('USERS ADD', main.env)
@@ -14,13 +22,12 @@ def users_add_screen(main):
 
 @fixture
 def users_delete_screen(main):
-    class MockParent:
-        def __init__(self):
-            self.table = Table([
-                {'id': '1', 'username': 'eecheverry', 'password': '123'}
-            ], ['id', 'username', 'password'])
-            self.table.keypress(None, 'down')
     return UsersDeleteScreen('USERS DELETE', main.env, MockParent())
+
+
+@fixture
+def users_credentials_screen(main):
+    return UsersCredentialsScreen('USERS CREDENTIALS', main.env, MockParent())
 
 
 def test_users_add_screen_instantiation(users_add_screen):
@@ -57,6 +64,11 @@ def test_users_delete_screen_instantiation(users_delete_screen):
     assert users_delete_screen is not None
 
 
+def test_users_delete_screen_instantiation_no_parent(main):
+    users_delete_screen = UsersDeleteScreen('USERS DELETE', main.env, None)
+    assert users_delete_screen._build_widget() is None
+
+
 def test_users_delete_screen_keypress(main, users_delete_screen):
     called = False
 
@@ -79,3 +91,13 @@ def test_users_delete_screen_keypress(main, users_delete_screen):
     assert len(users_delete_screen.auth_coordinator
                .user_repository.items) == 0
     assert called
+
+
+def test_users_credentials_screen_instantiation(users_credentials_screen):
+    assert users_credentials_screen is not None
+
+
+def test_users_credentials_screen_instantiation_no_parent(main):
+    users_credentials_screen = UsersCredentialsScreen(
+        'USERS CREDENTIALS', main.env, None)
+    assert users_credentials_screen._build_widget() is None
