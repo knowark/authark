@@ -11,7 +11,7 @@ def context():
     config = TrialConfig()
     registry = MemoryRegistry(config)
     registry['auth_reporter'].user_repository.load({
-        "1": User('1', 'eecheverry', 'eecheverry@example.com', '123')
+        "1": User('1', 'eecheverry', 'eecheverry@example.com')
     })
     return Context(config, registry)
 

@@ -78,7 +78,7 @@ class AuthCoordinator:
         user_id = self.id_service.generate_id()
 
         user = User(id=user_id, username=username,
-                    email=email, password=hashed_password)
+                    email=email)
 
         credential_id = self.id_service.generate_id()
         credential = Credential(id=credential_id, user_id=user_id,

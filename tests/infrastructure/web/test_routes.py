@@ -29,13 +29,11 @@ class MockRegistry(Registry):
             '1': User(
                 "1",
                 "eecheverry",
-                "eecheverry@nubark.com",
-                "HASHED: ABC1234"),
+                "eecheverry@nubark.com"),
             '2': User(
                 "2",
                 "mvivas",
-                "mvivas@gmail.com",
-                "HASHED: XYZ098"
+                "mvivas@gmail.com"
             )
         })
         credential_repository.load({

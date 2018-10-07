@@ -27,9 +27,9 @@ from authark.application.models.token import Token
 def mock_user_repository() -> UserRepository:
     parser = ExpressionParser()
     user_dict = {
-        "1": User('1', 'valenep', 'valenep@gmail.com', "HASHED: PASS1"),
-        "2": User('2', 'tebanep', 'tebanep@gmail.com', "HASHED: PASS2"),
-        "3": User('3', 'gabeche', 'gabeche@gmail.com', "HASHED: PASS3")
+        "1": User('1', 'valenep', 'valenep@gmail.com'),
+        "2": User('2', 'tebanep', 'tebanep@gmail.com'),
+        "3": User('3', 'gabeche', 'gabeche@gmail.com')
     }
     mock_user_repository = MemoryUserRepository(parser)
     mock_user_repository.load(user_dict)
@@ -203,7 +203,7 @@ def test_auth_coordinator_deregister(
 def test_auth_coordinator_deregister_missing(
         auth_coordinator: AuthCoordinator, mock_user_repository) -> None:
 
-    user = User('5', 'missing', 'missing@gmail.com', "HASHED: MISSING")
+    user = User('5', 'missing', 'missing@gmail.com')
     unregistered = auth_coordinator.deregister(user.id)
 
     assert unregistered is False

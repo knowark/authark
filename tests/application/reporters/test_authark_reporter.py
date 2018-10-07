@@ -21,9 +21,9 @@ def user_repository() -> UserRepository:
     parser = ExpressionParser()
     user_repository = MemoryUserRepository(parser)
     user_repository.load({
-        "valenep": User('1', 'valenep', 'valenep@gmail.com', "PASS1"),
-        "tebanep": User('2', 'tebanep', 'tebanep@gmail.com', "PASS2"),
-        "gabeche": User('3', 'gabeche', 'gabeche@gmail.com', "PASS3")
+        "valenep": User('1', 'valenep', 'valenep@gmail.com'),
+        "tebanep": User('2', 'tebanep', 'tebanep@gmail.com'),
+        "gabeche": User('3', 'gabeche', 'gabeche@gmail.com')
     })
     return user_repository
 

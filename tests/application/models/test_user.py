@@ -7,9 +7,8 @@ def test_user_creation() -> None:
     email = "eecheverry@nubark.com"
     password = "ABC123"
 
-    user = User(id=id_, username=username, email=email, password=password)
+    user = User(id=id_, username=username, email=email)
 
     assert user.id == id_
     assert user.username == username
     assert user.email == email
-    assert user.password == password

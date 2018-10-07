@@ -22,7 +22,7 @@ def authark_reporter(tmpdir_factory):
     parser = ExpressionParser()
     user_repository = JsonUserRepository(file_path, parser)
     user_repository.add(User(**{
-        'id': '1', 'username': 'mike', 'email': 'abc', 'password': '123'}))
+        'id': '1', 'username': 'mike', 'email': 'abc'}))
     credential_repository = JsonCredentialRepository(file_path, parser)
     credential_repository.add(Credential(**{
         'id': '1', 'user_id': '1', 'value': '123'}))
