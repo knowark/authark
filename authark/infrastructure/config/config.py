@@ -25,6 +25,10 @@ class Config(dict, ABC):
         }
         self['flask'] = {}
         self['database'] = {}
+        self['tokens'] = {
+            'access_lifetime': 86400,
+            'refresh_lifetime': 604800
+        }
 
 
 class TrialConfig(Config):
