@@ -13,8 +13,10 @@ def test_pyjwt_token_service_generate_token_with_payload() -> None:
     secret = 'ABCDE12345'
     algorithm = 'HS256'
     payload = {'user': "Pepe", 'email': "pepe@gmail.com"}
+    lifetime = 3600
 
-    pyjwt_service = PyJWTTokenService(secret=secret, algorithm=algorithm)
+    pyjwt_service = PyJWTTokenService(secret=secret, algorithm=algorithm,
+                                      lifetime=3600)
     token = pyjwt_service.generate_token(payload)
     value = token.value
 

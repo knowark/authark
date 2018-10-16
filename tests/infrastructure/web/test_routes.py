@@ -42,7 +42,7 @@ class MockRegistry(Registry):
             "3": Credential(id='3', user_id='1', value="REFRESH_TOKEN",
                             type='refresh_token'),
         })
-        token_service = PyJWTTokenService('TESTSECRET', 'HS256')
+        token_service = PyJWTTokenService('TESTSECRET', 'HS256', 3600)
         hash_service = MemoryHashService()
         id_service = StandardIdService()
         auth_coordinator = AuthCoordinator(

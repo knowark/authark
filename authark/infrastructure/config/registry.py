@@ -71,7 +71,9 @@ class JsonJwtRegistry(Registry):
             database_path, parser)
         credential_repository = JsonCredentialRepository(
             database_path, parser)
-        token_service = PyJWTTokenService('DEVSECRET123', 'HS256')
+        tokens_config = config.get("tokens", {})
+        token_service = PyJWTTokenService('DEVSECRET123', 'HS256',
+                                          tokens_config.get('access_lifetime'))
         hash_service = PasslibHashService()
         id_service = StandardIdService()
 
