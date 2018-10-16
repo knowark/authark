@@ -19,15 +19,21 @@ Version 1.0
   - [ ] Persist users in json format with a encrypted password
 
 - [ ] Credentials, Providers, Groups and Roles
+
   - [ ] Define Credentials
   - [ ] Define Providers
   - [ ] Define Groups
   - [ ] Define Roles
 
 - [ ] Add basic security controls to Authark itself
+
   - [ ] Create default provider (i.e. Authark itself)
   - [ ] Create Authark's basic groups
   - [ ] Decode authentication token to use in Authark
+
+- [ ] Add expiration date to tokens
+
+- [ ] Enable authentication through refresh tokens
 
 - [X] Manage system's setup through configuration files 
 - [X] Refactor to a standalone app by integrating gunicorn
