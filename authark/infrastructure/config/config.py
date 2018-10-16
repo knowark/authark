@@ -27,7 +27,8 @@ class Config(dict, ABC):
         self['database'] = {}
         self['tokens'] = {
             'access_lifetime': 86400,
-            'refresh_lifetime': 604800
+            'refresh_lifetime': 604800,
+            'refresh_threshold': 86400
         }
 
 
