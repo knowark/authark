@@ -17,12 +17,14 @@ class AuthCoordinator:
     def __init__(self, user_repository: UserRepository,
                  credential_repository: CredentialRepository,
                  hash_service: HashService,
-                 token_service: TokenService,
+                 access_token_service: TokenService,
+                 refresh_token_service: TokenService,
                  id_service: IdService) -> None:
         self.user_repository = user_repository
         self.credential_repository = credential_repository
         self.hash_service = hash_service
-        self.token_service = token_service
+        self.access_token_service = access_token_service
+        self.refresh_token_service = refresh_token_service
         self.id_service = id_service
 
     def authenticate(self, username: str, password: str) -> TokensDict:
@@ -42,7 +44,7 @@ class AuthCoordinator:
             raise AuthError("Authentication Error: Password mismatch.")
 
         access_payload = {'user': user.username, 'email': user.email}
-        access_token = self.token_service.generate_token(access_payload)
+        access_token = self.access_token_service.generate_token(access_payload)
 
         # Create new refresh token
         refresh_token_str = self._generate_refresh_token(user.id)
@@ -53,25 +55,27 @@ class AuthCoordinator:
         }
 
     def refresh_authenticate(self, refresh_token: TokenString) -> TokensDict:
-        # Remove previous refresh tokens as a user should have only one
         credentials = self.credential_repository.search([
             ('value', '=', refresh_token), ('type', '=', 'refresh_token')])
         if not credentials:
             raise AuthError("Authentication Error: Refresh token not found.")
 
+        token = Token(refresh_token)
+        self.refresh_token_service.valid(token)
+
+        tokens_dict = {}
         credential = credentials[0]
         user = self.user_repository.get(credential.user_id)
 
-        # Create new refresh token
-        refresh_token_str = self._generate_refresh_token(user.id)
+        if self.refresh_token_service.renew(token):
+            tokens_dict['refresh_token'] = self._generate_refresh_token(
+                user.id)
 
         access_payload = {'user': user.username, 'email': user.email}
-        access_token = self.token_service.generate_token(access_payload)
+        tokens_dict['access_token'] = self.access_token_service.generate_token(
+            access_payload).value
 
-        return {
-            'refresh_token': refresh_token_str,
-            'access_token': access_token.value
-        }
+        return tokens_dict
 
     def register(self, username: str, email: str, password: str) -> UserDict:
         hashed_password = self.hash_service.generate_hash(password)
@@ -104,7 +108,8 @@ class AuthCoordinator:
     def _generate_refresh_token(self, user_id: str) -> TokenString:
         credential_id = self.id_service.generate_id()
         refresh_payload = {'type': 'refresh_token'}
-        refresh_token = self.token_service.generate_token(refresh_payload)
+        refresh_token = self.refresh_token_service.generate_token(
+            refresh_payload)
 
         # Remove previous refresh tokens as a user should have only one
         previous_tokens = self.credential_repository.search([

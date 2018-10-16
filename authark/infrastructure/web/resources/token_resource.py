@@ -23,6 +23,6 @@ class TokenResource(Resource):
                 tokens = self.auth_coordinator.authenticate(
                     username, password)
         except Exception as e:
-            return '', 401
+            return str(e), 401
 
         return tokens, 200

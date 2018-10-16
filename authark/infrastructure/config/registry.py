@@ -42,14 +42,16 @@ class MemoryRegistry(Registry):
         user_repository = MemoryUserRepository(parser)
         credential_repository = MemoryCredentialRepository(parser)
         hash_service = MemoryHashService()
-        token_service = MemoryTokenService()
+        access_token_service = MemoryTokenService()
+        refresh_token_service = MemoryTokenService()
         id_service = StandardIdService()
 
         auth_reporter = MemoryAutharkReporter(user_repository,
                                               credential_repository)
         auth_coordinator = AuthCoordinator(
             user_repository, credential_repository,
-            hash_service, token_service, id_service)
+            hash_service, access_token_service,
+            refresh_token_service, id_service)
 
         self['auth_coordinator'] = auth_coordinator
         self['auth_reporter'] = auth_reporter
@@ -72,8 +74,11 @@ class JsonJwtRegistry(Registry):
         credential_repository = JsonCredentialRepository(
             database_path, parser)
         tokens_config = config.get("tokens", {})
-        token_service = PyJWTTokenService('DEVSECRET123', 'HS256',
-                                          tokens_config.get('access_lifetime'))
+        access_token_service = PyJWTTokenService(
+            'DEVSECRET123', 'HS256', tokens_config.get('access_lifetime'))
+        refresh_token_service = PyJWTTokenService(
+            'DEVSECRET123', 'HS256', tokens_config.get('refresh_lifetime'),
+            tokens_config.get('refresh_threshold'))
         hash_service = PasslibHashService()
         id_service = StandardIdService()
 
@@ -81,7 +86,8 @@ class JsonJwtRegistry(Registry):
                                             credential_repository)
         auth_coordinator = AuthCoordinator(
             user_repository, credential_repository,
-            hash_service, token_service, id_service)
+            hash_service, access_token_service,
+            refresh_token_service, id_service)
 
         self['auth_coordinator'] = auth_coordinator
         self['auth_reporter'] = auth_reporter
