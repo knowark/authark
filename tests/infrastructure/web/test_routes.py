@@ -101,7 +101,8 @@ def test_auth_post_route_successful_authentication(app: Flask) -> None:
         '/auth',
         data=json.dumps(dict(
             username="eecheverry",
-            password="ABC1234"
+            password="ABC1234",
+            client="mobile"
         )),
         content_type='application/json')
     assert response.status_code == 200

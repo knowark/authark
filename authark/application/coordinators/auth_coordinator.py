@@ -27,7 +27,8 @@ class AuthCoordinator:
         self.refresh_token_service = refresh_token_service
         self.id_service = id_service
 
-    def authenticate(self, username: str, password: str) -> TokensDict:
+    def authenticate(self, username: str, password: str, client: str
+                     ) -> TokensDict:
         users = self.user_repository.search([('username', '=', username)])
         if not users:
             raise AuthError("Authentication Error: User not found.")
@@ -47,7 +48,8 @@ class AuthCoordinator:
         access_token = self.access_token_service.generate_token(access_payload)
 
         # Create new refresh token
-        refresh_token_str = self._generate_refresh_token(user.id)
+        client = client or 'ALL'
+        refresh_token_str = self._generate_refresh_token(user.id, client)
 
         return {
             'refresh_token': refresh_token_str,
@@ -65,12 +67,12 @@ class AuthCoordinator:
 
         tokens_dict = {}
         credential = credentials[0]
-        user = self.user_repository.get(credential.user_id)
 
         if self.refresh_token_service.renew(token):
             tokens_dict['refresh_token'] = self._generate_refresh_token(
-                user.id)
+                credential.user_id, credential.client)
 
+        user = self.user_repository.get(credential.user_id)
         access_payload = {'user': user.username, 'email': user.email}
         tokens_dict['access_token'] = self.access_token_service.generate_token(
             access_payload).value
@@ -105,15 +107,19 @@ class AuthCoordinator:
 
         return True
 
-    def _generate_refresh_token(self, user_id: str) -> TokenString:
+    def _generate_refresh_token(self, user_id: str, client: str
+                                ) -> TokenString:
         credential_id = self.id_service.generate_id()
-        refresh_payload = {'type': 'refresh_token'}
+        refresh_payload = {'type': 'refresh_token',
+                           'client': client,
+                           'sub': user_id}
         refresh_token = self.refresh_token_service.generate_token(
             refresh_payload)
 
         # Remove previous refresh tokens as a user should have only one
         previous_tokens = self.credential_repository.search([
-            ('user_id', '=', user_id), ('type', '=', 'refresh_token')])
+            ('user_id', '=', user_id), ('type', '=', 'refresh_token'),
+            ('client', '=', client)])
         for token in previous_tokens:
             self.credential_repository.remove(token)
 

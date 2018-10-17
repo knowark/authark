@@ -20,8 +20,9 @@ class TokenResource(Resource):
             else:
                 username = data.get('username')
                 password = data.get('password')
+                client = data.get('client')
                 tokens = self.auth_coordinator.authenticate(
-                    username, password)
+                    username, password, client)
         except Exception as e:
             return str(e), 401
 
