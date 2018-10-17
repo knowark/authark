@@ -59,6 +59,9 @@ def test_users_add_screen_keypress(main, users_add_screen):
     assert len(users_add_screen.auth_coordinator.user_repository.items) == 2
     assert called
 
+    result = users_add_screen.keypress((40, 40), 'left')
+    assert result == 'left'
+
 
 def test_users_delete_screen_instantiation(users_delete_screen):
     assert users_delete_screen is not None

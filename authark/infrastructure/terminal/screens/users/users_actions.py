@@ -47,6 +47,8 @@ class UsersAddScreen(Screen):
             password = self.password.edit_text
             user = self.auth_coordinator.register(username, email, password)
             self._go_back()
+        if key == 'left':
+            return super(urwid.WidgetWrap, self).keypress(size, key)
         return super().keypress(size, key)
 
     def _go_back(self):
@@ -127,7 +129,7 @@ class UsersCredentialsScreen(Screen):
         ])
 
         # Credentials
-        headers_list = ['id', 'type', 'value']
+        headers_list = ['id', 'type', 'client', 'value']
         data = self.auth_reporter.search_credentials(
             [('user_id', '=', self.selected_item.get('id'))])
 
