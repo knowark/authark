@@ -124,7 +124,7 @@ class AuthCoordinator:
             self.credential_repository.remove(token)
 
         credential = Credential(credential_id, user_id, refresh_token.value,
-                                type='refresh_token')
+                                type='refresh_token', client=client)
         self.credential_repository.add(credential)
 
         return refresh_token.value
