@@ -14,7 +14,7 @@ class TokenResource(Resource):
     def post(self) -> Tuple[str, int]:
         data = request.get_json()
         try:
-            if data.get('type', '') == 'refresh_token':
+            if 'refresh_token' in data:
                 tokens = self.auth_coordinator.refresh_authenticate(
                     data.get('value', ''))
             else:
