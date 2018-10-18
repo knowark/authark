@@ -116,8 +116,7 @@ def test_auth_post_route_with_refresh_token(app: Flask) -> None:
     response = app.post(
         '/auth',
         data=json.dumps(dict(
-            type="refresh_token",
-            value=token
+            refresh_token=token
         )),
         content_type='application/json')
     assert response.status_code == 200

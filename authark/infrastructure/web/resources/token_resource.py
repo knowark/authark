@@ -16,7 +16,7 @@ class TokenResource(Resource):
         try:
             if 'refresh_token' in data:
                 tokens = self.auth_coordinator.refresh_authenticate(
-                    data.get('value', ''))
+                    data['refresh_token'])
             else:
                 username = data.get('username')
                 password = data.get('password')
