@@ -1,5 +1,5 @@
 from typing import List, Union, Callable
-from authark.application.utilities.type_definitions import TermTuple
+from .types import TermTuple
 
 
 class ExpressionParser:

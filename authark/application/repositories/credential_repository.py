@@ -1,6 +1,6 @@
-from authark.application.models.credential import Credential
-from authark.application.repositories.repository import Repository
-from authark.application.repositories.memory_repository import MemoryRepository
+from ..models import Credential
+from .repository import Repository
+from .memory_repository import MemoryRepository
 
 
 class CredentialRepository(Repository[Credential]):

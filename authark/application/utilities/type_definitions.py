@@ -15,3 +15,7 @@ UserDictList = List[UserDict]
 CredentialDict = Dict[str, Any]
 
 CredentialDictList = List[CredentialDict]
+
+DominionDict = Dict[str, Any]
+
+DominionDictList = List[DominionDict]

@@ -1,10 +1,8 @@
 from abc import ABC, abstractmethod
 from typing import List, Dict, TypeVar, Optional, Generic
-from authark.application.repositories.repository import Repository
-from authark.application.utilities.type_definitions import QueryDomain
-from authark.application.repositories.expression_parser import ExpressionParser
-
-T = TypeVar('T')
+from .repository import Repository
+from .expression_parser import ExpressionParser
+from .types import QueryDomain, T
 
 
 class MemoryRepository(Repository, Generic[T]):
