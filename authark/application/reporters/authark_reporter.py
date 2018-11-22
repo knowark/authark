@@ -16,7 +16,7 @@ class AutharkReporter(ABC):
         """Search Authark's credentials"""
 
 
-class MemoryAutharkReporter(AutharkReporter):
+class StandardAutharkReporter(AutharkReporter):
 
     def __init__(self, user_repository: UserRepository,
                  credential_repository: CredentialRepository,

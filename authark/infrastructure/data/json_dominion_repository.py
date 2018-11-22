@@ -1,0 +1,13 @@
+from ...application.models import Dominion
+from ...application.repositories import (
+    ExpressionParser, DominionRepository)
+from .json_repository import JsonRepository
+
+
+class JsonDominionRepository(
+        JsonRepository[Dominion], DominionRepository):
+    """Json Dominion Repository"""
+
+    def __init__(self, file_path: str, parser: ExpressionParser,
+                 collection_name: str = 'credentials') -> None:
+        super().__init__(file_path, parser, collection_name, Dominion)

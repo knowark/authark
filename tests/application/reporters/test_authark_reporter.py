@@ -7,7 +7,7 @@ from authark.application.repositories.credential_repository import (
     CredentialRepository, MemoryCredentialRepository)
 from authark.application.repositories.expression_parser import ExpressionParser
 from authark.application.reporters.authark_reporter import (
-    AutharkReporter, MemoryAutharkReporter)
+    AutharkReporter)
 
 
 def test_authark_reporter_methods():

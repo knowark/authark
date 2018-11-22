@@ -1,29 +1,25 @@
 from collections import UserDict
 from typing import Any, Dict
 from abc import ABC, abstractmethod
-from authark.application.models.user import User
-from authark.application.models.credential import Credential
-from authark.application.coordinators.auth_coordinator import AuthCoordinator
-from authark.application.reporters.authark_reporter import (
-    AutharkReporter, MemoryAutharkReporter)
-from authark.application.repositories.user_repository import (
-    MemoryUserRepository)
-from authark.application.repositories.credential_repository import (
-    MemoryCredentialRepository)
-from authark.application.repositories.expression_parser import ExpressionParser
-from authark.application.services.token_service import MemoryTokenService
-from authark.application.services.hash_service import MemoryHashService
-from authark.application.services.id_service import StandardIdService
-from authark.infrastructure.crypto.pyjwt_token_service import PyJWTTokenService
-from authark.infrastructure.crypto.passlib_hash_service import (
+from ...application.models import (
+    User, Credential, Dominion)
+from ...application.repositories import (
+    ExpressionParser,
+    UserRepository, MemoryUserRepository,
+    CredentialRepository, MemoryCredentialRepository,
+    DominionRepository, MemoryDominionRepository)
+from ...application.services import (
+    MemoryTokenService, MemoryHashService, StandardIdService)
+from ...application.coordinators import (
+    AuthCoordinator, ManagementCoordinator)
+from authark.application.reporters import (
+    AutharkReporter, StandardAutharkReporter)
+from ..crypto.pyjwt_token_service import PyJWTTokenService
+from ..crypto.passlib_hash_service import (
     PasslibHashService)
-from authark.infrastructure.data.init_json_database import init_json_database
-from authark.infrastructure.data.json_user_repository import (
-    JsonUserRepository)
-from authark.infrastructure.data.json_credential_repository import (
-    JsonCredentialRepository)
-from authark.infrastructure.data.json_authark_reporter import (
-    JsonAutharkReporter)
+from ..data import (
+    init_json_database, JsonUserRepository, JsonCredentialRepository,
+    JsonDominionRepository)
 from authark.infrastructure.config.config import Config
 
 
@@ -41,19 +37,25 @@ class MemoryRegistry(Registry):
         parser = ExpressionParser()
         user_repository = MemoryUserRepository(parser)
         credential_repository = MemoryCredentialRepository(parser)
+        dominion_repository = MemoryDominionRepository(parser)
         hash_service = MemoryHashService()
         access_token_service = MemoryTokenService()
         refresh_token_service = MemoryTokenService()
         id_service = StandardIdService()
 
-        auth_reporter = MemoryAutharkReporter(user_repository,
-                                              credential_repository)
+        auth_reporter = StandardAutharkReporter(
+            user_repository,
+            credential_repository,
+            dominion_repository)
         auth_coordinator = AuthCoordinator(
             user_repository, credential_repository,
             hash_service, access_token_service,
             refresh_token_service, id_service)
+        management_coordinator = ManagementCoordinator(
+            dominion_repository)
 
         self['auth_coordinator'] = auth_coordinator
+        self['management_coordinator'] = management_coordinator
         self['auth_reporter'] = auth_reporter
 
 
@@ -73,6 +75,8 @@ class JsonJwtRegistry(Registry):
             database_path, parser)
         credential_repository = JsonCredentialRepository(
             database_path, parser)
+        dominion_repository = JsonDominionRepository(
+            database_path, parser)
         tokens_config = config.get("tokens", {})
         access_token_service = PyJWTTokenService(
             'DEVSECRET123', 'HS256', tokens_config.get('access_lifetime'))
@@ -82,12 +86,17 @@ class JsonJwtRegistry(Registry):
         hash_service = PasslibHashService()
         id_service = StandardIdService()
 
-        auth_reporter = JsonAutharkReporter(user_repository,
-                                            credential_repository)
+        auth_reporter = StandardAutharkReporter(
+            user_repository,
+            credential_repository,
+            dominion_repository)
         auth_coordinator = AuthCoordinator(
             user_repository, credential_repository,
             hash_service, access_token_service,
             refresh_token_service, id_service)
+        management_coordinator = ManagementCoordinator(
+            dominion_repository)
 
         self['auth_coordinator'] = auth_coordinator
+        self['management_coordinator'] = management_coordinator
         self['auth_reporter'] = auth_reporter

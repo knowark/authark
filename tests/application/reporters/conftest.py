@@ -6,7 +6,7 @@ from authark.application.repositories import (
     CredentialRepository, MemoryCredentialRepository,
     DominionRepository, MemoryDominionRepository)
 from authark.application.reporters.authark_reporter import (
-    AutharkReporter, MemoryAutharkReporter)
+    AutharkReporter, StandardAutharkReporter)
 
 
 @fixture
@@ -50,5 +50,5 @@ def dominion_repository() -> DominionRepository:
 def authark_reporter(
         user_repository, credential_repository,
         dominion_repository) -> AutharkReporter:
-    return MemoryAutharkReporter(user_repository, credential_repository,
-                                 dominion_repository)
+    return StandardAutharkReporter(user_repository, credential_repository,
+                                   dominion_repository)
