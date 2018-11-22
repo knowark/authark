@@ -32,7 +32,7 @@ class Main:
         return top
 
     def _unhandled_input(self, key: str):
-        if key == 'ctrl c':
+        if key == 'meta q':
             self.exit(key)
 
     def exit(self, key: str):

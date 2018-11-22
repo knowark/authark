@@ -51,9 +51,13 @@ def mock_credential_repository() -> CredentialRepository:
 
 
 @fixture
-def mock_token_service() -> TokenService:
-    mock_token_service = MemoryTokenService()
-    return mock_token_service
+def mock_access_token_service() -> TokenService:
+    return MemoryTokenService()
+
+
+@fixture
+def mock_refresh_token_service() -> TokenService:
+    return MemoryTokenService()
 
 
 @fixture
@@ -72,10 +76,12 @@ def mock_id_service() -> IdService:
 def auth_coordinator(mock_user_repository: UserRepository,
                      mock_credential_repository: CredentialRepository,
                      mock_hash_service: HashService,
-                     mock_token_service: TokenService,
+                     mock_access_token_service: TokenService,
+                     mock_refresh_token_service: TokenService,
                      mock_id_service: IdService) -> AuthCoordinator:
     return AuthCoordinator(mock_user_repository, mock_credential_repository,
-                           mock_hash_service, mock_token_service,
+                           mock_hash_service, mock_access_token_service,
+                           mock_refresh_token_service,
                            mock_id_service)
 
 
@@ -90,7 +96,7 @@ def test_auth_coordinator_creation(
 def test_auth_coordinator_authenticate(
         auth_coordinator: AuthCoordinator) -> None:
 
-    tokens = auth_coordinator.authenticate("tebanep", "PASS2")
+    tokens = auth_coordinator.authenticate("tebanep", "PASS2", 'mobile')
 
     assert isinstance(tokens, dict)
     assert 'refresh_token' in tokens.keys()
@@ -102,10 +108,10 @@ def test_auth_coordinator_authenticate_no_credentials(
     credential_repository = auth_coordinator.credential_repository
     credential_repository.items = {}
     with raises(AuthError):
-        tokens = auth_coordinator.authenticate("tebanep", "PASS2")
+        tokens = auth_coordinator.authenticate("tebanep", "PASS2", 'mobile')
 
 
-def test_auth_coordinator_refresh_authenticate(
+def test_auth_coordinator_refresh_authenticate_no_renewal(
         auth_coordinator: AuthCoordinator) -> None:
     user_id = '1'
     refresh_token = "PREVIOUS_TOKEN"
@@ -116,8 +122,26 @@ def test_auth_coordinator_refresh_authenticate(
     tokens = auth_coordinator.refresh_authenticate(refresh_token)
 
     assert isinstance(tokens, dict)
-    assert 'refresh_token' in tokens.keys()
     assert 'access_token' in tokens.keys()
+    assert 'refresh_token' not in tokens.keys()
+
+
+def test_auth_coordinator_refresh_authenticate_renewal(
+        auth_coordinator: AuthCoordinator, monkeypatch) -> None:
+
+    user_id = '1'
+    refresh_token = "PREVIOUS_TOKEN"
+    credential_repository = auth_coordinator.credential_repository
+    credential_repository.items['4'] = Credential(
+        id='4', user_id=user_id, value=refresh_token, type='refresh_token')
+
+    auth_coordinator.refresh_token_service.renew = lambda token: True
+
+    tokens = auth_coordinator.refresh_authenticate(refresh_token)
+
+    assert isinstance(tokens, dict)
+    assert 'access_token' in tokens.keys()
+    assert 'refresh_token' in tokens.keys()
 
 
 def test_auth_coordinator_refresh_authenticate_refresh_token_not_found(
@@ -134,7 +158,8 @@ def test_auth_coordinator_refresh_authenticate_refresh_token_not_found(
 
 def test_generate_refresh_token(auth_coordinator: AuthCoordinator) -> None:
     user_id = '1'
-    refresh_token = auth_coordinator._generate_refresh_token(user_id)
+    client = 'mobile'
+    refresh_token = auth_coordinator._generate_refresh_token(user_id, client)
     credential_repository = auth_coordinator.credential_repository
 
     assert isinstance(refresh_token, str)
@@ -144,12 +169,14 @@ def test_generate_refresh_token(auth_coordinator: AuthCoordinator) -> None:
 def test_generate_refresh_token_only_one(
         auth_coordinator: AuthCoordinator) -> None:
     user_id = '1'
+    client = 'mobile'
     credential_repository = auth_coordinator.credential_repository
     credential_repository.items['4'] = Credential(
-        id='4', user_id=user_id, value="PREVIOUS_TOKEN", type='refresh_token')
+        id='4', user_id=user_id, value="PREVIOUS_TOKEN", type='refresh_token',
+        client=client)
 
     assert len(credential_repository.items) == 4
-    refresh_token = auth_coordinator._generate_refresh_token(user_id)
+    refresh_token = auth_coordinator._generate_refresh_token(user_id, client)
     assert isinstance(refresh_token, str)
     assert len(credential_repository.items) == 4
 
@@ -158,14 +185,16 @@ def test_auth_coordinator_fail_to_authenticate(
         auth_coordinator: AuthCoordinator) -> None:
 
     with raises(AuthError):
-        token = auth_coordinator.authenticate("tebanep", "WRONG_PASSWORD")
+        token = auth_coordinator.authenticate("tebanep", "WRONG_PASSWORD",
+                                              'web')
 
 
 def test_auth_coordinator_fail_to_authenticate_missing_user(
         auth_coordinator: AuthCoordinator) -> None:
 
     with raises(AuthError):
-        token = auth_coordinator.authenticate("MISSING_USER", "WRONG_PASSWORD")
+        token = auth_coordinator.authenticate("MISSING_USER", "WRONG_PASSWORD",
+                                              "web")
 
 
 def test_auth_coordinator_fail_to_authenticate_missing_credentials(
@@ -174,7 +203,8 @@ def test_auth_coordinator_fail_to_authenticate_missing_credentials(
     auth_coordinator.credential_repository.credentials_dict = {}
 
     with raises(AuthError):
-        token = auth_coordinator.authenticate("tebanep", "NO_CREDENTIALS")
+        token = auth_coordinator.authenticate("tebanep", "NO_CREDENTIALS",
+                                              'terminal')
 
 
 def test_auth_coordinator_register(

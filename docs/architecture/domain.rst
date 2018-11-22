@@ -38,6 +38,7 @@ core, and so are the **Provider** and **Role**.
     <tr><td port="id">id</td></tr>
     <tr><td port="provider_id">provider_id</td></tr>
     <tr><td port="user_id">user_id</td></tr>
+    <tr><td port="client">client</td></tr>
     <tr><td port="type">type</td></tr>
     <tr><td port="value">value</td></tr>
     </table>>];

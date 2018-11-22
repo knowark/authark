@@ -14,15 +14,16 @@ class TokenResource(Resource):
     def post(self) -> Tuple[str, int]:
         data = request.get_json()
         try:
-            if data.get('type', '') == 'refresh_token':
+            if 'refresh_token' in data:
                 tokens = self.auth_coordinator.refresh_authenticate(
-                    data.get('value', ''))
+                    data['refresh_token'])
             else:
                 username = data.get('username')
                 password = data.get('password')
+                client = data.get('client')
                 tokens = self.auth_coordinator.authenticate(
-                    username, password)
+                    username, password, client)
         except Exception as e:
-            return '', 401
+            return str(e), 401
 
         return tokens, 200
