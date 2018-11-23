@@ -11,15 +11,20 @@ class MainMenu(Screen):
         header = urwid.AttrMap(
             urwid.Text('AUTHARK', align='center'), 'titlebar')
         widget_list = [
-            header,
             urwid.Divider(),
             self._build_menu_option('Users', self.show_users_screen),
             self._build_menu_option('Dominions', self.show_dominions_screen)
         ]
 
-        widget = urwid.ListBox(urwid.SimpleFocusListWalker(widget_list))
+        body = urwid.ListBox(urwid.SimpleFocusListWalker(widget_list))
 
-        return widget
+        footer = urwid.Text([
+            "Press (", ("exit button", "Alt Q"), ") to exit. "
+        ])
+
+        frame = urwid.Frame(header=header, body=body, footer=footer)
+
+        return frame
 
     def _build_menu_option(self, name, callback):
         button = urwid.Button(name)
