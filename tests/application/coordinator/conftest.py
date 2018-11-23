@@ -97,6 +97,7 @@ def auth_coordinator(mock_user_repository: UserRepository,
 
 
 @fixture
-def management_coordinator(mock_dominion_repository: DominionRepository
+def management_coordinator(mock_dominion_repository: DominionRepository,
+                           mock_id_service: IdService
                            ) -> ManagementCoordinator:
-    return ManagementCoordinator(mock_dominion_repository)
+    return ManagementCoordinator(mock_dominion_repository, mock_id_service)

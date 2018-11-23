@@ -1,8 +1,8 @@
 import urwid
 from typing import Dict, Callable
-from authark.infrastructure.terminal.framework.screen import Screen
-from authark.infrastructure.terminal.framework.environment import Environment
-from authark.infrastructure.terminal.screens.users.users import UsersScreen
+from ..framework import Screen, Environment
+from .users import UsersScreen
+from .dominions import DominionsScreen
 
 
 class MainMenu(Screen):
@@ -13,7 +13,8 @@ class MainMenu(Screen):
         widget_list = [
             header,
             urwid.Divider(),
-            self._build_menu_option('Users', self.show_users_screen)
+            self._build_menu_option('Users', self.show_users_screen),
+            self._build_menu_option('Dominions', self.show_dominions_screen)
         ]
 
         widget = urwid.ListBox(urwid.SimpleFocusListWalker(widget_list))
@@ -27,4 +28,8 @@ class MainMenu(Screen):
 
     def show_users_screen(self, button=None):
         screen = UsersScreen('USERS', self.env)
+        return self._open_screen(screen)
+
+    def show_dominions_screen(self, button=None):
+        screen = DominionsScreen('DOMINIONS', self.env)
         return self._open_screen(screen)

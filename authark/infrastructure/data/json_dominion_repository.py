@@ -9,5 +9,5 @@ class JsonDominionRepository(
     """Json Dominion Repository"""
 
     def __init__(self, file_path: str, parser: ExpressionParser,
-                 collection_name: str = 'credentials') -> None:
+                 collection_name: str = 'dominions') -> None:
         super().__init__(file_path, parser, collection_name, Dominion)

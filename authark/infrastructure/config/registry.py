@@ -52,7 +52,7 @@ class MemoryRegistry(Registry):
             hash_service, access_token_service,
             refresh_token_service, id_service)
         management_coordinator = ManagementCoordinator(
-            dominion_repository)
+            dominion_repository, id_service)
 
         self['auth_coordinator'] = auth_coordinator
         self['management_coordinator'] = management_coordinator
@@ -95,7 +95,7 @@ class JsonJwtRegistry(Registry):
             hash_service, access_token_service,
             refresh_token_service, id_service)
         management_coordinator = ManagementCoordinator(
-            dominion_repository)
+            dominion_repository, id_service)
 
         self['auth_coordinator'] = auth_coordinator
         self['management_coordinator'] = management_coordinator

@@ -1,7 +1,6 @@
 import urwid
-import logging
 from typing import List
-from authark.infrastructure.config.context import Context
+from .context import Context
 
 
 class Environment:

@@ -1,7 +1,7 @@
 import urwid
 from typing import List
 from collections import OrderedDict
-from authark.infrastructure.config.context import Context
+from authark.infrastructure.terminal.framework.context import Context
 from authark.infrastructure.terminal.framework.themes import palette
 from authark.infrastructure.terminal.framework.environment import Environment
 from authark.infrastructure.terminal.screens.main_menu import MainMenu
