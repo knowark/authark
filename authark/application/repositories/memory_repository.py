@@ -14,10 +14,10 @@ class MemoryRepository(Repository, Generic[T]):
     def get(self, id: str) -> Optional[T]:
         return self.items.get(id)
 
-    def add(self, item: T) -> bool:
-        id = getattr(item, 'id') or str(uuid4())
-        self.items[id] = item
-        return True
+    def add(self, item: T) -> T:
+        setattr(item, 'id', getattr(item, 'id') or str(uuid4()))
+        self.items[getattr(item, 'id')] = item
+        return item
 
     def search(self, domain: QueryDomain, limit=0, offset=0) -> List[T]:
         items = []

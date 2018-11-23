@@ -11,7 +11,6 @@ from authark.application.repositories.credential_repository import (
 from authark.application.repositories.expression_parser import ExpressionParser
 from authark.application.coordinators.auth_coordinator import AuthCoordinator
 from authark.application.services.hash_service import MemoryHashService
-from authark.application.services.id_service import StandardIdService
 from authark.infrastructure.config.registry import Registry
 from authark.infrastructure.web.base import create_app
 from authark.infrastructure.config.config import TrialConfig
@@ -28,13 +27,13 @@ class MockRegistry(Registry):
         credential_repository = MemoryCredentialRepository(parser)
         user_repository.load({
             '1': User(
-                "1",
-                "eecheverry",
-                "eecheverry@nubark.com"),
+                id="1",
+                username="eecheverry",
+                email="eecheverry@nubark.com"),
             '2': User(
-                "2",
-                "mvivas",
-                "mvivas@gmail.com"
+                id="2",
+                username="mvivas",
+                email="mvivas@gmail.com"
             )
         })
         refresh_token = jwt.encode(
@@ -49,11 +48,10 @@ class MockRegistry(Registry):
         refresh_token_service = PyJWTTokenService(
             'REFRESHSECRET', 'HS256', 3600, 3600)
         hash_service = MemoryHashService()
-        id_service = StandardIdService()
         auth_coordinator = AuthCoordinator(
             user_repository, credential_repository,
             hash_service, access_token_service,
-            refresh_token_service, id_service)
+            refresh_token_service)
 
         self['auth_coordinator'] = auth_coordinator
 

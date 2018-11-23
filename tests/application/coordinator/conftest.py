@@ -14,8 +14,6 @@ from authark.application.coordinators import (
     AuthCoordinator, ManagementCoordinator)
 from authark.application.services.hash_service import (
     HashService, MemoryHashService)
-from authark.application.services.id_service import (
-    IdService, StandardIdService)
 
 
 ###########
@@ -27,9 +25,9 @@ from authark.application.services.id_service import (
 def mock_user_repository() -> UserRepository:
     parser = ExpressionParser()
     user_dict = {
-        "1": User('1', 'valenep', 'valenep@gmail.com'),
-        "2": User('2', 'tebanep', 'tebanep@gmail.com'),
-        "3": User('3', 'gabeche', 'gabeche@gmail.com')
+        "1": User(id='1', username='valenep', email='valenep@gmail.com'),
+        "2": User(id='2', username='tebanep', email='tebanep@gmail.com'),
+        "3": User(id='3', username='gabeche', email='gabeche@gmail.com')
     }
     mock_user_repository = MemoryUserRepository(parser)
     mock_user_repository.load(user_dict)
@@ -93,28 +91,20 @@ def mock_hash_service() -> HashService:
 
 
 @fixture
-def mock_id_service() -> IdService:
-    mock_id_service = StandardIdService()
-    return mock_id_service
-
-
-@fixture
 def auth_coordinator(mock_user_repository: UserRepository,
                      mock_credential_repository: CredentialRepository,
                      mock_hash_service: HashService,
                      mock_access_token_service: TokenService,
-                     mock_refresh_token_service: TokenService,
-                     mock_id_service: IdService) -> AuthCoordinator:
+                     mock_refresh_token_service: TokenService
+                     ) -> AuthCoordinator:
     return AuthCoordinator(mock_user_repository, mock_credential_repository,
                            mock_hash_service, mock_access_token_service,
-                           mock_refresh_token_service,
-                           mock_id_service)
+                           mock_refresh_token_service)
 
 
 @fixture
 def management_coordinator(mock_dominion_repository: DominionRepository,
-                           mock_role_repository: RoleRepository,
-                           mock_id_service: IdService
+                           mock_role_repository: RoleRepository
                            ) -> ManagementCoordinator:
     return ManagementCoordinator(
-        mock_dominion_repository, mock_role_repository, mock_id_service)
+        mock_dominion_repository, mock_role_repository)

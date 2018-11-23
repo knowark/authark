@@ -6,7 +6,7 @@ from authark.infrastructure.data.json_repository import JsonRepository
 
 
 class DummyEntity:
-    def __init__(self, id: str, field_1: str) -> None:
+    def __init__(self, id: str = '', field_1: str = '') -> None:
         self.id = id
         self.field_1 = field_1
 
@@ -59,6 +59,18 @@ def test_json_repository_add(json_repository):
         item_dict = items.get('5')
 
         assert item_dict.get('field_1') == item.field_1
+
+
+def test_json_repository_add_no_id(json_repository) -> None:
+    item = DummyEntity(field_1='value_5')
+    item = json_repository.add(item)
+
+    file_path = json_repository.file_path
+    with open(file_path) as f:
+        data = loads(f.read())
+        items = data.get("dummies")
+        for key in items:
+            assert len(key) > 0
 
 
 def test_json_repository_search(json_repository):

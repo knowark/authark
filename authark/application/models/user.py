@@ -1,6 +1,5 @@
 class User:
-    def __init__(self, id: str, username: str,
-                 email: str) -> None:
-        self.id = id
-        self.username = username
-        self.email = email
+    def __init__(self, **attributes) -> None:
+        self.id = attributes.get('id', '')
+        self.username = attributes['username']
+        self.email = attributes.get('email', '')

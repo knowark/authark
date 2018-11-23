@@ -1,8 +1,7 @@
 class Credential:
-    def __init__(self, id: str, user_id: str, value: str,
-                 type: str = 'password', client: str = 'ALL') -> None:
-        self.id = id
-        self.user_id = user_id
-        self.type = type
-        self.client = client
-        self.value = value
+    def __init__(self, **attributes) -> None:
+        self.id = attributes.get('id', '')
+        self.user_id = attributes['user_id']
+        self.type = attributes.get('type', 'password')
+        self.client = attributes.get('client', 'ALL')
+        self.value = attributes['value']

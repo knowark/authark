@@ -1,5 +1,6 @@
 import os
 from json import load, dump
+from uuid import uuid4
 from typing import Dict, List, Optional, Any, Type, TypeVar, Callable, Generic
 from authark.application.repositories.repository import Repository
 from authark.application.utilities.type_definitions import QueryDomain
@@ -27,12 +28,12 @@ class JsonRepository(Repository, Generic[T]):
                 item = self.item_class(**item_dict)
         return item
 
-    def add(self, item: T) -> bool:
+    def add(self, item: T) -> T:
         data = {}  # type: Dict[str, Any]
         with open(self.file_path, 'r') as f:
             data = load(f)
-        id = getattr(item, 'id')
-        data[self.collection_name].update({id: vars(item)})
+        setattr(item, 'id', getattr(item, 'id') or str(uuid4()))
+        data[self.collection_name].update({getattr(item, 'id'): vars(item)})
         with open(self.file_path, 'w') as f:
             dump(data, f)
         return True

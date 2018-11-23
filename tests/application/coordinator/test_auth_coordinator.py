@@ -10,8 +10,6 @@ from authark.application.services.token_service import (
     TokenService, MemoryTokenService)
 from authark.application.services.hash_service import (
     HashService, MemoryHashService)
-from authark.application.services.id_service import (
-    IdService, StandardIdService)
 from authark.application.models.error import AuthError
 from authark.application.models.user import User
 from authark.application.models.credential import Credential
@@ -166,7 +164,7 @@ def test_auth_coordinator_deregister(
 def test_auth_coordinator_deregister_missing(
         auth_coordinator: AuthCoordinator, mock_user_repository) -> None:
 
-    user = User('5', 'missing', 'missing@gmail.com')
+    user = User(id='5', username='missing', email='missing@gmail.com')
     unregistered = auth_coordinator.deregister(user.id)
 
     assert unregistered is False

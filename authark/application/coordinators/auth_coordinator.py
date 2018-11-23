@@ -3,7 +3,6 @@ from authark.application.repositories.credential_repository import (
     CredentialRepository)
 from authark.application.services.token_service import TokenService
 from authark.application.services.hash_service import HashService
-from authark.application.services.id_service import IdService
 from authark.application.models.error import AuthError
 from authark.application.models.token import Token
 from authark.application.models.user import User
@@ -18,14 +17,12 @@ class AuthCoordinator:
                  credential_repository: CredentialRepository,
                  hash_service: HashService,
                  access_token_service: TokenService,
-                 refresh_token_service: TokenService,
-                 id_service: IdService) -> None:
+                 refresh_token_service: TokenService) -> None:
         self.user_repository = user_repository
         self.credential_repository = credential_repository
         self.hash_service = hash_service
         self.access_token_service = access_token_service
         self.refresh_token_service = refresh_token_service
-        self.id_service = id_service
 
     def authenticate(self, username: str, password: str, client: str
                      ) -> TokensDict:
@@ -81,17 +78,10 @@ class AuthCoordinator:
 
     def register(self, username: str, email: str, password: str) -> UserDict:
         hashed_password = self.hash_service.generate_hash(password)
-        user_id = self.id_service.generate_id()
-
-        user = User(id=user_id, username=username,
-                    email=email)
-
-        credential_id = self.id_service.generate_id()
-        credential = Credential(id=credential_id, user_id=user_id,
-                                value=hashed_password)
-        self.user_repository.add(user)
+        user = User(username=username, email=email)
+        user = self.user_repository.add(user)
+        credential = Credential(user_id=user.id, value=hashed_password)
         self.credential_repository.add(credential)
-
         return vars(user)
 
     def deregister(self, user_id: str) -> bool:
@@ -109,7 +99,6 @@ class AuthCoordinator:
 
     def _generate_refresh_token(self, user_id: str, client: str
                                 ) -> TokenString:
-        credential_id = self.id_service.generate_id()
         refresh_payload = {'type': 'refresh_token',
                            'client': client,
                            'sub': user_id}
@@ -123,7 +112,8 @@ class AuthCoordinator:
         for token in previous_tokens:
             self.credential_repository.remove(token)
 
-        credential = Credential(credential_id, user_id, refresh_token.value,
+        credential = Credential(user_id=user_id,
+                                value=refresh_token.value,
                                 type='refresh_token', client=client)
         self.credential_repository.add(credential)
 
