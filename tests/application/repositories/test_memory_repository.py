@@ -7,7 +7,7 @@ from authark.application.repositories.expression_parser import ExpressionParser
 
 
 class DummyEntity:
-    def __init__(self, id: str, field_1: str) -> None:
+    def __init__(self, id: str = "", field_1: str = "") -> None:
         self.id = id
         self.field_1 = field_1
 
@@ -46,6 +46,20 @@ def test_memory_repository_add() -> None:
     assert len(memory_repository.items) == 1
     assert is_saved
     assert "1" in memory_repository.items.keys()
+    assert item in memory_repository.items.values()
+
+
+def test_memory_repository_add_no_id() -> None:
+    parser = ExpressionParser()
+    memory_repository = MemoryRepository[DummyEntity](parser)
+
+    item = DummyEntity(field_1="value_1")
+
+    is_saved = memory_repository.add(item)
+
+    assert len(memory_repository.items) == 1
+    assert is_saved
+    assert len(list(memory_repository.items.keys())[0]) > 0
     assert item in memory_repository.items.values()
 
 

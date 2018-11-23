@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from uuid import uuid4
 from typing import List, Dict, TypeVar, Optional, Generic
 from .repository import Repository
 from .expression_parser import ExpressionParser
@@ -14,7 +15,7 @@ class MemoryRepository(Repository, Generic[T]):
         return self.items.get(id)
 
     def add(self, item: T) -> bool:
-        id = getattr(item, 'id')
+        id = getattr(item, 'id') or str(uuid4())
         self.items[id] = item
         return True
 
