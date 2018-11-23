@@ -6,3 +6,4 @@ from .credential_repository import (
     CredentialRepository, MemoryCredentialRepository)
 from .dominion_repository import (
     DominionRepository, MemoryDominionRepository)
+from .role_repository import RoleRepository, MemoryRoleRepository

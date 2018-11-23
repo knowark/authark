@@ -1,20 +1,21 @@
 from typing import Dict
 from pytest import fixture, raises
-from authark.application.coordinators import (
-    AuthCoordinator, ManagementCoordinator)
+from authark.application.models import (
+    AuthError, User, Credential, Token, Dominion, Role)
 from authark.application.repositories import (
     ExpressionParser,
     UserRepository, MemoryUserRepository,
     CredentialRepository, MemoryCredentialRepository,
-    DominionRepository, MemoryDominionRepository)
+    DominionRepository, MemoryDominionRepository,
+    RoleRepository, MemoryRoleRepository)
 from authark.application.services.token_service import (
     TokenService, MemoryTokenService)
+from authark.application.coordinators import (
+    AuthCoordinator, ManagementCoordinator)
 from authark.application.services.hash_service import (
     HashService, MemoryHashService)
 from authark.application.services.id_service import (
     IdService, StandardIdService)
-from authark.application.models import (
-    AuthError, User, Credential, Token, Dominion)
 
 
 ###########
@@ -62,6 +63,20 @@ def mock_dominion_repository() -> DominionRepository:
 
 
 @fixture
+def mock_role_repository() -> RoleRepository:
+    roles_dict = {
+        "1": Role(id='1',
+                  name='admin',
+                  dominion_id='1',
+                  description="Administrator.")
+    }
+    parser = ExpressionParser()
+    role_repository = MemoryRoleRepository(parser)
+    role_repository.load(roles_dict)
+    return role_repository
+
+
+@fixture
 def mock_access_token_service() -> TokenService:
     return MemoryTokenService()
 
@@ -98,6 +113,8 @@ def auth_coordinator(mock_user_repository: UserRepository,
 
 @fixture
 def management_coordinator(mock_dominion_repository: DominionRepository,
+                           mock_role_repository: RoleRepository,
                            mock_id_service: IdService
                            ) -> ManagementCoordinator:
-    return ManagementCoordinator(mock_dominion_repository, mock_id_service)
+    return ManagementCoordinator(
+        mock_dominion_repository, mock_role_repository, mock_id_service)
