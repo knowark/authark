@@ -40,6 +40,7 @@ class MemoryRegistry(Registry):
         credential_repository = MemoryCredentialRepository(parser)
         role_repository = MemoryRoleRepository(parser)
         dominion_repository = MemoryDominionRepository(parser)
+        role_repository = MemoryRoleRepository(parser)
         hash_service = MemoryHashService()
         access_token_service = MemoryTokenService()
         refresh_token_service = MemoryTokenService()
@@ -47,7 +48,8 @@ class MemoryRegistry(Registry):
         auth_reporter = StandardAutharkReporter(
             user_repository,
             credential_repository,
-            dominion_repository)
+            dominion_repository,
+            role_repository)
         auth_coordinator = AuthCoordinator(
             user_repository, credential_repository,
             hash_service, access_token_service,
@@ -91,7 +93,8 @@ class JsonJwtRegistry(Registry):
         auth_reporter = StandardAutharkReporter(
             user_repository,
             credential_repository,
-            dominion_repository)
+            dominion_repository,
+            role_repository)
         auth_coordinator = AuthCoordinator(
             user_repository, credential_repository,
             hash_service, access_token_service,

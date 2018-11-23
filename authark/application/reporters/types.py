@@ -4,10 +4,6 @@ TermTuple = Tuple[str, str, Union[str, int, float, bool, list, tuple]]
 
 QueryDomain = List[Union[str, TermTuple]]
 
-TokenString = str
-
-TokensDict = Dict[str, Any]
-
 UserDict = Dict[str, Any]
 
 UserDictList = List[UserDict]
@@ -19,3 +15,7 @@ CredentialDictList = List[CredentialDict]
 DominionDict = Dict[str, Any]
 
 DominionDictList = List[DominionDict]
+
+RoleDict = Dict[str, Any]
+
+RoleDictList = List[RoleDict]

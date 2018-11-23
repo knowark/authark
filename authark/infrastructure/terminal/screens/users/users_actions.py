@@ -137,8 +137,6 @@ class UsersCredentialsScreen(Screen):
 
         frame = urwid.Frame(header=header, body=body, footer=footer)
 
-        text = urwid.Filler(urwid.Text("YUHUUUU CREDDD"))
-
         widget = urwid.Overlay(
             frame, self.parent,
             align='center', width=('relative', 70),

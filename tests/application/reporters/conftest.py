@@ -1,10 +1,11 @@
 from pytest import fixture, raises
-from authark.application.models import User, Credential, Dominion
+from authark.application.models import User, Credential, Dominion, Role
 from authark.application.repositories import (
     ExpressionParser,
     UserRepository, MemoryUserRepository,
     CredentialRepository, MemoryCredentialRepository,
-    DominionRepository, MemoryDominionRepository)
+    DominionRepository, MemoryDominionRepository,
+    RoleRepository, MemoryRoleRepository)
 from authark.application.reporters.authark_reporter import (
     AutharkReporter, StandardAutharkReporter)
 
@@ -47,8 +48,20 @@ def dominion_repository() -> DominionRepository:
 
 
 @fixture
+def role_repository() -> RoleRepository:
+    roles_dict = {
+        "1": Role(id='1', name='admin', dominion_id='1',
+                  description="Service's Administrator")
+    }
+    parser = ExpressionParser()
+    role_repository = MemoryRoleRepository(parser)
+    role_repository.load(roles_dict)
+    return role_repository
+
+
+@fixture
 def authark_reporter(
         user_repository, credential_repository,
-        dominion_repository) -> AutharkReporter:
+        dominion_repository, role_repository) -> AutharkReporter:
     return StandardAutharkReporter(user_repository, credential_repository,
-                                   dominion_repository)
+                                   dominion_repository, role_repository)

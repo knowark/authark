@@ -35,3 +35,10 @@ def test_memory_authark_reporter_search_dominions_all(authark_reporter):
     dominions = authark_reporter.search_dominions(domain)
 
     assert len(dominions) == 1
+
+
+def test_memory_authark_reporter_search_roles_all(authark_reporter):
+    domain = []
+    roles = authark_reporter.search_roles(domain)
+
+    assert len(roles) == 1

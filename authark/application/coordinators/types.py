@@ -1,7 +1,12 @@
-from typing import Dict, TypeVar
+from typing import Dict, TypeVar, Any
+
+
+UserDict = Dict[str, Any]
 
 DominionDict = Dict[str, str]
 
 RoleDict = Dict[str, str]
 
-T = TypeVar('T')
+TokenString = str
+
+TokensDict = Dict[str, Any]

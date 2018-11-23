@@ -1,14 +1,8 @@
-from authark.application.repositories.user_repository import UserRepository
-from authark.application.repositories.credential_repository import (
-    CredentialRepository)
-from authark.application.services.token_service import TokenService
-from authark.application.services.hash_service import HashService
-from authark.application.models.error import AuthError
-from authark.application.models.token import Token
-from authark.application.models.user import User
-from authark.application.models.credential import Credential
-from authark.application.utilities.type_definitions import (
-    TokenString, TokensDict, UserDict)
+
+from ..models import AuthError, Token, User, Credential
+from ..repositories import UserRepository, CredentialRepository
+from ..services import TokenService, HashService
+from .types import TokenString, TokensDict, UserDict
 
 
 class AuthCoordinator:

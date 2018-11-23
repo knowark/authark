@@ -2,9 +2,8 @@ import os
 from json import load, dump
 from uuid import uuid4
 from typing import Dict, List, Optional, Any, Type, TypeVar, Callable, Generic
-from authark.application.repositories.repository import Repository
-from authark.application.utilities.type_definitions import QueryDomain
-from authark.application.repositories.expression_parser import ExpressionParser
+from ...application.repositories import (
+    Repository, QueryDomain, ExpressionParser)
 
 
 T = TypeVar('T')

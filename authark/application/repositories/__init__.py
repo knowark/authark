@@ -7,3 +7,4 @@ from .credential_repository import (
 from .dominion_repository import (
     DominionRepository, MemoryDominionRepository)
 from .role_repository import RoleRepository, MemoryRoleRepository
+from .types import QueryDomain

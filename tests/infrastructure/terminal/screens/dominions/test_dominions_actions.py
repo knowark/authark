@@ -3,7 +3,7 @@ from pytest import raises, fixture
 from authark.infrastructure.terminal.framework.screen import Screen
 from authark.infrastructure.terminal.framework.table import Table
 from authark.infrastructure.terminal.screens.dominions import (
-    DominionsScreen, DominionsAddScreen)
+    DominionsScreen, DominionsAddScreen, DominionRolesScreen)
 
 
 @fixture
@@ -13,6 +13,11 @@ def dominions_add_screen(main):
 
 def test_dominions_add_screen_instantiation(dominions_add_screen):
     assert dominions_add_screen is not None
+
+
+@fixture
+def dominion_roles_screen(main):
+    return DominionRolesScreen('DOMINION ROLES', main.env, MockParent())
 
 
 def test_dominions_add_screen_keypress(main, dominions_add_screen):
