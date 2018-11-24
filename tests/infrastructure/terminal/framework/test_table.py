@@ -18,7 +18,7 @@ def test_table_build_header(table):
 def test_table_keypress(table):
     table.keypress(None, 'home')
     home_focused_widget = table._w.focus.render((40,)).text
-    assert b'NAME' in home_focused_widget[0]
+    assert b'Esteban' in home_focused_widget[0]
     table.keypress(None, 'end')
     end_focused_widget = table._w.focus.render((40,)).text
     assert b'Cesar' in end_focused_widget[0]
@@ -32,7 +32,7 @@ def test_table_keypress(table):
 
 def test_table_get_selected_item(table):
     result = table.get_selected_item()
-    assert result == {}
+    assert result == {'age': 29, 'name': 'Esteban'}
     table.keypress(None, 'down')
     result = table.get_selected_item()
-    assert result['name'] == 'Esteban'
+    assert result['name'] == 'Adriana'

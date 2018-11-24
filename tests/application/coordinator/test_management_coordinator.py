@@ -17,13 +17,10 @@ def test_management_coordinator_create_dominion(management_coordinator):
     assert 'abc001' in management_coordinator.dominion_repository.items
 
 
-def test_management_coordinator_create_dominion_no_id(management_coordinator):
-    dominion_dict = dict(
-        name='HR Server', url='https://hr.example.com')
-    management_coordinator.create_dominion(dominion_dict)
-    assert len(management_coordinator.dominion_repository.items) == 2
-    for item in management_coordinator.dominion_repository.items.values():
-        assert len(item.id) > 0
+def test_management_coordinator_remove_dominion(management_coordinator):
+    dominion_id = '1'
+    management_coordinator.remove_dominion(dominion_id)
+    assert len(management_coordinator.dominion_repository.items) == 0
 
 
 def test_management_coordinator_create_role(management_coordinator):
@@ -35,10 +32,7 @@ def test_management_coordinator_create_role(management_coordinator):
     assert '2' in management_coordinator.role_repository.items
 
 
-def test_management_coordinator_create_role_no_id(management_coordinator):
-    role_dict = dict(
-        name='admin', dominion_id='abc001', description='Administrator')
-    management_coordinator.create_role(role_dict)
-    assert len(management_coordinator.role_repository.items) == 2
-    for item in management_coordinator.role_repository.items.values():
-        assert len(item.id) > 0
+def test_management_coordinator_remove_role(management_coordinator):
+    role_id = '1'
+    management_coordinator.remove_role(role_id)
+    assert len(management_coordinator.role_repository.items) == 0

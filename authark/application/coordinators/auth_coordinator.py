@@ -82,12 +82,12 @@ class AuthCoordinator:
         user = self.user_repository.get(user_id)
         if not user:
             return False
-        self.user_repository.remove(user)
 
         credentials = self.credential_repository.search(
             [('user_id', '=', user.id)])
         for credential in credentials:
             self.credential_repository.remove(credential)
+        self.user_repository.remove(user)
 
         return True
 
