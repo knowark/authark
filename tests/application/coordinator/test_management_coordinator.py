@@ -23,6 +23,14 @@ def test_management_coordinator_remove_dominion(management_coordinator):
     assert len(management_coordinator.dominion_repository.items) == 0
 
 
+def test_management_coordinator_remove_dominion_missing(
+        management_coordinator):
+    dominion_id = '999'
+    result = management_coordinator.remove_dominion(dominion_id)
+    assert result is False
+    assert len(management_coordinator.dominion_repository.items) == 1
+
+
 def test_management_coordinator_create_role(management_coordinator):
     role_dict = dict(
         id='2', name='admin', dominion_id='abc001',
@@ -36,3 +44,11 @@ def test_management_coordinator_remove_role(management_coordinator):
     role_id = '1'
     management_coordinator.remove_role(role_id)
     assert len(management_coordinator.role_repository.items) == 0
+
+
+def test_management_coordinator_remove_role_missing_id(
+        management_coordinator):
+    role_id = '999'
+    result = management_coordinator.remove_role(role_id)
+    assert result is False
+    assert len(management_coordinator.role_repository.items) == 1
