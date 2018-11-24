@@ -1,5 +1,6 @@
 from pytest import fixture
 from unittest.mock import Mock
+from fnmatch import fnmatchcase
 from authark.application.repositories.expression_parser import (
     ExpressionParser)
 
@@ -128,3 +129,37 @@ def test_string_parser_with_lists_of_lists(parser):
 
     assert result(mock_object) is True
     assert result(mock_object) == expected(mock_object)
+
+
+def test_expression_parser_parse_like(parser):
+    filter_tuple_list = [
+        (('field', 'like', "Hello"),
+         lambda obj: fnmatchcase(obj.field, "Hello"),
+         Mock(field="Hello")),
+        (('field', 'like', "Hello%"),
+         lambda obj: fnmatchcase(obj.field, "Hello*"),
+         Mock(field="Hello World")),
+        (('field', 'like', "%World"),
+         lambda obj: fnmatchcase(obj.field, "*World"),
+         Mock(field="Hello World")),
+        (('field', 'like', "Hello_"),
+         lambda obj: fnmatchcase(obj.field, "Hello?"),
+         Mock(field="HelloX")),
+        (('field', 'ilike', "%World"),
+         lambda obj: fnmatchcase(obj.field, "*world"),
+         Mock(field="hello world")),
+        (('field', 'ilike', "%eLLo%"),
+         lambda obj: fnmatchcase(obj.field, "*ello*"),
+         Mock(field="hello world")),
+        (('field', 'like', "Hello%"), lambda obj: False, Mock(field=9)),
+    ]
+
+    for test_tuple in filter_tuple_list:
+        filter_tuple = test_tuple[0]
+        expected_function = test_tuple[1]
+        mock_object = test_tuple[2]
+
+        function = parser._parse_term(filter_tuple)
+
+        assert callable(function) is True
+        assert function(mock_object) == expected_function(mock_object)
