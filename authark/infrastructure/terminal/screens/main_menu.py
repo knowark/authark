@@ -9,7 +9,7 @@ class MainMenu(Screen):
 
     def _build_widget(self) -> urwid.Widget:
         header = urwid.AttrMap(
-            urwid.Text('AUTHARK', align='center'), 'titlebar')
+            urwid.Text('AUTHARK', align='center'), 'primary_bg')
         widget_list = [
             urwid.Divider(),
             self._build_menu_option('Users', self.show_users_screen),
@@ -19,7 +19,7 @@ class MainMenu(Screen):
         body = urwid.ListBox(urwid.SimpleFocusListWalker(widget_list))
 
         footer = urwid.Text([
-            "Press (", ("exit button", "Alt Q"), ") to exit. "
+            "Press (", ("warning", "Alt Q"), ") to exit. "
         ])
 
         frame = urwid.Frame(header=header, body=body, footer=footer)
@@ -29,7 +29,7 @@ class MainMenu(Screen):
     def _build_menu_option(self, name, callback):
         button = urwid.Button(name)
         urwid.connect_signal(button, 'click', callback)
-        return urwid.AttrMap(button, 'reversed')
+        return urwid.AttrMap(button, 'info')
 
     def show_users_screen(self, button=None):
         screen = UsersScreen('USERS', self.env)

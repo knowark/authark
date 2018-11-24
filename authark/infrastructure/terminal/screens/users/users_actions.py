@@ -9,11 +9,11 @@ class UsersAddScreen(Screen):
         self.auth_coordinator = self.env.context.registry['auth_coordinator']
 
         header = urwid.AttrMap(
-            urwid.Text(self.name, align='center'), 'titlebar')
+            urwid.Text(self.name, align='center'), 'success_bg')
 
         footer = urwid.Text([
-            "Press (", ("add button", "Enter"), ") to save. "
-            "Press (", ("back button", "Esc"), ") to go back. "
+            "Press (", ("success", "Enter"), ") to save. ",
+            "Press (", ("warning", "Esc"), ") to go back. "
         ])
 
         self.username = urwid.Edit()
@@ -63,11 +63,11 @@ class UsersDeleteScreen(Screen):
         self.auth_coordinator = self.env.context.registry['auth_coordinator']
 
         header = urwid.AttrMap(
-            urwid.Text(self.name, align='center'), 'titlebar')
+            urwid.Text(self.name, align='center'), 'danger_bg')
 
         footer = urwid.Text([
-            "Press (", ("remove button", "Enter"), ") to delete. "
-            "Press (", ("back button", "Esc"), ") to go back. "
+            "Press (", ("danger", "Enter"), ") to delete. "
+            "Press (", ("warning", "Esc"), ") to go back. "
         ])
 
         if not self.parent:
@@ -122,10 +122,10 @@ class UsersCredentialsScreen(Screen):
         title = "{}: {}".format(self.name, username)
 
         header = urwid.AttrMap(
-            urwid.Text(title, align='center'), 'titlebar')
+            urwid.Text(title, align='center'), 'primary_bg')
 
         footer = urwid.Text([
-            "Press (", ("back button", "Esc"), ") to go back. "
+            "Press (", ("warning", "Esc"), ") to go back. "
         ])
 
         # Credentials

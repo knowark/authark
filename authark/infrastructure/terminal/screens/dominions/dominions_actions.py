@@ -9,11 +9,11 @@ class DominionsAddScreen(Screen):
             'management_coordinator']
 
         header = urwid.AttrMap(
-            urwid.Text(self.name, align='center'), 'titlebar')
+            urwid.Text(self.name, align='center'), 'success_bg')
 
         footer = urwid.Text([
-            "Press (", ("add button", "Enter"), ") to save. "
-            "Press (", ("back button", "Esc"), ") to go back. "
+            "Press (", ("success", "Enter"), ") to save. "
+            "Press (", ("warning", "Esc"), ") to go back. "
         ])
 
         self.name = urwid.Edit()
@@ -66,11 +66,11 @@ class DominionsRolesScreen(Screen):
         title = "{}: {}".format(self.name, dominion_name)
 
         header = urwid.AttrMap(
-            urwid.Text(title, align='center'), 'titlebar')
+            urwid.Text(title, align='center'), 'primary_bg')
 
         footer = urwid.Text([
-            "Press (", ("add button", "A"), ") to add a new record. ",
-            "Press (", ("back button", "Esc"), ") to go back. "
+            "Press (", ("success", "A"), ") to add a new record. ",
+            "Press (", ("warning", "Esc"), ") to go back. "
         ])
 
         # Roles
@@ -108,11 +108,11 @@ class DominionsAddRoleScreen(Screen):
             'management_coordinator']
 
         header = urwid.AttrMap(
-            urwid.Text(self.name, align='center'), 'titlebar')
+            urwid.Text(self.name, align='center'), 'success_bg')
 
         footer = urwid.Text([
-            "Press (", ("add button", "Enter"), ") to save. "
-            "Press (", ("back button", "Esc"), ") to go back. "
+            "Press (", ("success", "Enter"), ") to save. "
+            "Press (", ("warning", "Esc"), ") to go back. "
         ])
 
         self.name = urwid.Edit()

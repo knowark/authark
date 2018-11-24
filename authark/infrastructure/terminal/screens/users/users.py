@@ -10,14 +10,14 @@ class UsersScreen(Screen):
     def _build_widget(self) -> urwid.Widget:
         self.auth_reporter = self.env.context.registry['auth_reporter']
         header = urwid.AttrMap(
-            urwid.Text(self.name, align='center'), 'heading')
+            urwid.Text(self.name, align='center'), 'success_bg')
 
         footer = urwid.Text([
-            "Press (", ("add button", "A"), ") to add a new record. ",
-            "Press (", ("update button", "U"), ") to update a record. ",
-            "Press (", ("update button", "C"), ") to show credentials. ",
-            "Press (", ("remove button", "R"), ") to remove a record. "
-            "Press (", ("back button", "Esc"), ") to go back. "
+            "Press (", ("success", "A"), ") to add a new record. ",
+            "Press (", ("light", "C"), ") to show credentials. ",
+            "Press (", ("primary", "U"), ") to update a record. ",
+            "Press (", ("danger", "D"), ") to delete a record. "
+            "Press (", ("warning", "Esc"), ") to go back. "
         ])
 
         headers_list = ['username', 'email']
