@@ -1,14 +1,19 @@
-from ..models import Dominion, Role
-from ..repositories import DominionRepository, RoleRepository
+from ..models import Dominion, Role, Ranking
+from ..repositories import (
+    UserRepository, DominionRepository, RoleRepository, RankingRepository)
 from.types import DominionDict, RoleDict
 
 
 class ManagementCoordinator:
 
-    def __init__(self, dominion_repository: DominionRepository,
-                 role_repository: RoleRepository) -> None:
+    def __init__(self, user_repository: UserRepository,
+                 dominion_repository: DominionRepository,
+                 role_repository: RoleRepository,
+                 ranking_repository: RankingRepository) -> None:
+        self.user_repository = user_repository
         self.dominion_repository = dominion_repository
         self.role_repository = role_repository
+        self.ranking_repository = ranking_repository
 
     def create_dominion(self, dominion_dict: DominionDict) -> None:
         dominion = Dominion(**dominion_dict)
@@ -30,4 +35,19 @@ class ManagementCoordinator:
         if not role:
             return False
         self.role_repository.remove(role)
+        return True
+
+    def assign_role(self, user_id: str, role_id: str) -> bool:
+        user = self.user_repository.get(user_id)
+        role = self.role_repository.get(role_id)
+        if not (user and role):
+            return False
+        ranking = Ranking(user_id=user.id, role_id=role.id)
+        self.ranking_repository.add(ranking)
+
+    def deassign_role(self, role_id: str) -> bool:
+        ranking = self.ranking_repository.get(role_id)
+        if not ranking:
+            return False
+        self.ranking_repository.remove(ranking)
         return True

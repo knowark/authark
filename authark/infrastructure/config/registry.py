@@ -8,7 +8,8 @@ from ...application.repositories import (
     UserRepository, MemoryUserRepository,
     CredentialRepository, MemoryCredentialRepository,
     DominionRepository, MemoryDominionRepository,
-    RoleRepository, MemoryRoleRepository)
+    RoleRepository, MemoryRoleRepository,
+    RankingRepository, MemoryRankingRepository)
 from ...application.services import (
     MemoryTokenService, MemoryHashService)
 from ...application.coordinators import (
@@ -20,7 +21,7 @@ from ..crypto.passlib_hash_service import (
     PasslibHashService)
 from ..data import (
     init_json_database, JsonUserRepository, JsonCredentialRepository,
-    JsonDominionRepository, JsonRoleRepository)
+    JsonDominionRepository, JsonRoleRepository, JsonRankingRepository)
 from authark.infrastructure.config.config import Config
 
 
@@ -41,6 +42,7 @@ class MemoryRegistry(Registry):
         role_repository = MemoryRoleRepository(parser)
         dominion_repository = MemoryDominionRepository(parser)
         role_repository = MemoryRoleRepository(parser)
+        ranking_repository = MemoryRankingRepository(parser)
         hash_service = MemoryHashService()
         access_token_service = MemoryTokenService()
         refresh_token_service = MemoryTokenService()
@@ -55,7 +57,8 @@ class MemoryRegistry(Registry):
             hash_service, access_token_service,
             refresh_token_service)
         management_coordinator = ManagementCoordinator(
-            dominion_repository, role_repository)
+            user_repository, dominion_repository,
+            role_repository, ranking_repository)
 
         self['auth_coordinator'] = auth_coordinator
         self['management_coordinator'] = management_coordinator
@@ -82,6 +85,8 @@ class JsonJwtRegistry(Registry):
             database_path, parser)
         role_repository = JsonRoleRepository(
             database_path, parser)
+        ranking_repository = JsonRankingRepository(
+            database_path, parser)
         tokens_config = config.get("tokens", {})
         access_token_service = PyJWTTokenService(
             'DEVSECRET123', 'HS256', tokens_config.get('access_lifetime'))
@@ -100,7 +105,8 @@ class JsonJwtRegistry(Registry):
             hash_service, access_token_service,
             refresh_token_service)
         management_coordinator = ManagementCoordinator(
-            dominion_repository, role_repository)
+            user_repository, dominion_repository,
+            role_repository, ranking_repository)
 
         self['auth_coordinator'] = auth_coordinator
         self['management_coordinator'] = management_coordinator

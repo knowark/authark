@@ -1,13 +1,14 @@
 from typing import Dict
 from pytest import fixture, raises
 from authark.application.models import (
-    AuthError, User, Credential, Token, Dominion, Role)
+    AuthError, User, Credential, Token, Dominion, Role, Ranking)
 from authark.application.repositories import (
     ExpressionParser,
     UserRepository, MemoryUserRepository,
     CredentialRepository, MemoryCredentialRepository,
     DominionRepository, MemoryDominionRepository,
-    RoleRepository, MemoryRoleRepository)
+    RoleRepository, MemoryRoleRepository,
+    RankingRepository, MemoryRankingRepository)
 from authark.application.services.token_service import (
     TokenService, MemoryTokenService)
 from authark.application.coordinators import (
@@ -75,6 +76,19 @@ def mock_role_repository() -> RoleRepository:
 
 
 @fixture
+def mock_ranking_repository() -> RankingRepository:
+    rankings_dict = {
+        "1": Ranking(id='1',
+                     user_id='1',
+                     role_id='1')
+    }
+    parser = ExpressionParser()
+    ranking_repository = MemoryRankingRepository(parser)
+    ranking_repository.load(rankings_dict)
+    return ranking_repository
+
+
+@fixture
 def mock_access_token_service() -> TokenService:
     return MemoryTokenService()
 
@@ -103,8 +117,12 @@ def auth_coordinator(mock_user_repository: UserRepository,
 
 
 @fixture
-def management_coordinator(mock_dominion_repository: DominionRepository,
-                           mock_role_repository: RoleRepository
-                           ) -> ManagementCoordinator:
+def management_coordinator(
+    mock_user_repository: UserRepository,
+    mock_dominion_repository: DominionRepository,
+    mock_role_repository: RoleRepository,
+    mock_ranking_repository: RankingRepository
+) -> ManagementCoordinator:
     return ManagementCoordinator(
-        mock_dominion_repository, mock_role_repository)
+        mock_user_repository, mock_dominion_repository,
+        mock_role_repository, mock_ranking_repository)
