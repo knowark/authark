@@ -1,8 +1,7 @@
 import urwid
 from pytest import raises, fixture
-from authark.infrastructure.terminal.screens.users.users import UsersScreen
-from authark.infrastructure.terminal.screens.users.users_actions import (
-    UsersAddScreen, UsersDeleteScreen, UsersCredentialsScreen)
+from authark.infrastructure.terminal.screens.users import (
+    UsersScreen, UsersAddScreen, UsersDeleteScreen, UsersCredentialsScreen)
 
 
 @fixture

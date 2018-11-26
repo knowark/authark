@@ -1,8 +1,9 @@
 import urwid
 from authark.infrastructure.terminal.framework.table import Table
 from authark.infrastructure.terminal.framework.screen import Screen
-from authark.infrastructure.terminal.screens.users.users_actions import (
-    UsersAddScreen, UsersDeleteScreen, UsersCredentialsScreen)
+from .users_actions import UsersAddScreen, UsersDeleteScreen
+from .users_credentials import UsersCredentialsScreen
+from .users_roles import UsersRolesScreen
 
 
 class UsersScreen(Screen):
@@ -30,6 +31,10 @@ class UsersScreen(Screen):
 
         return frame
 
+    def show_roles_screen(self):
+        screen = UsersRolesScreen("USER'S ROLES", self.env, self)
+        return self._open_screen(screen)
+
     def keypress(self, size, key):
         if key in ('a', 'A'):
             screen = UsersAddScreen('ADD USER', self.env, self)
@@ -37,8 +42,10 @@ class UsersScreen(Screen):
         if key in ('d', 'D'):
             screen = UsersDeleteScreen('DELETE USER', self.env, self)
             return self._open_screen(screen)
-        if key in ('c', 'C', 'enter'):
+        if key in ('c', 'C'):
             screen = UsersCredentialsScreen(
                 "USER'S CREDENTIALS", self.env, self)
             return self._open_screen(screen)
+        if key in ('r', 'R', 'enter'):
+            self.show_roles_screen()
         return super().keypress(size, key)

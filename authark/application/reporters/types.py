@@ -19,3 +19,7 @@ DominionDictList = List[DominionDict]
 RoleDict = Dict[str, Any]
 
 RoleDictList = List[RoleDict]
+
+ExtendedRankingDict = Dict[str, Any]
+
+ExtendedRankingDictList = List[ExtendedRankingDict]

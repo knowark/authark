@@ -1,10 +1,8 @@
 import urwid
 from pytest import fixture
 from authark.infrastructure.config.context import Context
-from authark.infrastructure.terminal.framework.environment import Environment
-from authark.infrastructure.terminal.framework.screen import Screen
-from authark.infrastructure.terminal.framework.table import Table
-from authark.infrastructure.terminal.framework.themes import palette
+from authark.infrastructure.terminal.framework import (
+    palette, Environment, Screen, Table, Selection)
 
 
 @fixture
@@ -40,3 +38,8 @@ def table():
 @fixture
 def themes():
     return palette
+
+
+@fixture
+def selection():
+    return Selection()

@@ -1,13 +1,16 @@
 from pytest import fixture, raises
-from authark.application.models import User, Credential, Dominion, Role
+from authark.application.models import (
+    User, Credential, Dominion, Role, Ranking)
 from authark.application.repositories import (
     ExpressionParser,
     UserRepository, MemoryUserRepository,
     CredentialRepository, MemoryCredentialRepository,
     DominionRepository, MemoryDominionRepository,
-    RoleRepository, MemoryRoleRepository)
-from authark.application.reporters.authark_reporter import (
-    AutharkReporter, StandardAutharkReporter)
+    RoleRepository, MemoryRoleRepository,
+    RankingRepository, MemoryRankingRepository)
+from authark.application.reporters import (
+    AutharkReporter, StandardAutharkReporter,
+    ComposingReporter, StandardComposingReporter)
 
 
 @fixture
@@ -60,8 +63,28 @@ def role_repository() -> RoleRepository:
 
 
 @fixture
+def ranking_repository() -> RankingRepository:
+    rankings_dict = {
+        "1": Ranking(id='1', user_id='1', role_id='1',
+                     description="Service's Administrator")
+    }
+    parser = ExpressionParser()
+    ranking_repository = MemoryRankingRepository(parser)
+    ranking_repository.load(rankings_dict)
+    return ranking_repository
+
+
+@fixture
 def authark_reporter(
         user_repository, credential_repository,
         dominion_repository, role_repository) -> AutharkReporter:
     return StandardAutharkReporter(user_repository, credential_repository,
                                    dominion_repository, role_repository)
+
+
+@fixture
+def composing_reporter(
+        user_repository, dominion_repository,
+        role_repository, ranking_repository) -> ComposingReporter:
+    return StandardComposingReporter(user_repository, dominion_repository,
+                                     role_repository, ranking_repository)

@@ -15,7 +15,8 @@ from ...application.services import (
 from ...application.coordinators import (
     AuthCoordinator, ManagementCoordinator)
 from authark.application.reporters import (
-    AutharkReporter, StandardAutharkReporter)
+    AutharkReporter, StandardAutharkReporter,
+    ComposingReporter, StandardComposingReporter)
 from ..crypto.pyjwt_token_service import PyJWTTokenService
 from ..crypto.passlib_hash_service import (
     PasslibHashService)
@@ -43,15 +44,11 @@ class MemoryRegistry(Registry):
         dominion_repository = MemoryDominionRepository(parser)
         role_repository = MemoryRoleRepository(parser)
         ranking_repository = MemoryRankingRepository(parser)
+
         hash_service = MemoryHashService()
         access_token_service = MemoryTokenService()
         refresh_token_service = MemoryTokenService()
 
-        auth_reporter = StandardAutharkReporter(
-            user_repository,
-            credential_repository,
-            dominion_repository,
-            role_repository)
         auth_coordinator = AuthCoordinator(
             user_repository, credential_repository,
             hash_service, access_token_service,
@@ -59,10 +56,21 @@ class MemoryRegistry(Registry):
         management_coordinator = ManagementCoordinator(
             user_repository, dominion_repository,
             role_repository, ranking_repository)
+        auth_reporter = StandardAutharkReporter(
+            user_repository,
+            credential_repository,
+            dominion_repository,
+            role_repository)
+        composing_reporter = StandardComposingReporter(
+            user_repository,
+            dominion_repository,
+            role_repository,
+            ranking_repository)
 
         self['auth_coordinator'] = auth_coordinator
         self['management_coordinator'] = management_coordinator
         self['auth_reporter'] = auth_reporter
+        self['composing_reporter'] = composing_reporter
 
 
 class JsonJwtRegistry(Registry):
@@ -75,7 +83,6 @@ class JsonJwtRegistry(Registry):
         # Initialize Json Database
         init_json_database(database_path)
 
-        # Services
         parser = ExpressionParser()
         user_repository = JsonUserRepository(
             database_path, parser)
@@ -87,6 +94,7 @@ class JsonJwtRegistry(Registry):
             database_path, parser)
         ranking_repository = JsonRankingRepository(
             database_path, parser)
+
         tokens_config = config.get("tokens", {})
         access_token_service = PyJWTTokenService(
             'DEVSECRET123', 'HS256', tokens_config.get('access_lifetime'))
@@ -95,11 +103,6 @@ class JsonJwtRegistry(Registry):
             tokens_config.get('refresh_threshold'))
         hash_service = PasslibHashService()
 
-        auth_reporter = StandardAutharkReporter(
-            user_repository,
-            credential_repository,
-            dominion_repository,
-            role_repository)
         auth_coordinator = AuthCoordinator(
             user_repository, credential_repository,
             hash_service, access_token_service,
@@ -107,7 +110,18 @@ class JsonJwtRegistry(Registry):
         management_coordinator = ManagementCoordinator(
             user_repository, dominion_repository,
             role_repository, ranking_repository)
+        auth_reporter = StandardAutharkReporter(
+            user_repository,
+            credential_repository,
+            dominion_repository,
+            role_repository)
+        composing_reporter = StandardComposingReporter(
+            user_repository,
+            dominion_repository,
+            role_repository,
+            ranking_repository)
 
         self['auth_coordinator'] = auth_coordinator
         self['management_coordinator'] = management_coordinator
         self['auth_reporter'] = auth_reporter
+        self['composing_reporter'] = composing_reporter
