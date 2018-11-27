@@ -54,14 +54,16 @@ class SelectionList(urwid.WidgetWrap):
     def __init__(self, item_list, item_formatter, selection_callback):
         self.item_list = item_list
 
-        empty_placeholder = '[-----]'
-        item_list = self.item_list or [empty_placeholder]
         widget_list = []
-        for item in item_list:
+        for item in self.item_list:
             value = item_formatter(item)
             widget = urwid.AttrMap(
                 urwid.Text(value), None, focus_map='reversed')
             widget_list.append(widget)
+
+        if not widget_list:
+            widget_list = [urwid.AttrMap(
+                urwid.Text('[-----]'), None, focus_map='reversed')]
 
         self.selection_callback = selection_callback
         self.item_formatter = item_formatter

@@ -29,19 +29,20 @@ class Table(urwid.WidgetWrap):
         return urwid.Columns(headers_widgets)
 
     def keypress(self, size, key):
+        num_items = len(self.data_list)
         if key == 'home':
-            self._w.set_focus(min(len(self._w.body), 1))
+            self._w.set_focus(min(num_items, 1))
             key = None
         elif key == 'end':
-            self._w.set_focus(len(self._w.body) - 1)
+            self._w.set_focus(max(0, num_items))
             key = None
         elif key == 'up':
-            position = max(min(len(self._w.body), 1),
-                           self._w.focus_position - 1)
+            position = max(
+                min(num_items, 1), self._w.focus_position - 1)
             self._w.set_focus(position)
             key = None
         elif key == 'down':
-            position = min(len(self._w.body) - 1, self._w.focus_position + 1)
+            position = min(num_items, self._w.focus_position + 1)
             self._w.set_focus(position)
             key = None
         return key

@@ -42,12 +42,18 @@ class ManagementCoordinator:
         role = self.role_repository.get(role_id)
         if not (user and role):
             return False
-        ranking = Ranking(user_id=user.id, role_id=role.id)
-        self.ranking_repository.add(ranking)
 
-    def deassign_role(self, role_id: str) -> bool:
-        ranking = self.ranking_repository.get(role_id)
-        if not ranking:
+        ranking = Ranking(user_id=user.id, role_id=role.id)
+        # Prevent duplicates
+        duplicate = self.ranking_repository.search([
+            ('user_id', '=', user.id), ('role_id', '=', role.id)
+        ])
+        if duplicate:
             return False
-        self.ranking_repository.remove(ranking)
+
+        self.ranking_repository.add(ranking)
         return True
+
+    def deassign_role(self, ranking_id: str) -> bool:
+        ranking = self.ranking_repository.get(ranking_id)
+        return self.ranking_repository.remove(ranking)
