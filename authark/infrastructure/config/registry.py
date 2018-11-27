@@ -11,7 +11,8 @@ from ...application.repositories import (
     RoleRepository, MemoryRoleRepository,
     RankingRepository, MemoryRankingRepository)
 from ...application.services import (
-    MemoryTokenService, MemoryHashService)
+    MemoryTokenService, MemoryHashService,
+    StandardAccessService)
 from ...application.coordinators import (
     AuthCoordinator, ManagementCoordinator)
 from authark.application.reporters import (
@@ -46,12 +47,16 @@ class MemoryRegistry(Registry):
         ranking_repository = MemoryRankingRepository(parser)
 
         hash_service = MemoryHashService()
+
         access_token_service = MemoryTokenService()
+        access_service = StandardAccessService(
+            ranking_repository, role_repository,
+            dominion_repository, access_token_service)
         refresh_token_service = MemoryTokenService()
 
         auth_coordinator = AuthCoordinator(
             user_repository, credential_repository,
-            hash_service, access_token_service,
+            hash_service, access_service,
             refresh_token_service)
         management_coordinator = ManagementCoordinator(
             user_repository, dominion_repository,
@@ -96,8 +101,13 @@ class JsonJwtRegistry(Registry):
             database_path, parser)
 
         tokens_config = config.get("tokens", {})
+
         access_token_service = PyJWTTokenService(
             'DEVSECRET123', 'HS256', tokens_config.get('access_lifetime'))
+        access_service = StandardAccessService(
+            ranking_repository, role_repository,
+            dominion_repository, access_token_service)
+
         refresh_token_service = PyJWTTokenService(
             'DEVSECRET123', 'HS256', tokens_config.get('refresh_lifetime'),
             tokens_config.get('refresh_threshold'))
@@ -105,7 +115,7 @@ class JsonJwtRegistry(Registry):
 
         auth_coordinator = AuthCoordinator(
             user_repository, credential_repository,
-            hash_service, access_token_service,
+            hash_service, access_service,
             refresh_token_service)
         management_coordinator = ManagementCoordinator(
             user_repository, dominion_repository,
