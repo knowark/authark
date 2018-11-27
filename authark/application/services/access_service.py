@@ -1,14 +1,15 @@
 import json
 from typing import Dict, Any
 from abc import ABC, abstractmethod
-from ..models import User
+from ..models import User, Token
 from ..repositories import (
     RankingRepository, RoleRepository, DominionRepository)
+from ..services import TokenService
 
 
 class AccessService(ABC):
     @abstractmethod
-    def generate_payload(self, user: User) -> Dict[str, str]:
+    def generate_token(self, user: User) -> Token:
         "Generate payload method to be implemented."
 
 
@@ -16,12 +17,20 @@ class StandardAccessService(AccessService):
 
     def __init__(self, ranking_repository: RankingRepository,
                  role_repository: RoleRepository,
-                 dominion_repository: DominionRepository) -> None:
+                 dominion_repository: DominionRepository,
+                 token_service: TokenService) -> None:
         self.ranking_repository = ranking_repository
         self.role_repository = role_repository
         self.dominion_repository = dominion_repository
+        self.token_service = token_service
 
-    def generate_payload(self, user: User) -> Dict[str, Any]:
+    def generate_token(self, user: User) -> Token:
+        access_payload = self._build_payload(user)
+        access_token = self.token_service.generate_token(access_payload)
+
+        return access_token
+
+    def _build_payload(self, user: User) -> Dict[str, Any]:
         payload = self._build_basic_info(user)
         payload['authorization'] = self._build_authorization(user)
         return payload

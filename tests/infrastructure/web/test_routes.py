@@ -2,15 +2,16 @@ import json
 import jwt
 from pytest import fixture
 from flask import Flask
-from authark.application.models.user import User
-from authark.application.models.credential import Credential
-from authark.application.repositories.user_repository import (
-    MemoryUserRepository)
-from authark.application.repositories.credential_repository import (
-    MemoryCredentialRepository)
-from authark.application.repositories.expression_parser import ExpressionParser
-from authark.application.coordinators.auth_coordinator import AuthCoordinator
-from authark.application.services.hash_service import MemoryHashService
+from authark.application.models import (
+    User, Credential, Dominion, Role, Ranking)
+from authark.application.repositories import (
+    ExpressionParser,
+    MemoryUserRepository, MemoryCredentialRepository,
+    MemoryDominionRepository, MemoryRoleRepository,
+    MemoryRankingRepository)
+from authark.application.coordinators import AuthCoordinator
+from authark.application.services import (
+    MemoryHashService, StandardAccessService)
 from authark.infrastructure.config.registry import Registry
 from authark.infrastructure.web.base import create_app
 from authark.infrastructure.config.config import TrialConfig
@@ -44,13 +45,32 @@ class MockRegistry(Registry):
             "3": Credential(id='3', user_id='1', value=refresh_token,
                             type='refresh_token'),
         })
+        ranking_repository = MemoryRankingRepository(parser)
+        ranking_repository.load({
+            "1": Ranking(id='1', user_id='1', role_id='1',
+                         description="Service's Administrator")
+        })
+        role_repository = MemoryRoleRepository(parser)
+        role_repository.load({
+            "1": Role(id='1', name='admin', dominion_id='1',
+                      description="Service's Administrator")
+        })
+        dominion_repository = MemoryDominionRepository(parser)
+        dominion_repository.load({
+            "1": Dominion(id='1', name='Data Server',
+                          url="https://dataserver.nubark.com")
+        })
         access_token_service = PyJWTTokenService('TESTSECRET', 'HS256', 3600)
+        access_service = StandardAccessService(
+            ranking_repository, role_repository,
+            dominion_repository, access_token_service)
+
         refresh_token_service = PyJWTTokenService(
             'REFRESHSECRET', 'HS256', 3600, 3600)
         hash_service = MemoryHashService()
         auth_coordinator = AuthCoordinator(
             user_repository, credential_repository,
-            hash_service, access_token_service,
+            hash_service, access_service,
             refresh_token_service)
 
         self['auth_coordinator'] = auth_coordinator

@@ -9,8 +9,9 @@ from authark.application.repositories import (
     DominionRepository, MemoryDominionRepository,
     RoleRepository, MemoryRoleRepository,
     RankingRepository, MemoryRankingRepository)
-from authark.application.services.token_service import (
-    TokenService, MemoryTokenService)
+from authark.application.services import (
+    TokenService, MemoryTokenService,
+    AccessService, StandardAccessService)
 from authark.application.coordinators import (
     AuthCoordinator, ManagementCoordinator)
 from authark.application.services.hash_service import (
@@ -89,7 +90,7 @@ def mock_ranking_repository() -> RankingRepository:
 
 
 @fixture
-def mock_access_token_service() -> TokenService:
+def mock_token_service() -> TokenService:
     return MemoryTokenService()
 
 
@@ -105,14 +106,22 @@ def mock_hash_service() -> HashService:
 
 
 @fixture
+def mock_access_service(mock_ranking_repository, mock_role_repository,
+                        mock_dominion_repository, mock_token_service):
+    return StandardAccessService(
+        mock_ranking_repository, mock_role_repository,
+        mock_dominion_repository, mock_token_service)
+
+
+@fixture
 def auth_coordinator(mock_user_repository: UserRepository,
                      mock_credential_repository: CredentialRepository,
                      mock_hash_service: HashService,
-                     mock_access_token_service: TokenService,
+                     mock_access_service: AccessService,
                      mock_refresh_token_service: TokenService
                      ) -> AuthCoordinator:
     return AuthCoordinator(mock_user_repository, mock_credential_repository,
-                           mock_hash_service, mock_access_token_service,
+                           mock_hash_service, mock_access_service,
                            mock_refresh_token_service)
 
 

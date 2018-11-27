@@ -1,13 +1,13 @@
 from inspect import signature
-from authark.application.models import User
+from authark.application.models import User, Token
 from authark.application.services import AccessService, StandardAccessService
 
 
 def test_access_service() -> None:
     methods = AccessService.__abstractmethods__  # type: ignore
-    assert 'generate_payload' in methods
+    assert 'generate_token' in methods
 
-    sig = signature(AccessService.generate_payload)
+    sig = signature(AccessService.generate_token)
     assert sig.parameters.get('user')
 
 
@@ -15,9 +15,18 @@ def test_standard_access_service_implementation() -> None:
     assert issubclass(StandardAccessService, AccessService)
 
 
-def test_standard_access_service_generate_payload(access_service) -> None:
+def test_standard_access_service_generate_token(access_service) -> None:
     user = User(id='1', username='johndoe', email='johndoe')
-    payload = access_service.generate_payload(user)
+    token = access_service.generate_token(user)
+
+    print(token)
+
+    assert isinstance(token, Token)
+
+
+def test_standard_access_service__build_payload(access_service) -> None:
+    user = User(id='1', username='johndoe', email='johndoe')
+    payload = access_service._build_payload(user)
 
     print(payload)
 

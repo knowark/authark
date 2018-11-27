@@ -1,6 +1,8 @@
 from pytest import fixture
 from authark.application.models import Dominion, Role, Ranking
-from authark.application.services import StandardAccessService
+from authark.application.services import (
+    AccessService, StandardAccessService,
+    TokenService, MemoryTokenService)
 from authark.application.repositories import (
     ExpressionParser,
     DominionRepository, MemoryDominionRepository,
@@ -45,6 +47,13 @@ def ranking_repository() -> RankingRepository:
 
 
 @fixture
-def access_service(ranking_repository, role_repository, dominion_repository):
+def token_service() -> TokenService:
+    return MemoryTokenService()
+
+
+@fixture
+def access_service(ranking_repository, role_repository,
+                   dominion_repository, token_service):
     return StandardAccessService(
-        ranking_repository, role_repository, dominion_repository)
+        ranking_repository, role_repository,
+        dominion_repository, token_service)
