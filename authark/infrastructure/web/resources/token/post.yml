@@ -1,0 +1,43 @@
+summary: Request token.
+
+tags:
+  - Tokens
+
+parameters:
+  - in: body
+    schema: 
+      $ref: "#/definitions/TokenRequest"
+
+responses:
+  201:
+    description: "Token created"
+    schema:
+      $ref: "#/definitions/Token"
+
+
+definitions:
+  TokenRequest:
+    id: TokenRequest
+    title: TokenRequest
+    type: object
+    properties:
+      username:
+        type: string
+        example: "amlopez"
+      password:
+        type: string
+        example: "secret"
+      client:
+        type: string
+        example: "data_server"
+  Token:
+    id: Token
+    title: Token
+    type: object
+    properties:
+      refresh_token:
+        type: string
+        example: "eyJhbG.eyJzdWIiOiIx.MjM5MadQssw5c"
+      access_token:
+        type: string
+        example: "eyJhbG.kpvaG4gRMyfQ.SflKxwssw5cdfs"

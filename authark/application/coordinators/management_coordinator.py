@@ -56,4 +56,6 @@ class ManagementCoordinator:
 
     def deassign_role(self, ranking_id: str) -> bool:
         ranking = self.ranking_repository.get(ranking_id)
+        if not ranking:
+            return False
         return self.ranking_repository.remove(ranking)

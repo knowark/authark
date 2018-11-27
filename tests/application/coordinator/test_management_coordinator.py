@@ -55,10 +55,17 @@ def test_management_coordinator_remove_role_missing_id(
 
 
 def test_management_coordinator_assign_role(management_coordinator):
-    user_id = '1'
+    user_id = '2'
     role_id = '1'
     management_coordinator.assign_role(user_id, role_id)
     assert len(management_coordinator.ranking_repository.items) == 2
+
+
+def test_management_coordinator_assign_role_duplicate(management_coordinator):
+    user_id = '1'
+    role_id = '1'
+    management_coordinator.assign_role(user_id, role_id)
+    assert len(management_coordinator.ranking_repository.items) == 1
 
 
 def test_management_coordinator_assign_role_missing_id(

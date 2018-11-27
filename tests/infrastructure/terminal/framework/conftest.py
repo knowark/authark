@@ -42,4 +42,8 @@ def themes():
 
 @fixture
 def selection():
-    return Selection()
+    def item_list_collector(x): return ['A', 'B', 'C']
+
+    def item_formatter(x): return str(x)
+
+    return Selection('Items', item_list_collector, item_formatter)
