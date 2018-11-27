@@ -46,7 +46,9 @@ class DevelopmentConfig(Config):
         super().__init__()
         self['mode'] = DEV
         self['gunicorn'].update({
-            'debug': True
+            'debug': True,
+            'accesslog': '-',
+            'loglevel': 'debug'
         })
 
 
@@ -55,7 +57,9 @@ class ProductionConfig(Config):
         super().__init__()
         self['mode'] = PROD
         self['gunicorn'].update({
-            'debug': False
+            'debug': True,
+            'accesslog': '-',
+            'loglevel': 'debug'
         })
         self['database'] = {
             'type': 'json',
