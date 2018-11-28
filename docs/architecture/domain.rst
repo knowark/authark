@@ -24,10 +24,17 @@ core, and so are the **Dominion** and **Role**.
     <tr><td><i>User</i></td></tr>
     <tr><td port="id">id</td></tr>
     </table>>];
-
-    UserRole [label=<
+    
+    Attribute [label=<
     <table border="0" cellborder="1" cellspacing="0">
-    <tr><td><i>UserRole</i></td></tr>
+    <tr><td><i>Attribute</i></td></tr>
+    <tr><td port="id">id</td></tr>
+    <tr><td port="user_id">user_id</td></tr>
+    </table>>];
+
+    Ranking [label=<
+    <table border="0" cellborder="1" cellspacing="0">
+    <tr><td><i>Ranking</i></td></tr>
     <tr><td port="user_id">user_id</td></tr>
     <tr><td port="role_id">role_id</td></tr>
     </table>>];
@@ -90,9 +97,9 @@ core, and so are the **Dominion** and **Role**.
     <tr><td port="role_id">role_id</td></tr> 
     </table>>];
 
-
-    UserRole:user_id -> User:id;
-    UserRole:role_id -> Role:id;
+    Attribute:user_id -> User:id;
+    Ranking:user_id -> User:id;
+    Ranking:role_id -> Role:id;
     Credential:dominion_id ->  Dominion:id;
     Credential:user_id -> User:id;
     Role:dominion_id -> Dominion:id;
@@ -108,10 +115,12 @@ core, and so are the **Dominion** and **Role**.
 
 Dominions can have multiple roles for authorization purposes, each been able
 to hold multiple users. As a user can as well belong to multiple groups, the 
-**UserRole** structure is the responsible of representing such binding. A user
+**Ranking** structure is the responsible of representing such binding. A user
 may have multiple **Credentials** to authenticate against Authark. Each 
 **Credential** must be either of the type 'password' or 'token' (i.e. refresh
-token) and belong to a single **Dominion**.
+token) and belong to a single **Dominion**. Moreover, **Users** may have
+optional **Attributes** in the form of *key-value* pairs that represent
+any kind of informative features or data suitable for authorization logic.
 
 A service or data **Dominion** may have one or more **Resources** to which it
 can give access. To do that, **Policies** are created to filter out the kind
