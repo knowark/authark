@@ -1,6 +1,6 @@
 from ..config import Config
 from .types import ProviderDict, ProvidersDict, ProvidersList, Registry
-from .factories import MemoryFactory, SqlFactory, HttpFactory
+from .factories import MemoryFactory, CryptoFactory, JsonFactory
 
 
 class Resolver:
@@ -8,8 +8,8 @@ class Resolver:
         self.config = config
         self.factories = {
             'MemoryFactory': MemoryFactory(self.config),
-            'SqlFactory': SqlFactory(self.config),
-            'HttpFactory': HttpFactory(self.config)
+            'CryptoFactory': JsonFactory(self.config),
+            'JsonFactory': JsonFactory(self.config)
         }
         self.default_factory = self.config.get('factory', 'MemoryFactory')
 
