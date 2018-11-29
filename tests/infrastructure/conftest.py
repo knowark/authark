@@ -1,7 +1,6 @@
 from pytest import fixture
-from authark.infrastructure.config.config import TrialConfig
-from authark.infrastructure.config.registry import MemoryRegistry
-from authark.infrastructure.config.context import Context
+from authark.infrastructure.config import TrialConfig
+from authark.infrastructure.resolver import Resolver
 
 
 @fixture
@@ -11,7 +10,8 @@ def config():
 
 @fixture
 def registry(config):
-    return MemoryRegistry(config)
+    resolver = Resolver(config)
+    return resolver.resolve(config['providers'])
 
 
 @fixture

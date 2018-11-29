@@ -1,6 +1,5 @@
 import urwid
 from pytest import fixture
-from authark.infrastructure.config.context import Context
 from authark.infrastructure.terminal.framework import (
     palette, Environment, Screen, Table, Selection)
 

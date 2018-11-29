@@ -4,7 +4,7 @@ from abc import ABC, abstractmethod
 from ..models import User, Token
 from ..repositories import (
     RankingRepository, RoleRepository, DominionRepository)
-from ..services import TokenService
+from ..services import AccessTokenService
 
 
 class AccessService(ABC):
@@ -18,7 +18,7 @@ class StandardAccessService(AccessService):
     def __init__(self, ranking_repository: RankingRepository,
                  role_repository: RoleRepository,
                  dominion_repository: DominionRepository,
-                 token_service: TokenService) -> None:
+                 token_service: AccessTokenService) -> None:
         self.ranking_repository = ranking_repository
         self.role_repository = role_repository
         self.dominion_repository = dominion_repository

@@ -6,10 +6,10 @@ class UsersRolesScreen(Screen):
 
     def _build_widget(self) -> urwid.Widget:
         self.management_coordinator = self.env.context.registry[
-            'management_coordinator']
-        self.auth_reporter = self.env.context.registry['auth_reporter']
+            'ManagementCoordinator']
+        self.auth_reporter = self.env.context.registry['AutharkReporter']
         self.composing_reporter = self.env.context.registry[
-            'composing_reporter']
+            'ComposingReporter']
 
         if not self.parent:
             return

@@ -21,7 +21,15 @@ class Config(dict, ABC):
         self['flask'] = {}
         self['database'] = {}
         self['tokens'] = {
-            'access_lifetime': 86400,
-            'refresh_lifetime': 604800,
-            'refresh_threshold': 86400
+            'access': {
+                'algorithm': 'HS256',
+                'secret': 'DEVSECRET123',
+                'lifetime': 86400
+            },
+            'refresh': {
+                'algorithm': 'HS256',
+                'secret': 'DEVSECRET123',
+                'lifetime': 604800,
+                'threshold': 86400
+            }
         }

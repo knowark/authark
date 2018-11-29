@@ -27,3 +27,21 @@ class MemoryTokenService(TokenService):
 
     def renew(self, token: Token) -> bool:
         return False
+
+# Dedicated Aliases
+
+
+class AccessTokenService(TokenService):
+    """Access Token Service"""
+
+
+class MemoryAccessTokenService(MemoryTokenService, AccessTokenService):
+    """Access Token Service"""
+
+
+class RefreshTokenService(TokenService):
+    """Refresh Token Service"""
+
+
+class MemoryRefreshTokenService(MemoryTokenService, RefreshTokenService):
+    """Memory Refresh Token Service"""

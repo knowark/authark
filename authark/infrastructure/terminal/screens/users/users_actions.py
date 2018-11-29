@@ -5,7 +5,7 @@ from ...framework import Screen, Table
 class UsersAddScreen(Screen):
 
     def _build_widget(self) -> urwid.Widget:
-        self.auth_coordinator = self.env.context.registry['auth_coordinator']
+        self.auth_coordinator = self.env.context.registry['AuthCoordinator']
 
         header = urwid.AttrMap(
             urwid.Text(self.name, align='center'), 'success_bg')
@@ -59,7 +59,7 @@ class UsersAddScreen(Screen):
 class UsersDeleteScreen(Screen):
 
     def _build_widget(self) -> urwid.Widget:
-        self.auth_coordinator = self.env.context.registry['auth_coordinator']
+        self.auth_coordinator = self.env.context.registry['AuthCoordinator']
 
         header = urwid.AttrMap(
             urwid.Text(self.name, align='center'), 'danger_bg')

@@ -8,7 +8,7 @@ class Resolver:
         self.config = config
         self.factories = {
             'MemoryFactory': MemoryFactory(self.config),
-            'CryptoFactory': JsonFactory(self.config),
+            'CryptoFactory': CryptoFactory(self.config),
             'JsonFactory': JsonFactory(self.config)
         }
         self.default_factory = self.config.get('factory', 'MemoryFactory')

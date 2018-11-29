@@ -7,7 +7,7 @@ from flasgger import swag_from
 class TokenResource(Resource):
 
     def __init__(self, **kwargs: Any) -> None:
-        self.auth_coordinator = kwargs['auth_coordinator']
+        self.auth_coordinator = kwargs['AuthCoordinator']
 
     def get(self) -> str:
         return "Authentication endpoint. Please 'Post' to '/auth'"

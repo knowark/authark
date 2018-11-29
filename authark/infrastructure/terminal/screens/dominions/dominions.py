@@ -7,7 +7,7 @@ from .dominions_actions import (
 class DominionsScreen(Screen):
 
     def _build_widget(self) -> urwid.Widget:
-        self.auth_reporter = self.env.context.registry['auth_reporter']
+        self.auth_reporter = self.env.context.registry['AutharkReporter']
         header = urwid.AttrMap(
             urwid.Text(self.name, align='center'), 'secondary_bg')
 

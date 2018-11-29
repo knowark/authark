@@ -1,7 +1,8 @@
 import jwt
 from time import time
 from typing import Dict, Any
-from authark.application.services.token_service import TokenService
+from authark.application.services.token_service import (
+    TokenService, AccessTokenService, RefreshTokenService)
 from authark.application.models.token import Token
 
 
@@ -39,3 +40,11 @@ class PyJWTTokenService(TokenService):
             return True
 
         return False
+
+
+class PyJWTAccessTokenService(PyJWTTokenService, AccessTokenService):
+    """PyJWT Access Token Service"""
+
+
+class PyJWTRefreshTokenService(PyJWTTokenService, RefreshTokenService):
+    """PyJWT Refresh Token Service"""

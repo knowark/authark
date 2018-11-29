@@ -11,6 +11,8 @@ from ....application.repositories import (
 from ....application.services import (
     HashService, MemoryHashService,
     TokenService, MemoryTokenService,
+    AccessTokenService, MemoryAccessTokenService,
+    RefreshTokenService, MemoryRefreshTokenService,
     AccessService, StandardAccessService)
 from ....application.coordinators import (
     AuthCoordinator, ManagementCoordinator)
@@ -54,17 +56,20 @@ class MemoryFactory:
 
     # Services
 
-    def standard_hash_service(self) -> MemoryHashService:
+    def memory_hash_service(self) -> MemoryHashService:
         return MemoryHashService()
 
-    def memory_token_service(self) -> MemoryTokenService:
-        return MemoryTokenService()
+    def memory_access_token_service(self) -> MemoryAccessTokenService:
+        return MemoryAccessTokenService()
+
+    def memory_refresh_token_service(self) -> MemoryRefreshTokenService:
+        return MemoryRefreshTokenService()
 
     def standard_access_service(
             self, ranking_repository: RankingRepository,
             role_repository: RoleRepository,
             dominion_repository: DominionRepository,
-            token_service: TokenService) -> StandardAccessService:
+            token_service: AccessTokenService) -> StandardAccessService:
         return StandardAccessService(
             ranking_repository, role_repository,
             dominion_repository, token_service)
@@ -76,7 +81,7 @@ class MemoryFactory:
             credential_repository: CredentialRepository,
             hash_service: HashService,
             access_service: AccessService,
-            refresh_token_service: TokenService) -> AuthCoordinator:
+            refresh_token_service: RefreshTokenService) -> AuthCoordinator:
         return AuthCoordinator(
             user_repository, credential_repository,
             hash_service, access_service, refresh_token_service)

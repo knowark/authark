@@ -14,25 +14,30 @@ class ProductionConfig(DevelopmentConfig):
             'type': 'json',
             'url': './authark_data.json'
         }
-
-        # self.read_configuration_files()
-
-    # def read_configuration_files(self):
-    #     config_filename = '/config.json'
-    #     paths = [
-    #         '/etc/opt/authark' + config_filename,
-    #         '/etc/authark' + config_filename,
-    #         self['environment']['home'] + config_filename,
-    #         '.' + config_filename
-    #     ]
-    #     for path in paths:
-    #         config_dict = {}
-    #         config_file = Path(path)
-    #         if config_file.is_file():
-    #             with config_file.open() as f:
-    #                 try:
-    #                     data = f.read()
-    #                     config_dict = loads(data)
-    #                 except JSONDecodeError:
-    #                     pass
-    #         self.update(config_dict)
+        self['factory'] = 'JsonFactory'
+        self['providers'].update({
+            "UserRepository": {
+                "method": "json_user_repository"
+            },
+            "CredentialRepository": {
+                "method": "json_credential_repository"
+            },
+            "DominionRepository": {
+                "method": "json_dominion_repository"
+            },
+            "RoleRepository": {
+                "method": "json_role_repository"
+            },
+            "RankingRepository": {
+                "method": "json_ranking_repository"
+            },
+            "HashService": {
+                "method": "passlib_hash_service"
+            },
+            "AccessTokenService": {
+                "method": "pyjwt_access_token_service"
+            },
+            "RefreshTokenService": {
+                "method": "pyjwt_refresh_token_service"
+            }
+        })

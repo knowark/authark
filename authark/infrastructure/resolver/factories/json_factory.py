@@ -1,6 +1,6 @@
 from ....application.repositories import ExpressionParser
 from ...config import Config
-from ..data import (
+from ...data import (
     init_json_database, JsonCredentialRepository,
     JsonDominionRepository, JsonRoleRepository,
     JsonRepository, JsonUserRepository,
@@ -10,8 +10,8 @@ from .crypto_factory import CryptoFactory
 
 class JsonFactory(CryptoFactory):
     def __init__(self, config: Config) -> None:
-        self.config = config
-        self.path = config['database']['url']
+        super().__init__(config)
+        self.path = self.config.get('database', {}).get('url')
 
     # Repositories
 

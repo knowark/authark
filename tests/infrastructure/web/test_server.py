@@ -1,5 +1,5 @@
 from pytest import fixture
-from authark.infrastructure.web.server import Application
+from authark.infrastructure.web import ServerApplication
 
 
 class MockApp:
@@ -9,7 +9,7 @@ class MockApp:
 @fixture
 def application():
     options = {'reload': True}
-    return Application(MockApp(), options)
+    return ServerApplication(MockApp(), options)
 
 
 def test_server_application_instantiation(application):

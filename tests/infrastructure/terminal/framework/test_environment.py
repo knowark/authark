@@ -1,7 +1,7 @@
 import urwid
 from pytest import fixture
-from authark.infrastructure.config.context import Context
-from authark.infrastructure.terminal.framework.environment import Environment
+from authark.infrastructure.terminal.framework import (
+    Context, Environment)
 
 
 def test_environment_instantiation(environment):

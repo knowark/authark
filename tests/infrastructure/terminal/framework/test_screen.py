@@ -1,7 +1,7 @@
 import urwid
 from pytest import fixture, raises
-from authark.infrastructure.config.context import Context
-from authark.infrastructure.terminal.framework.screen import Screen
+from authark.infrastructure.terminal.framework import (
+    Screen, Context)
 
 
 def test_screen_instantiation(screen):

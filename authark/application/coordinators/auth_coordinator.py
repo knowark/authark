@@ -1,7 +1,8 @@
 
 from ..models import AuthError, Token, User, Credential
 from ..repositories import UserRepository, CredentialRepository
-from ..services import TokenService, HashService, AccessService
+from ..services import (
+    TokenService, RefreshTokenService, HashService, AccessService)
 from .types import TokenString, TokensDict, UserDict
 
 
@@ -11,7 +12,7 @@ class AuthCoordinator:
                  credential_repository: CredentialRepository,
                  hash_service: HashService,
                  access_service: AccessService,
-                 refresh_token_service: TokenService) -> None:
+                 refresh_token_service: RefreshTokenService) -> None:
         self.user_repository = user_repository
         self.credential_repository = credential_repository
         self.hash_service = hash_service

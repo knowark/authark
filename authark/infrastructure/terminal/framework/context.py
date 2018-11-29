@@ -1,8 +1,8 @@
 from abc import ABC
-from authark.infrastructure.config.registry import Registry
+from typing import Dict, Any
 
 
 class Context(ABC):
-    def __init__(self):
-        self.config = {}
-        self.registry = {}
+    def __init__(self, config=None, registry=None):
+        self.config = config or {}  # Dict[str, Any]
+        self.registry = registry or {}  # Dict[str, Any]

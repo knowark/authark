@@ -7,7 +7,7 @@ from flasgger import swag_from
 class UserResource(Resource):
 
     def __init__(self, **kwargs: Any) -> None:
-        self.auth_coordinator = kwargs['auth_coordinator']
+        self.auth_coordinator = kwargs['AuthCoordinator']
 
     @swag_from('post.yml')
     def post(self) -> Tuple[str, int]:

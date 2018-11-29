@@ -5,8 +5,8 @@ from ...framework import Screen, Table
 class UsersCredentialsScreen(Screen):
 
     def _build_widget(self) -> urwid.Widget:
-        self.auth_coordinator = self.env.context.registry['auth_coordinator']
-        self.auth_reporter = self.env.context.registry['auth_reporter']
+        self.auth_coordinator = self.env.context.registry['AuthCoordinator']
+        self.auth_reporter = self.env.context.registry['AutharkReporter']
 
         if not self.parent:
             return

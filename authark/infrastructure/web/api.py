@@ -1,7 +1,7 @@
 from flask import Flask
 from flask_restful import Api
 from flasgger import Swagger
-from ..config.registry import Registry
+from ..resolver import Registry
 from .resources import UserResource, TokenResource
 
 

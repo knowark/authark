@@ -12,12 +12,12 @@ from authark.application.repositories import (
 from authark.application.coordinators import AuthCoordinator
 from authark.application.services import (
     MemoryHashService, StandardAccessService)
-from authark.infrastructure.config.registry import Registry
+from authark.infrastructure.resolver import Registry
 from authark.infrastructure.web.base import create_app
-from authark.infrastructure.config.config import TrialConfig
-from authark.infrastructure.config.context import Context
+from authark.infrastructure.config import TrialConfig
 
-from authark.infrastructure.crypto.pyjwt_token_service import PyJWTTokenService
+from authark.infrastructure.crypto import (
+    PyJWTRefreshTokenService, PyJWTAccessTokenService)
 
 
 class MockRegistry(Registry):
@@ -60,12 +60,13 @@ class MockRegistry(Registry):
             "1": Dominion(id='1', name='Data Server',
                           url="https://dataserver.nubark.com")
         })
-        access_token_service = PyJWTTokenService('TESTSECRET', 'HS256', 3600)
+        access_token_service = PyJWTAccessTokenService(
+            'TESTSECRET', 'HS256', 3600)
         access_service = StandardAccessService(
             ranking_repository, role_repository,
             dominion_repository, access_token_service)
 
-        refresh_token_service = PyJWTTokenService(
+        refresh_token_service = PyJWTRefreshTokenService(
             'REFRESHSECRET', 'HS256', 3600, 3600)
         hash_service = MemoryHashService()
         auth_coordinator = AuthCoordinator(
@@ -73,7 +74,7 @@ class MockRegistry(Registry):
             hash_service, access_service,
             refresh_token_service)
 
-        self['auth_coordinator'] = auth_coordinator
+        self['AuthCoordinator'] = auth_coordinator
 
 
 @fixture
@@ -81,9 +82,8 @@ def app() -> Flask:
     """Create app testing client"""
     config = TrialConfig()
     mock_registry = MockRegistry()
-    context = Context(config, mock_registry)
 
-    app = create_app(context=context)
+    app = create_app(config=config, registry=mock_registry)
     app.testing = True
     app = app.test_client()
 
