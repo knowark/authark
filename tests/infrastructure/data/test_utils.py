@@ -1,4 +1,4 @@
-from pytest import fixture
+from pytest import fixture, raises
 from json import dump
 from authark.infrastructure.data import load_json, LoadingError
 
@@ -10,7 +10,7 @@ def filepath(tmpdir_factory):
 
     data = {'key_1': 'value_1'}
 
-    with open(filepath) as f:
+    with open(filepath, 'w') as f:
         dump(data, f)
 
     return str(filepath)
