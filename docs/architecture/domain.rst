@@ -23,13 +23,7 @@ core, and so are the **Dominion** and **Role**.
     <table border="0" cellborder="1" cellspacing="0">
     <tr><td><i>User</i></td></tr>
     <tr><td port="id">id</td></tr>
-    </table>>];
-    
-    Attribute [label=<
-    <table border="0" cellborder="1" cellspacing="0">
-    <tr><td><i>Attribute</i></td></tr>
-    <tr><td port="id">id</td></tr>
-    <tr><td port="user_id">user_id</td></tr>
+    <tr><td port="attributes">attributes</td></tr>
     </table>>];
 
     Ranking [label=<
@@ -97,7 +91,6 @@ core, and so are the **Dominion** and **Role**.
     <tr><td port="role_id">role_id</td></tr> 
     </table>>];
 
-    Attribute:user_id -> User:id;
     Ranking:user_id -> User:id;
     Ranking:role_id -> Role:id;
     Credential:dominion_id ->  Dominion:id;
@@ -119,7 +112,7 @@ to hold multiple users. As a user can as well belong to multiple groups, the
 may have multiple **Credentials** to authenticate against Authark. Each 
 **Credential** must be either of the type 'password' or 'token' (i.e. refresh
 token) and belong to a single **Dominion**. Moreover, **Users** may have
-optional **Attributes** in the form of *key-value* pairs that represent
+optional *attributes* in the form of *key-value* pairs that represent
 any kind of informative features or data suitable for authorization logic.
 
 A service or data **Dominion** may have one or more **Resources** to which it

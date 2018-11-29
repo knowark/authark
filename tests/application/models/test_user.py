@@ -1,18 +1,38 @@
+from pytest import fixture
 from authark.application.models.user import User
 
 
+def test_user_creation_default():
+    user = User(
+        username="tebanep",
+        email="eecheverry@nubark.com")
+
+    assert user.id == ""
+    assert user.username == "tebanep"
+    assert user.attributes == {}
+    assert user.email == "eecheverry@nubark.com"
+    assert user.name == ""
+    assert user.gender == ""
+
+
 def test_user_creation() -> None:
-    id_ = "af1209fade"
-    username = "tebanep"
-    email = "eecheverry@nubark.com"
-    name = "Esteban Echeverry Pérez"
-    gender = "male"
+    user = User(
+        id="af1209fade",
+        username="tebanep",
+        email="eecheverry@nubark.com",
+        name="Esteban Echeverry Pérez",
+        gender="male",
+        attributes={
+            'key_1': 'value_1',
+            'key_2': 'value_2'
+        })
 
-    user = User(id=id_, username=username, email=email,
-                name=name, gender=gender)
-
-    assert user.id == id_
-    assert user.username == username
-    assert user.email == email
-    assert user.name == name
-    assert user.gender == gender
+    assert user.id == "af1209fade"
+    assert user.username == "tebanep"
+    assert user.email == "eecheverry@nubark.com"
+    assert user.name == "Esteban Echeverry Pérez"
+    assert user.gender == "male"
+    assert user.attributes == {
+        'key_1': 'value_1',
+        'key_2': 'value_2'
+    }
