@@ -2,6 +2,7 @@ from pytest import fixture
 from authark.application.models import User, Dominion, Role
 from authark.infrastructure.terminal.main import Main
 from authark.infrastructure.config import TrialConfig
+from authark.infrastructure.factories import build_factories
 from authark.infrastructure.resolver import Resolver
 from authark.infrastructure.terminal.framework import Context
 
@@ -9,7 +10,8 @@ from authark.infrastructure.terminal.framework import Context
 @fixture
 def context():
     config = TrialConfig()
-    resolver = Resolver(config)
+    factories = build_factories(config)
+    resolver = Resolver(config, factories)
     registry = resolver.resolve(config['providers'])
 
     registry['AutharkReporter'].user_repository.load({

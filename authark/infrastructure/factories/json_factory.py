@@ -1,6 +1,6 @@
-from ....application.repositories import ExpressionParser
-from ...config import Config
-from ...data import (
+from ...application.repositories import ExpressionParser
+from ..config import Config
+from ..data import (
     init_json_database, JsonCredentialRepository,
     JsonDominionRepository, JsonRoleRepository,
     JsonRepository, JsonUserRepository,

@@ -1,17 +1,13 @@
-from ..config import Config
-from .types import ProviderDict, ProvidersDict, ProvidersList, Registry
-from .factories import MemoryFactory, CryptoFactory, JsonFactory
+from .types import (
+    ProviderDict, ProvidersDict, ProvidersList,
+    Config, Registry, Factories)
 
 
 class Resolver:
-    def __init__(self, config: Config) -> None:
+    def __init__(self, config: Config, factories: Factories) -> None:
         self.config = config
-        self.factories = {
-            'MemoryFactory': MemoryFactory(self.config),
-            'CryptoFactory': CryptoFactory(self.config),
-            'JsonFactory': JsonFactory(self.config)
-        }
-        self.default_factory = self.config.get('factory', 'MemoryFactory')
+        self.factories = factories
+        self.default_factory = self.config['factory']
 
     def resolve(self, providers: ProvidersDict) -> Registry:
         providers_list = self._resolve_dependencies(providers)
@@ -30,12 +26,44 @@ class Resolver:
         for key, value in providers.items():
             factory = value.get('factory', self.default_factory)
             method = value.get('method')
+
             annotations = getattr(
                 self.factories[factory], method).__annotations__
+
+            dedicated_providers = value.get('providers', {})
+
             providers[key]['name'] = key
             providers[key]['dependencies'] = [
                 providers[value.__name__] for key, value in
-                annotations.items() if key != 'return']
+                annotations.items() if key != 'return'
+            ]
+
+            # dependencies = []
+            # for argument, parameter_type in annotations.items():
+            #     if argument == 'return':
+            #         continue
+
+            #     dependency = providers[parameter_type.__name__]
+            #     dedicated_method = dedicated_providers.get(parameter_type)
+
+            #     if dedicated_method:
+            #         dependency['method'] = dedicated_method
+            #     # print('DEPENDENCY------', dependency)
+            #     dependencies.append(dependency)
+
+            # print('))))))))))))', dependencies)
+            # providers[key]['dependencies'] = dependencies
+
+            # print('DEP ++++++', providers[key]['dependencies'])
+
+            # if dedicated_providers:
+            #     print()
+            #     print('### KEY', key)
+            #     print('DED=====', dedicated_providers)
+            #     print("providers[key]['dependencies'] |||||||",
+            #           providers[key]['dependencies'])
+            #     for value in providers[key]['dependencies']:
+            #         print('DEPend=====',  value)
 
         return list(providers.values())
 
@@ -43,8 +71,15 @@ class Resolver:
                           registry: Registry) -> object:
 
         arguments = []
+        dedicated_dependencies = provider.get('providers', {})
         for dependency in provider['dependencies']:
-            if dependency['name'] in registry:
+            name = dependency['name']
+            if name in dedicated_dependencies:
+                dependency['method'] = dedicated_dependencies[name]
+                del dependency['name']
+                dependency_instance = self._resolve_instance(
+                    dependency, registry)
+            elif dependency['name'] in registry:
                 dependency_instance = registry[dependency['name']]
             else:
                 dependency_instance = self._resolve_instance(
@@ -53,9 +88,10 @@ class Resolver:
 
         factory = provider.get('factory', self.default_factory)
         method = provider['method']
-        name = provider['name']
 
         instance = getattr(self.factories[factory], method)(*arguments)
-        registry[name] = instance
+
+        if provider.get('name'):
+            registry[provider['name']] = instance
 
         return instance

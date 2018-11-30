@@ -19,16 +19,12 @@ def test_standard_access_service_generate_token(access_service) -> None:
     user = User(id='1', username='johndoe', email='johndoe')
     token = access_service.generate_token(user)
 
-    print(token)
-
     assert isinstance(token, Token)
 
 
 def test_standard_access_service__build_payload(access_service) -> None:
     user = User(id='1', username='johndoe', email='johndoe')
     payload = access_service._build_payload(user)
-
-    print(payload)
 
     assert isinstance(payload, dict)
     assert 'sub' in payload

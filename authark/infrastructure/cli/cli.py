@@ -31,31 +31,6 @@ class Cli:
 
         return parser.parse_args()
 
-    # def setup(self, args: Namespace) -> None:
-    #     print('SETUP IMAGE SHELVE FILE')
-    #     image_shelve_file = (
-    #         self.config['shelve'] + self.config['images']['shelve'])
-    #     print(image_shelve_file)
-    #     ShelveArranger.make_shelve(image_shelve_file)
-
-    #     print('SETUP IMAGE MEDIA DIRECTORIES')
-    #     images_media_directory = (
-    #         self.config['media'] + self.config['images']['media'])
-    #     print(images_media_directory)
-    #     DirectoryArranger(images_media_directory).setup()
-
-    #     print('SETUP AUDIO SHELVE FILE')
-    #     audio_shelve_file = (
-    #         self.config['shelve'] + self.config['audios']['shelve'])
-    #     print(audio_shelve_file)
-    #     ShelveArranger.make_shelve(audio_shelve_file)
-
-    #     print('SETUP AUDIO MEDIA DIRECTORIES')
-    #     audios_media_directory = (
-    #         self.config['media'] + self.config['audios']['media'])
-    #     print(audios_media_directory)
-    #     DirectoryArranger(audios_media_directory).setup()
-
     def serve(self, args: Namespace) -> None:
         print('...SERVE:::', args)
 

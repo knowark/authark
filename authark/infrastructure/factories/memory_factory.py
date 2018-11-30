@@ -1,22 +1,22 @@
-from ...config import Config
-from ....application.models import (
+from ..config import Config
+from ...application.models import (
     User, Credential, Dominion, Role, Ranking)
-from ....application.repositories import (
+from ...application.repositories import (
     ExpressionParser,
     UserRepository, MemoryUserRepository,
     CredentialRepository, MemoryCredentialRepository,
     DominionRepository, MemoryDominionRepository,
     RoleRepository, MemoryRoleRepository,
     RankingRepository, MemoryRankingRepository)
-from ....application.services import (
+from ...application.services import (
     HashService, MemoryHashService,
     TokenService, MemoryTokenService,
     AccessTokenService, MemoryAccessTokenService,
     RefreshTokenService, MemoryRefreshTokenService,
     AccessService, StandardAccessService)
-from ....application.coordinators import (
+from ...application.coordinators import (
     AuthCoordinator, ManagementCoordinator)
-from ....application.reporters import (
+from ...application.reporters import (
     StandardAutharkReporter, StandardComposingReporter)
 
 

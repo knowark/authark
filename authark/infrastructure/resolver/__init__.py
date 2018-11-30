@@ -1,1 +1,1 @@
-from .resolver import Resolver, Registry
+from .resolver import Resolver, Registry, Config
