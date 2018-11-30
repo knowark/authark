@@ -25,6 +25,8 @@ class ExpressionParser:
             'ilike': lambda field, value: (
                 lambda obj: self._parse_like(
                     getattr(obj, field), value, True)),
+            'contains': lambda field, value: (
+                lambda obj: value in getattr(obj, field)),
         }
 
         self.binary_dict = {
