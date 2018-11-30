@@ -1,15 +1,15 @@
-from ...config import Config
-from ...crypto import (
+from ..config import Config
+from ..crypto import (
     PasslibHashService, PyJWTAccessTokenService,
     PyJWTRefreshTokenService)
 from .memory_factory import MemoryFactory
-from ....application.repositories import (
+from ...application.repositories import (
     ExpressionParser,
     UserRepository,
     CredentialRepository)
-from ....application.services import (
+from ...application.services import (
     HashService, TokenService, AccessService)
-from ....application.coordinators import (
+from ...application.coordinators import (
     AuthCoordinator)
 
 
