@@ -60,6 +60,9 @@ class Cli:
     def terminal(self, args: Namespace) -> None:
         print('...TERMINAL:::', args)
 
+        print('REGISTRY')
+        print(self.registry)
+
         context = Context(self.config, self.registry)
         app = Main(context)
         app.run()

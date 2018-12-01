@@ -100,3 +100,6 @@ ENV/
 
 # code
 .vscode/
+
+# authark
+/authark_data.json

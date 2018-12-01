@@ -107,3 +107,13 @@ class MemoryFactory:
         return StandardAutharkReporter(
             user_repository, credential_repository,
             dominion_repository, role_repository)
+
+    def standard_composing_reporter(
+        self, user_repository: UserRepository,
+        dominion_repository: DominionRepository,
+        role_repository: RoleRepository,
+        ranking_repository: RankingRepository
+    ) -> StandardComposingReporter:
+        return StandardComposingReporter(
+            user_repository, dominion_repository,
+            role_repository, ranking_repository)

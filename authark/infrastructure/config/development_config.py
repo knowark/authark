@@ -50,5 +50,8 @@ class DevelopmentConfig(Config):
             },
             "AutharkReporter": {
                 "method": "standard_authark_reporter"
+            },
+            "ComposingReporter": {
+                "method": "standard_composing_reporter"
             }
         }

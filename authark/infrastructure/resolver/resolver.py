@@ -1,3 +1,4 @@
+from inspect import signature
 from .types import (
     ProviderDict, ProvidersDict, ProvidersList,
     Config, Registry, Factories)
@@ -27,43 +28,16 @@ class Resolver:
             factory = value.get('factory', self.default_factory)
             method = value.get('method')
 
-            annotations = getattr(
-                self.factories[factory], method).__annotations__
+            annotations = signature(getattr(
+                self.factories[factory], method)).parameters
 
             dedicated_providers = value.get('providers', {})
 
             providers[key]['name'] = key
             providers[key]['dependencies'] = [
-                providers[value.__name__] for key, value in
+                providers[value.annotation.__name__] for key, value in
                 annotations.items() if key != 'return'
             ]
-
-            # dependencies = []
-            # for argument, parameter_type in annotations.items():
-            #     if argument == 'return':
-            #         continue
-
-            #     dependency = providers[parameter_type.__name__]
-            #     dedicated_method = dedicated_providers.get(parameter_type)
-
-            #     if dedicated_method:
-            #         dependency['method'] = dedicated_method
-            #     # print('DEPENDENCY------', dependency)
-            #     dependencies.append(dependency)
-
-            # print('))))))))))))', dependencies)
-            # providers[key]['dependencies'] = dependencies
-
-            # print('DEP ++++++', providers[key]['dependencies'])
-
-            # if dedicated_providers:
-            #     print()
-            #     print('### KEY', key)
-            #     print('DED=====', dedicated_providers)
-            #     print("providers[key]['dependencies'] |||||||",
-            #           providers[key]['dependencies'])
-            #     for value in providers[key]['dependencies']:
-            #         print('DEPend=====',  value)
 
         return list(providers.values())
 
