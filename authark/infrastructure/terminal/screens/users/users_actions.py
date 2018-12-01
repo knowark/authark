@@ -161,8 +161,6 @@ class UsersUpdateScreen(Screen):
 
     def keypress(self, size, key):
         if key == 'meta enter':
-            print('UPDATE')
-
             self.selected_item['username'] = self.username.edit_text
             self.selected_item['email'] = self.email.edit_text
             self.selected_item['attributes'] = json.loads(
