@@ -40,7 +40,8 @@ class StandardAccessService(AccessService):
             'sub': user.id,
             'email': user.email,
             'name': user.name,
-            'gender': user.gender
+            'gender': user.gender,
+            'attributes': user.attributes
         }
 
     def _build_authorization(self, user: User) -> Dict[str, Any]:

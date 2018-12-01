@@ -22,13 +22,14 @@ def test_standard_access_service_generate_token(access_service) -> None:
     assert isinstance(token, Token)
 
 
-def test_standard_access_service__build_payload(access_service) -> None:
+def test_standard_access_service_build_payload(access_service) -> None:
     user = User(id='1', username='johndoe', email='johndoe')
     payload = access_service._build_payload(user)
 
     assert isinstance(payload, dict)
     assert 'sub' in payload
     assert 'email' in payload
+    assert 'attributes' in payload
     assert 'authorization' in payload
 
 
@@ -39,6 +40,7 @@ def test_standard_access_service_build_basic_info(access_service) -> None:
     assert isinstance(info, dict)
     assert info['sub'] == user.id
     assert info['email'] == user.email
+    assert info['attributes'] == user.attributes
 
 
 def test_standard_access_service_build_authorization(access_service) -> None:
