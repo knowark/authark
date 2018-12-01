@@ -73,6 +73,35 @@ def test_json_repository_add_no_id(json_repository) -> None:
             assert len(key) > 0
 
 
+def test_json_repository_update(json_repository) -> None:
+    updated_entity = DummyEntity("1", "New Value")
+
+    is_updated = json_repository.update(updated_entity)
+
+    file_path = json_repository.file_path
+    with open(file_path) as f:
+        data = loads(f.read())
+        items = data.get("dummies")
+
+        assert len(items) == 3
+        assert is_updated is True
+        assert "New Value" in items['1']['field_1']
+
+
+def test_json_repository_update_false(json_repository):
+    missing_entity = DummyEntity("99", "New Value")
+
+    is_updated = json_repository.update(missing_entity)
+
+    file_path = json_repository.file_path
+    with open(file_path) as f:
+        data = loads(f.read())
+        items = data.get("dummies")
+
+        assert len(items) == 3
+        assert is_updated is False
+
+
 def test_json_repository_search(json_repository):
     domain = [('field_1', '=', "value_3")]
     items = json_repository.search(domain)

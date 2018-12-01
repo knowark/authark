@@ -37,6 +37,21 @@ class JsonRepository(Repository, Generic[T]):
             dump(data, f)
         return item
 
+    def update(self, item: T) -> bool:
+        with open(self.file_path, 'r') as f:
+            data = load(f)
+            items_dict = data.get(self.collection_name)
+
+        id = getattr(item, 'id')
+        if id not in items_dict:
+            return False
+
+        items_dict[id] = vars(item)
+
+        with open(self.file_path, 'w') as f:
+            dump(data, f)
+        return True
+
     def search(self, domain: QueryDomain, limit=0, offset=0) -> List[T]:
         with open(self.file_path, 'r') as f:
             data = load(f)
