@@ -49,6 +49,39 @@ def test_memory_repository_add() -> None:
     assert item in memory_repository.items.values()
 
 
+def test_memory_repository_update() -> None:
+    parser = ExpressionParser()
+    memory_repository = MemoryRepository[DummyEntity](parser)
+    memory_repository.items = {
+        '1': DummyEntity("1", "value_1")
+    }
+
+    updated_entity = DummyEntity("1", "New Value")
+
+    is_updated = memory_repository.update(updated_entity)
+
+    assert len(memory_repository.items) == 1
+    assert is_updated is True
+    assert "1" in memory_repository.items.keys()
+    assert updated_entity in memory_repository.items.values()
+    assert "New Value" in memory_repository.items['1'].field_1
+
+
+def test_memory_repository_update_false():
+    parser = ExpressionParser()
+    memory_repository = MemoryRepository[DummyEntity](parser)
+    memory_repository.items = {
+        '1': DummyEntity("1", "value_1")
+    }
+
+    missing_entity = DummyEntity("99", "New Value")
+
+    is_updated = memory_repository.update(missing_entity)
+
+    assert len(memory_repository.items) == 1
+    assert is_updated is False
+
+
 def test_memory_repository_add_no_id() -> None:
     parser = ExpressionParser()
     memory_repository = MemoryRepository[DummyEntity](parser)

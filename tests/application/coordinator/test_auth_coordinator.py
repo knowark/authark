@@ -34,6 +34,18 @@ def test_auth_coordinator_authenticate(
     assert 'access_token' in tokens.keys()
 
 
+def test_auth_coordinator_update(
+        auth_coordinator: AuthCoordinator) -> None:
+
+    user_dict = {'id': '2', 'username': 'tebanep',
+                 'email': 'newmail@eep.com'}
+    updated = auth_coordinator.update(user_dict)
+
+    assert updated is True
+    items = getattr(auth_coordinator.user_repository, 'items')
+    assert items['2'].email == 'newmail@eep.com'
+
+
 def test_auth_coordinator_authenticate_no_credentials(
         auth_coordinator: AuthCoordinator) -> None:
     credential_repository = auth_coordinator.credential_repository

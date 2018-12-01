@@ -77,6 +77,10 @@ class AuthCoordinator:
         self.credential_repository.add(credential)
         return vars(user)
 
+    def update(self, user_dict: UserDict) -> bool:
+        user = User(**user_dict)
+        return self.user_repository.update(user)
+
     def deregister(self, user_id: str) -> bool:
         user = self.user_repository.get(user_id)
         if not user:

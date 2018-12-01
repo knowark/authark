@@ -19,6 +19,13 @@ class MemoryRepository(Repository, Generic[T]):
         self.items[getattr(item, 'id')] = item
         return item
 
+    def update(self, item: T) -> bool:
+        id = getattr(item, 'id')
+        if id not in self.items:
+            return False
+        self.items[id] = item
+        return True
+
     def search(self, domain: QueryDomain, limit=0, offset=0) -> List[T]:
         items = []
         limit = int(limit) if limit > 0 else 100

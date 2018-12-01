@@ -14,6 +14,10 @@ class Repository(ABC, Generic[T]):
         "Add method to be implemented."
 
     @abstractmethod
+    def update(self, item: T) -> bool:
+        "Update method to be implemented."
+
+    @abstractmethod
     def search(self, domain: QueryDomain, limit=0, offset=0) -> List[T]:
         "Search users matching a query domain"
 
