@@ -162,12 +162,15 @@ class UsersUpdateScreen(Screen):
     def keypress(self, size, key):
         if key == 'meta enter':
             print('UPDATE')
-            #     username = self.username.edit_text
-            #     email = self.email.edit_text
-            #     password = self.password.edit_text
-            #     user = self.auth_coordinator.register(username,
-            # email, password)
-            #     self._go_back()
+
+            self.selected_item['username'] = self.username.edit_text
+            self.selected_item['email'] = self.email.edit_text
+            self.selected_item['attributes'] = json.loads(
+                self.attributes.edit_text)
+
+            self.auth_coordinator.update(self.selected_item)
+            self._go_back()
+
         if key == 'left':
             return super(urwid.WidgetWrap, self).keypress(size, key)
         return super().keypress(size, key)
