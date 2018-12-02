@@ -66,7 +66,7 @@ class UsersAssignRoleScreen(Screen):
     def _build_widget(self) -> urwid.Widget:
         self.auth_reporter = self.env.context.registry['AutharkReporter']
         self.management_coordinator = self.env.context.registry[
-            'management_coordinator']
+            'ManagementCoordinator']
 
         header = urwid.AttrMap(
             urwid.Text(self.name, align='center'), 'success_bg')
@@ -145,7 +145,7 @@ class UsersDeassignRoleScreen(Screen):
 
     def _build_widget(self) -> urwid.Widget:
         self.management_coordinator = self.env.context.registry[
-            'management_coordinator']
+            'ManagementCoordinator']
 
         header = urwid.AttrMap(
             urwid.Text(self.name, align='center'), 'danger_bg')
