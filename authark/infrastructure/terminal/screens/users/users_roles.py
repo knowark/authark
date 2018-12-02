@@ -64,7 +64,7 @@ class UsersRolesScreen(Screen):
 class UsersAssignRoleScreen(Screen):
 
     def _build_widget(self) -> urwid.Widget:
-        self.auth_reporter = self.env.context.registry['auth_reporter']
+        self.auth_reporter = self.env.context.registry['AutharkReporter']
         self.management_coordinator = self.env.context.registry[
             'management_coordinator']
 
