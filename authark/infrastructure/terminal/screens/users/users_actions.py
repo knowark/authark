@@ -164,6 +164,8 @@ class UsersUpdateScreen(Screen):
             urwid.Columns([
                 urwid.Text("Gender: ", align='center'), self.gender]),
             urwid.Columns([
+                urwid.Text("Password: ", align='center'), self.password]),
+            urwid.Columns([
                 urwid.Text("Attributes: ", align='center'), self.attributes])
         ])
 
