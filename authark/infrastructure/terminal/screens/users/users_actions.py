@@ -138,6 +138,9 @@ class UsersUpdateScreen(Screen):
         self.selected_item = self.parent.table.get_selected_item()
         username = self.selected_item.get('username')
         email = self.selected_item.get('email')
+        name = self.selected_item.get('name')
+        gender = self.selected_item.get('gender')
+
         attributes = json.dumps(
             self.selected_item.get('attributes', {}),
             sort_keys=True, indent=4)
@@ -146,6 +149,9 @@ class UsersUpdateScreen(Screen):
 
         self.username = urwid.Edit("> ", username)
         self.email = urwid.Edit("> ", email)
+        self.name = urwid.Edit("> ", name)
+        self.gender = urwid.Edit("> ", gender)
+        self.password = urwid.Edit("> ", "")
         self.attributes = urwid.Edit("", attributes, multiline=True)
 
         body = urwid.Pile([
@@ -153,6 +159,10 @@ class UsersUpdateScreen(Screen):
                 urwid.Text("Username: ", align='center'), self.username]),
             urwid.Columns([
                 urwid.Text("Email: ", align='center'), self.email]),
+            urwid.Columns([
+                urwid.Text("Name: ", align='center'), self.name]),
+            urwid.Columns([
+                urwid.Text("Gender: ", align='center'), self.gender]),
             urwid.Columns([
                 urwid.Text("Attributes: ", align='center'), self.attributes])
         ])
@@ -173,6 +183,12 @@ class UsersUpdateScreen(Screen):
         if key == 'meta enter':
             self.selected_item['username'] = self.username.edit_text
             self.selected_item['email'] = self.email.edit_text
+            self.selected_item['name'] = self.name.edit_text
+            self.selected_item['gender'] = self.gender.edit_text
+
+            if self.password.edit_text:
+                self.selected_item['password'] = self.password.edit_text
+
             self.selected_item['attributes'] = json.loads(
                 self.attributes.edit_text)
 
