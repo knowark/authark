@@ -153,8 +153,9 @@ def test_auth_coordinator_fail_to_authenticate_missing_credentials(
 def test_auth_coordinator_register(
         auth_coordinator: AuthCoordinator) -> None:
 
-    user_dict = auth_coordinator.register(
-        "mvp", "mvp@gmail.com", "PASS4")
+    user_dict = {"username": "mvp", "email": "mvp@gmail.com",
+                 "password": "PASS4"}
+    user_dict = auth_coordinator.register(user_dict)
 
     assert user_dict
     assert isinstance(user_dict, dict)

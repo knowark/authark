@@ -12,13 +12,10 @@ class UserResource(Resource):
     @swag_from('post.yml')
     def post(self) -> Tuple[str, int]:
         data = request.get_json()
-        username = data.get('username')
-        email = data.get('email')
-        password = data.get('password')
 
-        user = self.auth_coordinator.register(username, email, password)
+        user = self.auth_coordinator.register(data)
 
         response = 'Account Created: username<{0}> - email<{1}>'.format(
-            username, email)
+            user.get('username'), user.get('email'))
 
         return response, 201

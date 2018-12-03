@@ -69,9 +69,10 @@ class AuthCoordinator:
 
         return tokens_dict
 
-    def register(self, username: str, email: str, password: str) -> UserDict:
-        hashed_password = self.hash_service.generate_hash(password)
-        user = User(username=username, email=email)
+    def register(self, user_dict: UserDict) -> UserDict:
+        hashed_password = self.hash_service.generate_hash(
+            user_dict['password'])
+        user = User(**user_dict)
         user = self.user_repository.add(user)
         credential = Credential(user_id=user.id, value=hashed_password)
         self.credential_repository.add(credential)

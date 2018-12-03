@@ -18,6 +18,8 @@ class UsersAddScreen(Screen):
 
         self.username = urwid.Edit()
         self.email = urwid.Edit()
+        self.name = urwid.Edit()
+        self.gender = urwid.Edit()
         self.password = urwid.Edit()
 
         body = urwid.Pile([
@@ -25,6 +27,10 @@ class UsersAddScreen(Screen):
                 urwid.Text("Username: ", align='center'), self.username]),
             urwid.Columns([
                 urwid.Text("Email: ", align='center'), self.email]),
+            urwid.Columns([
+                urwid.Text("Name: ", align='center'), self.name]),
+            urwid.Columns([
+                urwid.Text("Gender: ", align='center'), self.gender]),
             urwid.Columns([
                 urwid.Text("Password: ", align='center'), self.password]),
         ])
@@ -42,10 +48,14 @@ class UsersAddScreen(Screen):
 
     def keypress(self, size, key):
         if key == 'enter':
-            username = self.username.edit_text
-            email = self.email.edit_text
-            password = self.password.edit_text
-            user = self.auth_coordinator.register(username, email, password)
+            user_dict = {}
+            user_dict['username'] = self.username.edit_text
+            user_dict['email'] = self.email.edit_text
+            user_dict['name'] = self.name.edit_text
+            user_dict['gender'] = self.gender.edit_text
+            user_dict['password'] = self.password.edit_text
+
+            user = self.auth_coordinator.register(user_dict)
             self._go_back()
         if key == 'left':
             return super(urwid.WidgetWrap, self).keypress(size, key)
