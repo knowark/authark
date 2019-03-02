@@ -13,9 +13,9 @@ from ...application.services import (
     TokenService, MemoryTokenService,
     AccessTokenService, MemoryAccessTokenService,
     RefreshTokenService, MemoryRefreshTokenService,
-    AccessService, StandardAccessService)
+    AccessService, StandardAccessService, ImportService, MemoryImportService)
 from ...application.coordinators import (
-    AuthCoordinator, ManagementCoordinator)
+    AuthCoordinator, ManagementCoordinator, SetupCoordinator)
 from ...application.reporters import (
     StandardAutharkReporter, StandardComposingReporter)
 
@@ -65,6 +65,9 @@ class MemoryFactory:
     def memory_refresh_token_service(self) -> MemoryRefreshTokenService:
         return MemoryRefreshTokenService()
 
+    def memory_import_service(self) -> MemoryImportService:
+        return MemoryImportService()
+
     def standard_access_service(
             self, ranking_repository: RankingRepository,
             role_repository: RoleRepository,
@@ -95,6 +98,14 @@ class MemoryFactory:
         return ManagementCoordinator(
             user_repository, dominion_repository,
             role_repository, ranking_repository)
+
+    def setup_coordinator(self,
+                          import_service: ImportService,
+                          user_repository: UserRepository,
+                          credential_repository: CredentialRepository
+                          ) -> SetupCoordinator:
+        return SetupCoordinator(import_service, user_repository,
+                                credential_repository)
 
     # Reporters
 

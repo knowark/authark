@@ -39,5 +39,8 @@ class ProductionConfig(DevelopmentConfig):
             },
             "RefreshTokenService": {
                 "method": "pyjwt_refresh_token_service"
+            },
+            "ImportService": {
+                "method": "json_import_service"
             }
         })

@@ -42,11 +42,17 @@ class DevelopmentConfig(Config):
             "AccessService": {
                 "method": "standard_access_service"
             },
+            "ImportService": {
+                "method": "memory_import_service"
+            },
             "AuthCoordinator": {
                 "method": "auth_coordinator"
             },
             "ManagementCoordinator": {
                 "method": "management_coordinator"
+            },
+            "SetupCoordinator": {
+                "method": "setup_coordinator"
             },
             "AutharkReporter": {
                 "method": "standard_authark_reporter"

@@ -1,2 +1,3 @@
 from .auth_coordinator import AuthCoordinator
 from .management_coordinator import ManagementCoordinator
+from .setup_coordinator import SetupCoordinator

@@ -31,6 +31,13 @@ class Cli:
         terminal_parser = subparsers.add_parser('terminal')
         terminal_parser.set_defaults(func=self.terminal)
 
+        # Load
+        load_parser = subparsers.add_parser('load')
+        load_parser.add_argument('input_file')
+        load_parser.add_argument('-s', '--source')
+        load_parser.add_argument('-p', '--password_field')
+        load_parser.set_defaults(func=self.load)
+
         if len(sys.argv[1:]) == 0:
             parser.print_help()
             parser.exit()
@@ -63,3 +70,15 @@ class Cli:
         context = Context(self.config, self.registry)
         app = Main(context)
         app.run()
+
+    def load(self, args: Namespace) -> None:
+        print('::::::LOAD:::::', args.input_file)
+        input_file = args.input_file
+        source = args.source
+        if not source:
+            source = 'erp.users'
+        password_field = args.password_field
+        if not password_field:
+            password_field = 'password'
+        setup_coordinator = self.registry.get('SetupCoordinator')
+        setup_coordinator.import_users(input_file, source, password_field)
