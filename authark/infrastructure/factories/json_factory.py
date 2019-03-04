@@ -1,11 +1,12 @@
-from ...application.repositories import ExpressionParser
+from ...application.repositories import ExpressionParser, UserRepository
 from ..config import Config
 from ..data import (
     init_json_database, JsonCredentialRepository,
     JsonDominionRepository, JsonRoleRepository,
     JsonRepository, JsonUserRepository,
-    JsonRankingRepository)
+    JsonRankingRepository, JsonImportService)
 from .crypto_factory import CryptoFactory
+from ...application.services import HashService
 
 
 class JsonFactory(CryptoFactory):
@@ -39,3 +40,9 @@ class JsonFactory(CryptoFactory):
             self, expression_parser: ExpressionParser
     ) -> JsonRankingRepository:
         return JsonRankingRepository(self.path, expression_parser)
+
+    def json_import_service(
+            self, user_repository: UserRepository,
+            hash_service: HashService
+    ) -> JsonImportService:
+        return JsonImportService(user_repository, hash_service)
