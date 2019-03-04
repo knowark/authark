@@ -11,7 +11,8 @@ class SetupCoordinator:
         self.user_repository = user_repository
         self.credential_repository = credential_repository
 
-    def import_users(self, filepath: str, source: str, password_field) -> None:
+    def import_users(self, filepath: str, source: str,
+                     password_field: str) -> None:
         users_list = self.import_service.import_users(
             filepath, source, password_field)
         for user, credential in users_list:

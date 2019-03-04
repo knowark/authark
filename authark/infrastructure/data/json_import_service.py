@@ -20,8 +20,8 @@ class JsonImportService(ImportService):
                 user_dict_data = {
                     'external_source': source,
                     'external_id': user_key,
-                    'username': user_dict.pop('work_email'),
-                    'email': user_dict.pop('work_email', ''),
+                    'username': user_dict.pop('username'),
+                    'email': user_dict.pop('email', ''),
                     'name': user_dict.pop('name', ''),
                     'gender': user_dict.pop('gender', ''),
                     'attributes': user_dict

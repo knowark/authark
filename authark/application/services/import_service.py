@@ -11,5 +11,9 @@ class ImportService(ABC):
 
 
 class MemoryImportService(ImportService):
-    def import_users(self, filepath: str, source: str) -> []:
-        return []
+    def __init__(self):
+        self.users = []
+
+    def import_users(self, filepath: str, source: str,
+                     password_field: str) -> []:
+        return self.users
