@@ -58,7 +58,7 @@ class JsonRepository(Repository, Generic[T]):
             items_dict = data.get(self.collection_name, {})
 
         items = []
-        limit = int(limit) if limit > 0 else 100
+        limit = int(limit) if limit > 0 else 10000
         offset = int(offset) if offset > 0 else 0
         filter_function = self.parser.parse(domain)
         for item_dict in items_dict.values():

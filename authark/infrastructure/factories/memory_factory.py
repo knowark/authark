@@ -102,10 +102,13 @@ class MemoryFactory:
     def setup_coordinator(self,
                           import_service: ImportService,
                           user_repository: UserRepository,
-                          credential_repository: CredentialRepository
+                          credential_repository: CredentialRepository,
+                          role_repository: RoleRepository,
+                          ranking_repository: RankingRepository
                           ) -> SetupCoordinator:
         return SetupCoordinator(import_service, user_repository,
-                                credential_repository)
+                                credential_repository, role_repository,
+                                ranking_repository)
 
     # Reporters
 

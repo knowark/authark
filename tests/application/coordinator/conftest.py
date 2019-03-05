@@ -151,8 +151,10 @@ def mock_import_service() -> ImportService:
                   )
     credential_1 = Credential(value="HASHED: PASS1")
     credential_2 = Credential(value="HASHED: PASS2")
+    role_1 = [Role(name="admin"), Role(name="user")]
     users_list = [
-        [user_1, credential_1], [user_2, None], [user_4, credential_2]
+        [user_1, credential_1, role_1], [
+            user_2, None, None], [user_4, credential_2, role_1]
     ]
     mock_import_service.users = users_list
     return mock_import_service
@@ -195,7 +197,10 @@ def setup_coordinator(
     mock_import_service: ImportService,
     mock_user_repository: UserRepository,
     mock_credential_repository: CredentialRepository,
+    mock_role_repository: RoleRepository,
+    mock_ranking_repository: RankingRepository
 ) -> SetupCoordinator:
     return SetupCoordinator(
         mock_import_service, mock_user_repository,
-        mock_credential_repository)
+        mock_credential_repository, mock_role_repository,
+        mock_ranking_repository)

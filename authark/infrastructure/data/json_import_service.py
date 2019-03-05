@@ -1,7 +1,7 @@
 import json
 from ...application.repositories import CredentialRepository
 from ...application.services import ImportService, HashService
-from ...application.models import User, Credential
+from ...application.models import User, Credential, Role
 
 
 class JsonImportService(ImportService):
@@ -26,12 +26,25 @@ class JsonImportService(ImportService):
                     'gender': user_dict.pop('gender', ''),
                     'attributes': user_dict
                 }
+
                 credential = None
+                roles = None
                 if user_dict.get(password_field, False):
                     hashed_password = self.hash_service.generate_hash(
                         user_dict.pop(password_field))
                     credential = Credential(value=hashed_password)
+
+                if user_dict.pop('authorization'):
+                    roles = self._roles_users(user_dict.pop('authorization'))
                 user = User(**user_dict_data)
-                users_list.append([user, credential])
+                users_list.append([user, credential, roles])
         f.close()
         return users_list
+
+    def _roles_users(self, authorization: dict) -> []:
+        roles_list = []
+        for domain, roles in authorization.items():
+            for role in roles.get('roles', []):
+                user_role = Role(name=role)
+                roles_list.append(user_role)
+        return roles_list
