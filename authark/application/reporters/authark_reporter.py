@@ -38,7 +38,9 @@ class StandardAutharkReporter(AutharkReporter):
         self.role_repository = role_repository
 
     def search_users(self, domain: QueryDomain) -> UserDictList:
-        return [vars(user) for user in self.user_repository.search(domain)]
+        return [vars(user) for user in sorted(
+            self.user_repository.search(domain),
+            key=lambda x: x.username)]
 
     def search_credentials(self, domain: QueryDomain) -> CredentialDictList:
         return [vars(credential) for credential in
@@ -46,8 +48,10 @@ class StandardAutharkReporter(AutharkReporter):
 
     def search_dominions(self, domain: QueryDomain) -> DominionDictList:
         return [vars(dominion) for dominion in
-                self.dominion_repository.search(domain)]
+                sorted(self.dominion_repository.search(domain),
+                       key=lambda x: x.name)]
 
     def search_roles(self, domain: QueryDomain) -> RoleDictList:
         return [vars(role) for role in
-                self.role_repository.search(domain)]
+                sorted(self.role_repository.search(domain),
+                       key=lambda x: x.name)]
