@@ -1,7 +1,8 @@
 from ..services import ImportService
 from ..repositories import (
-    UserRepository, CredentialRepository, RoleRepository, RankingRepository)
-from ..models import User, Credential, Role, Ranking
+    UserRepository, CredentialRepository, RoleRepository, RankingRepository,
+    DominionRepository)
+from ..models import User, Credential, Role, Ranking, Dominion
 
 
 class SetupCoordinator:
@@ -9,12 +10,14 @@ class SetupCoordinator:
                  user_repository: UserRepository,
                  credential_repository: CredentialRepository,
                  role_repository: RoleRepository,
-                 ranking_repository: RankingRepository) -> None:
+                 ranking_repository: RankingRepository,
+                 dominion_repository: DominionRepository) -> None:
         self.import_service = import_service
         self.user_repository = user_repository
         self.credential_repository = credential_repository
         self.role_repository = role_repository
         self.ranking_repository = ranking_repository
+        self.dominion_repository = dominion_repository
 
     def import_users(self, filepath: str, source: str,
                      password_field: str) -> None:
@@ -58,16 +61,28 @@ class SetupCoordinator:
         else:
             self.credential_repository.add(credential)
 
-    def _generate_ranking_user(self, roles: Role, user: User) -> None:
-        for role in roles:
-            domain = [('name', '=', role.name)]
-            existing_role = self.role_repository.search(domain)
-            if existing_role:
-                domain_ranking = [('user_id', '=', user.id),
-                                  ('role_id', '=', existing_role[0].id)]
-                existing_ranking = self.ranking_repository.search(
-                    domain_ranking)
-                if not existing_ranking:
-                    ranking = Ranking(user_id=user.id,
-                                      role_id=existing_role[0].id)
-                    self.ranking_repository.add(ranking)
+    def _search_dominion(self, dominion: Dominion) -> Dominion:
+        domain = [('name', '=', dominion.name)]
+        existing_dominion = self.dominion_repository.search(domain)
+        if existing_dominion:
+            return existing_dominion[0]
+        else:
+            return False
+
+    def _create_ranking(self, role, user: User) -> None:
+        if role:
+            domain_ranking = [('user_id', '=', user.id),
+                              ('role_id', '=', role[0].id)]
+            existing_ranking = self.ranking_repository.search(domain_ranking)
+            if not existing_ranking:
+                ranking = Ranking(user_id=user.id,
+                                  role_id=role[0].id)
+                self.ranking_repository.add(ranking)
+
+    def _generate_ranking_user(self, roles: [], user: User) -> None:
+        for role, dominion in roles:
+            existing_dominion = self._search_dominion(dominion)
+            if existing_dominion:
+                domain = [('name', '=', role.name)]
+                existing_role = self.role_repository.search(domain)
+                self._create_ranking(existing_role, user)

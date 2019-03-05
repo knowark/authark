@@ -104,11 +104,12 @@ class MemoryFactory:
                           user_repository: UserRepository,
                           credential_repository: CredentialRepository,
                           role_repository: RoleRepository,
-                          ranking_repository: RankingRepository
+                          ranking_repository: RankingRepository,
+                          dominion_repository: DominionRepository,
                           ) -> SetupCoordinator:
         return SetupCoordinator(import_service, user_repository,
                                 credential_repository, role_repository,
-                                ranking_repository)
+                                ranking_repository, dominion_repository)
 
     # Reporters
 
