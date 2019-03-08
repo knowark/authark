@@ -1,17 +1,40 @@
 from typing import Any, Dict, Tuple
 from flask import request
 from flask_restful import Resource
-from flasgger import swag_from
+from ...schemas import UserSchema
 
 
 class UserResource(Resource):
 
     def __init__(self, **kwargs: Any) -> None:
         self.auth_coordinator = kwargs['AuthCoordinator']
+        self.spec = kwargs['spec']
 
-    @swag_from('post.yml')
     def post(self) -> Tuple[str, int]:
-        data = request.get_json()
+        """
+        ---
+        summary: Register user.
+        tags:
+          - Users
+        requestBody:
+          description: Optional description in *Markdown*
+          required: true
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        responses:
+          201:
+            description: "User created"
+        """
+
+        print('REQUEST >>>>', request, request.data)
+        print('JSON', request.get_json())
+        data = UserSchema().loads(request.data).data
+
+        print('DATA>>>>', request, request.data, data)
+
+        raise ValueError('Yuhuuuu')
 
         user = self.auth_coordinator.register(data)
 

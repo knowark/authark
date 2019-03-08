@@ -1,49 +1,56 @@
-from flask import Flask
-from flask_restful import Api
-# from flasgger import Swagger
-from apispec import APISpec
+from flask import Flask, got_request_exception, abort
+import flask_restful
 from ..resolver import Registry
 from .resources import RootResource, UserResource, TokenResource
+from .spec import create_spec
+
+
+def log_exception(sender, exception, **extra):
+    """ Log an exception to our logging framework """
+    print('?' * 300)
+    print('SENDER::', sender)
+    print('exception::', exception)
+    print('extra::', extra)
+    return abort(
+        500, 'Course ||{}|| does not exist'.format(str(exception)))
+
+
+class Api(flask_restful.Api):
+
+    def handle_error(self, e):
+        print('++++++++++++++++++++++++++++++++++++++++++++++')
+        print("|"*100)
+
+        print('============== ERROR|||||||||||||', e)
+
+        return flask_restful.abort(
+            500, message='Course ||{}|| does not exist'.format(str(e)))
 
 
 def create_api(app: Flask, registry: Registry) -> None:
 
     # Restful API
     api = Api(app)
-
-    # Swagger
-    # Swagger(app, template_file="api.yml", config={
-    #     "specs_route": "/",
-    #     "headers": [],
-    #     "specs": [{
-    #         "endpoint": 'apispec_1',
-    #         "route": '/apispec_1.json',
-    #         "rule_filter": lambda rule: True,
-    #         "model_filter": lambda tag: True,
-    #     }],
-    #     "static_url_path": "/flasgger_static",
-    #     "swagger_ui": True
-    # })
-
-    spec = APISpec(
-        title="Authark",
-        version="1.0.0",
-        openapi_version="3.0.2",
-        info=dict(description="Authentication and Authorization Server"))
-
+    spec = create_spec()
     registry['spec'] = spec
 
+    got_request_exception.connect(log_exception, app)
+
+    # Root Resource (Api Specification)
     api.add_resource(
         RootResource, '/', resource_class_kwargs=registry)
 
     # Tokens Resource
+    path = "/tokens"
     api.add_resource(
         TokenResource,
-        '/auth', '/login', '/tokens',
+        path, '/auth', '/login',
         resource_class_kwargs=registry)
 
     # Users Resource
+    path = "/users"
+    spec.path(path=path, resource=UserResource)
     api.add_resource(
         UserResource,
-        '/register', '/signup', '/users',
+        path, '/register', '/signup',
         resource_class_kwargs=registry)
