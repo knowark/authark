@@ -1,14 +1,14 @@
 from typing import Any, Dict, Tuple
 from flask import request
-from flask_restful import Resource
+from flask.views import MethodView
 from ...schemas import UserSchema
 
 
-class UserResource(Resource):
+class UserResource(MethodView):
 
-    def __init__(self, **kwargs: Any) -> None:
-        self.auth_coordinator = kwargs['AuthCoordinator']
-        self.spec = kwargs['spec']
+    def __init__(self, registry) -> None:
+        self.auth_coordinator = registry['AuthCoordinator']
+        self.spec = registry['spec']
 
     def post(self) -> Tuple[str, int]:
         """

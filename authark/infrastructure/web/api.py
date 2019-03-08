@@ -1,56 +1,30 @@
-from flask import Flask, got_request_exception, abort
-import flask_restful
+from flask import Flask
 from ..resolver import Registry
 from .resources import RootResource, UserResource, TokenResource
 from .spec import create_spec
 
 
-def log_exception(sender, exception, **extra):
-    """ Log an exception to our logging framework """
-    print('?' * 300)
-    print('SENDER::', sender)
-    print('exception::', exception)
-    print('extra::', extra)
-    return abort(
-        500, 'Course ||{}|| does not exist'.format(str(exception)))
-
-
-class Api(flask_restful.Api):
-
-    def handle_error(self, e):
-        print('++++++++++++++++++++++++++++++++++++++++++++++')
-        print("|"*100)
-
-        print('============== ERROR|||||||||||||', e)
-
-        return flask_restful.abort(
-            500, message='Course ||{}|| does not exist'.format(str(e)))
-
-
 def create_api(app: Flask, registry: Registry) -> None:
 
     # Restful API
-    api = Api(app)
     spec = create_spec()
     registry['spec'] = spec
 
-    got_request_exception.connect(log_exception, app)
+    # got_request_exception.connect(log_exception, app)
 
     # Root Resource (Api Specification)
-    api.add_resource(
-        RootResource, '/', resource_class_kwargs=registry)
+    root_view = RootResource.as_view('root', registry=registry)
+    app.add_url_rule("/", view_func=root_view)
 
     # Tokens Resource
-    path = "/tokens"
-    api.add_resource(
-        TokenResource,
-        path, '/auth', '/login',
-        resource_class_kwargs=registry)
+    token_view = TokenResource.as_view('token', registry=registry)
+    app.add_url_rule("/tokens/", view_func=token_view)
+    app.add_url_rule("/auth/", view_func=token_view)
+    app.add_url_rule("/login/", view_func=token_view)
 
     # Users Resource
-    path = "/users"
-    spec.path(path=path, resource=UserResource)
-    api.add_resource(
-        UserResource,
-        path, '/register', '/signup',
-        resource_class_kwargs=registry)
+    spec.path(path="/users/", resource=UserResource)
+    user_view = UserResource.as_view('user', registry=registry)
+    app.add_url_rule("/users/", view_func=user_view)
+    app.add_url_rule("/register/", view_func=token_view)
+    app.add_url_rule("/signup/", view_func=token_view)
