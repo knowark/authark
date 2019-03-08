@@ -17,6 +17,7 @@ def create_api(app: Flask, registry: Registry) -> None:
     app.add_url_rule("/", view_func=root_view)
 
     # Tokens Resource
+    spec.path(path="/tokens/", resource=TokenResource)
     token_view = TokenResource.as_view('token', registry=registry)
     app.add_url_rule("/tokens/", view_func=token_view)
     app.add_url_rule("/auth/", view_func=token_view)

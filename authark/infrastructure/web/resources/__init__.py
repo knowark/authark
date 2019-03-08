@@ -1,9 +1,7 @@
-from .token import TokenResource
-from .user import UserResource
-
-from typing import Any, Dict, Tuple
 from flask import request, render_template, make_response, jsonify
 from flask.views import MethodView
+from .token import TokenResource
+from .user import UserResource
 
 
 class RootResource(MethodView):
@@ -12,8 +10,6 @@ class RootResource(MethodView):
         self.spec = registry.get('spec')
 
     def get(self) -> str:
-        print('REQUEST::::', request, request.args)
-
         if 'api' in request.args:
             return jsonify(self.spec.to_dict())
 

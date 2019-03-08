@@ -17,7 +17,6 @@ class UserResource(MethodView):
         tags:
           - Users
         requestBody:
-          description: Optional description in *Markdown*
           required: true
           content:
             application/json:
