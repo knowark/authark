@@ -31,10 +31,15 @@ class ResourcePlugin(BasePlugin):
 def create_spec() -> APISpec:
     spec = APISpec(
         title="Authark",
-        version="1.0.0",
+        version="1.2.0",
         openapi_version="3.0.2",
         plugins=[MarshmallowPlugin(), ResourcePlugin()],
-        info=dict(description="Authentication and Authorization Server"))
+        info=dict(
+            description="Authentication and Authorization Server",
+            contact=dict(
+                name="Nubark",
+                url="https://www.nubark.com"
+            )))
 
     _register_schemas(spec)
 

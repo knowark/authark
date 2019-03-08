@@ -1,7 +1,7 @@
 from typing import Any, Dict, Tuple
 from flask import request
 from flask.views import MethodView
-from ...schemas import UserSchema
+from ..schemas import UserSchema
 
 
 class UserResource(MethodView):
