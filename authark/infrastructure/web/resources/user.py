@@ -33,8 +33,6 @@ class UserResource(MethodView):
 
         print('DATA>>>>', request, request.data, data)
 
-        raise ValueError('Yuhuuuu')
-
         user = self.auth_coordinator.register(data)
 
         response = 'Account Created: username<{0}> - email<{1}>'.format(

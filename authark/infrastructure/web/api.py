@@ -1,4 +1,5 @@
-from flask import Flask
+from flask import Flask, jsonify
+
 from ..resolver import Registry
 from .resources import RootResource, UserResource, TokenResource
 from .spec import create_spec
@@ -9,8 +10,6 @@ def create_api(app: Flask, registry: Registry) -> None:
     # Restful API
     spec = create_spec()
     registry['spec'] = spec
-
-    # got_request_exception.connect(log_exception, app)
 
     # Root Resource (Api Specification)
     root_view = RootResource.as_view('root', registry=registry)
