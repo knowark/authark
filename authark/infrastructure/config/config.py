@@ -13,7 +13,7 @@ class Config(dict, ABC):
             'home': '/opt/authark'
         }
         self['gunicorn'] = {
-            'bind': '%s:%s' % ('0.0.0.0', '8080'),
+            'bind': '%s:%s' % ('0.0.0.0', '8090'),
             'workers': 1,
             'worker_class': 'gevent',
             'debug': False
