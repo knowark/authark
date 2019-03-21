@@ -55,7 +55,8 @@ class StandardAccessService(AccessService):
         for dominion in dominions:
             authorization[dominion.name] = {
                 "roles":  [role.name for role in roles
-                           if role.dominion_id == dominion.id]
+                           if role.dominion_id == dominion.id],
+                "policies": []
             }
 
         return authorization
