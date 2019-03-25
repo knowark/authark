@@ -1,6 +1,7 @@
 
 clean:
 	find . -name '__pycache__' -exec rm -fr {} +
+	rm -rf ./.cache
 
 test:
 	pytest
