@@ -18,9 +18,10 @@ from ...application.coordinators import (
     AuthCoordinator, ManagementCoordinator, SetupCoordinator)
 from ...application.reporters import (
     StandardAutharkReporter, StandardComposingReporter)
+from .factory import Factory
 
 
-class MemoryFactory:
+class MemoryFactory(Factory):
     def __init__(self, config: Config) -> None:
         self.config = config
 

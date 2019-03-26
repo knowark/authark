@@ -15,7 +15,7 @@ class ProductionConfig(DevelopmentConfig):
             'url': './authark_data.json'
         }
         self['factory'] = 'JsonFactory'
-        self['providers'].update({
+        self['strategy'].update({
             "UserRepository": {
                 "method": "json_user_repository"
             },

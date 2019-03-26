@@ -3,9 +3,9 @@ Authark entrypoint
 """
 
 import os
+from injectark import Injectark
 from .infrastructure.config import build_config
-from .infrastructure.factories import build_factories
-from .infrastructure.resolver import Resolver
+from .infrastructure.factories import build_factory
 from .infrastructure.cli import Cli
 
 
@@ -14,12 +14,11 @@ def main():  # pragma: no cover
     config_path = os.environ.get('AUTHARK_CONFIG', 'authark_config.json')
     config = build_config(config_path, mode)
 
-    factories = build_factories(config)
-    resolver = Resolver(config, factories)
-    providers = config['providers']
-    registry = resolver.resolve(providers)
+    factory = build_factory(config)
+    strategy = config['strategy']
+    resolver = Injectark(strategy=strategy, factory=factory)
 
-    Cli(config, registry)
+    Cli(config, resolver)
 
 
 if __name__ == '__main__':  # pragma: no cover

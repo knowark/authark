@@ -5,11 +5,12 @@ from ...framework import Screen, Table, Selection
 class UsersRolesScreen(Screen):
 
     def _build_widget(self) -> urwid.Widget:
-        self.management_coordinator = self.env.context.registry[
-            'ManagementCoordinator']
-        self.auth_reporter = self.env.context.registry['AutharkReporter']
-        self.composing_reporter = self.env.context.registry[
-            'ComposingReporter']
+        self.management_coordinator = self.env.context.resolve(
+            'ManagementCoordinator')
+        self.auth_reporter = self.env.context.resolve(
+            'AutharkReporter')
+        self.composing_reporter = self.env.context.resolve(
+            'ComposingReporter')
 
         if not self.parent:
             return
@@ -64,9 +65,10 @@ class UsersRolesScreen(Screen):
 class UsersAssignRoleScreen(Screen):
 
     def _build_widget(self) -> urwid.Widget:
-        self.auth_reporter = self.env.context.registry['AutharkReporter']
-        self.management_coordinator = self.env.context.registry[
-            'ManagementCoordinator']
+        self.auth_reporter = self.env.context.resolve(
+            'AutharkReporter')
+        self.management_coordinator = self.env.context.resolve(
+            'ManagementCoordinator')
 
         header = urwid.AttrMap(
             urwid.Text(self.name, align='center'), 'success_bg')

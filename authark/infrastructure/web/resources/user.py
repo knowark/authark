@@ -7,9 +7,8 @@ from ..schemas import UserSchema
 
 class UserResource(MethodView):
 
-    def __init__(self, registry) -> None:
-        self.auth_coordinator = registry['AuthCoordinator']
-        self.spec = registry['spec']
+    def __init__(self, resolver) -> None:
+        self.auth_coordinator = resolver.resolve('AuthCoordinator')
 
     def post(self) -> Tuple[str, int]:
         """

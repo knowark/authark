@@ -5,8 +5,8 @@ from ...framework import Screen, Table
 class DominionsAddScreen(Screen):
 
     def _build_widget(self) -> urwid.Widget:
-        self.management_coordinator = self.env.context.registry[
-            'ManagementCoordinator']
+        self.management_coordinator = self.env.context.resolve(
+            'ManagementCoordinator')
 
         header = urwid.AttrMap(
             urwid.Text(self.name, align='center'), 'success_bg')
@@ -58,7 +58,8 @@ class DominionsAddScreen(Screen):
 class DominionsRolesScreen(Screen):
 
     def _build_widget(self) -> urwid.Widget:
-        self.auth_reporter = self.env.context.registry['AutharkReporter']
+        self.auth_reporter = self.env.context.resolve(
+            'AutharkReporter')
 
         self.dominion = self.parent.table.get_selected_item()
         dominion_id = self.dominion['id']
@@ -104,8 +105,8 @@ class DominionsRolesScreen(Screen):
 class DominionsAddRoleScreen(Screen):
 
     def _build_widget(self) -> urwid.Widget:
-        self.management_coordinator = self.env.context.registry[
-            'ManagementCoordinator']
+        self.management_coordinator = self.env.context.resolve(
+            'ManagementCoordinator')
 
         header = urwid.AttrMap(
             urwid.Text(self.name, align='center'), 'success_bg')

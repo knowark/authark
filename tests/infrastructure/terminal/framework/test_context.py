@@ -9,4 +9,4 @@ def test_context_instantiation(environment):
     context = ConcreteContext()
     assert context is not None
     assert isinstance(context.config, dict)
-    assert isinstance(context.registry, dict)
+    assert context.resolver is None

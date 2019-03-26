@@ -1,13 +1,12 @@
 from typing import Any, Dict, Tuple
-from flask import request
+from flask import request, jsonify
 from flask.views import MethodView
 
 
 class TokenResource(MethodView):
 
-    def __init__(self, registry) -> None:
-        self.auth_coordinator = registry['AuthCoordinator']
-        self.spec = registry['spec']
+    def __init__(self, resolver) -> None:
+        self.auth_coordinator = resolver.resolve('AuthCoordinator')
 
     def get(self) -> str:
         return "Authentication endpoint. Please 'Post' to '/auth'"
@@ -44,6 +43,7 @@ class TokenResource(MethodView):
                 tokens = self.auth_coordinator.authenticate(
                     username, password, client)
         except Exception as e:
+            raise e
             return str(e), 401
 
-        return tokens, 200
+        return jsonify(tokens), 200

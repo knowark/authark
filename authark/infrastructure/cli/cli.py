@@ -1,16 +1,16 @@
 import sys
 from argparse import ArgumentParser, Namespace
+from injectark import Injectark
 from ..config import Config
-from ..resolver import Registry
 from ..data import JsonArranger
 from ..web import create_app, ServerApplication
 from ..terminal import Main, Context
 
 
 class Cli:
-    def __init__(self, config: Config, registry: Registry) -> None:
-        self.registry = registry
+    def __init__(self, config: Config, resolver: Injectark) -> None:
         self.config = config
+        self.resolver = resolver
 
         args = self.parse()
         args.func(args)
@@ -60,14 +60,14 @@ class Cli:
     def serve(self, args: Namespace) -> None:
         print('...SERVE:::', args)
 
-        app = create_app(self.config, self.registry)
+        app = create_app(self.config, self.resolver)
         gunicorn_config = self.config['gunicorn']
         ServerApplication(app, gunicorn_config).run()
 
     def terminal(self, args: Namespace) -> None:
         print('...TERMINAL:::', args)
 
-        context = Context(self.config, self.registry)
+        context = Context(self.config, self.resolver)
         app = Main(context)
         app.run()
 
@@ -80,5 +80,5 @@ class Cli:
         password_field = args.password_field
         if not password_field:
             password_field = 'password'
-        setup_coordinator = self.registry.get('SetupCoordinator')
+        setup_coordinator = self.resolver.resolve('SetupCoordinator')
         setup_coordinator.import_users(input_file, source, password_field)

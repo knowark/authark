@@ -33,3 +33,4 @@ class Config(dict, ABC):
                 'threshold': 86400
             }
         }
+        self['strategy'] = {}

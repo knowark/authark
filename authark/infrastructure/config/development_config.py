@@ -11,7 +11,7 @@ class DevelopmentConfig(Config):
             'loglevel': 'debug'
         })
         self['factory'] = 'MemoryFactory'
-        self['providers'] = {
+        self['strategy'] = {
             "ExpressionParser": {
                 "method": "expression_parser"
             },

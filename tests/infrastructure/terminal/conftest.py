@@ -1,33 +1,34 @@
 from pytest import fixture
+from injectark import Injectark
 from authark.application.models import User, Dominion, Role
 from authark.infrastructure.terminal.main import Main
 from authark.infrastructure.config import TrialConfig
-from authark.infrastructure.factories import build_factories
-from authark.infrastructure.resolver import Resolver
+from authark.infrastructure.factories import build_factory
 from authark.infrastructure.terminal.framework import Context
 
 
 @fixture
 def context():
     config = TrialConfig()
-    factories = build_factories(config)
-    resolver = Resolver(config, factories)
-    registry = resolver.resolve(config['providers'])
+    factory = build_factory(config)
+    strategy = config['strategy']
 
-    registry['AutharkReporter'].user_repository.load({
+    resolver = Injectark(strategy=strategy, factory=factory)
+
+    resolver.resolve('AutharkReporter').user_repository.load({
         "1": User(id='1', username='eecheverry',
                   email='eecheverry@example.com')
     })
-    registry['AutharkReporter'].dominion_repository.load({
+    resolver.resolve('AutharkReporter').dominion_repository.load({
         "1": Dominion(id='1', name='Data Server',
                       url='https://dataserver.nubark.cloud')
     })
-    registry['AutharkReporter'].role_repository.load({
+    resolver.resolve('AutharkReporter').role_repository.load({
         "1": Role(id='1', name='manager', dominion_id='1',
                   description='Production Manager')
     })
 
-    return Context(config, registry)
+    return Context(config, resolver)
 
 
 @fixture

@@ -1,6 +1,7 @@
 from pytest import fixture
+from injectark import Injectark
 from authark.infrastructure.config import TrialConfig
-from authark.infrastructure.resolver import Resolver
+from authark.infrastructure.factories import build_factory
 
 
 @fixture
@@ -9,9 +10,11 @@ def config():
 
 
 @fixture
-def registry(config):
-    resolver = Resolver(config)
-    return resolver.resolve(config['providers'])
+def resolver(config):
+    factory = build_factory(config)
+    strategy = config['strategy']
+    resolver = Injectark(strategy=strategy, factory=factory)
+    return resolver
 
 
 @fixture
