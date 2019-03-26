@@ -31,6 +31,29 @@ def test_management_coordinator_remove_dominion_missing(
     assert len(management_coordinator.dominion_repository.items) == 1
 
 
+def test_management_coordinator_create_policy(management_coordinator):
+    policy_dict = dict(
+        id='002', name='Records After 2018', type='domain',
+        value='[("date", ">", "2018-12-31")]')
+    management_coordinator.create_policy(policy_dict)
+    assert len(management_coordinator.policy_repository.items) == 2
+    assert '002' in management_coordinator.policy_repository.items
+
+
+def test_management_coordinator_remove_policy(management_coordinator):
+    policy_id = '001'
+    management_coordinator.remove_policy(policy_id)
+    assert len(management_coordinator.policy_repository.items) == 0
+
+
+def test_management_coordinator_remove_policy_missing_id(
+        management_coordinator):
+    policy_id = '999'
+    result = management_coordinator.remove_policy(policy_id)
+    assert result is False
+    assert len(management_coordinator.policy_repository.items) == 1
+
+
 def test_management_coordinator_create_role(management_coordinator):
     role_dict = dict(
         id='2', name='admin', dominion_id='abc001',

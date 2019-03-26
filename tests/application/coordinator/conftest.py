@@ -1,18 +1,20 @@
 from typing import Dict
 from pytest import fixture, raises
 from authark.application.models import (
-    AuthError, User, Credential, Token, Dominion, Role, Ranking)
+    AuthError, User, Credential, Token, Dominion, Role, Ranking,
+    Policy)
 from authark.application.repositories import (
     ExpressionParser,
     UserRepository, MemoryUserRepository,
     CredentialRepository, MemoryCredentialRepository,
     DominionRepository, MemoryDominionRepository,
     RoleRepository, MemoryRoleRepository,
-    RankingRepository, MemoryRankingRepository)
+    RankingRepository, MemoryRankingRepository,
+    PolicyRepository, MemoryPolicyRepository)
 from authark.application.services import (
     TokenService, MemoryTokenService,
     AccessService, StandardAccessService,
-    ImportService, MemoryImportService)
+    RefreshTokenService, ImportService, MemoryImportService)
 from authark.application.coordinators import (
     AuthCoordinator, ManagementCoordinator, SetupCoordinator)
 from authark.application.services.hash_service import (
@@ -67,6 +69,17 @@ def mock_dominion_repository() -> DominionRepository:
     dominion_repository = MemoryDominionRepository(parser)
     dominion_repository.load(dominions_dict)
     return dominion_repository
+
+
+@fixture
+def mock_policy_repository() -> PolicyRepository:
+    policy_dict = {
+        "001": Policy(id='001', name='First Role Only', value="1")
+    }
+    parser = ExpressionParser()
+    policy_repository = MemoryPolicyRepository(parser)
+    policy_repository.load(policy_dict)
+    return policy_repository
 
 
 @fixture
@@ -176,7 +189,7 @@ def auth_coordinator(mock_user_repository: UserRepository,
                      mock_credential_repository: CredentialRepository,
                      mock_hash_service: HashService,
                      mock_access_service: AccessService,
-                     mock_refresh_token_service: TokenService
+                     mock_refresh_token_service: RefreshTokenService
                      ) -> AuthCoordinator:
     return AuthCoordinator(mock_user_repository, mock_credential_repository,
                            mock_hash_service, mock_access_service,
@@ -188,11 +201,13 @@ def management_coordinator(
     mock_user_repository: UserRepository,
     mock_dominion_repository: DominionRepository,
     mock_role_repository: RoleRepository,
-    mock_ranking_repository: RankingRepository
+    mock_ranking_repository: RankingRepository,
+    mock_policy_repository: PolicyRepository
 ) -> ManagementCoordinator:
     return ManagementCoordinator(
         mock_user_repository, mock_dominion_repository,
-        mock_role_repository, mock_ranking_repository)
+        mock_role_repository, mock_ranking_repository,
+        mock_policy_repository)
 
 
 @fixture
