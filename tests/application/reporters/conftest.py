@@ -1,13 +1,14 @@
 from pytest import fixture, raises
 from authark.application.models import (
-    User, Credential, Dominion, Role, Ranking)
+    User, Credential, Dominion, Role, Ranking, Policy)
 from authark.application.repositories import (
     ExpressionParser,
     UserRepository, MemoryUserRepository,
     CredentialRepository, MemoryCredentialRepository,
     DominionRepository, MemoryDominionRepository,
     RoleRepository, MemoryRoleRepository,
-    RankingRepository, MemoryRankingRepository)
+    RankingRepository, MemoryRankingRepository,
+    PolicyRepository, MemoryPolicyRepository)
 from authark.application.reporters import (
     AutharkReporter, StandardAutharkReporter,
     ComposingReporter, StandardComposingReporter)
@@ -75,11 +76,24 @@ def ranking_repository() -> RankingRepository:
 
 
 @fixture
+def policy_repository() -> PolicyRepository:
+    policy_dict = {
+        "1": Policy(id='1', name="Administrators Only", value="admin")
+    }
+    parser = ExpressionParser()
+    policy_repository = MemoryPolicyRepository(parser)
+    policy_repository.load(policy_dict)
+    return policy_repository
+
+
+@fixture
 def authark_reporter(
         user_repository, credential_repository,
-        dominion_repository, role_repository) -> AutharkReporter:
+        dominion_repository, role_repository, policy_repository
+) -> AutharkReporter:
     return StandardAutharkReporter(user_repository, credential_repository,
-                                   dominion_repository, role_repository)
+                                   dominion_repository, role_repository,
+                                   policy_repository)
 
 
 @fixture
