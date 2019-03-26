@@ -7,7 +7,8 @@ from ...application.repositories import (
     CredentialRepository, MemoryCredentialRepository,
     DominionRepository, MemoryDominionRepository,
     RoleRepository, MemoryRoleRepository,
-    RankingRepository, MemoryRankingRepository)
+    RankingRepository, MemoryRankingRepository,
+    PolicyRepository, MemoryPolicyRepository)
 from ...application.services import (
     HashService, MemoryHashService,
     TokenService, MemoryTokenService,
@@ -55,6 +56,11 @@ class MemoryFactory(Factory):
     ) -> MemoryRankingRepository:
         return MemoryRankingRepository(expression_parser)
 
+    def memory_policy_repository(
+            self, expression_parser: ExpressionParser
+    ) -> MemoryPolicyRepository:
+        return MemoryPolicyRepository(expression_parser)
+
     # Services
 
     def memory_hash_service(self) -> MemoryHashService:
@@ -94,11 +100,12 @@ class MemoryFactory(Factory):
         self, user_repository: UserRepository,
         dominion_repository: DominionRepository,
         role_repository: RoleRepository,
-        ranking_repository: RankingRepository
+        ranking_repository: RankingRepository,
+        policy_repository: PolicyRepository
     ) -> ManagementCoordinator:
         return ManagementCoordinator(
             user_repository, dominion_repository,
-            role_repository, ranking_repository)
+            role_repository, ranking_repository, policy_repository)
 
     def setup_coordinator(self,
                           import_service: ImportService,
@@ -118,11 +125,13 @@ class MemoryFactory(Factory):
         self, user_repository: UserRepository,
         credential_repository: CredentialRepository,
         dominion_repository: DominionRepository,
-        role_repository: RoleRepository
+        role_repository: RoleRepository,
+        policy_repository: PolicyRepository
     ) -> StandardAutharkReporter:
         return StandardAutharkReporter(
             user_repository, credential_repository,
-            dominion_repository, role_repository)
+            dominion_repository, role_repository,
+            policy_repository)
 
     def standard_composing_reporter(
         self, user_repository: UserRepository,
