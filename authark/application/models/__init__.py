@@ -6,4 +6,5 @@ from .token import Token
 from .role import Role
 from .ranking import Ranking
 from .policy import Policy
+from .permission import Permission
 from .grant import Grant
