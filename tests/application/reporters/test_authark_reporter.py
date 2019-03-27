@@ -49,3 +49,10 @@ def test_memory_authark_reporter_search_policies_all(authark_reporter):
     policies = authark_reporter.search_policies(domain)
 
     assert len(policies) == 1
+
+
+def test_memory_authark_reporter_search_resources_all(authark_reporter):
+    domain = []
+    policies = authark_reporter.search_resources(domain)
+
+    assert len(policies) == 1
