@@ -16,7 +16,8 @@ from ...application.services import (
     RefreshTokenService, MemoryRefreshTokenService,
     AccessService, StandardAccessService, ImportService, MemoryImportService)
 from ...application.coordinators import (
-    AuthCoordinator, ManagementCoordinator, SetupCoordinator)
+    AuthCoordinator, ManagementCoordinator,
+    SetupCoordinator, AssignmentCoordinator)
 from ...application.reporters import (
     StandardAutharkReporter, StandardComposingReporter)
 from .factory import Factory
@@ -130,6 +131,19 @@ class MemoryFactory(Factory):
         return SetupCoordinator(import_service, user_repository,
                                 credential_repository, role_repository,
                                 ranking_repository, dominion_repository)
+
+    def assignment_coordinator(
+        self,
+        user_repository: UserRepository,
+        role_repository: RoleRepository,
+        ranking_repository: RankingRepository,
+        policy_repository: PolicyRepository,
+        resource_repository: ResourceRepository,
+        permission_repository: PermissionRepository
+    ) -> AssignmentCoordinator:
+        return AssignmentCoordinator(
+            user_repository, role_repository, ranking_repository,
+            policy_repository, resource_repository, permission_repository)
 
     # Reporters
 

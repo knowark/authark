@@ -53,6 +53,8 @@ class StandardComposingReporter(ComposingReporter):
         for permission in permissions:
             policy = self.policy_repository.get(permission.policy_id)
             result.append({'permission_id': permission.id,
-                           'policy': policy.name})
+                           'policy': policy.name,
+                           'type': policy.type,
+                           'value': policy.value})
 
         return result

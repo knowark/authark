@@ -63,6 +63,9 @@ class DevelopmentConfig(Config):
             "SetupCoordinator": {
                 "method": "setup_coordinator"
             },
+            "AssignmentCoordinator": {
+                "method": "assignment_coordinator"
+            },
             "AutharkReporter": {
                 "method": "standard_authark_reporter"
             },
