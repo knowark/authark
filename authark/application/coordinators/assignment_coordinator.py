@@ -24,7 +24,6 @@ class AssignmentCoordinator:
     def assign_policy(self, policy_id: str, resource_id: str) -> bool:
         policy = self.policy_repository.get(policy_id)
         resource = self.resource_repository.get(resource_id)
-        print('DUP>>>', policy.id, resource.id)
         if not (policy and resource):
             return False
 
@@ -33,7 +32,7 @@ class AssignmentCoordinator:
         duplicate = self.permission_repository.search([
             ('policy_id', '=', policy.id), ('resource_id', '=', resource.id)
         ])
-        print('DUP>>>', duplicate, policy.id, resource.id)
+
         if duplicate:
             return False
 

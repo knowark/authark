@@ -125,9 +125,7 @@ def mock_resource_repository() -> ResourceRepository:
 
 @fixture
 def mock_permission_repository() -> PermissionRepository:
-    permission_dict = {
-
-    }
+    permission_dict = {}  # type: Dict[str, Permission]
     parser = ExpressionParser()
     permission_repository = MemoryPermissionRepository(parser)
     permission_repository.load(permission_dict)
