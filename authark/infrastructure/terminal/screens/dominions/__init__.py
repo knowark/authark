@@ -1,4 +1,2 @@
-from .dominions import DominionsScreen
-from .dominions_actions import (
-    DominionsAddScreen, DominionsRolesScreen,
-    DominionsAddRoleScreen)
+from .dominions import DominionsScreen, DominionsAddScreen
+from .roles import DominionsRolesScreen, DominionsAddRoleScreen

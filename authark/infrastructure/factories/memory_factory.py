@@ -62,6 +62,11 @@ class MemoryFactory(Factory):
     ) -> MemoryPolicyRepository:
         return MemoryPolicyRepository(expression_parser)
 
+    def memory_resource_repository(
+            self, expression_parser: ExpressionParser
+    ) -> MemoryResourceRepository:
+        return MemoryResourceRepository(expression_parser)
+
     # Services
 
     def memory_hash_service(self) -> MemoryHashService:
