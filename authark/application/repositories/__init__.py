@@ -9,6 +9,7 @@ from .dominion_repository import (
 from .ranking_repository import (
     RankingRepository, MemoryRankingRepository)
 from .role_repository import RoleRepository, MemoryRoleRepository
+from .resource_repository import ResourceRepository, MemoryResourceRepository
 from .policy_repository import PolicyRepository, MemoryPolicyRepository
 from .permission_repository import (
     PermissionRepository, MemoryPermissionRepository)

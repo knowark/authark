@@ -31,6 +31,24 @@ def test_management_coordinator_remove_dominion_missing(
     assert len(management_coordinator.dominion_repository.items) == 1
 
 
+def test_management_coordinator_create_resource(management_coordinator):
+    resource_dict = dict(id='002', name='products', dominion_id='001')
+    management_coordinator.create_resource(resource_dict)
+    assert len(management_coordinator.resource_repository.items) == 2
+    assert '002' in management_coordinator.resource_repository.items
+
+
+def test_management_coordinator_remove_resource(management_coordinator):
+    policy_id = '999'
+    result = management_coordinator.remove_resource(policy_id)
+    assert result is False
+    assert len(management_coordinator.resource_repository.items) == 1
+
+    resource_id = '001'
+    management_coordinator.remove_resource(resource_id)
+    assert len(management_coordinator.resource_repository.items) == 0
+
+
 def test_management_coordinator_create_policy(management_coordinator):
     policy_dict = dict(
         id='002', name='Records After 2018', type='domain',
