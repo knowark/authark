@@ -13,6 +13,7 @@ def main():  # pragma: no cover
     mode = os.environ.get('AUTHARK_MODE', 'PROD')
     config_path = os.environ.get('AUTHARK_CONFIG', 'authark_config.json')
     config = build_config(config_path, mode)
+    print('ccc', config_path)
 
     factory = build_factory(config)
     strategy = config['strategy']

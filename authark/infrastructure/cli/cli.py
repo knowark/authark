@@ -53,7 +53,11 @@ class Cli:
             'credentials',
             'dominions',
             'roles',
-            'rankings'
+            'rankings',
+            'policies',
+            'permissions',
+            'resources',
+            'grants'
         ]
         JsonArranger.make_json(filename, collections)
 

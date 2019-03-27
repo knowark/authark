@@ -33,6 +33,9 @@ class DevelopmentConfig(Config):
             "PolicyRepository": {
                 "method": "memory_policy_repository"
             },
+            "ResourceRepository": {
+                "method": "memory_resource_repository"
+            },
             "HashService": {
                 "method": "memory_hash_service"
             },
