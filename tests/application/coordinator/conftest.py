@@ -2,7 +2,7 @@ from typing import Dict
 from pytest import fixture, raises
 from authark.application.models import (
     AuthError, User, Credential, Token, Dominion, Role, Ranking,
-    Policy, Resource)
+    Policy, Resource, Permission)
 from authark.application.repositories import (
     ExpressionParser,
     UserRepository, MemoryUserRepository,
@@ -11,13 +11,15 @@ from authark.application.repositories import (
     RoleRepository, MemoryRoleRepository,
     RankingRepository, MemoryRankingRepository,
     PolicyRepository, MemoryPolicyRepository,
-    ResourceRepository, MemoryResourceRepository)
+    ResourceRepository, MemoryResourceRepository,
+    PermissionRepository, MemoryPermissionRepository)
 from authark.application.services import (
     TokenService, MemoryTokenService,
     AccessService, StandardAccessService,
     RefreshTokenService, ImportService, MemoryImportService)
 from authark.application.coordinators import (
-    AuthCoordinator, ManagementCoordinator, SetupCoordinator)
+    AuthCoordinator, ManagementCoordinator, SetupCoordinator,
+    AssignmentCoordinator)
 from authark.application.services.hash_service import (
     HashService, MemoryHashService)
 
@@ -73,17 +75,6 @@ def mock_dominion_repository() -> DominionRepository:
 
 
 @fixture
-def mock_policy_repository() -> PolicyRepository:
-    policy_dict = {
-        "001": Policy(id='001', name='First Role Only', value="1")
-    }
-    parser = ExpressionParser()
-    policy_repository = MemoryPolicyRepository(parser)
-    policy_repository.load(policy_dict)
-    return policy_repository
-
-
-@fixture
 def mock_role_repository() -> RoleRepository:
     roles_dict = {
         "1": Role(id='1',
@@ -111,6 +102,17 @@ def mock_ranking_repository() -> RankingRepository:
 
 
 @fixture
+def mock_policy_repository() -> PolicyRepository:
+    policy_dict = {
+        "001": Policy(id='001', name='First Role Only', value="1")
+    }
+    parser = ExpressionParser()
+    policy_repository = MemoryPolicyRepository(parser)
+    policy_repository.load(policy_dict)
+    return policy_repository
+
+
+@fixture
 def mock_resource_repository() -> ResourceRepository:
     resource_dict = {
         "001": Resource(id='001', name='customers', dominion_id='1')
@@ -119,6 +121,17 @@ def mock_resource_repository() -> ResourceRepository:
     resource_repository = MemoryResourceRepository(parser)
     resource_repository.load(resource_dict)
     return resource_repository
+
+
+@fixture
+def mock_permission_repository() -> PermissionRepository:
+    permission_dict = {
+
+    }
+    parser = ExpressionParser()
+    permission_repository = MemoryPermissionRepository(parser)
+    permission_repository.load(permission_dict)
+    return permission_repository
 
 
 @fixture
@@ -236,3 +249,19 @@ def setup_coordinator(
         mock_import_service, mock_user_repository,
         mock_credential_repository, mock_role_repository,
         mock_ranking_repository, mock_dominion_repository)
+
+
+@fixture
+def assignment_coordinator(
+    mock_user_repository: UserRepository,
+    mock_role_repository: RoleRepository,
+    mock_ranking_repository: RankingRepository,
+    mock_policy_repository: PolicyRepository,
+    mock_resource_repository: ResourceRepository,
+    mock_permission_repository: PermissionRepository
+) -> AssignmentCoordinator:
+    return AssignmentCoordinator(
+        mock_user_repository, mock_role_repository,
+        mock_ranking_repository,
+        mock_policy_repository, mock_resource_repository,
+        mock_permission_repository)
