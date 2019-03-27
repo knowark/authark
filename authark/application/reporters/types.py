@@ -25,3 +25,7 @@ ExtendedRankingDict = Dict[str, Any]
 ExtendedRankingDictList = List[ExtendedRankingDict]
 
 ResultDictList = List[Dict[str, Any]]
+
+ExtendedDict = Dict[str, Any]
+
+ExtendedDictList = List[ExtendedDict]

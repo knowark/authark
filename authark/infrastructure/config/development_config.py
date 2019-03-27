@@ -36,6 +36,9 @@ class DevelopmentConfig(Config):
             "ResourceRepository": {
                 "method": "memory_resource_repository"
             },
+            "PermissionRepository": {
+                "method": "memory_permission_repository"
+            },
             "HashService": {
                 "method": "memory_hash_service"
             },

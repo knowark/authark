@@ -1,6 +1,7 @@
 from pytest import fixture, raises
 from authark.application.models import (
-    User, Credential, Dominion, Role, Ranking, Policy, Resource)
+    User, Credential, Dominion, Role, Ranking,
+    Policy, Resource, Permission)
 from authark.application.repositories import (
     ExpressionParser,
     UserRepository, MemoryUserRepository,
@@ -9,7 +10,8 @@ from authark.application.repositories import (
     RoleRepository, MemoryRoleRepository,
     RankingRepository, MemoryRankingRepository,
     PolicyRepository, MemoryPolicyRepository,
-    ResourceRepository, MemoryResourceRepository)
+    ResourceRepository, MemoryResourceRepository,
+    PermissionRepository, MemoryPermissionRepository)
 from authark.application.reporters import (
     AutharkReporter, StandardAutharkReporter,
     ComposingReporter, StandardComposingReporter)
@@ -99,6 +101,17 @@ def resource_repository() -> ResourceRepository:
 
 
 @fixture
+def permission_repository() -> PermissionRepository:
+    permissions_dict = {
+        "1": Permission(id='1', resource_id='1', policy_id='1')
+    }
+    parser = ExpressionParser()
+    permission_repository = MemoryPermissionRepository(parser)
+    permission_repository.load(permissions_dict)
+    return permission_repository
+
+
+@fixture
 def authark_reporter(
         user_repository, credential_repository,
         dominion_repository, role_repository, policy_repository,
@@ -111,7 +124,9 @@ def authark_reporter(
 
 @fixture
 def composing_reporter(
-        user_repository, dominion_repository,
-        role_repository, ranking_repository) -> ComposingReporter:
-    return StandardComposingReporter(user_repository, dominion_repository,
-                                     role_repository, ranking_repository)
+        dominion_repository, role_repository, ranking_repository,
+        resource_repository, policy_repository, permission_repository
+) -> ComposingReporter:
+    return StandardComposingReporter(
+        dominion_repository, role_repository, ranking_repository,
+        resource_repository, policy_repository, permission_repository)

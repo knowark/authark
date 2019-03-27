@@ -1,6 +1,4 @@
 from ..config import Config
-from ...application.models import (
-    User, Credential, Dominion, Role, Ranking, Resource)
 from ...application.repositories import (
     ExpressionParser,
     UserRepository, MemoryUserRepository,
@@ -9,7 +7,8 @@ from ...application.repositories import (
     RoleRepository, MemoryRoleRepository,
     RankingRepository, MemoryRankingRepository,
     PolicyRepository, MemoryPolicyRepository,
-    ResourceRepository, MemoryResourceRepository)
+    ResourceRepository, MemoryResourceRepository,
+    PermissionRepository, MemoryPermissionRepository)
 from ...application.services import (
     HashService, MemoryHashService,
     TokenService, MemoryTokenService,
@@ -66,6 +65,11 @@ class MemoryFactory(Factory):
             self, expression_parser: ExpressionParser
     ) -> MemoryResourceRepository:
         return MemoryResourceRepository(expression_parser)
+
+    def memory_permission_repository(
+            self, expression_parser: ExpressionParser
+    ) -> MemoryPermissionRepository:
+        return MemoryPermissionRepository(expression_parser)
 
     # Services
 
@@ -143,11 +147,13 @@ class MemoryFactory(Factory):
             policy_repository, resource_repository)
 
     def standard_composing_reporter(
-        self, user_repository: UserRepository,
-        dominion_repository: DominionRepository,
+        self, dominion_repository: DominionRepository,
         role_repository: RoleRepository,
-        ranking_repository: RankingRepository
+        ranking_repository: RankingRepository,
+        resource_repository: ResourceRepository,
+        policy_repository: PolicyRepository,
+        permission_repository: PermissionRepository
     ) -> StandardComposingReporter:
         return StandardComposingReporter(
-            user_repository, dominion_repository,
-            role_repository, ranking_repository)
+            dominion_repository, role_repository, ranking_repository,
+            resource_repository, policy_repository, permission_repository)
