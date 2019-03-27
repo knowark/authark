@@ -16,6 +16,7 @@ class UsersScreen(Screen):
         footer = urwid.Text([
             "Press (", ("success", "A"), ") to add a new record. ",
             "Press (", ("light", "C"), ") to show credentials. ",
+            "Press (", ("info", "R"), ") to show roles. ",
             "Press (", ("primary", "U"), ") to update a record. ",
             "Press (", ("danger", "D"), ") to delete a record. "
             "Press (", ("warning", "Esc"), ") to go back. "

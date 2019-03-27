@@ -14,8 +14,8 @@ class DominionsScreen(Screen):
 
         footer = urwid.Text([
             "Press (", ("success", "A"), ") to add a new record. ",
-            "Press (", ("light", "S"), ") to show roles. ",
-            "Press (", ("primary", "R"), ") to show resources. ",
+            "Press (", ("light", "R"), ") to show roles. ",
+            "Press (", ("primary", "S"), ") to show resources. ",
             "Press (", ("warning", "Esc"), ") to go back. "
         ])
 
@@ -41,9 +41,9 @@ class DominionsScreen(Screen):
         if key in ('a', 'A'):
             screen = DominionsAddScreen('ADD DOMINION', self.env, self)
             return self._open_screen(screen)
-        if key in ('s', 'S', 'enter') and len(self.table):
-            return self.show_roles_screen()
         if key in ('r', 'R', 'enter') and len(self.table):
+            return self.show_roles_screen()
+        if key in ('s', 'S', 'enter') and len(self.table):
             return self.show_resources_screen()
         return super().keypress(size, key)
 

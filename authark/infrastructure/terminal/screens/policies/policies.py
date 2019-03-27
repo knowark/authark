@@ -14,7 +14,6 @@ class PoliciesScreen(Screen):
 
         footer = urwid.Text([
             "Press (", ("success", "A"), ") to add a new record. ",
-            "Press (", ("light", "S"), ") to show roles. ",
             "Press (", ("warning", "Esc"), ") to go back. "
         ])
 
