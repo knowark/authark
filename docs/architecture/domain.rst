@@ -83,9 +83,9 @@ core, and so are the **Dominion** and **Role**.
     <tr><td port="policy_id">policy_id</td></tr> 
     </table>>];
 
-    RolePermission [label=<
+    Grant [label=<
     <table border="0" cellborder="1" cellspacing="0">
-    <tr><td><i>RolePermission</i></td></tr>
+    <tr><td><i>Grant</i></td></tr>
     <tr><td port="id">id</td></tr>
     <tr><td port="permission_id">permission_id</td></tr>
     <tr><td port="role_id">role_id</td></tr> 
@@ -99,8 +99,8 @@ core, and so are the **Dominion** and **Role**.
     Resource:dominion_id -> Dominion:id;
     Permission:resource_id -> Resource:id; 
     Permission:policy_id -> Policy:id;
-    RolePermission:role_id -> Role:id;
-    RolePermission:permission_id -> Permission:id;
+    Grant:role_id -> Role:id;
+    Grant:permission_id -> Permission:id;
     Policy:user_id -> User:id;
     Policy:role_id -> Role:id;
     }

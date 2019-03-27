@@ -3,8 +3,8 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Authark (0.1.0)
-===============
+Authark
+=======
 
 Authentication and authorization server.
 
