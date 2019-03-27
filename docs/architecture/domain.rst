@@ -69,8 +69,6 @@ core, and so are the **Dominion** and **Role**.
     <tr><td><i>Policy</i></td></tr>
     <tr><td port="id">id</td></tr>
     <tr><td port="type">type</td></tr> 
-    <tr><td port="user_id">user_id (nullable)</td></tr>  
-    <tr><td port="role_id">role_id (nullable)</td></tr>
     <tr><td port="value">value</td></tr>
     </table>>];
 
@@ -87,8 +85,8 @@ core, and so are the **Dominion** and **Role**.
     <table border="0" cellborder="1" cellspacing="0">
     <tr><td><i>Grant</i></td></tr>
     <tr><td port="id">id</td></tr>
-    <tr><td port="permission_id">permission_id</td></tr>
     <tr><td port="role_id">role_id</td></tr> 
+    <tr><td port="permission_id">permission_id</td></tr>
     </table>>];
 
     Ranking:user_id -> User:id;
@@ -101,8 +99,6 @@ core, and so are the **Dominion** and **Role**.
     Permission:policy_id -> Policy:id;
     Grant:role_id -> Role:id;
     Grant:permission_id -> Permission:id;
-    Policy:user_id -> User:id;
-    Policy:role_id -> Role:id;
     }
 
 
