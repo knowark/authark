@@ -31,6 +31,9 @@ class ProductionConfig(DevelopmentConfig):
             "RankingRepository": {
                 "method": "json_ranking_repository"
             },
+            "PolicyRepository": {
+                "method": "json_policy_repository"
+            },
             "HashService": {
                 "method": "passlib_hash_service"
             },
