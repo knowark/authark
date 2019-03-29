@@ -8,4 +8,5 @@ from .json_ranking_repository import JsonRankingRepository
 from .json_import_service import JsonImportService
 from .json_arranger import JsonArranger
 from .json_policy_repository import JsonPolicyRepository
+from .json_resource_repository import JsonResourceRepository
 from .utils import load_json, LoadingError
