@@ -204,8 +204,8 @@ class ResourcesAssignPolicyScreen(Screen):
     def _add_permission(self, button: urwid.Button):
         policy = self.policy_selection.selected
 
-        if not policy:
-            return
+        # if not policy:
+        #     return
 
         assigned = self.assignment_coordinator.assign_policy(
             policy.get('id'), self.resource.get('id'))

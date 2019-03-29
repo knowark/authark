@@ -5,7 +5,8 @@ from ..data import (
     JsonDominionRepository, JsonRoleRepository,
     JsonRepository, JsonUserRepository,
     JsonRankingRepository, JsonImportService,
-    JsonPolicyRepository, JsonResourceRepository)
+    JsonPolicyRepository, JsonResourceRepository,
+    JsonGrantRepository, JsonPermissionRepository)
 from .crypto_factory import CryptoFactory
 from ...application.services import HashService
 
@@ -51,6 +52,16 @@ class JsonFactory(CryptoFactory):
             self, expression_parser: ExpressionParser
     ) -> JsonResourceRepository:
         return JsonResourceRepository(self.path, expression_parser)
+
+    def json_grant_repository(
+            self, expression_parser: ExpressionParser
+    ) -> JsonGrantRepository:
+        return JsonGrantRepository(self.path, expression_parser)
+
+    def json_permission_repository(
+            self, expression_parser: ExpressionParser
+    ) -> JsonPermissionRepository:
+        return JsonPermissionRepository(self.path, expression_parser)
 
     def json_import_service(
             self, user_repository: UserRepository,

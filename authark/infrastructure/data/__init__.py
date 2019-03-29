@@ -9,4 +9,6 @@ from .json_import_service import JsonImportService
 from .json_arranger import JsonArranger
 from .json_policy_repository import JsonPolicyRepository
 from .json_resource_repository import JsonResourceRepository
+from .json_grant_repository import JsonGrantRepository
+from .json_permission_repository import JsonPermissionRepository
 from .utils import load_json, LoadingError
