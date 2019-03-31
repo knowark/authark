@@ -1,5 +1,6 @@
 import urwid
-from ...framework import Screen, Table
+from ....framework import Screen, Table
+from .permissions import PermissionsScreen
 
 
 class DominionsRolesScreen(Screen):
@@ -18,6 +19,7 @@ class DominionsRolesScreen(Screen):
 
         footer = urwid.Text([
             "Press (", ("success", "A"), ") to add a new record. ",
+            "Press (", ("info", "P"), ") to show role permissions. ",
             "Press (", ("warning", "Esc"), ") to go back. "
         ])
 
@@ -43,9 +45,15 @@ class DominionsRolesScreen(Screen):
         screen = DominionsAddRoleScreen('ADD ROLE', self.env, self)
         return self._open_screen(screen)
 
+    def show_permissions_screen(self):
+        screen = PermissionsScreen('ROLE PERMISSIONS', self.env, self)
+        return self._open_screen(screen)
+
     def keypress(self, size, key):
         if key in ('a', 'A') and self.dominion['id']:
             return self.show_add_role_screen()
+        if key in ('p', 'P', 'enter') and self.dominion['id']:
+            return self.show_permissions_screen()
         return super().keypress(size, key)
 
 
