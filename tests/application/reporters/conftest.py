@@ -1,7 +1,7 @@
 from pytest import fixture, raises
 from authark.application.models import (
     User, Credential, Dominion, Role, Ranking,
-    Policy, Resource, Permission)
+    Policy, Resource, Permission, Grant)
 from authark.application.repositories import (
     ExpressionParser,
     UserRepository, MemoryUserRepository,
@@ -11,7 +11,8 @@ from authark.application.repositories import (
     RankingRepository, MemoryRankingRepository,
     PolicyRepository, MemoryPolicyRepository,
     ResourceRepository, MemoryResourceRepository,
-    PermissionRepository, MemoryPermissionRepository)
+    PermissionRepository, MemoryPermissionRepository,
+    GrantRepository, MemoryGrantRepository)
 from authark.application.reporters import (
     AutharkReporter, StandardAutharkReporter,
     ComposingReporter, StandardComposingReporter)
@@ -112,6 +113,17 @@ def permission_repository() -> PermissionRepository:
 
 
 @fixture
+def grant_repository() -> GrantRepository:
+    grants_dict = {
+        "1": Grant(id='1', role_id='1', permission_id='1')
+    }
+    parser = ExpressionParser()
+    grant_repository = MemoryGrantRepository(parser)
+    grant_repository.load(grants_dict)
+    return grant_repository
+
+
+@fixture
 def authark_reporter(
         user_repository, credential_repository,
         dominion_repository, role_repository, policy_repository,
@@ -125,8 +137,10 @@ def authark_reporter(
 @fixture
 def composing_reporter(
         dominion_repository, role_repository, ranking_repository,
-        resource_repository, policy_repository, permission_repository
+        resource_repository, policy_repository, permission_repository,
+        grant_repository
 ) -> ComposingReporter:
     return StandardComposingReporter(
         dominion_repository, role_repository, ranking_repository,
-        resource_repository, policy_repository, permission_repository)
+        resource_repository, policy_repository, permission_repository,
+        grant_repository)

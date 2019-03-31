@@ -2,7 +2,7 @@ from typing import Dict
 from pytest import fixture, raises
 from authark.application.models import (
     AuthError, User, Credential, Token, Dominion, Role, Ranking,
-    Policy, Resource, Permission)
+    Policy, Resource, Permission, Grant)
 from authark.application.repositories import (
     ExpressionParser,
     UserRepository, MemoryUserRepository,
@@ -12,7 +12,8 @@ from authark.application.repositories import (
     RankingRepository, MemoryRankingRepository,
     PolicyRepository, MemoryPolicyRepository,
     ResourceRepository, MemoryResourceRepository,
-    PermissionRepository, MemoryPermissionRepository)
+    PermissionRepository, MemoryPermissionRepository,
+    GrantRepository, MemoryGrantRepository)
 from authark.application.services import (
     TokenService, MemoryTokenService,
     AccessService, StandardAccessService,
@@ -130,6 +131,15 @@ def mock_permission_repository() -> PermissionRepository:
     permission_repository = MemoryPermissionRepository(parser)
     permission_repository.load(permission_dict)
     return permission_repository
+
+
+@fixture
+def mock_grant_repository() -> GrantRepository:
+    grants_dict = {}  # type: Dict[str, Grant]
+    parser = ExpressionParser()
+    grant_repository = MemoryGrantRepository(parser)
+    grant_repository.load(grants_dict)
+    return grant_repository
 
 
 @fixture
@@ -256,10 +266,12 @@ def assignment_coordinator(
     mock_ranking_repository: RankingRepository,
     mock_policy_repository: PolicyRepository,
     mock_resource_repository: ResourceRepository,
-    mock_permission_repository: PermissionRepository
+    mock_permission_repository: PermissionRepository,
+    mock_grant_repository: GrantRepository
 ) -> AssignmentCoordinator:
     return AssignmentCoordinator(
         mock_user_repository, mock_role_repository,
         mock_ranking_repository,
         mock_policy_repository, mock_resource_repository,
-        mock_permission_repository)
+        mock_permission_repository,
+        mock_grant_repository)

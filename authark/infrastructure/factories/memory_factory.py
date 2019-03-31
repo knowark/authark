@@ -8,7 +8,8 @@ from ...application.repositories import (
     RankingRepository, MemoryRankingRepository,
     PolicyRepository, MemoryPolicyRepository,
     ResourceRepository, MemoryResourceRepository,
-    PermissionRepository, MemoryPermissionRepository)
+    PermissionRepository, MemoryPermissionRepository,
+    GrantRepository, MemoryGrantRepository)
 from ...application.services import (
     HashService, MemoryHashService,
     TokenService, MemoryTokenService,
@@ -71,6 +72,11 @@ class MemoryFactory(Factory):
             self, expression_parser: ExpressionParser
     ) -> MemoryPermissionRepository:
         return MemoryPermissionRepository(expression_parser)
+
+    def memory_grant_repository(
+            self, expression_parser: ExpressionParser
+    ) -> MemoryGrantRepository:
+        return MemoryGrantRepository(expression_parser)
 
     # Services
 
@@ -139,11 +145,13 @@ class MemoryFactory(Factory):
         ranking_repository: RankingRepository,
         policy_repository: PolicyRepository,
         resource_repository: ResourceRepository,
-        permission_repository: PermissionRepository
+        permission_repository: PermissionRepository,
+        grant_repository: GrantRepository
     ) -> AssignmentCoordinator:
         return AssignmentCoordinator(
             user_repository, role_repository, ranking_repository,
-            policy_repository, resource_repository, permission_repository)
+            policy_repository, resource_repository, permission_repository,
+            grant_repository)
 
     # Reporters
 
@@ -166,8 +174,10 @@ class MemoryFactory(Factory):
         ranking_repository: RankingRepository,
         resource_repository: ResourceRepository,
         policy_repository: PolicyRepository,
-        permission_repository: PermissionRepository
+        permission_repository: PermissionRepository,
+        grant_repository: GrantRepository
     ) -> StandardComposingReporter:
         return StandardComposingReporter(
             dominion_repository, role_repository, ranking_repository,
-            resource_repository, policy_repository, permission_repository)
+            resource_repository, policy_repository, permission_repository,
+            grant_repository)
