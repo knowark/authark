@@ -22,21 +22,42 @@ class UsersScreen(Screen):
             "Press (", ("warning", "Esc"), ") to go back. "
         ])
 
-        headers_list = ['username', 'email']
-        data = self.auth_reporter.search_users([])
+        box_table = self.build_table(domain=[])
+        self.search_user = urwid.Edit()
+        urwid.connect_signal(self.search_user, 'change', self.on_search_user)
 
-        self.table = Table(data, headers_list)
-        body = self.table
+        self.pile = urwid.Pile([
+            urwid.Columns([urwid.Text("SEARCH:", align='center'),
+                           self.search_user]),
+            urwid.Divider("="),
+            box_table
+        ])
+        body = urwid.Filler(self.pile)
 
         frame = urwid.Frame(header=header, body=body, footer=footer)
-
         return frame
+
+    def on_search_user(self, widget, value):
+        domain = []
+        if value:
+            domain = [('username', 'ilike', f"%{value}%")]
+
+        box_table = self.build_table(domain)
+        self.pile.contents[-1] = (box_table, self.pile.options('pack', None))
+
+    def build_table(self, domain):
+        headers_list = ['username', 'email']
+        data = self.auth_reporter.search_users(domain)
+        table = Table(data, headers_list)
+        return urwid.BoxAdapter(table, 24)
 
     def show_roles_screen(self):
         screen = UsersRolesScreen("USER'S ROLES", self.env, self)
         return self._open_screen(screen)
 
     def keypress(self, size, key):
+        if self.pile.focus_position == 0:
+            return super().keypress(size, key)
         if key in ('a', 'A'):
             screen = UsersAddScreen('ADD USER', self.env, self)
             return self._open_screen(screen)

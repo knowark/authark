@@ -12,7 +12,8 @@ from authark.application.repositories import (
 from authark.application.services import (
     TokenService, MemoryTokenService,
     AccessService, StandardAccessService,
-    ImportService, MemoryImportService)
+    ImportService, MemoryImportService,
+    RefreshTokenService, MemoryRefreshTokenService)
 from authark.application.coordinators import (
     AuthCoordinator, ManagementCoordinator, SetupCoordinator)
 from authark.application.services.hash_service import (
@@ -102,8 +103,8 @@ def mock_token_service() -> TokenService:
 
 
 @fixture
-def mock_refresh_token_service() -> TokenService:
-    return MemoryTokenService()
+def mock_refresh_token_service() -> RefreshTokenService:
+    return MemoryRefreshTokenService()
 
 
 @fixture
