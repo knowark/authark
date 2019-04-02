@@ -17,4 +17,4 @@ class AccessTokenPayloadSchema(Schema):
     sub = fields.Str(example="e1fbaebd-6a37-4949-83b3-fb8954b07a2a")
     iat = fields.Int(example=1543334000)
     ext = fields.Int(example=1543338055)
-    authorization = fields.Nested('DominionAuthorizationSchema')
+    authorization = fields.Nested('AuthorizationSchema')
