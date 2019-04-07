@@ -96,10 +96,15 @@ class MemoryFactory(Factory):
             self, ranking_repository: RankingRepository,
             role_repository: RoleRepository,
             dominion_repository: DominionRepository,
+            resource_repository: ResourceRepository,
+            grant_repository: GrantRepository,
+            permission_repository: PermissionRepository,
+            policy_repository: PolicyRepository,
             token_service: AccessTokenService) -> StandardAccessService:
         return StandardAccessService(
             ranking_repository, role_repository,
-            dominion_repository, token_service)
+            dominion_repository, resource_repository, grant_repository,
+            permission_repository, policy_repository, token_service)
 
     # Coordinators
 
