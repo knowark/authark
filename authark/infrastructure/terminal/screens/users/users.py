@@ -22,7 +22,8 @@ class UsersScreen(Screen):
             "Press (", ("warning", "Esc"), ") to go back. "
         ])
 
-        box_table = self.build_table(domain=[])
+        self.table = self.build_table(domain=[])
+        box_table = urwid.BoxAdapter(self.table, 24)
         self.search_user = urwid.Edit()
         urwid.connect_signal(self.search_user, 'change', self.on_search_user)
 
@@ -42,14 +43,15 @@ class UsersScreen(Screen):
         if value:
             domain = [('username', 'ilike', f"%{value}%")]
 
-        box_table = self.build_table(domain)
+        self.table = self.build_table(domain)
+        box_table = urwid.BoxAdapter(self.table, 24)
+
         self.pile.contents[-1] = (box_table, self.pile.options('pack', None))
 
     def build_table(self, domain):
         headers_list = ['username', 'email']
         data = self.auth_reporter.search_users(domain)
-        table = Table(data, headers_list)
-        return urwid.BoxAdapter(table, 24)
+        return Table(data, headers_list)
 
     def show_roles_screen(self):
         screen = UsersRolesScreen("USER'S ROLES", self.env, self)
