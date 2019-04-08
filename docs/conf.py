@@ -23,10 +23,13 @@ project = 'Authark'
 copyright = '2018, Nubark'
 author = 'Nubark'
 
+with open('../authark/__init__.py') as f:
+    exec(f.read())
+
 # The short X.Y version
-version = ''
+version = __version__
 # The full version, including alpha/beta/rc tags
-release = '0.2.2'
+release = __version__
 
 
 # -- General configuration ---------------------------------------------------
