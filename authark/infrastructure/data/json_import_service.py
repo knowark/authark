@@ -1,4 +1,5 @@
 import json
+from typing import List, Any
 from ...application.repositories import CredentialRepository
 from ...application.services import ImportService, HashService
 from ...application.models import User, Credential, Role, Dominion
@@ -12,7 +13,7 @@ class JsonImportService(ImportService):
         self.hash_service = hash_service
 
     def import_users(self, filepath: str, source: str,
-                     password_field: str) -> []:
+                     password_field: str) -> List[Any]:
         users_list = []
         with open(filepath) as f:
             users_dict = json.load(f)
@@ -41,7 +42,7 @@ class JsonImportService(ImportService):
         f.close()
         return users_list
 
-    def _users_roles(self, authorization: dict) -> []:
+    def _users_roles(self, authorization: dict) -> List[Any]:
         roles_list = []
         for dominion, roles in authorization.items():
             dominion_role = Dominion(name=dominion)
