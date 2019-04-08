@@ -71,14 +71,15 @@ class SetupCoordinator:
             return None
 
     def _create_ranking(self, role, user: User) -> None:
-        if role:
-            domain_ranking = [('user_id', '=', user.id),
-                              ('role_id', '=', role[0].id)]
-            existing_ranking = self.ranking_repository.search(domain_ranking)
-            if not existing_ranking:
-                ranking = Ranking(user_id=user.id,
-                                  role_id=role[0].id)
-                self.ranking_repository.add(ranking)
+        if not role:
+            return None
+        ranking_domain = [('user_id', '=', user.id),
+                          ('role_id', '=', role[0].id)]
+        existing_ranking = self.ranking_repository.search(ranking_domain)
+        if not existing_ranking:
+            ranking = Ranking(user_id=user.id,
+                              role_id=role[0].id)
+            self.ranking_repository.add(ranking)
 
     def _generate_ranking_user(self, roles: List[Any], user: User) -> None:
         for role, dominion in roles:
