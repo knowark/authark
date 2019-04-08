@@ -1,13 +1,14 @@
 import json
-from typing import Dict
+from typing import Dict, List, Any
 from abc import ABC, abstractmethod
 from ..models import User
 
 
 class ImportService(ABC):
     @abstractmethod
-    def import_users(self, filepath: str, source: str) -> []:
-        "Generate method to be implemented."
+    def import_users(self, filepath: str, source: str,
+                     password_field: str) -> List[Any]:
+        "Import users method to be implemented."
 
 
 class MemoryImportService(ImportService):
@@ -15,5 +16,5 @@ class MemoryImportService(ImportService):
         self.users = []
 
     def import_users(self, filepath: str, source: str,
-                     password_field: str) -> []:
+                     password_field: str) -> List[Any]:
         return self.users
