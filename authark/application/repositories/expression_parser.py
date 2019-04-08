@@ -79,7 +79,11 @@ class ExpressionParser:
 
     def _parse_term(self, term_tuple: TermTuple) -> Callable:
         field, operator, value = term_tuple
-        function = self.comparison_dict.get(operator)
+
+        def false_function(field, value):
+            return lambda obj: False
+
+        function = self.comparison_dict.get(operator, false_function)
         result = function(field, value)
         return result
 
