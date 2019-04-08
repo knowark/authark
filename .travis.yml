@@ -7,4 +7,5 @@ script:
   - mypy authark
   - pytest --cov-report term-missing --cov-branch --cov authark tests
 after_success:
-  - codecov
+  - codecov --file /tmp/.coverage_authark
+
