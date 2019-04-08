@@ -11,4 +11,4 @@ def build_factory(config: Config) -> Factory:
         'MemoryFactory': MemoryFactory(config),
         'CryptoFactory': CryptoFactory(config),
         'JsonFactory': JsonFactory(config)
-    }.get(config.get('factory', 'MemoryFactory'))
+    }.get(config.get('factory', 'MemoryFactory'), MemoryFactory(config))

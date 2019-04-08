@@ -7,9 +7,7 @@ from ...application.models import User, Credential, Role, Dominion
 
 class JsonImportService(ImportService):
 
-    def __init__(self, credential_repository: CredentialRepository,
-                 hash_service: HashService) -> None:
-        self.credential_repository = credential_repository
+    def __init__(self, hash_service: HashService) -> None:
         self.hash_service = hash_service
 
     def import_users(self, filepath: str, source: str,

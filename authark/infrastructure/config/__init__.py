@@ -1,5 +1,6 @@
 from pathlib import Path
 from json import load
+from typing import Optional
 from .config import Config
 from .development_config import DevelopmentConfig
 from .production_config import ProductionConfig
@@ -18,7 +19,7 @@ def build_config(config_path: str, mode: str) -> Config:
     return production_config
 
 
-def load_config(config_path: str) -> Config:
+def load_config(config_path: str) -> Optional[Config]:
     path = Path(config_path)
     if not path.exists():
         return None

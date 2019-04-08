@@ -64,7 +64,5 @@ class JsonFactory(CryptoFactory):
         return JsonPermissionRepository(self.path, expression_parser)
 
     def json_import_service(
-            self, user_repository: UserRepository,
-            hash_service: HashService
-    ) -> JsonImportService:
-        return JsonImportService(user_repository, hash_service)
+            self, hash_service: HashService) -> JsonImportService:
+        return JsonImportService(hash_service)
