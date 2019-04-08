@@ -1,3 +1,4 @@
+from typing import List, Optional, Any
 from ..services import ImportService
 from ..repositories import (
     UserRepository, CredentialRepository, RoleRepository, RankingRepository,
@@ -37,7 +38,7 @@ class SetupCoordinator:
             if roles:
                 self._generate_ranking_user(roles, user)
 
-    def _search_user(self, user: User) -> User:
+    def _search_user(self, user: User) -> Optional[User]:
         domain = [
             ('external_source', '=', user.external_source),
             ('external_id', '=', user.external_id)
@@ -47,7 +48,7 @@ class SetupCoordinator:
         user_result = self.user_repository.search(domain)
         if user_result:
             return user_result[0]
-        return False
+        return None
 
     def _update_credential(self, credential: Credential):
         domain = [
@@ -61,13 +62,13 @@ class SetupCoordinator:
         else:
             self.credential_repository.add(credential)
 
-    def _search_dominion(self, dominion: Dominion) -> Dominion:
+    def _search_dominion(self, dominion: Dominion) -> Optional[Dominion]:
         domain = [('name', '=', dominion.name)]
         existing_dominion = self.dominion_repository.search(domain)
         if existing_dominion:
             return existing_dominion[0]
         else:
-            return False
+            return None
 
     def _create_ranking(self, role, user: User) -> None:
         if role:
@@ -79,7 +80,7 @@ class SetupCoordinator:
                                   role_id=role[0].id)
                 self.ranking_repository.add(ranking)
 
-    def _generate_ranking_user(self, roles: [], user: User) -> None:
+    def _generate_ranking_user(self, roles: List[Any], user: User) -> None:
         for role, dominion in roles:
             existing_dominion = self._search_dominion(dominion)
             if existing_dominion:

@@ -64,6 +64,9 @@ class AuthCoordinator:
                 credential.user_id, credential.client)
 
         user = self.user_repository.get(credential.user_id)
+        if not user:
+            return tokens_dict
+
         tokens_dict['access_token'] = self.access_service.generate_token(
             user).value
 

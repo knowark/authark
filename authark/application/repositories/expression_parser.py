@@ -1,4 +1,4 @@
-from typing import List, Union, Callable
+from typing import Sequence, List, Union, Callable
 from fnmatch import fnmatchcase
 from .types import TermTuple
 
@@ -43,7 +43,7 @@ class ExpressionParser:
 
         self.default_join_operator = '&'
 
-    def parse(self, domain: List[Union[str, TermTuple]]) -> Callable:
+    def parse(self, domain: Sequence[Union[str, TermTuple]]) -> Callable:
         if not domain:
             return lambda obj: True
         stack = []  # type: List[Callable]
