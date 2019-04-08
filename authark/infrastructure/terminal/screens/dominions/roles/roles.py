@@ -9,6 +9,9 @@ class DominionsRolesScreen(Screen):
         self.auth_reporter = self.env.context.resolve(
             'AutharkReporter')
 
+        if not self.parent:
+            return
+
         self.dominion = self.parent.table.get_selected_item()
         dominion_id = self.dominion['id']
         dominion_name = self.dominion['name']

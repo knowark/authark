@@ -10,6 +10,9 @@ class PermissionsScreen(Screen):
         self.auth_reporter = self.env.context.resolve(
             'AutharkReporter')
 
+        if not self.parent:
+            return
+
         self.dominion = self.parent.dominion
         self.role = self.parent.table.get_selected_item()
         role_id = self.role['id']
@@ -60,6 +63,9 @@ class AssignPermissionScreen(Screen):
             'ComposingReporter')
         self.assignment_coordinator = self.env.context.resolve(
             'AssignmentCoordinator')
+
+        if not self.parent:
+            return
 
         self.role = self.parent.role
         self.dominion = self.parent.dominion

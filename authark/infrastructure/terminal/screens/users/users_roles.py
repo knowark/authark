@@ -70,6 +70,9 @@ class UsersAssignRoleScreen(Screen):
         self.management_coordinator = self.env.context.resolve(
             'ManagementCoordinator')
 
+        if not self.parent:
+            return
+
         header = urwid.AttrMap(
             urwid.Text(self.name, align='center'), 'success_bg')
 

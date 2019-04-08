@@ -8,6 +8,9 @@ class DominionsResourcesScreen(Screen):
         self.auth_reporter = self.env.context.resolve(
             'AutharkReporter')
 
+        if not self.parent:
+            return
+
         self.dominion = self.parent.table.get_selected_item()
         dominion_id = self.dominion['id']
         dominion_name = self.dominion['name']
@@ -112,6 +115,9 @@ class ResourcesPoliciesScreen(Screen):
         self.composing_reporter = self.env.context.resolve(
             'ComposingReporter')
 
+        if not self.parent:
+            return
+
         self.resource = self.parent.table.get_selected_item()
         resource_id = self.resource['id']
         resource_name = self.resource['name']
@@ -159,6 +165,9 @@ class ResourcesAssignPolicyScreen(Screen):
             'AutharkReporter')
         self.assignment_coordinator = self.env.context.resolve(
             'AssignmentCoordinator')
+
+        if not self.parent:
+            return
 
         header = urwid.AttrMap(
             urwid.Text(self.name, align='center'), 'success_bg')
