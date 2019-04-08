@@ -1,2 +1,2 @@
 [run]
-data_file = /tmp/.coverage_authark
+#data_file = /tmp/.coverage
