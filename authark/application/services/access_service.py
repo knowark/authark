@@ -1,10 +1,11 @@
 import json
 from typing import Dict, Any, List
 from abc import ABC, abstractmethod
-from ..models import User, Token, Role
+from ..models import User, Token, Role, Dominion
 from ..repositories import (
     RankingRepository, RoleRepository, DominionRepository,
-    ResourceRepository)
+    ResourceRepository, GrantRepository, PermissionRepository,
+    PolicyRepository)
 from ..services import AccessTokenService
 
 
@@ -19,8 +20,8 @@ class StandardAccessService(AccessService):
     def __init__(self, ranking_repository: RankingRepository,
                  role_repository: RoleRepository,
                  dominion_repository: DominionRepository,
-                 grant_repository: GrantRepository,
                  resource_repository: ResourceRepository,
+                 grant_repository: GrantRepository,
                  permission_repository: PermissionRepository,
                  policy_repository: PolicyRepository,
                  token_service: AccessTokenService) -> None:
@@ -62,12 +63,12 @@ class StandardAccessService(AccessService):
             role.dominion_id for role in roles])])
 
         for dominion in dominions:
-            roles = [role.name for role in roles
-                     if role.dominion_id == dominion.id]
-            permissions = self._build_permissions(roles)
+            role_names = [role.name for role in roles
+                          if role.dominion_id == dominion.id]
+            permissions_dict = self._build_permissions(dominion, roles)
             authorization[dominion.name] = {
-                "roles":  roles,
-                "permissions": permissions
+                "roles":  role_names,
+                "permissions": permissions_dict
             }
 
         return authorization
@@ -95,6 +96,7 @@ class StandardAccessService(AccessService):
             del policy_dict['id']
 
             permissions_dict[resource_name] = (
-                permissions_dict.get(resource_name, []).append(policy_dict)
+                permissions_dict.get(resource_name, []))
+            permissions_dict[resource_name].append(policy_dict)
 
         return permissions_dict
