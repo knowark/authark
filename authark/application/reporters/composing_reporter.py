@@ -44,7 +44,11 @@ class StandardComposingReporter(ComposingReporter):
         result = []
         for ranking in rankings:
             role = self.role_repository.get(ranking.role_id)
+            if not role:
+                continue
             dominion = self.dominion_repository.get(role.dominion_id)
+            if not dominion:
+                continue
             result.append({'ranking_id': ranking.id, 'role': role.name,
                            'dominion': dominion.name})
 
@@ -56,6 +60,8 @@ class StandardComposingReporter(ComposingReporter):
         result = []
         for permission in permissions:
             policy = self.policy_repository.get(permission.policy_id)
+            if not policy:
+                continue
             result.append({'permission_id': permission.id,
                            'policy': policy.name,
                            'type': policy.type,
@@ -69,8 +75,14 @@ class StandardComposingReporter(ComposingReporter):
         result = []
         for grant in grants:
             permission = self.permission_repository.get(grant.permission_id)
+            if not permission:
+                continue
             policy = self.policy_repository.get(permission.policy_id)
+            if not policy:
+                continue
             resource = self.resource_repository.get(permission.resource_id)
+            if not resource:
+                continue
             result.append({
                 'grant_id': grant.id,
                 'permission_id': permission.id,
