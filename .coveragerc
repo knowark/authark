@@ -1,2 +1,2 @@
 [run]
-#data_file = /tmp/.coverage
+data_file = /tmp/.coverage
