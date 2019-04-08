@@ -4,12 +4,15 @@ from pytest import fixture
 from flask import Flask
 from injectark import Injectark
 from authark.application.models import (
-    User, Credential, Dominion, Role, Ranking)
+    User, Credential, Dominion, Role, Ranking,
+    Resource, Grant, Policy, Permission)
 from authark.application.repositories import (
     ExpressionParser,
     MemoryUserRepository, MemoryCredentialRepository,
     MemoryDominionRepository, MemoryRoleRepository,
-    MemoryRankingRepository)
+    MemoryRankingRepository, MemoryResourceRepository,
+    MemoryGrantRepository, MemoryPermissionRepository,
+    MemoryPolicyRepository)
 from authark.application.coordinators import AuthCoordinator
 from authark.application.services import (
     MemoryHashService, StandardAccessService)
@@ -59,11 +62,31 @@ def resolver():
         "1": Dominion(id='1', name='Data Server',
                       url="https://dataserver.nubark.com")
     })
+    resource_repository = MemoryResourceRepository(parser)
+    resource_repository.load({
+        "1": Resource(id='1', name='employees',
+                      dominion_id='1')
+    })
+    grant_repository = MemoryGrantRepository(parser)
+    grant_repository.load({
+        '001': Grant(id='001', permission_id='001', role_id='1')
+    })
+    permission_repository = MemoryPermissionRepository(parser)
+    permission_repository.load({
+        "001": Permission(id='001', policy_id='001', resource_id='1')
+    })
+    policy_repository = MemoryPolicyRepository(parser)
+    policy_repository.load({
+        "001": Policy(id='001', name='First Role Only', value="1")
+    })
+
     access_token_service = PyJWTAccessTokenService(
         'TESTSECRET', 'HS256', 3600)
     access_service = StandardAccessService(
         ranking_repository, role_repository,
-        dominion_repository, access_token_service)
+        dominion_repository, resource_repository,
+        grant_repository, permission_repository,
+        policy_repository, access_token_service)
 
     refresh_token_service = PyJWTRefreshTokenService(
         'REFRESHSECRET', 'HS256', 3600, 3600)
