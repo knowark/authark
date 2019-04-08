@@ -18,3 +18,7 @@ coverage-infrastructure:
 coverage: 
 	pytest -x --cov=authark tests/ --cov-report term-missing -s
 
+PART ?= patch
+A
+version:
+	bump2version $(PART) authark/__init__.py --tag --commit
