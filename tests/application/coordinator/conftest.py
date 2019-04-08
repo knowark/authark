@@ -211,10 +211,14 @@ def mock_import_service() -> ImportService:
 
 @fixture
 def mock_access_service(mock_ranking_repository, mock_role_repository,
-                        mock_dominion_repository, mock_token_service):
+                        mock_dominion_repository, mock_resource_repository,
+                        mock_grant_repository, mock_permission_repository,
+                        mock_policy_repository, mock_token_service):
     return StandardAccessService(
         mock_ranking_repository, mock_role_repository,
-        mock_dominion_repository, mock_token_service)
+        mock_dominion_repository, mock_resource_repository,
+        mock_grant_repository, mock_permission_repository,
+        mock_policy_repository, mock_token_service)
 
 
 @fixture

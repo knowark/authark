@@ -88,7 +88,7 @@ class StandardAccessService(AccessService):
             for resource in self.resource_repository.search(
                 [('dominion_id', '=', dominion.id)])}
 
-        permissions_dict = {}
+        permissions_dict: Dict[str, Any] = {}
         for permission in permissions:
             resource_name = resources_dict[permission.resource_id]
             policy_dict = vars(self.policy_repository.search(

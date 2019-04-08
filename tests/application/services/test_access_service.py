@@ -48,5 +48,19 @@ def test_standard_access_service_build_authorization(access_service) -> None:
     authorization = access_service._build_authorization(user)
 
     assert isinstance(authorization, dict)
-    assert 'Data Server' in authorization
-    assert 'admin' in authorization['Data Server']['roles']
+    assert 'Data System' in authorization
+    assert 'admin' in authorization['Data System']['roles']
+
+
+def test_standard_access_service_build_permissions(access_service) -> None:
+    dominion = access_service.dominion_repository.get('1')
+    roles = [access_service.role_repository.get('1')]
+
+    permissions_dict = access_service._build_permissions(dominion, roles)
+
+    assert isinstance(permissions_dict, dict)
+    assert permissions_dict == {
+        'employees': [
+            {'type': 'role', 'name': 'First Role Only', 'value': '1'}
+        ]
+    }
