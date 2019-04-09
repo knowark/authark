@@ -44,9 +44,26 @@ class Cli:
 
         return parser.parse_args()
 
+    # def setup(self, args: Namespace) -> None:
+    #     print('...SETUP:::', args)
+    #     filename = self.config['database']['url']
+    #     print('Filename:', filename)
+    #     collections = [
+    #         'users',
+    #         'credentials',
+    #         'dominions',
+    #         'roles',
+    #         'rankings',
+    #         'policies',
+    #         'permissions',
+    #         'resources',
+    #         'grants'
+    #     ]
+    #     JsonArranger.make_json(filename, collections)
+
     def setup(self, args: Namespace) -> None:
         print('...SETUP:::', args)
-        filename = self.config['database']['url']
+        filename = self.config['tenancy']['url']
         print('Filename:', filename)
         collections = [
             'users',
@@ -59,6 +76,8 @@ class Cli:
             'resources',
             'grants'
         ]
+        setup_coordinator = self.resolver.resolve('SetupCoordinator')
+
         JsonArranger.make_json(filename, collections)
 
     def serve(self, args: Namespace) -> None:
@@ -84,5 +103,5 @@ class Cli:
         password_field = args.password_field
         if not password_field:
             password_field = 'password'
-        setup_coordinator = self.resolver.resolve('SetupCoordinator')
-        setup_coordinator.import_users(input_file, source, password_field)
+        import_coordinator = self.resolver.resolve('ImportCoordinator')
+        import_coordinator.import_users(input_file, source, password_field)

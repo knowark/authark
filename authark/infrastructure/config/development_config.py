@@ -60,6 +60,9 @@ class DevelopmentConfig(Config):
             "ManagementCoordinator": {
                 "method": "management_coordinator"
             },
+            "ImportCoordinator": {
+                "method": "import_coordinator"
+            },
             "SetupCoordinator": {
                 "method": "setup_coordinator"
             },

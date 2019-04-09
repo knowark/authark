@@ -10,6 +10,14 @@ class ProductionConfig(DevelopmentConfig):
             'accesslog': '-',
             'loglevel': 'debug'
         })
+        self['tenancy'] = {
+            'type': 'json',
+            'url': './authark_tenancy.json'
+        }
+        self['data'] = {
+            'type': 'json',
+            'dir': './data'
+        }
         self['database'] = {
             'type': 'json',
             'url': './authark_data.json'
