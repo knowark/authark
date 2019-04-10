@@ -1,3 +1,4 @@
+from pathlib import Path
 from .development_config import DevelopmentConfig
 
 
@@ -12,11 +13,11 @@ class ProductionConfig(DevelopmentConfig):
         })
         self['tenancy'] = {
             'type': 'json',
-            'url': './authark_tenancy.json'
+            'url': Path.home() / 'tenants_catalog.json'
         }
         self['data'] = {
             'type': 'json',
-            'dir': './data'
+            'dir': Path.home() / 'data'
         }
         self['database'] = {
             'type': 'json',
