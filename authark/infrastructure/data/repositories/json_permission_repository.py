@@ -1,5 +1,5 @@
-from ...application.models import Permission
-from ...application.repositories import (
+from ....application.models import Permission
+from ....application.repositories import (
     ExpressionParser, PermissionRepository)
 from .json_repository import JsonRepository
 

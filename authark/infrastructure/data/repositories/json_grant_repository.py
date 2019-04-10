@@ -1,5 +1,5 @@
-from ...application.models import Grant
-from ...application.repositories import (
+from ....application.models import Grant
+from ....application.repositories import (
     ExpressionParser, GrantRepository)
 from .json_repository import JsonRepository
 

@@ -1,5 +1,5 @@
-from ...application.models import Policy
-from ...application.repositories import (
+from ....application.models import Policy
+from ....application.repositories import (
     ExpressionParser, PolicyRepository)
 from .json_repository import JsonRepository
 

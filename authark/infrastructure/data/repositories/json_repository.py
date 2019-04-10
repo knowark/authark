@@ -2,7 +2,7 @@ import os
 from json import load, dump
 from uuid import uuid4
 from typing import Dict, List, Optional, Any, Type, TypeVar, Callable, Generic
-from ...application.repositories import (
+from ....application.repositories import (
     Repository, QueryDomain, ExpressionParser)
 
 

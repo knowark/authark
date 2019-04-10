@@ -1,5 +1,5 @@
-from ...application.models import Ranking
-from ...application.repositories import (
+from ....application.models import Ranking
+from ....application.repositories import (
     ExpressionParser, RankingRepository)
 from .json_repository import JsonRepository
 
