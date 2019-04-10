@@ -7,4 +7,5 @@ from .access_service import AccessService, StandardAccessService
 from .import_service import ImportService, MemoryImportService
 from .tenancy import (
     Tenant, CatalogService, MemoryCatalogService,
-    ProvisionService, MemoryProvisionService)
+    ProvisionService, MemoryProvisionService,
+    TenantService, StandardTenantService)

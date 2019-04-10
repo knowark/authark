@@ -6,7 +6,8 @@ from authark.application.models import (
 from authark.application.services import (
     AccessService, StandardAccessService,
     CatalogService, MemoryCatalogService,
-    TokenService, MemoryTokenService)
+    TokenService, MemoryTokenService,
+    TenantService, StandardTenantService)
 from authark.application.repositories import (
     ExpressionParser,
     DominionRepository, MemoryDominionRepository,
@@ -107,6 +108,11 @@ def token_service() -> TokenService:
 @fixture
 def catalog_service() -> CatalogService:
     return MemoryCatalogService()
+
+
+@fixture
+def tenant_service(catalog_service) -> TenantService:
+    return StandardTenantService(catalog_service)
 
 
 @fixture
