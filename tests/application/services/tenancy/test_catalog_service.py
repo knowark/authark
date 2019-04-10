@@ -6,7 +6,9 @@ from authark.application.services import (
 def test_catalog_service_methods():
     abstract_methods = CatalogService.__abstractmethods__
 
-    # assert 'setup' in abstract_methods
-    # assert 'is_authenticated' in abstract_methods
-    # assert 'validate_roles' in abstract_methods
-    # assert 'get_user' in abstract_methods
+    assert 'setup' in abstract_methods
+
+
+def test_memory_catalog_service_setup_catalog(catalog_service):
+    catalog_service.setup()
+    assert catalog_service.catalog == {}

@@ -18,21 +18,17 @@ def test_user_default_attributes(tenant: Tenant) -> None:
     assert tenant.name == ""
 
 
-# def test_user_attributes_from_dict() -> None:
+def test_user_attributes_from_dict() -> None:
 
-#     user_dict = {
-#         "id": "XYZ123",
-#         "name": "Julian David Martos",
-#         "email": "jdmartos@nubark.com",
-#         "external_id": "5432",
-#         "external_source": "erp_system",
-#         "attributes": {
-#             "employee_id": "2349",
-#             "partner_id": "7689"
-#         }
-#     }
+    tenant_dict = {
+        "id": "farbo007",
+        "name": "hortofruticola_el_carino"
+    }
 
-#     user = User(**user_dict)
+    tenant = Tenant(**tenant_dict)
 
-#     for key, value in user_dict.items():
-#         assert getattr(user, key) == value
+    for key, value in tenant_dict.items():
+        assert getattr(tenant, key) == value
+
+    assert tenant.created_at > 0
+    assert tenant.updated_at > 0

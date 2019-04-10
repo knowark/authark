@@ -1,8 +1,6 @@
 from abc import ABC, abstractmethod
 from typing import List, Dict, Any
-from .errors import AuthenticationError, AuthorizationError
-from .token import Token
-from .user import User
+from .catalog_service import CatalogService
 
 
 class TenantService(ABC):

@@ -5,6 +5,7 @@ from authark.application.models import (
     Permission, Policy)
 from authark.application.services import (
     AccessService, StandardAccessService,
+    CatalogService, MemoryCatalogService,
     TokenService, MemoryTokenService)
 from authark.application.repositories import (
     ExpressionParser,
@@ -101,6 +102,11 @@ def policy_repository() -> PolicyRepository:
 @fixture
 def token_service() -> TokenService:
     return MemoryTokenService()
+
+
+@fixture
+def catalog_service() -> CatalogService:
+    return MemoryCatalogService()
 
 
 @fixture
