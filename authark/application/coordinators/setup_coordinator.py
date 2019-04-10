@@ -1,9 +1,8 @@
 from typing import List, Optional, Any
-from ..services import CatalogService, ProvisionService
+from ..services import CatalogService, ProvisionService, Tenant
 from ..repositories import (
     UserRepository, CredentialRepository, RoleRepository,
     RankingRepository, DominionRepository)
-from ..models import User, Credential, Role, Ranking, Dominion
 
 
 class SetupCoordinator:
@@ -15,7 +14,7 @@ class SetupCoordinator:
     def setup_catalog(self):
         self.catalog_service.setup()
 
-    def create_tenant(self, args):
+    def create_tenant(self, tenant_dict):
         self.catalog_service = catalog_service
         self.provision_service = provision_service
         pass
