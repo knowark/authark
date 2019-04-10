@@ -13,7 +13,7 @@ class SetupCoordinator:
         self.provision_service = provision_service
 
     def setup_catalog(self):
-        pass
+        self.catalog_service.setup()
 
     def create_tenant(self, args):
         self.catalog_service = catalog_service

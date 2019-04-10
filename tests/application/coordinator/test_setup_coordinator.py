@@ -1,5 +1,7 @@
+from typing import cast
 from authark.application.models import User
-from authark.application.coordinators.setup_coordinator import SetupCoordinator
+from authark.application.services import MemoryCatalogService
+from authark.application.coordinators import SetupCoordinator
 
 
 def test_setup_coordinator_creation(
@@ -9,4 +11,8 @@ def test_setup_coordinator_creation(
 
 def test_setup_coordinator_setup_catalog(
         setup_coordinator: SetupCoordinator) -> None:
+    catalog_service = cast(MemoryCatalogService,
+                           setup_coordinator.catalog_service)
+    assert catalog_service.catalog is None
     setup_coordinator.setup_catalog()
+    assert catalog_service.catalog == {}

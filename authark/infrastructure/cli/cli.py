@@ -63,22 +63,24 @@ class Cli:
 
     def setup(self, args: Namespace) -> None:
         print('...SETUP:::', args)
-        filename = self.config['tenancy']['url']
-        print('Filename:', filename)
-        collections = [
-            'users',
-            'credentials',
-            'dominions',
-            'roles',
-            'rankings',
-            'policies',
-            'permissions',
-            'resources',
-            'grants'
-        ]
+        # filename = self.config['tenancy']['url']
+        # print('Filename:', filename)
+        # collections = [
+        #     'users',
+        #     'credentials',
+        #     'dominions',
+        #     'roles',
+        #     'rankings',
+        #     'policies',
+        #     'permissions',
+        #     'resources',
+        #     'grants'
+        # ]
         setup_coordinator = self.resolver.resolve('SetupCoordinator')
 
-        JsonArranger.make_json(filename, collections)
+        setup_coordinator.setup_catalog()
+
+        # JsonArranger.make_json(filename, collections)
 
     def serve(self, args: Namespace) -> None:
         print('...SERVE:::', args)

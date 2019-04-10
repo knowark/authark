@@ -15,7 +15,10 @@ from ...application.services import (
     TokenService, MemoryTokenService,
     AccessTokenService, MemoryAccessTokenService,
     RefreshTokenService, MemoryRefreshTokenService,
-    AccessService, StandardAccessService, ImportService, MemoryImportService)
+    AccessService, StandardAccessService,
+    ImportService, MemoryImportService,
+    CatalogService, MemoryCatalogService,
+    ProvisionService, MemoryProvisionService)
 from ...application.coordinators import (
     AuthCoordinator, ManagementCoordinator,
     ImportCoordinator, SetupCoordinator, AssignmentCoordinator)
@@ -92,6 +95,12 @@ class MemoryFactory(Factory):
     def memory_import_service(self) -> MemoryImportService:
         return MemoryImportService()
 
+    def memory_catalog_service(self) -> MemoryCatalogService:
+        return MemoryCatalogService()
+
+    def memory_provision_service(self) -> MemoryProvisionService:
+        return MemoryProvisionService()
+
     def standard_access_service(
             self, ranking_repository: RankingRepository,
             role_repository: RoleRepository,
@@ -144,16 +153,10 @@ class MemoryFactory(Factory):
                                  ranking_repository, dominion_repository)
 
     def setup_coordinator(self,
-                          import_service: ImportService,
-                          user_repository: UserRepository,
-                          credential_repository: CredentialRepository,
-                          role_repository: RoleRepository,
-                          ranking_repository: RankingRepository,
-                          dominion_repository: DominionRepository,
+                          catalog_service: CatalogService,
+                          provision_service: ProvisionService
                           ) -> SetupCoordinator:
-        return SetupCoordinator(import_service, user_repository,
-                                credential_repository, role_repository,
-                                ranking_repository, dominion_repository)
+        return SetupCoordinator(catalog_service, provision_service)
 
     def assignment_coordinator(
         self,

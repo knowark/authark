@@ -54,6 +54,12 @@ class DevelopmentConfig(Config):
             "ImportService": {
                 "method": "memory_import_service"
             },
+            "CatalogService": {
+                "method": "memory_catalog_service"
+            },
+            "ProvisionService": {
+                "method": "memory_provision_service"
+            },
             "AuthCoordinator": {
                 "method": "auth_coordinator"
             },
