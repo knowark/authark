@@ -17,10 +17,12 @@ from authark.application.repositories import (
 from authark.application.services import (
     TokenService, MemoryTokenService,
     AccessService, StandardAccessService,
-    RefreshTokenService, ImportService, MemoryImportService)
+    RefreshTokenService, ImportService, MemoryImportService,
+    CatalogService, MemoryCatalogService,
+    ProvisionService, MemoryProvisionService)
 from authark.application.coordinators import (
     AuthCoordinator, ManagementCoordinator, SetupCoordinator,
-    AssignmentCoordinator)
+    ImportCoordinator, AssignmentCoordinator)
 from authark.application.services.hash_service import (
     HashService, MemoryHashService)
 
@@ -159,6 +161,18 @@ def mock_hash_service() -> HashService:
 
 
 @fixture
+def mock_catalog_service() -> CatalogService:
+    mock_catalog_service = MemoryCatalogService()
+    return mock_catalog_service
+
+
+@fixture
+def mock_provision_service() -> ProvisionService:
+    mock_provision_service = MemoryProvisionService()
+    return mock_provision_service
+
+
+@fixture
 def mock_import_service() -> ImportService:
     mock_import_service = MemoryImportService()
     user_1 = User(**{'id': "1",
@@ -249,15 +263,15 @@ def management_coordinator(
 
 
 @fixture
-def setup_coordinator(
+def import_coordinator(
     mock_import_service: ImportService,
     mock_user_repository: UserRepository,
     mock_credential_repository: CredentialRepository,
     mock_role_repository: RoleRepository,
     mock_ranking_repository: RankingRepository,
     mock_dominion_repository: DominionRepository
-) -> SetupCoordinator:
-    return SetupCoordinator(
+) -> ImportCoordinator:
+    return ImportCoordinator(
         mock_import_service, mock_user_repository,
         mock_credential_repository, mock_role_repository,
         mock_ranking_repository, mock_dominion_repository)
@@ -279,3 +293,12 @@ def assignment_coordinator(
         mock_policy_repository, mock_resource_repository,
         mock_permission_repository,
         mock_grant_repository)
+
+
+@fixture
+def setup_coordinator(
+    mock_catalog_service: CatalogService,
+    mock_provision_service: ProvisionService
+) -> SetupCoordinator:
+    return SetupCoordinator(
+        mock_catalog_service, mock_provision_service)
