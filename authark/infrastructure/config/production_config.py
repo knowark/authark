@@ -63,5 +63,8 @@ class ProductionConfig(DevelopmentConfig):
             },
             "ImportService": {
                 "method": "json_import_service"
-            }
+            },
+            "CatalogService": {
+                "method": "json_catalog_service"
+            },
         })
