@@ -1,9 +1,8 @@
 from typing import Dict
-from pytest import fixture
+from pytest import fixture, raises
 from inspect import signature
-from authark.application.repositories.repository import Repository
-from authark.application.repositories.memory_repository import MemoryRepository
-from authark.application.repositories.expression_parser import ExpressionParser
+from authark.application.repositories import (
+    Repository, MemoryRepository, ExpressionParser, EntityNotFoundError)
 
 
 class DummyEntity:
@@ -33,6 +32,11 @@ def test_memory_repository_get(memory_repository) -> None:
     item = memory_repository.get("1")
 
     assert item and item.field_1 == "value_1"
+
+
+def test_memory_repository_get_missing(memory_repository) -> None:
+    with raises(EntityNotFoundError):
+        memory_repository.get("999999999")
 
 
 def test_memory_repository_add() -> None:

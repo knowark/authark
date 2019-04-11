@@ -18,11 +18,6 @@ def test_management_coordinator_create_dominion(management_coordinator):
 
 
 def test_management_coordinator_remove_dominion(management_coordinator):
-    dominion_id = '999'
-    result = management_coordinator.remove_dominion(dominion_id)
-    assert result is False
-    assert len(management_coordinator.dominion_repository.items) == 1
-
     dominion_id = '1'
     management_coordinator.remove_dominion(dominion_id)
     assert len(management_coordinator.dominion_repository.items) == 0
@@ -36,11 +31,6 @@ def test_management_coordinator_create_resource(management_coordinator):
 
 
 def test_management_coordinator_remove_resource(management_coordinator):
-    policy_id = '999'
-    result = management_coordinator.remove_resource(policy_id)
-    assert result is False
-    assert len(management_coordinator.resource_repository.items) == 1
-
     resource_id = '001'
     management_coordinator.remove_resource(resource_id)
     assert len(management_coordinator.resource_repository.items) == 0
@@ -56,11 +46,6 @@ def test_management_coordinator_create_policy(management_coordinator):
 
 
 def test_management_coordinator_remove_policy(management_coordinator):
-    policy_id = '999'
-    result = management_coordinator.remove_policy(policy_id)
-    assert result is False
-    assert len(management_coordinator.policy_repository.items) == 1
-
     policy_id = '001'
     management_coordinator.remove_policy(policy_id)
     assert len(management_coordinator.policy_repository.items) == 0
@@ -76,11 +61,6 @@ def test_management_coordinator_create_role(management_coordinator):
 
 
 def test_management_coordinator_remove_role(management_coordinator):
-    role_id = '999'
-    result = management_coordinator.remove_role(role_id)
-    assert result is False
-    assert len(management_coordinator.role_repository.items) == 1
-
     role_id = '1'
     management_coordinator.remove_role(role_id)
     assert len(management_coordinator.role_repository.items) == 0
@@ -100,24 +80,7 @@ def test_management_coordinator_assign_role_duplicate(management_coordinator):
     assert len(management_coordinator.ranking_repository.items) == 1
 
 
-def test_management_coordinator_assign_role_missing_id(
-        management_coordinator):
-    user_id = '1'
-    role_id = '999'
-    result = management_coordinator.assign_role(user_id, role_id)
-    assert result is False
-    assert len(management_coordinator.ranking_repository.items) == 1
-
-
 def test_management_coordinator_deassign_role(management_coordinator):
     ranking_id = '1'
     management_coordinator.deassign_role(ranking_id)
     assert len(management_coordinator.ranking_repository.items) == 0
-
-
-def test_management_coordinator_deassign_role_missing_id(
-        management_coordinator):
-    ranking_id = '999'
-    result = management_coordinator.deassign_role(ranking_id)
-    assert result is False
-    assert len(management_coordinator.ranking_repository.items) == 1

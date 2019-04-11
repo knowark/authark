@@ -3,7 +3,7 @@ from json import load, dump
 from uuid import uuid4
 from typing import Dict, List, Optional, Any, Type, TypeVar, Callable, Generic
 from ....application.repositories import (
-    Repository, QueryDomain, ExpressionParser)
+    Repository, QueryDomain, ExpressionParser, EntityNotFoundError)
 
 
 T = TypeVar('T')
@@ -17,15 +17,15 @@ class JsonRepository(Repository, Generic[T]):
         self.collection_name = collection_name
         self.item_class = item_class  # type: Callable[..., T]
 
-    def get(self, id: str) -> Optional[T]:
-        item = None
+    def get(self, id: str) -> T:
         with open(self.file_path) as f:
             data = load(f)
             items = data.get(self.collection_name, {})
             item_dict = items.get(id)
-            if item_dict:
-                item = self.item_class(**item_dict)
-        return item
+            if not item_dict:
+                raise EntityNotFoundError(
+                    f"The entity with id {id} was not found.")
+            return self.item_class(**item_dict)
 
     def add(self, item: T) -> T:
         data = {}  # type: Dict[str, Any]

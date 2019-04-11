@@ -22,6 +22,14 @@ def test_composing_reporter_list_user_roles(composing_reporter):
                          'dominion': 'Data Server'}
 
 
+def test_composing_reporter_list_user_roles_(composing_reporter):
+    user_id = '1'
+    result = composing_reporter.list_user_roles(user_id)
+    assert isinstance(result, list)
+    assert result[0] == {'ranking_id': '1', 'role': 'admin',
+                         'dominion': 'Data Server'}
+
+
 def test_composing_reporter_list_resource_policies(composing_reporter):
     resource_id = '1'
     result = composing_reporter.list_resource_policies(resource_id)

@@ -27,8 +27,6 @@ class ManagementCoordinator:
 
     def remove_dominion(self, dominion_id: str) -> bool:
         dominion = self.dominion_repository.get(dominion_id)
-        if not dominion:
-            return False
         self.dominion_repository.remove(dominion)
         return True
 
@@ -38,8 +36,6 @@ class ManagementCoordinator:
 
     def remove_resource(self, resource_id: str) -> bool:
         resource = self.resource_repository.get(resource_id)
-        if not resource:
-            return False
         self.resource_repository.remove(resource)
         return True
 
@@ -49,8 +45,6 @@ class ManagementCoordinator:
 
     def remove_policy(self, policy_id: str) -> bool:
         policy = self.policy_repository.get(policy_id)
-        if not policy:
-            return False
         self.policy_repository.remove(policy)
         return True
 
@@ -60,19 +54,14 @@ class ManagementCoordinator:
 
     def remove_role(self, role_id: str) -> bool:
         role = self.role_repository.get(role_id)
-        if not role:
-            return False
         self.role_repository.remove(role)
         return True
 
     def assign_role(self, user_id: str, role_id: str) -> bool:
         user = self.user_repository.get(user_id)
         role = self.role_repository.get(role_id)
-        if not (user and role):
-            return False
 
         ranking = Ranking(user_id=user.id, role_id=role.id)
-        # Prevent duplicates
         duplicate = self.ranking_repository.search([
             ('user_id', '=', user.id), ('role_id', '=', role.id)
         ])
@@ -84,6 +73,4 @@ class ManagementCoordinator:
 
     def deassign_role(self, ranking_id: str) -> bool:
         ranking = self.ranking_repository.get(ranking_id)
-        if not ranking:
-            return False
         return self.ranking_repository.remove(ranking)

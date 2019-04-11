@@ -27,8 +27,6 @@ class AssignmentCoordinator:
     def assign_policy(self, policy_id: str, resource_id: str) -> bool:
         policy = self.policy_repository.get(policy_id)
         resource = self.resource_repository.get(resource_id)
-        if not (policy and resource):
-            return False
 
         permission = Permission(policy_id=policy.id, resource_id=resource.id)
         # Prevent duplicates
@@ -45,8 +43,6 @@ class AssignmentCoordinator:
     def assign_permission(self, role_id: str, permission_id: str) -> bool:
         role = self.role_repository.get(role_id)
         permission = self.permission_repository.get(permission_id)
-        if not (role and permission):
-            return False
 
         grant = Grant(role_id=role.id, permission_id=permission.id)
         # Prevent duplicates

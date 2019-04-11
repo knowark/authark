@@ -6,8 +6,8 @@ from .types import QueryDomain, T
 class Repository(ABC, Generic[T]):
 
     @abstractmethod
-    def get(self, id: str) -> Optional[T]:
-        "Get method to be implemented."
+    def get(self, id: str) -> T:
+        "Get method to be implemented. Raises if missing."
 
     @abstractmethod
     def add(self, item: T) -> T:

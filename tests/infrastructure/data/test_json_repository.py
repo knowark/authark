@@ -1,8 +1,9 @@
 from json import dumps, loads
-from pytest import fixture
+from pytest import fixture, raises
 from authark.application.repositories.repository import Repository
-from authark.application.repositories.expression_parser import ExpressionParser
-from authark.infrastructure.data.json_repository import JsonRepository
+from authark.application.repositories import (
+    ExpressionParser, EntityNotFoundError)
+from authark.infrastructure.data import JsonRepository
 
 
 class DummyEntity:
@@ -43,8 +44,8 @@ def test_json_repository_get(json_repository):
 
 
 def test_json_repository_get_not_found(json_repository):
-    item = json_repository.get("99")
-    assert item is None
+    with raises(EntityNotFoundError):
+        json_repository.get("99")
 
 
 def test_json_repository_add(json_repository):

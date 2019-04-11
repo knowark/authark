@@ -104,19 +104,6 @@ def test_auth_coordinator_refresh_authenticate_refresh_token_not_found(
         tokens = auth_coordinator.refresh_authenticate("BAD_TOKEN")
 
 
-def test_auth_coordinator_refresh_authenticate_user_not_found(
-        auth_coordinator: AuthCoordinator) -> None:
-    user_id = '999'
-    refresh_token = "GOOD_TOKEN"
-    credential_repository = cast(MemoryCredentialRepository,
-                                 auth_coordinator.credential_repository)
-    credential_repository.items['4'] = Credential(
-        id='4', user_id=user_id, value=refresh_token, type='refresh_token')
-
-    tokens = auth_coordinator.refresh_authenticate("GOOD_TOKEN")
-    assert tokens == {}
-
-
 def test_generate_refresh_token(auth_coordinator: AuthCoordinator) -> None:
     user_id = '1'
     client = 'mobile'
@@ -201,15 +188,3 @@ def test_auth_coordinator_deregister(
     assert unregistered is True
     assert len(user_repository.items) == 2
     assert len(credential_repository.items) == 2
-
-
-def test_auth_coordinator_deregister_missing(
-        auth_coordinator: AuthCoordinator, mock_user_repository) -> None:
-    user_repository = cast(MemoryUserRepository,
-                           auth_coordinator.user_repository)
-
-    user = User(id='5', username='missing', email='missing@gmail.com')
-    unregistered = auth_coordinator.deregister(user.id)
-
-    assert unregistered is False
-    assert len(user_repository.items) == 3

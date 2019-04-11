@@ -15,3 +15,4 @@ from .permission_repository import (
     PermissionRepository, MemoryPermissionRepository)
 from .grant_repository import GrantRepository, MemoryGrantRepository
 from .types import QueryDomain
+from .errors import EntityNotFoundError

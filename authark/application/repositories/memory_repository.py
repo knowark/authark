@@ -4,6 +4,7 @@ from typing import List, Dict, TypeVar, Optional, Generic
 from .repository import Repository
 from .expression_parser import ExpressionParser
 from .types import QueryDomain, T
+from .errors import EntityNotFoundError
 
 
 class MemoryRepository(Repository, Generic[T]):
@@ -11,8 +12,12 @@ class MemoryRepository(Repository, Generic[T]):
         self.items = {}  # type: Dict[str, T]
         self.parser = parser
 
-    def get(self, id: str) -> Optional[T]:
-        return self.items.get(id)
+    def get(self, id: str) -> T:
+        item = self.items.get(id)
+        if not item:
+            raise EntityNotFoundError(
+                f"The entity with id {id} was not found.")
+        return item
 
     def add(self, item: T) -> T:
         setattr(item, 'id', getattr(item, 'id') or str(uuid4()))
