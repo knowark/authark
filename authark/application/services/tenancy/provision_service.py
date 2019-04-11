@@ -27,7 +27,7 @@ class MemoryProvisionService(ProvisionService):
 
     def create_tenant(self, tenant: Tenant) -> Tenant:
         tenant.id = tenant.id or str(uuid4())
-        if not self.pool:
+        if self.pool is None:
             raise ValueError("Setup the provisioning environment first.")
         self.pool[tenant.id] = tenant
         return tenant
