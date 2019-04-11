@@ -1,9 +1,8 @@
 from abc import ABC, abstractmethod
 from uuid import uuid4
 from typing import List, Dict, TypeVar, Optional, Generic
+from ..utilities import ExpressionParser, QueryDomain, T
 from .repository import Repository
-from .expression_parser import ExpressionParser
-from .types import QueryDomain, T
 from .errors import EntityNotFoundError
 
 

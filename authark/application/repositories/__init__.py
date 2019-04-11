@@ -1,4 +1,3 @@
-from .expression_parser import ExpressionParser
 from .memory_repository import MemoryRepository
 from .repository import Repository
 from .user_repository import UserRepository, MemoryUserRepository
@@ -14,5 +13,5 @@ from .policy_repository import PolicyRepository, MemoryPolicyRepository
 from .permission_repository import (
     PermissionRepository, MemoryPermissionRepository)
 from .grant_repository import GrantRepository, MemoryGrantRepository
-from .types import QueryDomain
+from ..utilities import QueryDomain
 from .errors import EntityNotFoundError

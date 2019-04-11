@@ -1,8 +1,9 @@
 from typing import Dict
 from pytest import fixture, raises
 from inspect import signature
+from authark.application.utilities import ExpressionParser
 from authark.application.repositories import (
-    Repository, MemoryRepository, ExpressionParser, EntityNotFoundError)
+    Repository, MemoryRepository, EntityNotFoundError)
 
 
 class DummyEntity:

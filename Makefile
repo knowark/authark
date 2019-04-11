@@ -8,7 +8,7 @@ test:
 	pytest
 
 coverage-application:
-	mypy authark
+	# mypy authark
 	pytest -x --cov=authark/application tests/application/ \
 	--cov-report term-missing -s
 

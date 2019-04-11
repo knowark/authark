@@ -3,8 +3,8 @@ from pytest import fixture, raises
 from authark.application.models import (
     AuthError, User, Credential, Token, Dominion, Role, Ranking,
     Policy, Resource, Permission, Grant)
+from authark.application.utilities import ExpressionParser
 from authark.application.repositories import (
-    ExpressionParser,
     UserRepository, MemoryUserRepository,
     CredentialRepository, MemoryCredentialRepository,
     DominionRepository, MemoryDominionRepository,
@@ -162,7 +162,8 @@ def mock_hash_service() -> HashService:
 
 @fixture
 def mock_catalog_service() -> CatalogService:
-    mock_catalog_service = MemoryCatalogService()
+    parser = ExpressionParser()
+    mock_catalog_service = MemoryCatalogService(parser)
     return mock_catalog_service
 
 

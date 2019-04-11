@@ -25,3 +25,10 @@ def test_memory_catalog_service_add_tenant_no_setup(catalog_service):
     tenant = Tenant(name='Microsoft')
     with raises(ValueError):
         catalog_service.add_tenant(tenant)
+
+
+def test_memory_catalog_service_search_tenants_empty(catalog_service):
+    tenant = Tenant(name='Microsoft')
+    catalog_service.setup()
+    tenants = catalog_service.search_tenants([])
+    assert len(tenants) == 0

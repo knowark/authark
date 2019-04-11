@@ -2,8 +2,8 @@ from pytest import fixture, raises
 from authark.application.models import (
     User, Credential, Dominion, Role, Ranking,
     Policy, Resource, Permission, Grant)
+from authark.application.utilities import ExpressionParser
 from authark.application.repositories import (
-    ExpressionParser,
     UserRepository, MemoryUserRepository,
     CredentialRepository, MemoryCredentialRepository,
     DominionRepository, MemoryDominionRepository,

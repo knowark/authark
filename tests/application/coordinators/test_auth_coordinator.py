@@ -1,7 +1,7 @@
 from typing import Dict, cast
 from pytest import fixture, raises
 from authark.application.coordinators.auth_coordinator import AuthCoordinator
-from authark.application.repositories.expression_parser import ExpressionParser
+from authark.application.utilities import ExpressionParser
 from authark.application.repositories.user_repository import (
     UserRepository, MemoryUserRepository)
 from authark.application.repositories.credential_repository import (

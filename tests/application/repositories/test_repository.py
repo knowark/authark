@@ -1,4 +1,4 @@
-from authark.application.repositories.repository import Repository
+from authark.application.repositories import Repository
 
 
 def test_repository_methods() -> None:

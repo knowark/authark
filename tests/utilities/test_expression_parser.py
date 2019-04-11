@@ -1,8 +1,7 @@
 from pytest import fixture
 from unittest.mock import Mock
 from fnmatch import fnmatchcase
-from authark.application.repositories.expression_parser import (
-    ExpressionParser)
+from authark.application.utilities import ExpressionParser
 
 
 @fixture

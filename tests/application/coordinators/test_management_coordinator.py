@@ -1,7 +1,7 @@
 from typing import Dict
 from pytest import fixture, raises
 from authark.application.models import Dominion
-from authark.application.repositories import ExpressionParser
+from authark.application.utilities import ExpressionParser
 from authark.application.coordinators import ManagementCoordinator
 
 

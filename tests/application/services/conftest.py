@@ -3,6 +3,7 @@ from typing import Dict
 from authark.application.models import (
     Dominion, Role, Ranking, Resource, Grant,
     Permission, Policy)
+from authark.application.utilities import ExpressionParser
 from authark.application.services import (
     AccessService, StandardAccessService,
     CatalogService, MemoryCatalogService,
@@ -10,7 +11,6 @@ from authark.application.services import (
     TenantService, StandardTenantService,
     ProvisionService, MemoryProvisionService)
 from authark.application.repositories import (
-    ExpressionParser,
     DominionRepository, MemoryDominionRepository,
     RoleRepository, MemoryRoleRepository,
     ResourceRepository, MemoryResourceRepository,
@@ -108,7 +108,8 @@ def token_service() -> TokenService:
 
 @fixture
 def catalog_service() -> CatalogService:
-    return MemoryCatalogService()
+    parser = ExpressionParser()
+    return MemoryCatalogService(parser)
 
 
 @fixture
