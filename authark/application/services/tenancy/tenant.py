@@ -1,4 +1,5 @@
 import time
+import unicodedata
 
 
 class Tenant:
@@ -13,4 +14,9 @@ class Tenant:
 
     @staticmethod
     def _normalize_slug(slug: str) -> str:
-        return slug
+        stripped_slug = slug.strip().replace(" ", "_").lower()
+        normalized_slug = unicodedata.normalize(
+            'NFKD', stripped_slug).encode('ascii', 'ignore').decode('utf-8')
+        if not normalized_slug:
+            raise ValueError("Invalid tenant 'slug' name.")
+        return normalized_slug
