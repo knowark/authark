@@ -67,4 +67,7 @@ class ProductionConfig(DevelopmentConfig):
             "CatalogService": {
                 "method": "json_catalog_service"
             },
+            "ProvisionService": {
+                "method": "json_provision_service"
+            }
         })

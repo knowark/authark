@@ -1,7 +1,7 @@
 import json
 from pathlib import Path
 from typing import Dict
-from ...application.services import CatalogService, Tenant
+from ....application.services import CatalogService, Tenant
 
 
 class JsonCatalogService(CatalogService):
@@ -20,6 +20,6 @@ class JsonCatalogService(CatalogService):
 
         print('TO be created.....')
         with catalog_file.open('w') as f:
-            json.dump(self.catalog_schema, f)
+            json.dump(self.catalog_schema, f, indent=2)
 
         return True

@@ -7,7 +7,7 @@ from ..data import (
     JsonRankingRepository, JsonImportService,
     JsonPolicyRepository, JsonResourceRepository,
     JsonGrantRepository, JsonPermissionRepository,
-    JsonCatalogService)
+    JsonCatalogService, JsonProvisionService)
 from .crypto_factory import CryptoFactory
 from ...application.services import HashService
 
@@ -71,3 +71,7 @@ class JsonFactory(CryptoFactory):
     def json_catalog_service(self) -> JsonCatalogService:
         catalog_path = self.config['tenancy']['url']
         return JsonCatalogService(catalog_path)
+
+    def json_provision_service(self) -> JsonProvisionService:
+        data_directory = self.config['data']['dir']
+        return JsonProvisionService(data_directory)
