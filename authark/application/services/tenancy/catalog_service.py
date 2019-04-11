@@ -27,5 +27,7 @@ class MemoryCatalogService(CatalogService):
 
     def add_tenant(self, tenant: Tenant) -> Tenant:
         tenant.id = tenant.id or str(uuid4())
+        if self.catalog is None:
+            raise ValueError("Setup the tenant catalog first.")
         self.catalog[tenant.id] = tenant
         return tenant

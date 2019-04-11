@@ -35,6 +35,7 @@ class JsonProvisionService(ProvisionService):
 
     def create_tenant(self, tenant: Tenant) -> Tenant:
         print('Calling provision json...')
+        return tenant
 
     #     tenant = self._register_tenant(tenant)
 
