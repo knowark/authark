@@ -64,7 +64,7 @@ class Cli:
     def setup(self, args: Namespace) -> None:
         print('...SETUP:::', args)
         setup_coordinator = self.resolver.resolve('SetupCoordinator')
-        setup_coordinator.setup_catalog()
+        setup_coordinator.setup_server()
 
     def serve(self, args: Namespace) -> None:
         print('...SERVE:::', args)
