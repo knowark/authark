@@ -21,3 +21,9 @@ def test_memory_provision_service_create_tenant(provision_service):
     created_tenant = provision_service.create_tenant(tenant)
     assert len(provision_service.pool) == 1
     assert created_tenant.id in provision_service.pool
+
+
+def test_memory_provision_service_create_tenant_no_setup(provision_service):
+    tenant = Tenant(name="Servagro")
+    with raises(ValueError):
+        provision_service.create_tenant(tenant)
