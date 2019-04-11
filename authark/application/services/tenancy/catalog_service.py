@@ -14,7 +14,7 @@ class CatalogService(ABC):
 class MemoryCatalogService(CatalogService):
 
     def __init__(self) -> None:
-        self.catalog: Dict = None
+        self.catalog: Optional[Dict] = None
 
     def setup(self) -> bool:
         self.catalog = {}
