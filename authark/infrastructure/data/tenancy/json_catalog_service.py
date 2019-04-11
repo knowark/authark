@@ -1,6 +1,7 @@
 import json
+from uuid import uuid4
 from pathlib import Path
-from typing import Dict
+from typing import Dict, List, Any
 from ....application.services import CatalogService, Tenant
 
 
@@ -8,8 +9,9 @@ class JsonCatalogService(CatalogService):
 
     def __init__(self, path: str) -> None:
         self.path = path
+        self.collection_name = 'tenants'
         self.catalog_schema: Dict = {
-            'tenants': {}
+            self.collection_name: {}
         }
 
     def setup(self) -> bool:
@@ -23,3 +25,15 @@ class JsonCatalogService(CatalogService):
             json.dump(self.catalog_schema, f, indent=2)
 
         return True
+
+    def add_tenant(self, tenant: Tenant) -> Tenant:
+        data: Dict[str, Any] = {}
+        with open(self.path, 'r') as f:
+            data = json.load(f)
+
+        tenant.id = tenant.id or str(uuid4())
+        data[self.collection_name].update({tenant.id: vars(tenant)})
+        with open(self.path, 'w') as f:
+            json.dump(data, f, indent=2)
+
+        return tenant

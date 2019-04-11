@@ -17,4 +17,5 @@ class SetupCoordinator:
 
     def create_tenant(self, tenant_dict):
         tenant = Tenant(**tenant_dict)
+        self.catalog_service.add_tenant(tenant)
         self.provision_service.create_tenant(tenant)

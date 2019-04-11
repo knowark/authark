@@ -20,19 +20,29 @@ class Cli:
         subparsers = parser.add_subparsers()
 
         # Setup
-        setup_parser = subparsers.add_parser('setup')
+        setup_parser = subparsers.add_parser(
+            'setup', help='Prepare system environment.')
         setup_parser.set_defaults(func=self.setup)
 
+        # Provision
+        provision_parser = subparsers.add_parser(
+            'provision', help='Provision new tenants.')
+        provision_parser.add_argument('name')
+        provision_parser.set_defaults(func=self.provision)
+
         # Serve
-        serve_parser = subparsers.add_parser('serve')
+        serve_parser = subparsers.add_parser(
+            'serve', help='Start HTTP server.')
         serve_parser.set_defaults(func=self.serve)
 
         # Terminal
-        terminal_parser = subparsers.add_parser('terminal')
+        terminal_parser = subparsers.add_parser(
+            'terminal', help='Open terminal interface.')
         terminal_parser.set_defaults(func=self.terminal)
 
         # Load
-        load_parser = subparsers.add_parser('load')
+        load_parser = subparsers.add_parser(
+            'load', help='Load items from file.')
         load_parser.add_argument('input_file')
         load_parser.add_argument('-s', '--source')
         load_parser.add_argument('-p', '--password_field')
@@ -44,27 +54,16 @@ class Cli:
 
         return parser.parse_args()
 
-    # def setup(self, args: Namespace) -> None:
-    #     print('...SETUP:::', args)
-    #     filename = self.config['database']['url']
-    #     print('Filename:', filename)
-    #     collections = [
-    #         'users',
-    #         'credentials',
-    #         'dominions',
-    #         'roles',
-    #         'rankings',
-    #         'policies',
-    #         'permissions',
-    #         'resources',
-    #         'grants'
-    #     ]
-    #     JsonArranger.make_json(filename, collections)
-
     def setup(self, args: Namespace) -> None:
         print('...SETUP:::', args)
         setup_coordinator = self.resolver.resolve('SetupCoordinator')
         setup_coordinator.setup_server()
+
+    def provision(self, args: Namespace) -> None:
+        print('...PROVISION::::')
+        setup_coordinator = self.resolver.resolve('SetupCoordinator')
+        tenant_dict = {'name': args.name}
+        setup_coordinator.create_tenant(tenant_dict)
 
     def serve(self, args: Namespace) -> None:
         print('...SERVE:::', args)
