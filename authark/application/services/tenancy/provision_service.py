@@ -6,8 +6,16 @@ from .tenant import Tenant
 class ProvisionService(ABC):
     """Tenant Provision service."""
 
+    @abstractmethod
+    def setup(self) -> bool:
+        "Setup method to be implemented."
+
 
 class MemoryProvisionService(ProvisionService):
 
     def __init__(self) -> None:
-        pass
+        self.pool: Dict = None
+
+    def setup(self) -> bool:
+        self.pool = {}
+        return True

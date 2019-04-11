@@ -22,5 +22,5 @@ class Repository(ABC, Generic[T]):
         "Search users matching a query domain"
 
     @abstractmethod
-    def remove(self, user: T) -> bool:
+    def remove(self, item: T) -> bool:
         "Remove method to be implemented."

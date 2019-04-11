@@ -18,6 +18,7 @@ class JsonCatalogService(CatalogService):
         if catalog_file.exists():
             return False
 
+        print('TO be created.....')
         with catalog_file.open('w') as f:
             json.dump(self.catalog_schema, f)
 

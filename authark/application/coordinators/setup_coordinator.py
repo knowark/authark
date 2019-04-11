@@ -13,8 +13,11 @@ class SetupCoordinator:
 
     def setup_catalog(self):
         self.catalog_service.setup()
+        self.provision_service.setup()
 
     def create_tenant(self, tenant_dict):
         self.catalog_service = catalog_service
+        if self.catalog_service.get(''):
+            return False
         self.provision_service = provision_service
         pass

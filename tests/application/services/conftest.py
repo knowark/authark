@@ -116,6 +116,11 @@ def tenant_service(catalog_service) -> TenantService:
 
 
 @fixture
+def provision_service() -> TenantService:
+    return StandardTenantService(catalog_service)
+
+
+@fixture
 def access_service(ranking_repository, role_repository,
                    dominion_repository, resource_repository,
                    grant_repository, permission_repository,

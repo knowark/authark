@@ -7,3 +7,5 @@ class Tenant:
         self.created_at = int(time.time())
         self.updated_at = int(time.time())
         self.name = attributes.get('name', '')
+        self.email = attributes.get('email', '')
+        self.active = attributes.get('active', True)
