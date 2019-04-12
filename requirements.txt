@@ -24,7 +24,7 @@ Flask-RESTful==0.3.6
 funcparserlib==0.3.6
 gevent==1.2.2
 greenlet==0.4.12
-gunicorn==19.7.1
+gunicorn==19.9.0
 idna==2.6
 imagesize==1.0.0
 injectark==0.2.0
