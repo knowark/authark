@@ -46,3 +46,9 @@ def test_memory_catalog_service_search_tenants(
     tenants = catalog_service.search_tenants(
         [('slug', '=', 'amazon')])
     assert len(tenants) == 1
+
+
+def test_memory_catalog_service_search_tenants_no_setup(
+        catalog_service: MemoryCatalogService):
+    with raises(ValueError):
+        tenants = catalog_service.search_tenants([])

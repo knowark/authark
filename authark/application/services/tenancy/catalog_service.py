@@ -42,6 +42,8 @@ class MemoryCatalogService(CatalogService):
     def search_tenants(self, domain: QueryDomain) -> List[Tenant]:
         tenants = []
         filter_function = self.parser.parse(domain)
+        if self.catalog is None:
+            raise ValueError("Setup the tenant catalog first.")
         for tenant in list(self.catalog.values()):
             if filter_function(tenant):
                 tenants.append(tenant)
