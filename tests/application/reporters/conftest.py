@@ -13,9 +13,12 @@ from authark.application.repositories import (
     ResourceRepository, MemoryResourceRepository,
     PermissionRepository, MemoryPermissionRepository,
     GrantRepository, MemoryGrantRepository)
+from authark.application.services import (
+    CatalogService, MemoryCatalogService, Tenant)
 from authark.application.reporters import (
     AutharkReporter, StandardAutharkReporter,
-    ComposingReporter, StandardComposingReporter)
+    ComposingReporter, StandardComposingReporter,
+    TenancyReporter, StandardTenancyReporter)
 
 
 @fixture
@@ -124,6 +127,16 @@ def grant_repository() -> GrantRepository:
 
 
 @fixture
+def catalog_service() -> CatalogService:
+    parser = ExpressionParser()
+    catalog_service = MemoryCatalogService(parser)
+    catalog_service.catalog = {
+        "1": Tenant(id='1', name="Davivienda")
+    }
+    return catalog_service
+
+
+@fixture
 def authark_reporter(
         user_repository, credential_repository,
         dominion_repository, role_repository, policy_repository,
@@ -144,3 +157,8 @@ def composing_reporter(
         dominion_repository, role_repository, ranking_repository,
         resource_repository, policy_repository, permission_repository,
         grant_repository)
+
+
+@fixture
+def tenancy_reporter(catalog_service) -> TenancyReporter:
+    return StandardTenancyReporter(catalog_service)

@@ -12,17 +12,17 @@ COVFILE ?= .coverage
 coverage-application:
 	mypy authark
 	export COVERAGE_FILE=$(COVFILE); pytest -x --cov=authark/application \
-	tests/application/ --cov-report term-missing -s
+	tests/application/ --cov-report term-missing -s -vv
 
 coverage-infrastructure:
 	mypy authark
 	export COVERAGE_FILE=$(COVFILE); pytest -x --cov=authark/infrastructure \
-	tests/infrastructure/ --cov-report term-missing -s
+	tests/infrastructure/ --cov-report term-missing -s -vv
 
 coverage: 
 	mypy authark
 	export COVERAGE_FILE=$(COVFILE); pytest -x --cov=authark tests/ \
-	--cov-report term-missing -s
+	--cov-report term-missing -s -vv
 
 PART ?= patch
 
