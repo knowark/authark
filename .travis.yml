@@ -8,5 +8,4 @@ script:
   - mypy authark
   - pytest --cov-report term-missing --cov-branch --cov authark tests
 after_success:
-  - cat .coverage
   - codecov

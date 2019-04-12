@@ -7,19 +7,22 @@ clean:
 test:
 	pytest
 
+COVFILE ?= .coverage
+
 coverage-application:
 	mypy authark
-	pytest -x --cov=authark/application tests/application/ \
-	--cov-report term-missing -s
+	export COVERAGE_FILE=$(COVFILE); pytest -x --cov=authark/application \
+	tests/application/ --cov-report term-missing -s
 
 coverage-infrastructure:
 	mypy authark
-	pytest -x --cov=authark/infrastructure tests/infrastructure/ \
-	--cov-report term-missing -s
+	export COVERAGE_FILE=$(COVFILE); pytest -x --cov=authark/infrastructure \
+	tests/infrastructure/ --cov-report term-missing -s
 
 coverage: 
 	mypy authark
-	pytest -x --cov=authark tests/ --cov-report term-missing -s
+	export COVERAGE_FILE=$(COVFILE); pytest -x --cov=authark tests/ \
+	--cov-report term-missing -s
 
 PART ?= patch
 
