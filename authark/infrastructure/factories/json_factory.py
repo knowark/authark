@@ -69,9 +69,10 @@ class JsonFactory(CryptoFactory):
             self, hash_service: HashService) -> JsonImportService:
         return JsonImportService(hash_service)
 
-    def json_catalog_service(self) -> JsonCatalogService:
+    def json_catalog_service(
+            self, expression_parser: ExpressionParser) -> JsonCatalogService:
         catalog_path = self.config['tenancy']['url']
-        return JsonCatalogService(catalog_path)
+        return JsonCatalogService(catalog_path, expression_parser)
 
     def json_provision_service(self) -> JsonProvisionService:
         data_directory = self.config['data']['dir']

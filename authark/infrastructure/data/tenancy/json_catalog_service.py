@@ -2,14 +2,15 @@ import json
 from uuid import uuid4
 from pathlib import Path
 from typing import Dict, List, Any
-from ....application.utilities import QueryDomain
+from ....application.utilities import QueryDomain, ExpressionParser
 from ....application.services import CatalogService, Tenant
 
 
 class JsonCatalogService(CatalogService):
 
-    def __init__(self, path: str) -> None:
+    def __init__(self, path: str, parser: ExpressionParser) -> None:
         self.path = path
+        self.parser = parser
         self.collection_name = 'tenants'
         self.catalog_schema: Dict = {
             self.collection_name: {}
@@ -40,4 +41,16 @@ class JsonCatalogService(CatalogService):
         return tenant
 
     def search_tenants(self, domain: QueryDomain) -> List[Tenant]:
-        return []
+        with open(self.path, 'r') as f:
+            data = json.load(f)
+            tenants_dict = data.get(self.collection_name, {})
+
+        tenants = []
+        filter_function = self.parser.parse(domain)
+        for tenant_dict in tenants_dict.values():
+            tenant = Tenant(**tenant_dict)
+
+            if filter_function(tenant):
+                tenants.append(tenant)
+
+        return tenants
