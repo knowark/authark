@@ -1,10 +1,10 @@
 from inspect import signature
-from authark.application.services.hash_service import (
+from authark.application.services import (
     HashService, MemoryHashService)
 
 
 def test_hash_service() -> None:
-    methods = HashService.__abstractmethods__
+    methods = HashService.__abstractmethods__  # type: ignore
     assert 'generate_hash' in methods
     assert 'verify_password' in methods
 

@@ -5,7 +5,7 @@ from authark.application.services.token_service import MemoryTokenService
 
 
 def test_token_service() -> None:
-    methods = TokenService.__abstractmethods__
+    methods = TokenService.__abstractmethods__  # type: ignore
     assert 'generate_token' in methods
     assert 'valid' in methods
     assert 'renew' in methods
