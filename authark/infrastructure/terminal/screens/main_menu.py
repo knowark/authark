@@ -4,13 +4,20 @@ from ..framework import Screen, Environment
 from .users import UsersScreen
 from .dominions import DominionsScreen
 from .policies import PoliciesScreen
+from .tenants import TenantsScreen
 
 
 class MainMenu(Screen):
 
     def _build_widget(self) -> urwid.Widget:
-        header = urwid.AttrMap(
-            urwid.Text('AUTHARK', align='center'), 'primary_bg')
+        title = urwid.AttrMap(
+            urwid.Text('AUTHARK', align='center'), 'secondary_bg')
+        tenant_button = urwid.Button(
+            'COMFACAUCA', on_press=self.show_tenants_screen)
+        tenant_button._label.align = 'center'
+        tenant = urwid.AttrMap(
+            tenant_button, 'primary_bg')
+        header = urwid.Pile([title, tenant])
         widget_list = [
             urwid.Divider(),
             self._build_menu_option('Users', self.show_users_screen),
@@ -32,6 +39,10 @@ class MainMenu(Screen):
         button = urwid.Button(name)
         urwid.connect_signal(button, 'click', callback)
         return urwid.AttrMap(button, 'info')
+
+    def show_tenants_screen(self, button=None):
+        screen = TenantsScreen('TENANTS', self.env, self)
+        return self._open_screen(screen)
 
     def show_users_screen(self, button=None):
         screen = UsersScreen('USERS', self.env)

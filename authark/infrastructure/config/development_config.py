@@ -80,5 +80,8 @@ class DevelopmentConfig(Config):
             },
             "ComposingReporter": {
                 "method": "standard_composing_reporter"
+            },
+            "TenancyReporter": {
+                "method": "standard_tenancy_reporter"
             }
         }

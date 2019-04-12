@@ -23,7 +23,8 @@ from ...application.coordinators import (
     AuthCoordinator, ManagementCoordinator,
     ImportCoordinator, SetupCoordinator, AssignmentCoordinator)
 from ...application.reporters import (
-    StandardAutharkReporter, StandardComposingReporter)
+    StandardAutharkReporter, StandardComposingReporter,
+    StandardTenancyReporter)
 from .factory import Factory
 
 
@@ -203,3 +204,8 @@ class MemoryFactory(Factory):
             dominion_repository, role_repository, ranking_repository,
             resource_repository, policy_repository, permission_repository,
             grant_repository)
+
+    def standard_tenancy_reporter(
+        self, catalog_service: CatalogService
+    ) -> StandardTenancyReporter:
+        return StandardTenancyReporter(catalog_service)
