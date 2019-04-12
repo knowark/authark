@@ -3,6 +3,7 @@ from ..services import CatalogService, ProvisionService, Tenant
 from ..repositories import (
     UserRepository, CredentialRepository, RoleRepository,
     RankingRepository, DominionRepository)
+from .errors import TenantAlreadyExistsError
 
 
 class SetupCoordinator:
@@ -19,6 +20,8 @@ class SetupCoordinator:
         tenant = Tenant(**tenant_dict)
         domain = ['|', ('slug', '=', tenant.slug),
                   ('name', '=', tenant.name)]
-        self.catalog_service.search_tenants(domain)
+        duplicates = self.catalog_service.search_tenants(domain)
+        if duplicates:
+            raise TenantAlreadyExistsError()
         self.catalog_service.add_tenant(tenant)
         self.provision_service.create_tenant(tenant)

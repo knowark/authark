@@ -1,8 +1,9 @@
+from pytest import raises
 from typing import cast
-from authark.application.models import User
 from authark.application.services import (
-    MemoryCatalogService, MemoryProvisionService)
-from authark.application.coordinators import SetupCoordinator
+    Tenant, MemoryCatalogService, MemoryProvisionService)
+from authark.application.coordinators import (
+    SetupCoordinator, TenantAlreadyExistsError)
 
 
 def test_setup_coordinator_creation(
@@ -32,3 +33,21 @@ def test_setup_coordinator_create_tenant(
     setup_coordinator.setup_server()
     setup_coordinator.create_tenant(tenant_dict)
     assert len(provision_service.pool) == 1
+
+
+def test_setup_coordinator_create_tenant_duplicate(
+        setup_coordinator: SetupCoordinator) -> None:
+    provision_service = cast(MemoryProvisionService,
+                             setup_coordinator.provision_service)
+    catalog_service = cast(MemoryCatalogService,
+                           setup_coordinator.catalog_service)
+    setup_coordinator.setup_server()
+    catalog_service.catalog = {
+        '001': Tenant(name='Amazon'),
+        '002': Tenant(name='Google'),
+        '003': Tenant(name='Microsoft'),
+    }
+
+    tenant_dict = {"name": "Google"}
+    with raises(TenantAlreadyExistsError):
+        setup_coordinator.create_tenant(tenant_dict)
