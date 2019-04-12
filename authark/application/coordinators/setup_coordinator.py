@@ -17,5 +17,8 @@ class SetupCoordinator:
 
     def create_tenant(self, tenant_dict):
         tenant = Tenant(**tenant_dict)
+        domain = ['|', ('slug', '=', tenant.slug),
+                  ('name', '=', tenant.name)]
+        self.catalog_service.search_tenants(domain)
         self.catalog_service.add_tenant(tenant)
         self.provision_service.create_tenant(tenant)

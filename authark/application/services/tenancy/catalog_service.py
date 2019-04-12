@@ -40,15 +40,10 @@ class MemoryCatalogService(CatalogService):
         return tenant
 
     def search_tenants(self, domain: QueryDomain) -> List[Tenant]:
-        return []
-        # tenants = []
-        # filter_function = self.parser.parse(domain)
-        # for item in list(self.items.values()):
-        #     if filter_function(item):
-        #         items.append(item)
+        tenants = []
+        filter_function = self.parser.parse(domain)
+        for tenant in list(self.catalog.values()):
+            if filter_function(tenant):
+                tenants.append(tenant)
 
-        # items = items[:limit]
-        # items = items[offset:]
-
-        # return items
-        # return super().search_tenants(domain)
+        return tenants
