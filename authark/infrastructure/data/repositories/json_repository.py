@@ -2,8 +2,9 @@ import os
 from json import load, dump
 from uuid import uuid4
 from typing import Dict, List, Optional, Any, Type, TypeVar, Callable, Generic
+from ....application.utilities import ExpressionParser
 from ....application.repositories import (
-    Repository, QueryDomain, ExpressionParser, EntityNotFoundError)
+    Repository, QueryDomain, EntityNotFoundError)
 
 
 T = TypeVar('T')

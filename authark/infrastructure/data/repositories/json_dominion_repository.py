@@ -1,6 +1,6 @@
 from ....application.models import Dominion
-from ....application.repositories import (
-    ExpressionParser, DominionRepository)
+from ....application.utilities import ExpressionParser
+from ....application.repositories import DominionRepository
 from .json_repository import JsonRepository
 
 

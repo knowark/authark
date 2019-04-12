@@ -1,6 +1,6 @@
 from ....application.models import Role
-from ....application.repositories import (
-    ExpressionParser, RoleRepository)
+from ....application.utilities import ExpressionParser
+from ....application.repositories import RoleRepository
 from .json_repository import JsonRepository
 
 

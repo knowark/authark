@@ -1,8 +1,7 @@
 from json import dumps, loads
 from pytest import fixture, raises
-from authark.application.repositories.repository import Repository
-from authark.application.repositories import (
-    ExpressionParser, EntityNotFoundError)
+from authark.application.utilities import ExpressionParser
+from authark.application.repositories import Repository, EntityNotFoundError
 from authark.infrastructure.data import JsonRepository
 
 

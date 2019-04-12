@@ -1,6 +1,6 @@
 from ....application.models import Grant
-from ....application.repositories import (
-    ExpressionParser, GrantRepository)
+from ....application.utilities import ExpressionParser
+from ....application.repositories import GrantRepository
 from .json_repository import JsonRepository
 
 

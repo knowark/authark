@@ -1,6 +1,6 @@
 from ....application.models import Resource
-from ....application.repositories import (
-    ExpressionParser, ResourceRepository)
+from ....application.utilities import ExpressionParser
+from ....application.repositories import ResourceRepository
 from .json_repository import JsonRepository
 
 

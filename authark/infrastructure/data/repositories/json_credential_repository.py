@@ -1,7 +1,6 @@
-from authark.application.models.credential import Credential
-from authark.application.utilities import ExpressionParser
-from authark.application.repositories.credential_repository import (
-    CredentialRepository)
+from ....application.models import Credential
+from ....application.utilities import ExpressionParser
+from ....application.repositories import CredentialRepository
 from .json_repository import JsonRepository
 
 

@@ -6,8 +6,8 @@ from injectark import Injectark
 from authark.application.models import (
     User, Credential, Dominion, Role, Ranking,
     Resource, Grant, Policy, Permission)
+from authark.application.utilities import ExpressionParser
 from authark.application.repositories import (
-    ExpressionParser,
     MemoryUserRepository, MemoryCredentialRepository,
     MemoryDominionRepository, MemoryRoleRepository,
     MemoryRankingRepository, MemoryResourceRepository,

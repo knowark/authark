@@ -1,6 +1,6 @@
 from ....application.models import Policy
-from ....application.repositories import (
-    ExpressionParser, PolicyRepository)
+from ....application.utilities import ExpressionParser
+from ....application.repositories import PolicyRepository
 from .json_repository import JsonRepository
 
 

@@ -1,6 +1,6 @@
-from authark.application.models.user import User
-from authark.application.utilities import ExpressionParser
-from authark.application.repositories.user_repository import UserRepository
+from ....application.models import User
+from ....application.utilities import ExpressionParser
+from ....application.repositories import UserRepository
 from .json_repository import JsonRepository
 
 

@@ -1,6 +1,6 @@
 from ..config import Config
+from ...application.utilities import ExpressionParser
 from ...application.repositories import (
-    ExpressionParser,
     UserRepository, MemoryUserRepository,
     CredentialRepository, MemoryCredentialRepository,
     DominionRepository, MemoryDominionRepository,
@@ -95,8 +95,10 @@ class MemoryFactory(Factory):
     def memory_import_service(self) -> MemoryImportService:
         return MemoryImportService()
 
-    def memory_catalog_service(self) -> MemoryCatalogService:
-        return MemoryCatalogService()
+    def memory_catalog_service(
+            self, expression_parser: ExpressionParser
+    ) -> MemoryCatalogService:
+        return MemoryCatalogService(expression_parser)
 
     def memory_provision_service(self) -> MemoryProvisionService:
         return MemoryProvisionService()

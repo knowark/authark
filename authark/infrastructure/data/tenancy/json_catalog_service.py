@@ -2,6 +2,7 @@ import json
 from uuid import uuid4
 from pathlib import Path
 from typing import Dict, List, Any
+from ....application.utilities import QueryDomain
 from ....application.services import CatalogService, Tenant
 
 
@@ -37,3 +38,6 @@ class JsonCatalogService(CatalogService):
             json.dump(data, f, indent=2)
 
         return tenant
+
+    def search_tenants(self, domain: QueryDomain) -> List[Tenant]:
+        return []

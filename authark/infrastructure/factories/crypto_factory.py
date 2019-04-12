@@ -3,8 +3,8 @@ from ..crypto import (
     PasslibHashService, PyJWTAccessTokenService,
     PyJWTRefreshTokenService)
 from .memory_factory import MemoryFactory
+from ...application.utilities import ExpressionParser
 from ...application.repositories import (
-    ExpressionParser,
     UserRepository,
     CredentialRepository)
 from ...application.services import (
