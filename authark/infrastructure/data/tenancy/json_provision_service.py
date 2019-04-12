@@ -20,8 +20,6 @@ class JsonProvisionService(ProvisionService):
             'grants'
         ]
 
-        print('||||| Provision directory>>>', self.directory)
-
     def setup(self) -> bool:
 
         directory = Path(self.directory)
@@ -33,25 +31,22 @@ class JsonProvisionService(ProvisionService):
 
         return True
 
-    def create_tenant(self, tenant: Tenant) -> Tenant:
-        print('Calling provision json...')
-        return tenant
+    def provision_tenant(self, tenant: Tenant) -> None:
+        filepath = Path(self.directory) / tenant.slug / f"{tenant.slug}.json"
+        self._deploy_schema(filepath, self.collections)
 
-    #     tenant = self._register_tenant(tenant)
+    def _deploy_schema(self, filepath: Path, collections: List[str]) -> None:
+        parent_path = Path(filepath).parent
+        parent_path.mkdir(parents=True, exist_ok=True)
+        filepath.touch()
 
-    # def _deploy_schema(self, filename: str, collections: List[str]) -> None:
-    #     parent_path = Path(filename).parent
-    #     parent_path.mkdir(parents=True, exist_ok=True)
-    #     filepath = Path(filename)
-    #     filepath.touch()
+        with filepath.open('r') as f:
+            content = f.read() or "{}"
+            data = json.loads(content)
 
-    #     with filepath.open('r') as f:
-    #         content = f.read() or "{}"
-    #         data = json.loads(content)
+            for collection in collections:
+                if collection not in data:
+                    data[collection] = {}
 
-    #         for collection in collections:
-    #             if collection not in data:
-    #                 data[collection] = {}
-
-    #         with filepath.open('w') as f:
-    #             json.dump(data, f)
+            with filepath.open('w') as f:
+                json.dump(data, f, indent=2)

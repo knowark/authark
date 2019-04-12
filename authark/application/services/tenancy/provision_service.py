@@ -12,8 +12,8 @@ class ProvisionService(ABC):
         "Setup method to be implemented."
 
     @abstractmethod
-    def create_tenant(self, tenant: Tenant) -> Tenant:
-        "Create tenant method to be implemented."
+    def provision_tenant(self, tenant: Tenant) -> None:
+        "Provision tenant method to be implemented."
 
 
 class MemoryProvisionService(ProvisionService):
@@ -25,9 +25,8 @@ class MemoryProvisionService(ProvisionService):
         self.pool = {}
         return True
 
-    def create_tenant(self, tenant: Tenant) -> Tenant:
+    def provision_tenant(self, tenant: Tenant) -> None:
         tenant.id = tenant.id or str(uuid4())
         if self.pool is None:
             raise ValueError("Setup the provisioning environment first.")
         self.pool[tenant.id] = tenant
-        return tenant

@@ -21,8 +21,10 @@ class SetupCoordinator:
         domain = ['|', ('slug', '=', tenant.slug),
                   ('name', '=', tenant.name)]
         duplicates = self.catalog_service.search_tenants(domain)
-        print('Duplicates====', duplicates, tenant, tenant_dict)
+
         if duplicates:
-            raise TenantAlreadyExistsError()
-        self.catalog_service.add_tenant(tenant)
-        self.provision_service.create_tenant(tenant)
+            raise TenantAlreadyExistsError(
+                f'A tenant with slug "{tenant.slug}" already exists.')
+
+        tenant = self.catalog_service.add_tenant(tenant)
+        self.provision_service.provision_tenant(tenant)
