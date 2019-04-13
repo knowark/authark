@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 from typing import List, TypeVar, Optional, Generic
+
 from ..utilities import QueryDomain, T
 
 

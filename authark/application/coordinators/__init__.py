@@ -1,3 +1,4 @@
+from .affiliation_coordinator import AffiliationCoordinator
 from .auth_coordinator import AuthCoordinator
 from .management_coordinator import ManagementCoordinator
 from .setup_coordinator import SetupCoordinator

@@ -19,10 +19,11 @@ from authark.application.services import (
     AccessService, StandardAccessService,
     RefreshTokenService, ImportService, MemoryImportService,
     CatalogService, MemoryCatalogService,
-    ProvisionService, MemoryProvisionService)
+    ProvisionService, MemoryProvisionService,
+    TenantService, StandardTenantService)
 from authark.application.coordinators import (
     AuthCoordinator, ManagementCoordinator, SetupCoordinator,
-    ImportCoordinator, AssignmentCoordinator)
+    ImportCoordinator, AssignmentCoordinator, AffiliationCoordinator)
 from authark.application.services.hash_service import (
     HashService, MemoryHashService)
 
@@ -174,6 +175,12 @@ def mock_provision_service() -> ProvisionService:
 
 
 @fixture
+def mock_tenant_service() -> StandardTenantService:
+    mock_tenant_service = StandardTenantService()
+    return mock_tenant_service
+
+
+@fixture
 def mock_import_service() -> ImportService:
     mock_import_service = MemoryImportService()
     user_1 = User(**{'id': "1",
@@ -303,3 +310,12 @@ def setup_coordinator(
 ) -> SetupCoordinator:
     return SetupCoordinator(
         mock_catalog_service, mock_provision_service)
+
+
+@fixture
+def affiliation_coordinator(
+    mock_catalog_service: CatalogService,
+    mock_tenant_service: TenantService
+) -> AffiliationCoordinator:
+    return AffiliationCoordinator(
+        mock_catalog_service, mock_tenant_service)

@@ -113,8 +113,8 @@ def catalog_service() -> CatalogService:
 
 
 @fixture
-def tenant_service(catalog_service) -> TenantService:
-    return StandardTenantService(catalog_service)
+def tenant_service() -> TenantService:
+    return StandardTenantService()
 
 
 @fixture
