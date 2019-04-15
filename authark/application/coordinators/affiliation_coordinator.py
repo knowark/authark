@@ -10,13 +10,10 @@ class AffiliationCoordinator:
         self.catalog_service = catalog_service
         self.tenant_service = tenant_service
 
-    def establish_tenant(self, tenant_dict: Dict[str, Any]) -> None:
-        slug = tenant_dict.get('slug', '')
-        domain = [('slug', '=', slug)]
-        tenants = self.catalog_service.search_tenants(domain)
-
-        if not len(tenants) == 1:
-            raise ValueError("Your tenant was not found.")
-
-        tenant = tenants[0]
+    def establish_tenant(self, tenant_id: str) -> None:
+        tenant = self.catalog_service.get_tenant(tenant_id)
         self.tenant_service.setup(tenant)
+
+    def get_current_tenant(self) -> Dict[str, Any]:
+        current = self.tenant_service.get_tenant()
+        return vars(current)

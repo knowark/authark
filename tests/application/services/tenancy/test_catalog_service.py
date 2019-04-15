@@ -52,3 +52,33 @@ def test_memory_catalog_service_search_tenants_no_setup(
         catalog_service: MemoryCatalogService):
     with raises(ValueError):
         tenants = catalog_service.search_tenants([])
+
+
+def test_memory_catalog_service_get_tenant(
+        catalog_service: MemoryCatalogService):
+    catalog_service.setup()
+    catalog_service.catalog = {
+        '001': Tenant(name='Amazon'),
+        '002': Tenant(name='Google'),
+        '003': Tenant(name='Microsoft'),
+    }
+    tenant = catalog_service.get_tenant('002')
+    assert tenant.name == 'Google'
+
+
+def test_memory_catalog_service_get_tenant_not_found(
+        catalog_service: MemoryCatalogService):
+    catalog_service.setup()
+    catalog_service.catalog = {
+        '001': Tenant(name='Amazon'),
+        '002': Tenant(name='Google'),
+        '003': Tenant(name='Microsoft'),
+    }
+    with raises(ValueError):
+        catalog_service.get_tenant('004')
+
+
+def test_memory_catalog_service_get_tenant_not_setup(
+        catalog_service: MemoryCatalogService):
+    with raises(ValueError):
+        catalog_service.get_tenant('001')

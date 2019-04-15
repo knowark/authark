@@ -40,6 +40,16 @@ class JsonCatalogService(CatalogService):
 
         return tenant
 
+    def get_tenant(self, tenant_id: str) -> Tenant:
+        with open(self.path) as f:
+            data = json.load(f)
+            tenants = data.get(self.collection_name, {})
+            tenant_dict = tenants.get(tenant_id)
+            if not tenant_dict:
+                raise ValueError(
+                    f"The entity with id {tenant_id} was not found.")
+            return Tenant(**tenant_dict)
+
     def search_tenants(self, domain: QueryDomain) -> List[Tenant]:
         with open(self.path, 'r') as f:
             data = json.load(f)

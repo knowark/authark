@@ -1,5 +1,5 @@
 import urwid
-from typing import Dict, Callable
+from typing import Dict, Callable, Any
 from ..framework import Screen, Environment
 from .users import UsersScreen
 from .dominions import DominionsScreen
@@ -10,10 +10,16 @@ from .tenants import TenantsScreen
 class MainMenu(Screen):
 
     def _build_widget(self) -> urwid.Widget:
+        self.affiliation_coordinator = self.env.context.resolve(
+            'AffiliationCoordinator')
+
+        current_tenant = self.affiliation_coordinator.get_current_tenant()
+        current_tenant_name = current_tenant.get('name', '').upper()
+
         title = urwid.AttrMap(
             urwid.Text('AUTHARK', align='center'), 'secondary_bg')
         tenant_button = urwid.Button(
-            'COMFACAUCA', on_press=self.show_tenants_screen)
+            current_tenant_name, on_press=self.show_tenants_screen)
         tenant_button._label.align = 'center'
         tenant = urwid.AttrMap(
             tenant_button, 'primary_bg')
@@ -34,6 +40,9 @@ class MainMenu(Screen):
         frame = urwid.Frame(header=header, body=body, footer=footer)
 
         return frame
+
+    def rebuild(self) -> None:
+        self.env.holder.original_widget = MainMenu("Main Menu", self.env)
 
     def _build_menu_option(self, name, callback):
         button = urwid.Button(name)

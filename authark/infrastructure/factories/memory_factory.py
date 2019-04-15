@@ -18,10 +18,12 @@ from ...application.services import (
     AccessService, StandardAccessService,
     ImportService, MemoryImportService,
     CatalogService, MemoryCatalogService,
-    ProvisionService, MemoryProvisionService)
+    ProvisionService, MemoryProvisionService,
+    TenantService, StandardTenantService)
 from ...application.coordinators import (
     AuthCoordinator, ManagementCoordinator,
-    ImportCoordinator, SetupCoordinator, AssignmentCoordinator)
+    ImportCoordinator, SetupCoordinator, AssignmentCoordinator,
+    AffiliationCoordinator)
 from ...application.reporters import (
     StandardAutharkReporter, StandardComposingReporter,
     StandardTenancyReporter)
@@ -104,6 +106,9 @@ class MemoryFactory(Factory):
     def memory_provision_service(self) -> MemoryProvisionService:
         return MemoryProvisionService()
 
+    def standard_tenant_service(self) -> StandardTenantService:
+        return StandardTenantService()
+
     def standard_access_service(
             self, ranking_repository: RankingRepository,
             role_repository: RoleRepository,
@@ -175,6 +180,12 @@ class MemoryFactory(Factory):
             user_repository, role_repository, ranking_repository,
             policy_repository, resource_repository, permission_repository,
             grant_repository)
+
+    def affiliation_coordinator(
+        self, catalog_service: CatalogService,
+        tenant_service: TenantService,
+    ) -> AffiliationCoordinator:
+        return AffiliationCoordinator(catalog_service, tenant_service)
 
     # Reporters
 

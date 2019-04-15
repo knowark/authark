@@ -25,3 +25,8 @@ def test_standard_tenant_service_get_tenant(tenant_service):
     assert tenant_service.state.tenant is None
     tenant_service.setup(tenant)
     assert tenant_service.get_tenant() == tenant
+
+
+def test_standard_tenant_service_get_tenant_not_set(tenant_service):
+    with raises(ValueError):
+        assert tenant_service.get_tenant()

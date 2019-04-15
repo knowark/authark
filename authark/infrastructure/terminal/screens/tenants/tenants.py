@@ -6,6 +6,9 @@ class TenantsScreen(Screen):
 
     def _build_widget(self) -> urwid.Widget:
         self.tenancy_reporter = self.env.context.resolve('TenancyReporter')
+        self.affiliation_coordinator = self.env.context.resolve(
+            'AffiliationCoordinator')
+
         header = urwid.AttrMap(
             urwid.Text(self.name, align='center'), 'success_bg')
 
@@ -50,9 +53,14 @@ class TenantsScreen(Screen):
         return Table(data, headers_list)
 
     def set_current_tenant(self):
-        pass
+        self.selected_item = self.table.get_selected_item()
+        self.affiliation_coordinator.establish_tenant(self.selected_item['id'])
+
+        self._back()
+        main_menu = self.env.holder.original_widget
+        main_menu.rebuild()
 
     def keypress(self, size, key):
-        # if key in ('enter'):
-        #     self.set_current_tenant()
+        if key in ('enter'):
+            self.set_current_tenant()
         return super().keypress(size, key)

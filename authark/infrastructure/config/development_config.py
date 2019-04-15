@@ -57,6 +57,9 @@ class DevelopmentConfig(Config):
             "CatalogService": {
                 "method": "memory_catalog_service"
             },
+            "TenantService": {
+                "method": "standard_tenant_service"
+            },
             "ProvisionService": {
                 "method": "memory_provision_service"
             },
@@ -74,6 +77,9 @@ class DevelopmentConfig(Config):
             },
             "AssignmentCoordinator": {
                 "method": "assignment_coordinator"
+            },
+            "AffiliationCoordinator": {
+                "method": "affiliation_coordinator"
             },
             "AutharkReporter": {
                 "method": "standard_authark_reporter"

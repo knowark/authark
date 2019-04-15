@@ -13,7 +13,7 @@ class Main:
     def __init__(self, context: Context) -> None:
         self.context = context
         self.holder = urwid.WidgetPlaceholder(urwid.SolidFill('/'))
-        self.stack = []  # type: List[urwid.Widget]
+        self.stack: List[urwid.Widget] = []
         self.env = Environment(self.holder, self.stack, self.context)
 
         self.top = self._build_top(self.holder)
@@ -23,6 +23,7 @@ class Main:
             unhandled_input=self._unhandled_input)
 
     def _build_top(self, holder: urwid.Widget) -> urwid.Overlay:
+        self._setup_initial_tenant()
         holder.original_widget = MainMenu("Main Menu", self.env)
         top = urwid.Overlay(
             holder, urwid.SolidFill('\N{MEDIUM SHADE}'),
@@ -30,6 +31,13 @@ class Main:
             valign='middle', height=('relative', 95),
             min_width=20, min_height=9)
         return top
+
+    def _setup_initial_tenant(self) -> None:
+        self.tenancy_reporter = self.env.context.resolve('TenancyReporter')
+        self.affiliation_coordinator = self.env.context.resolve(
+            'AffiliationCoordinator')
+        first_tenant = self.tenancy_reporter.search_tenants([])[0]
+        self.affiliation_coordinator.establish_tenant(first_tenant['id'])
 
     def _unhandled_input(self, key: str):
         if key == 'meta q':

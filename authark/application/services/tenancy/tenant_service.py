@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import List, Dict, Any
+from typing import List, Dict, Any, Optional
 from threading import local
 from .catalog_service import CatalogService
 from .tenant import Tenant
@@ -12,6 +12,10 @@ class TenantService(ABC):
     def setup(self, tenant: Tenant) -> None:
         "Setup current tenant method to be implemented."
 
+    @abstractmethod
+    def get_tenant(self) -> Tenant:
+        """Get the current request user"""
+
 
 class StandardTenantService(TenantService):
 
@@ -23,4 +27,6 @@ class StandardTenantService(TenantService):
         self.state.tenant = tenant
 
     def get_tenant(self) -> Tenant:
+        if not self.state.tenant:
+            raise ValueError('Not tenant has been set.')
         return self.state.tenant

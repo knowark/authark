@@ -11,24 +11,22 @@ def test_affiliation_coordinator_instantiation(affiliation_coordinator):
 
 
 def test_affiliation_coordinator_establish_tenant(affiliation_coordinator):
-    tenant_dict = {'slug': 'amazon'}
+    tenant_id = '001'
     affiliation_coordinator.catalog_service.catalog = {
         '001': Tenant(name='Amazon'),
         '002': Tenant(name='Google'),
         '003': Tenant(name='Microsoft')
     }
-    affiliation_coordinator.establish_tenant(tenant_dict)
+    affiliation_coordinator.establish_tenant(tenant_id)
     tenant = affiliation_coordinator.tenant_service.get_tenant()
     assert tenant.slug == 'amazon'
 
 
-def test_affiliation_coordinator_establish_tenant_not_found(
-        affiliation_coordinator):
-    tenant_dict = {'slug': 'Apple'}
-    affiliation_coordinator.catalog_service.catalog = {
-        '001': Tenant(name='Amazon'),
-        '002': Tenant(name='Google'),
-        '003': Tenant(name='Microsoft')
-    }
-    with raises(ValueError):
-        affiliation_coordinator.establish_tenant(tenant_dict)
+def test_affiliation_coordinator_get_current_tenant(affiliation_coordinator):
+    affiliation_coordinator.tenant_service.state.tenant = (
+        Tenant(id='001', name='Amazon'))
+
+    current_tenant = affiliation_coordinator.get_current_tenant()
+    assert isinstance(current_tenant, dict)
+    assert current_tenant.get('id') == '001'
+    assert current_tenant.get('name') == 'Amazon'

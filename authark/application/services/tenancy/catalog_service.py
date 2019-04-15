@@ -18,6 +18,10 @@ class CatalogService(ABC):
         "Add tenant method to be implemented."
 
     @abstractmethod
+    def get_tenant(self, tenant_id: str) -> Tenant:
+        "Get tenant method to be implemented."
+
+    @abstractmethod
     def search_tenants(self, domain: QueryDomain) -> List[Tenant]:
         "Search tenants method to be implemented."
 
@@ -37,6 +41,17 @@ class MemoryCatalogService(CatalogService):
         if self.catalog is None:
             raise ValueError("Setup the tenant catalog first.")
         self.catalog[tenant.id] = tenant
+        return tenant
+
+    def get_tenant(self, tenant_id: str) -> Tenant:
+        if self.catalog is None:
+            raise ValueError("Setup the tenant catalog first.")
+
+        tenant = self.catalog.get(tenant_id)
+
+        if not tenant:
+            raise ValueError('Tenant not found.')
+
         return tenant
 
     def search_tenants(self, domain: QueryDomain) -> List[Tenant]:
