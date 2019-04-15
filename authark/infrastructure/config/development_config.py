@@ -81,6 +81,9 @@ class DevelopmentConfig(Config):
             "AffiliationCoordinator": {
                 "method": "affiliation_coordinator"
             },
+            "AccessCoordinator": {
+                "method": "access_coordinator"
+            },
             "AutharkReporter": {
                 "method": "standard_authark_reporter"
             },

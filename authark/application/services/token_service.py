@@ -1,7 +1,7 @@
 import json
 from typing import Dict, Any
 from abc import ABC, abstractmethod
-from authark.application.models.token import Token
+from authark.application.models import Token
 
 
 class TokenService(ABC):

@@ -23,7 +23,7 @@ from ...application.services import (
 from ...application.coordinators import (
     AuthCoordinator, ManagementCoordinator,
     ImportCoordinator, SetupCoordinator, AssignmentCoordinator,
-    AffiliationCoordinator)
+    AffiliationCoordinator, AccessCoordinator)
 from ...application.reporters import (
     StandardAutharkReporter, StandardComposingReporter,
     StandardTenancyReporter)
@@ -129,11 +129,11 @@ class MemoryFactory(Factory):
             self, user_repository: UserRepository,
             credential_repository: CredentialRepository,
             hash_service: HashService,
-            access_service: AccessService,
+            access_coordinator: AccessCoordinator,
             refresh_token_service: RefreshTokenService) -> AuthCoordinator:
         return AuthCoordinator(
             user_repository, credential_repository,
-            hash_service, access_service, refresh_token_service)
+            hash_service, access_coordinator, refresh_token_service)
 
     def management_coordinator(
         self, user_repository: UserRepository,
@@ -186,6 +186,20 @@ class MemoryFactory(Factory):
         tenant_service: TenantService,
     ) -> AffiliationCoordinator:
         return AffiliationCoordinator(catalog_service, tenant_service)
+
+    def access_coordinator(
+            self, ranking_repository: RankingRepository,
+            role_repository: RoleRepository,
+            dominion_repository: DominionRepository,
+            resource_repository: ResourceRepository,
+            grant_repository: GrantRepository,
+            permission_repository: PermissionRepository,
+            policy_repository: PolicyRepository,
+            token_service: AccessTokenService) -> AccessCoordinator:
+        return AccessCoordinator(
+            ranking_repository, role_repository,
+            dominion_repository, resource_repository, grant_repository,
+            permission_repository, policy_repository, token_service)
 
     # Reporters
 

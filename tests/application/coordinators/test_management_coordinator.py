@@ -31,7 +31,7 @@ def test_management_coordinator_create_resource(management_coordinator):
 
 
 def test_management_coordinator_remove_resource(management_coordinator):
-    resource_id = '001'
+    resource_id = '1'
     management_coordinator.remove_resource(resource_id)
     assert len(management_coordinator.resource_repository.items) == 0
 

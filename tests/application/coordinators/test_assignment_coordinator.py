@@ -11,7 +11,7 @@ def test_assignment_coordinator_instantiation(assignment_coordinator):
 
 def test_assignment_coordinator_assign_policy(assignment_coordinator):
     policy_id = '001'
-    resource_id = '001'
+    resource_id = '1'
     assignment_coordinator.assign_policy(policy_id, resource_id)
     assert len(assignment_coordinator.permission_repository.items) == 1
 
@@ -19,9 +19,9 @@ def test_assignment_coordinator_assign_policy(assignment_coordinator):
 def test_assignment_coordinator_assign_policy_duplicate(
         assignment_coordinator):
     policy_id = '001'
-    resource_id = '001'
+    resource_id = '1'
     assignment_coordinator.permission_repository.items['001'] = (
-        Permission(id='001', policy_id='001', resource_id='001')
+        Permission(id='001', policy_id='001', resource_id='1')
     )
 
     assignment_coordinator.assign_policy(policy_id, resource_id)

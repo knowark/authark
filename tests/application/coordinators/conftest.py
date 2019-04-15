@@ -23,7 +23,8 @@ from authark.application.services import (
     TenantService, StandardTenantService)
 from authark.application.coordinators import (
     AuthCoordinator, ManagementCoordinator, SetupCoordinator,
-    ImportCoordinator, AssignmentCoordinator, AffiliationCoordinator)
+    ImportCoordinator, AssignmentCoordinator, AffiliationCoordinator,
+    AccessCoordinator)
 from authark.application.services.hash_service import (
     HashService, MemoryHashService)
 
@@ -119,7 +120,7 @@ def mock_policy_repository() -> PolicyRepository:
 @fixture
 def mock_resource_repository() -> ResourceRepository:
     resource_dict = {
-        "001": Resource(id='001', name='customers', dominion_id='1')
+        "1": Resource(id='1', name='employees', dominion_id='1')
     }
     parser = ExpressionParser()
     resource_repository = MemoryResourceRepository(parser)
@@ -129,7 +130,9 @@ def mock_resource_repository() -> ResourceRepository:
 
 @fixture
 def mock_permission_repository() -> PermissionRepository:
-    permission_dict = {}  # type: Dict[str, Permission]
+    permission_dict = {
+        "001": Permission(id='001', policy_id='001', resource_id='1')
+    }  # type: Dict[str, Permission]
     parser = ExpressionParser()
     permission_repository = MemoryPermissionRepository(parser)
     permission_repository.load(permission_dict)
@@ -138,7 +141,9 @@ def mock_permission_repository() -> PermissionRepository:
 
 @fixture
 def mock_grant_repository() -> GrantRepository:
-    grants_dict = {}  # type: Dict[str, Grant]
+    grants_dict = {
+        '001': Grant(id='001', permission_id='001', role_id='1')
+    }  # type: Dict[str, Grant]
     parser = ExpressionParser()
     grant_repository = MemoryGrantRepository(parser)
     grant_repository.load(grants_dict)
@@ -247,11 +252,11 @@ def mock_access_service(mock_ranking_repository, mock_role_repository,
 def auth_coordinator(mock_user_repository: UserRepository,
                      mock_credential_repository: CredentialRepository,
                      mock_hash_service: HashService,
-                     mock_access_service: AccessService,
+                     mock_access_coordinator: AccessCoordinator,
                      mock_refresh_token_service: RefreshTokenService
                      ) -> AuthCoordinator:
     return AuthCoordinator(mock_user_repository, mock_credential_repository,
-                           mock_hash_service, mock_access_service,
+                           mock_hash_service, mock_access_coordinator,
                            mock_refresh_token_service)
 
 
@@ -319,3 +324,15 @@ def affiliation_coordinator(
 ) -> AffiliationCoordinator:
     return AffiliationCoordinator(
         mock_catalog_service, mock_tenant_service)
+
+
+@fixture
+def access_coordinator(mock_ranking_repository, mock_role_repository,
+                       mock_dominion_repository, mock_resource_repository,
+                       mock_grant_repository, mock_permission_repository,
+                       mock_policy_repository, mock_token_service):
+    return AccessCoordinator(
+        mock_ranking_repository, mock_role_repository,
+        mock_dominion_repository, mock_resource_repository,
+        mock_grant_repository, mock_permission_repository,
+        mock_policy_repository, mock_token_service)
