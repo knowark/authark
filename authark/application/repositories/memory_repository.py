@@ -12,10 +12,13 @@ class MemoryRepository(Repository, Generic[T]):
                  tenant_service: TenantService,
                  tenants: List[str]) -> None:
         super().__init__(tenant_service)
+        if not tenants:
+            raise ValueError("At least one tenant must be provided.")
+
         self.data: Dict[str, Dict[str, T]] = {
             tenant: {} for tenant in tenants
         }
-        # self.items: Dict[str, T] = {}
+
         self.parser = parser
 
     def get(self, id: str) -> T:

@@ -1,4 +1,4 @@
-from typing import Dict
+from typing import Dict, List
 from pytest import fixture, raises
 from inspect import signature
 from authark.application.utilities import ExpressionParser
@@ -38,6 +38,16 @@ def filled_memory_repository(memory_repository) -> MemoryRepository:
     }
     memory_repository.load(data_dict)
     return memory_repository
+
+
+def test_memory_repository_no_tenants() -> None:
+    with raises(ValueError):
+        parser = ExpressionParser()
+        tenant_service = StandardTenantService(Tenant(name="Default"))
+        tenants: List[str] = []
+
+        repository = MemoryRepository[DummyEntity](
+            parser, tenant_service, tenants)
 
 
 def test_memory_repository_tenant_service(filled_memory_repository) -> None:
