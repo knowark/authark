@@ -5,7 +5,6 @@ from authark.application.models import (
     Permission, Policy)
 from authark.application.utilities import ExpressionParser
 from authark.application.services import (
-    AccessService, StandardAccessService,
     CatalogService, MemoryCatalogService,
     TokenService, MemoryTokenService,
     TenantService, StandardTenantService,
@@ -120,15 +119,3 @@ def tenant_service() -> TenantService:
 @fixture
 def provision_service() -> ProvisionService:
     return MemoryProvisionService()
-
-
-@fixture
-def access_service(ranking_repository, role_repository,
-                   dominion_repository, resource_repository,
-                   grant_repository, permission_repository,
-                   policy_repository, token_service):
-    return StandardAccessService(
-        ranking_repository, role_repository,
-        dominion_repository, resource_repository,
-        grant_repository, permission_repository,
-        policy_repository, token_service)

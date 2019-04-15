@@ -12,6 +12,7 @@ def test_assignment_coordinator_instantiation(assignment_coordinator):
 def test_assignment_coordinator_assign_policy(assignment_coordinator):
     policy_id = '001'
     resource_id = '1'
+    assignment_coordinator.permission_repository.items = {}
     assignment_coordinator.assign_policy(policy_id, resource_id)
     assert len(assignment_coordinator.permission_repository.items) == 1
 
@@ -31,21 +32,10 @@ def test_assignment_coordinator_assign_policy_duplicate(
 def test_assignment_coordinator_assign_permission(assignment_coordinator):
     role_id = '1'
     permission_id = '001'
-    assignment_coordinator.permission_repository.items['001'] = (
-        Permission(id='001', policy_id='001', resource_id='001')
-    )
 
+    assignment_coordinator.grant_repository.items = {}
     assignment_coordinator.assign_permission(role_id, permission_id)
     assert len(assignment_coordinator.grant_repository.items) == 1
-
-
-# def test_assignment_coordinator_assign_permission_missing_id(
-#         assignment_coordinator):
-#     role_id = '001'
-#     permission_id = '999'
-#     result = assignment_coordinator.assign_permission(role_id, permission_id)
-#     assert result is False
-#     assert len(assignment_coordinator.grant_repository.items) == 0
 
 
 def test_assignment_coordinator_assign_permission_duplicate(

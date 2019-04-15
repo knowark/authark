@@ -16,7 +16,6 @@ from authark.application.repositories import (
     GrantRepository, MemoryGrantRepository)
 from authark.application.services import (
     TokenService, MemoryTokenService,
-    AccessService, StandardAccessService,
     RefreshTokenService, ImportService, MemoryImportService,
     CatalogService, MemoryCatalogService,
     ProvisionService, MemoryProvisionService,
@@ -130,9 +129,9 @@ def mock_resource_repository() -> ResourceRepository:
 
 @fixture
 def mock_permission_repository() -> PermissionRepository:
-    permission_dict = {
+    permission_dict: Dict[str, Permission] = {
         "001": Permission(id='001', policy_id='001', resource_id='1')
-    }  # type: Dict[str, Permission]
+    }
     parser = ExpressionParser()
     permission_repository = MemoryPermissionRepository(parser)
     permission_repository.load(permission_dict)
@@ -141,9 +140,9 @@ def mock_permission_repository() -> PermissionRepository:
 
 @fixture
 def mock_grant_repository() -> GrantRepository:
-    grants_dict = {
+    grants_dict: Dict[str, Grant] = {
         '001': Grant(id='001', permission_id='001', role_id='1')
-    }  # type: Dict[str, Grant]
+    }
     parser = ExpressionParser()
     grant_repository = MemoryGrantRepository(parser)
     grant_repository.load(grants_dict)
@@ -237,26 +236,14 @@ def mock_import_service() -> ImportService:
 
 
 @fixture
-def mock_access_service(mock_ranking_repository, mock_role_repository,
-                        mock_dominion_repository, mock_resource_repository,
-                        mock_grant_repository, mock_permission_repository,
-                        mock_policy_repository, mock_token_service):
-    return StandardAccessService(
-        mock_ranking_repository, mock_role_repository,
-        mock_dominion_repository, mock_resource_repository,
-        mock_grant_repository, mock_permission_repository,
-        mock_policy_repository, mock_token_service)
-
-
-@fixture
 def auth_coordinator(mock_user_repository: UserRepository,
                      mock_credential_repository: CredentialRepository,
                      mock_hash_service: HashService,
-                     mock_access_coordinator: AccessCoordinator,
+                     access_coordinator: AccessCoordinator,
                      mock_refresh_token_service: RefreshTokenService
                      ) -> AuthCoordinator:
     return AuthCoordinator(mock_user_repository, mock_credential_repository,
-                           mock_hash_service, mock_access_coordinator,
+                           mock_hash_service, access_coordinator,
                            mock_refresh_token_service)
 
 

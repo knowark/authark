@@ -2,7 +2,7 @@
 from ..models import AuthError, Token, User, Credential
 from ..repositories import UserRepository, CredentialRepository
 from ..services import (
-    TokenService, RefreshTokenService, HashService, AccessService)
+    TokenService, RefreshTokenService, HashService)
 from .access_coordinator import AccessCoordinator
 from .types import TokenString, TokensDict, UserDict
 
