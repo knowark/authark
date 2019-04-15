@@ -1,14 +1,15 @@
 from abc import ABC, abstractmethod
 from typing import List, TypeVar, Optional, Generic
-# from ..services.tenancy import TenantService
+from ..services import TenantService
 from ..utilities import QueryDomain, T
 
 
 class Repository(ABC, Generic[T]):
 
-    # @abstractmethod
-    # def __init__(self, tenant_service: TenantService) -> None:
-    #     "__init__ method to be implemented."
+    @abstractmethod
+    def __init__(self, tenant_service: TenantService) -> None:
+        "__init__ method to be implemented."
+        self.tenant_service = tenant_service
 
     @abstractmethod
     def get(self, id: str) -> T:

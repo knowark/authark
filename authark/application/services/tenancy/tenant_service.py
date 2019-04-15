@@ -14,19 +14,19 @@ class TenantService(ABC):
 
     @abstractmethod
     def get_tenant(self) -> Tenant:
-        """Get the current request user"""
+        """Get the current tenant"""
 
 
 class StandardTenantService(TenantService):
 
-    def __init__(self) -> None:
+    def __init__(self, tenant=None) -> None:
         self.state = local()
-        self.state.__dict__.setdefault('tenant', None)
+        self.state.__dict__.setdefault('tenant', tenant)
 
     def setup(self, tenant: Tenant) -> None:
         self.state.tenant = tenant
 
     def get_tenant(self) -> Tenant:
         if not self.state.tenant:
-            raise ValueError('Not tenant has been set.')
+            raise ValueError('No tenant has been set.')
         return self.state.tenant
