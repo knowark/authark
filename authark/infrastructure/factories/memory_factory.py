@@ -15,7 +15,6 @@ from ...application.services import (
     TokenService, MemoryTokenService,
     AccessTokenService, MemoryAccessTokenService,
     RefreshTokenService, MemoryRefreshTokenService,
-    AccessService, StandardAccessService,
     ImportService, MemoryImportService,
     CatalogService, MemoryCatalogService,
     ProvisionService, MemoryProvisionService,
@@ -108,20 +107,6 @@ class MemoryFactory(Factory):
 
     def standard_tenant_service(self) -> StandardTenantService:
         return StandardTenantService()
-
-    def standard_access_service(
-            self, ranking_repository: RankingRepository,
-            role_repository: RoleRepository,
-            dominion_repository: DominionRepository,
-            resource_repository: ResourceRepository,
-            grant_repository: GrantRepository,
-            permission_repository: PermissionRepository,
-            policy_repository: PolicyRepository,
-            token_service: AccessTokenService) -> StandardAccessService:
-        return StandardAccessService(
-            ranking_repository, role_repository,
-            dominion_repository, resource_repository, grant_repository,
-            permission_repository, policy_repository, token_service)
 
     # Coordinators
 

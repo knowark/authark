@@ -48,9 +48,6 @@ class DevelopmentConfig(Config):
             "RefreshTokenService": {
                 "method": "memory_refresh_token_service"
             },
-            "AccessService": {
-                "method": "standard_access_service"
-            },
             "ImportService": {
                 "method": "memory_import_service"
             },

@@ -13,9 +13,9 @@ from authark.application.repositories import (
     MemoryRankingRepository, MemoryResourceRepository,
     MemoryGrantRepository, MemoryPermissionRepository,
     MemoryPolicyRepository)
-from authark.application.coordinators import AuthCoordinator
-from authark.application.services import (
-    MemoryHashService, StandardAccessService)
+from authark.application.services import MemoryHashService
+from authark.application.coordinators import (
+    AuthCoordinator, AccessCoordinator)
 from authark.infrastructure.web.base import create_app
 from authark.infrastructure.config import TrialConfig
 from authark.infrastructure.factories import build_factory
@@ -82,7 +82,7 @@ def resolver():
 
     access_token_service = PyJWTAccessTokenService(
         'TESTSECRET', 'HS256', 3600)
-    access_service = StandardAccessService(
+    access_coordinator = AccessCoordinator(
         ranking_repository, role_repository,
         dominion_repository, resource_repository,
         grant_repository, permission_repository,
@@ -93,7 +93,7 @@ def resolver():
     hash_service = MemoryHashService()
     auth_coordinator = AuthCoordinator(
         user_repository, credential_repository,
-        hash_service, access_service,
+        hash_service, access_coordinator,
         refresh_token_service)
 
     resolver = Injectark()

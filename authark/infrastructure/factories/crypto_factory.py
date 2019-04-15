@@ -8,7 +8,7 @@ from ...application.repositories import (
     UserRepository,
     CredentialRepository)
 from ...application.services import (
-    HashService, TokenService, AccessService)
+    HashService, TokenService)
 from ...application.coordinators import (
     AuthCoordinator)
 

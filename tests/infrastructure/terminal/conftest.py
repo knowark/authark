@@ -1,6 +1,7 @@
 from pytest import fixture
 from injectark import Injectark
 from authark.application.models import User, Dominion, Role
+from authark.application.services import Tenant
 from authark.infrastructure.terminal.main import Main
 from authark.infrastructure.config import TrialConfig
 from authark.infrastructure.factories import build_factory
@@ -15,6 +16,10 @@ def context():
 
     resolver = Injectark(strategy=strategy, factory=factory)
 
+    resolver.resolve('CatalogService').setup()
+    resolver.resolve('CatalogService').catalog = {
+        "1": Tenant(id='1', name='Knowark')
+    }
     resolver.resolve('AutharkReporter').user_repository.load({
         "1": User(id='1', username='eecheverry',
                   email='eecheverry@example.com')
