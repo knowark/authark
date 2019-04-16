@@ -35,6 +35,7 @@ class MainMenu(Screen):
 
         footer = urwid.Text([
             "Press (", ("warning", "Alt Q"), ") to exit. "
+            "Press (", ("success", "T"), ") to switch tenant. "
         ])
 
         frame = urwid.Frame(header=header, body=body, footer=footer)
@@ -64,3 +65,8 @@ class MainMenu(Screen):
     def show_policies_screen(self, button=None):
         screen = PoliciesScreen('POLICIES', self.env)
         return self._open_screen(screen)
+
+    def keypress(self, size, key):
+        if key in ('t', 'T'):
+            self.show_tenants_screen()
+        return super().keypress(size, key)

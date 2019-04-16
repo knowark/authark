@@ -1,5 +1,6 @@
 import urwid
 from authark.infrastructure.terminal.framework import Table, Screen
+from .tenants_actions import TenantsDetailsScreen
 
 
 class TenantsScreen(Screen):
@@ -14,6 +15,7 @@ class TenantsScreen(Screen):
 
         footer = urwid.Text([
             "Press (", ("success", "A"), ") to add a new record. ",
+            "Press (", ("info", "D"), ") to show tenant's details. ",
             "Press (", ("warning", "Esc"), ") to go back. "
         ])
 
@@ -60,7 +62,13 @@ class TenantsScreen(Screen):
         main_menu = self.env.holder.original_widget
         main_menu.rebuild()
 
+    def show_details_screen(self):
+        screen = TenantsDetailsScreen("TENANT'S DETAILS", self.env, self)
+        return self._open_screen(screen)
+
     def keypress(self, size, key):
         if key in ('enter'):
             self.set_current_tenant()
+        if key in ('d', 'D'):
+            self.show_details_screen()
         return super().keypress(size, key)
