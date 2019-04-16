@@ -19,7 +19,8 @@ class Config(dict, ABC):
             'debug': False
         }
         self['flask'] = {}
-        self['database'] = {}
+        self['tenancy'] = {}
+        self['data'] = {}
         self['tokens'] = {
             'access': {
                 'algorithm': 'HS256',

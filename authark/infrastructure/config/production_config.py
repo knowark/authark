@@ -19,10 +19,6 @@ class ProductionConfig(DevelopmentConfig):
             'type': 'json',
             'dir': Path.home() / 'data'
         }
-        self['database'] = {
-            'type': 'json',
-            'url': './authark_data.json'
-        }
         self['factory'] = 'JsonFactory'
         self['strategy'].update({
             "UserRepository": {

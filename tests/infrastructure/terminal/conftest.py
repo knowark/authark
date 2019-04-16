@@ -21,16 +21,22 @@ def context():
         "1": Tenant(id='1', name='Knowark')
     }
     resolver.resolve('AutharkReporter').user_repository.load({
-        "1": User(id='1', username='eecheverry',
-                  email='eecheverry@example.com')
+        "knowark": {
+            "1": User(id='1', username='eecheverry',
+                      email='eecheverry@example.com')
+        }
     })
     resolver.resolve('AutharkReporter').dominion_repository.load({
-        "1": Dominion(id='1', name='Data Server',
-                      url='https://dataserver.nubark.cloud')
+        "knowark": {
+            "1": Dominion(id='1', name='Data Server',
+                          url='https://dataserver.nubark.cloud')
+        }
     })
     resolver.resolve('AutharkReporter').role_repository.load({
-        "1": Role(id='1', name='manager', dominion_id='1',
-                  description='Production Manager')
+        "knowark": {
+            "1": Role(id='1', name='manager', dominion_id='1',
+                      description='Production Manager')
+        }
     })
 
     return Context(config, resolver)

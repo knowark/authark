@@ -55,7 +55,8 @@ def test_users_add_screen_keypress(main, users_add_screen):
 
     users_add_screen.keypress((40, 40), 'enter')
 
-    assert len(users_add_screen.auth_coordinator.user_repository.items) == 2
+    assert len(users_add_screen.auth_coordinator
+               .user_repository.data['knowark']) == 2
     assert called
 
     result = users_add_screen.keypress((40, 40), 'left')
@@ -91,7 +92,7 @@ def test_users_delete_screen_keypress(main, users_delete_screen):
     users_delete_screen.keypress((40, 40), 'enter')
 
     assert len(users_delete_screen.auth_coordinator
-               .user_repository.items) == 0
+               .user_repository.data['knowark']) == 0
     assert called
 
 

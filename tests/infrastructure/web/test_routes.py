@@ -13,7 +13,8 @@ from authark.application.repositories import (
     MemoryRankingRepository, MemoryResourceRepository,
     MemoryGrantRepository, MemoryPermissionRepository,
     MemoryPolicyRepository)
-from authark.application.services import MemoryHashService
+from authark.application.services import (
+    MemoryHashService, StandardTenantService, Tenant)
 from authark.application.coordinators import (
     AuthCoordinator, AccessCoordinator)
 from authark.infrastructure.web.base import create_app
@@ -26,58 +27,77 @@ from authark.infrastructure.crypto import (
 @fixture
 def resolver():
     parser = ExpressionParser()
-    user_repository = MemoryUserRepository(parser)
-    credential_repository = MemoryCredentialRepository(parser)
+    tenant_service = StandardTenantService(Tenant(name="Default"))
+    user_repository = MemoryUserRepository(parser, tenant_service)
+    credential_repository = MemoryCredentialRepository(parser, tenant_service)
     user_repository.load({
-        '1': User(
-            id="1",
-            username="eecheverry",
-            email="eecheverry@nubark.com"),
-        '2': User(
-            id="2",
-            username="mvivas",
-            email="mvivas@gmail.com"
-        )
+        "default": {
+            '1': User(
+                id="1",
+                username="eecheverry",
+                email="eecheverry@nubark.com"),
+            '2': User(
+                id="2",
+                username="mvivas",
+                email="mvivas@gmail.com")
+        }
     })
     refresh_token = jwt.encode(
         {'user': "pepe"}, 'REFRESHSECRET').decode('utf-8')
     credential_repository.load({
-        "1": Credential(id='1', user_id='1', value="HASHED: ABC1234"),
-        "2": Credential(id='2', user_id='2', value="HASHED: XYZ098"),
-        "3": Credential(id='3', user_id='1', value=refresh_token,
-                        type='refresh_token'),
+        "default": {
+            "1": Credential(id='1', user_id='1', value="HASHED: ABC1234"),
+            "2": Credential(id='2', user_id='2', value="HASHED: XYZ098"),
+            "3": Credential(id='3', user_id='1', value=refresh_token,
+                            type='refresh_token'),
+        }
+
     })
-    ranking_repository = MemoryRankingRepository(parser)
+    ranking_repository = MemoryRankingRepository(parser, tenant_service)
     ranking_repository.load({
-        "1": Ranking(id='1', user_id='1', role_id='1',
-                        description="Service's Administrator")
+        "default": {
+            "1": Ranking(id='1', user_id='1', role_id='1',
+                         description="Service's Administrator")
+        }
     })
-    role_repository = MemoryRoleRepository(parser)
+    role_repository = MemoryRoleRepository(parser, tenant_service)
     role_repository.load({
-        "1": Role(id='1', name='admin', dominion_id='1',
-                  description="Service's Administrator")
+        "default": {
+            "1": Role(id='1', name='admin', dominion_id='1',
+                      description="Service's Administrator")
+        }
     })
-    dominion_repository = MemoryDominionRepository(parser)
+    dominion_repository = MemoryDominionRepository(parser, tenant_service)
     dominion_repository.load({
-        "1": Dominion(id='1', name='Data Server',
-                      url="https://dataserver.nubark.com")
+        "default": {
+            "1": Dominion(id='1', name='Data Server',
+                          url="https://dataserver.nubark.com")
+        }
     })
-    resource_repository = MemoryResourceRepository(parser)
+    resource_repository = MemoryResourceRepository(parser, tenant_service)
     resource_repository.load({
-        "1": Resource(id='1', name='employees',
-                      dominion_id='1')
+        "default": {
+            "1": Resource(id='1', name='employees',
+                          dominion_id='1')
+        }
     })
-    grant_repository = MemoryGrantRepository(parser)
+    grant_repository = MemoryGrantRepository(parser, tenant_service)
     grant_repository.load({
-        '001': Grant(id='001', permission_id='001', role_id='1')
+        "default": {
+            '001': Grant(id='001', permission_id='001', role_id='1')
+        }
     })
-    permission_repository = MemoryPermissionRepository(parser)
+    permission_repository = MemoryPermissionRepository(parser, tenant_service)
     permission_repository.load({
-        "001": Permission(id='001', policy_id='001', resource_id='1')
+        "default": {
+            "001": Permission(id='001', policy_id='001', resource_id='1')
+        }
     })
-    policy_repository = MemoryPolicyRepository(parser)
+    policy_repository = MemoryPolicyRepository(parser, tenant_service)
     policy_repository.load({
-        "001": Policy(id='001', name='First Role Only', value="1")
+        "default": {
+            "001": Policy(id='001', name='First Role Only', value="1")
+        }
     })
 
     access_token_service = PyJWTAccessTokenService(

@@ -39,49 +39,58 @@ class MemoryFactory(Factory):
         return ExpressionParser()
 
     def memory_user_repository(
-            self, expression_parser: ExpressionParser
+            self, expression_parser: ExpressionParser,
+            tenant_service: TenantService
     ) -> MemoryUserRepository:
-        return MemoryUserRepository(expression_parser)
+        return MemoryUserRepository(expression_parser, tenant_service)
 
     def memory_credential_repository(
-            self, expression_parser: ExpressionParser
+            self, expression_parser: ExpressionParser,
+            tenant_service: TenantService
     ) -> MemoryCredentialRepository:
-        return MemoryCredentialRepository(expression_parser)
+        return MemoryCredentialRepository(expression_parser, tenant_service)
 
     def memory_dominion_repository(
-            self, expression_parser: ExpressionParser
+            self, expression_parser: ExpressionParser,
+            tenant_service: TenantService
     ) -> MemoryDominionRepository:
-        return MemoryDominionRepository(expression_parser)
+        return MemoryDominionRepository(expression_parser, tenant_service)
 
     def memory_role_repository(
-            self, expression_parser: ExpressionParser
+            self, expression_parser: ExpressionParser,
+            tenant_service: TenantService
     ) -> MemoryRoleRepository:
-        return MemoryRoleRepository(expression_parser)
+        return MemoryRoleRepository(expression_parser, tenant_service)
 
     def memory_ranking_repository(
-            self, expression_parser: ExpressionParser
+            self, expression_parser: ExpressionParser,
+            tenant_service: TenantService
     ) -> MemoryRankingRepository:
-        return MemoryRankingRepository(expression_parser)
+        return MemoryRankingRepository(expression_parser, tenant_service)
 
     def memory_policy_repository(
-            self, expression_parser: ExpressionParser
+            self, expression_parser: ExpressionParser,
+            tenant_service: TenantService
     ) -> MemoryPolicyRepository:
-        return MemoryPolicyRepository(expression_parser)
+        return MemoryPolicyRepository(expression_parser, tenant_service)
 
     def memory_resource_repository(
-            self, expression_parser: ExpressionParser
+            self, expression_parser: ExpressionParser,
+            tenant_service: TenantService
     ) -> MemoryResourceRepository:
-        return MemoryResourceRepository(expression_parser)
+        return MemoryResourceRepository(expression_parser, tenant_service)
 
     def memory_permission_repository(
-            self, expression_parser: ExpressionParser
+            self, expression_parser: ExpressionParser,
+            tenant_service: TenantService
     ) -> MemoryPermissionRepository:
-        return MemoryPermissionRepository(expression_parser)
+        return MemoryPermissionRepository(expression_parser, tenant_service)
 
     def memory_grant_repository(
-            self, expression_parser: ExpressionParser
+            self, expression_parser: ExpressionParser,
+            tenant_service: TenantService
     ) -> MemoryGrantRepository:
-        return MemoryGrantRepository(expression_parser)
+        return MemoryGrantRepository(expression_parser, tenant_service)
 
     # Services
 

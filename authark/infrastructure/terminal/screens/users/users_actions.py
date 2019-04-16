@@ -147,7 +147,7 @@ class UsersUpdateScreen(Screen):
 
         attributes = json.dumps(
             self.selected_item.get('attributes', {}),
-            sort_keys=True, indent=4)
+            sort_keys=True, indent=2)
 
         title = "{}: {}".format(self.name, username)
 

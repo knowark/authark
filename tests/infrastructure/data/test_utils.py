@@ -11,7 +11,7 @@ def filepath(tmpdir_factory):
     data = {'key_1': 'value_1'}
 
     with open(filepath, 'w') as f:
-        dump(data, f)
+        dump(data, f, indent=2)
 
     return str(filepath)
 

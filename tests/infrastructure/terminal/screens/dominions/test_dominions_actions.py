@@ -65,7 +65,8 @@ def test_dominions_add_screen_keypress(main, dominions_add_screen):
     dominions_add_screen.keypress((40, 40), 'enter')
 
     assert len(
-        dominions_add_screen.management_coordinator.dominion_repository.items
+        dominions_add_screen.management_coordinator
+        .dominion_repository.data['knowark']
     ) == 2
     assert called
 
@@ -101,7 +102,7 @@ def test_dominions_add_role_screen_keypress(main, dominions_add_role_screen):
 
     assert len(
         dominions_add_role_screen.management_coordinator
-        .role_repository.items) == 2
+        .role_repository.data['knowark']) == 2
     assert called
 
     result = dominions_add_role_screen.keypress((40, 40), 'left')

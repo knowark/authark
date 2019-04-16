@@ -22,4 +22,4 @@ class JsonArranger:
                     data[collection] = {}
 
             with filepath.open('w') as f:
-                json.dump(data, f)
+                json.dump(data, f, indent=2)

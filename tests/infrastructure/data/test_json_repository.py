@@ -1,5 +1,7 @@
-from json import dumps, loads
+from json import dump, loads
+from pathlib import Path
 from pytest import fixture, raises
+from authark.application.services import StandardTenantService, Tenant
 from authark.application.utilities import ExpressionParser
 from authark.application.repositories import Repository, EntityNotFoundError
 from authark.infrastructure.data import JsonRepository
@@ -16,24 +18,28 @@ def test_json_repository_implementation() -> None:
 
 
 @fixture
-def json_repository(tmpdir) -> JsonRepository:
+def json_repository(tmp_path) -> JsonRepository:
     item_dict = {
         "1": vars(DummyEntity('1', 'value_1')),
         "2": vars(DummyEntity('2', 'value_2')),
         "3": vars(DummyEntity('3', 'value_3'))
     }
+    tenant_directory = tmp_path / "default"
+    tenant_directory.mkdir(parents=True)
+    file_path = str(tenant_directory / 'default.json')
 
-    file_path = str(tmpdir.mkdir("authark").join('authark_data.json'))
     collection_name = 'dummies'
     with open(file_path, 'w') as f:
-        data = dumps({collection_name: item_dict})
-        f.write(data)
+        dump({collection_name: item_dict}, f, indent=2)
 
     parser = ExpressionParser()
-    json_repository = JsonRepository(file_path=file_path,
+    tenant_service = StandardTenantService(Tenant(name="Default"))
+    json_repository = JsonRepository(data_path=str(tmp_path),
                                      parser=parser,
+                                     tenant_service=tenant_service,
                                      collection_name=collection_name,
                                      item_class=DummyEntity)
+
     return json_repository
 
 
@@ -51,8 +57,8 @@ def test_json_repository_add(json_repository):
     item = DummyEntity('5', 'value_5')
     json_repository.add(item)
 
-    file_path = json_repository.file_path
-    with open(file_path) as f:
+    file_path = Path(json_repository.data_path) / "default/default.json"
+    with file_path.open() as f:
         data = loads(f.read())
         items = data.get("dummies")
 
@@ -65,7 +71,7 @@ def test_json_repository_add_no_id(json_repository) -> None:
     item = DummyEntity(field_1='value_5')
     item = json_repository.add(item)
 
-    file_path = json_repository.file_path
+    file_path = str(json_repository._file_path)
     with open(file_path) as f:
         data = loads(f.read())
         items = data.get("dummies")
@@ -78,7 +84,7 @@ def test_json_repository_update(json_repository) -> None:
 
     is_updated = json_repository.update(updated_entity)
 
-    file_path = json_repository.file_path
+    file_path = str(json_repository._file_path)
     with open(file_path) as f:
         data = loads(f.read())
         items = data.get("dummies")
@@ -93,7 +99,7 @@ def test_json_repository_update_false(json_repository):
 
     is_updated = json_repository.update(missing_entity)
 
-    file_path = json_repository.file_path
+    file_path = str(json_repository._file_path)
     with open(file_path) as f:
         data = loads(f.read())
         items = data.get("dummies")
@@ -133,7 +139,7 @@ def test_json_repository_search_offset(json_repository):
 
 
 def test_json_repository_remove_true(json_repository):
-    file_path = json_repository.file_path
+    file_path = str(json_repository._file_path)
     with open(file_path) as f:
         data = loads(f.read())
         items_dict = data.get("dummies")
@@ -152,7 +158,7 @@ def test_json_repository_remove_true(json_repository):
 
 
 def test_json_repository_remove_false(json_repository):
-    file_path = json_repository.file_path
+    file_path = str(json_repository._file_path)
     item = DummyEntity(**{'id': '6', 'field_1': 'MISSING'})
     deleted = json_repository.remove(item)
 
