@@ -19,11 +19,10 @@ def test_memory_repository_implementation() -> None:
 
 @fixture
 def memory_repository() -> MemoryRepository:
-    tenants = ['default']
     tenant_service = StandardTenantService(Tenant(name="Default"))
     parser = ExpressionParser()
-    repository = MemoryRepository[DummyEntity](
-        parser, tenant_service, tenants)
+    repository = MemoryRepository[DummyEntity](parser, tenant_service)
+    repository.load({"default": {}})
     return repository
 
 
@@ -38,16 +37,6 @@ def filled_memory_repository(memory_repository) -> MemoryRepository:
     }
     memory_repository.load(data_dict)
     return memory_repository
-
-
-def test_memory_repository_no_tenants() -> None:
-    with raises(ValueError):
-        parser = ExpressionParser()
-        tenant_service = StandardTenantService(Tenant(name="Default"))
-        tenants: List[str] = []
-
-        repository = MemoryRepository[DummyEntity](
-            parser, tenant_service, tenants)
 
 
 def test_memory_repository_tenant_service(filled_memory_repository) -> None:

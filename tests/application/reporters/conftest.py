@@ -24,24 +24,31 @@ from authark.application.reporters import (
 
 @fixture
 def user_repository() -> UserRepository:
-    tenant_service = StandardTenantService()
+    tenant_service = StandardTenantService(Tenant(name="Default"))
     parser = ExpressionParser()
     user_repository = MemoryUserRepository(parser, tenant_service)
     user_repository.load({
-        "valenep": User(id='1', username='valenep', email='valenep@gmail.com'),
-        "tebanep": User(id='2', username='tebanep', email='tebanep@gmail.com'),
-        "gabeche": User(id='3', username='gabeche', email='gabeche@gmail.com')
+        "default": {
+            "valenep": User(id='1', username='valenep',
+                            email='valenep@gmail.com'),
+            "tebanep": User(id='2', username='tebanep',
+                            email='tebanep@gmail.com'),
+            "gabeche": User(id='3', username='gabeche',
+                            email='gabeche@gmail.com')
+        }
     })
     return user_repository
 
 
 @fixture
 def credential_repository() -> CredentialRepository:
-    tenant_service = StandardTenantService()
+    tenant_service = StandardTenantService(Tenant(name="Default"))
     credentials_dict = {
-        "1": Credential(id='1', user_id='1', value="PASS1"),
-        "2": Credential(id='2', user_id='2', value="PASS2"),
-        "3": Credential(id='3', user_id='3', value="PASS3"),
+        "default": {
+            "1": Credential(id='1', user_id='1', value="PASS1"),
+            "2": Credential(id='2', user_id='2', value="PASS2"),
+            "3": Credential(id='3', user_id='3', value="PASS3"),
+        }
     }
     parser = ExpressionParser()
     credential_repository = MemoryCredentialRepository(parser, tenant_service)
@@ -51,10 +58,12 @@ def credential_repository() -> CredentialRepository:
 
 @fixture
 def dominion_repository() -> DominionRepository:
-    tenant_service = StandardTenantService()
+    tenant_service = StandardTenantService(Tenant(name="Default"))
     dominions_dict = {
-        "1": Dominion(id='1', name='Data Server',
-                      url="https://dataserver.nubark.com")
+        "default": {
+            "1": Dominion(id='1', name='Data Server',
+                          url="https://dataserver.nubark.com")
+        }
     }
     parser = ExpressionParser()
     dominion_repository = MemoryDominionRepository(parser, tenant_service)
@@ -64,10 +73,12 @@ def dominion_repository() -> DominionRepository:
 
 @fixture
 def role_repository() -> RoleRepository:
-    tenant_service = StandardTenantService()
+    tenant_service = StandardTenantService(Tenant(name="Default"))
     roles_dict = {
-        "1": Role(id='1', name='admin', dominion_id='1',
-                  description="Service's Administrator")
+        "default": {
+            "1": Role(id='1', name='admin', dominion_id='1',
+                      description="Service's Administrator")
+        }
     }
     parser = ExpressionParser()
     role_repository = MemoryRoleRepository(parser, tenant_service)
@@ -77,10 +88,12 @@ def role_repository() -> RoleRepository:
 
 @fixture
 def ranking_repository() -> RankingRepository:
-    tenant_service = StandardTenantService()
+    tenant_service = StandardTenantService(Tenant(name="Default"))
     rankings_dict = {
-        "1": Ranking(id='1', user_id='1', role_id='1',
-                     description="Service's Administrator")
+        "default": {
+            "1": Ranking(id='1', user_id='1', role_id='1',
+                         description="Service's Administrator")
+        }
     }
     parser = ExpressionParser()
     ranking_repository = MemoryRankingRepository(parser, tenant_service)
@@ -90,9 +103,11 @@ def ranking_repository() -> RankingRepository:
 
 @fixture
 def policy_repository() -> PolicyRepository:
-    tenant_service = StandardTenantService()
+    tenant_service = StandardTenantService(Tenant(name="Default"))
     policy_dict = {
-        "1": Policy(id='1', name="Administrators Only", value="admin")
+        "default": {
+            "1": Policy(id='1', name="Administrators Only", value="admin")
+        }
     }
     parser = ExpressionParser()
     policy_repository = MemoryPolicyRepository(parser, tenant_service)
@@ -102,9 +117,11 @@ def policy_repository() -> PolicyRepository:
 
 @fixture
 def resource_repository() -> ResourceRepository:
-    tenant_service = StandardTenantService()
+    tenant_service = StandardTenantService(Tenant(name="Default"))
     resource_dict = {
-        "1": Resource(id='1', name="products", dominion_id="001")
+        "default": {
+            "1": Resource(id='1', name="products", dominion_id="001")
+        }
     }
     parser = ExpressionParser()
     resource_repository = MemoryResourceRepository(parser, tenant_service)
@@ -114,9 +131,11 @@ def resource_repository() -> ResourceRepository:
 
 @fixture
 def permission_repository() -> PermissionRepository:
-    tenant_service = StandardTenantService()
+    tenant_service = StandardTenantService(Tenant(name="Default"))
     permissions_dict = {
-        "1": Permission(id='1', resource_id='1', policy_id='1')
+        "default": {
+            "1": Permission(id='1', resource_id='1', policy_id='1')
+        }
     }
     parser = ExpressionParser()
     permission_repository = MemoryPermissionRepository(parser, tenant_service)
@@ -126,9 +145,11 @@ def permission_repository() -> PermissionRepository:
 
 @fixture
 def grant_repository() -> GrantRepository:
-    tenant_service = StandardTenantService()
+    tenant_service = StandardTenantService(Tenant(name="Default"))
     grants_dict = {
-        "1": Grant(id='1', role_id='1', permission_id='1')
+        "default": {
+            "1": Grant(id='1', role_id='1', permission_id='1')
+        }
     }
     parser = ExpressionParser()
     grant_repository = MemoryGrantRepository(parser, tenant_service)

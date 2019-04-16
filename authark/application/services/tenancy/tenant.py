@@ -11,6 +11,7 @@ class Tenant:
         self.email = attributes.get('email', '')
         self.active = attributes.get('active', True)
         self.slug = self._normalize_slug(attributes.get('slug', self.name))
+        self.location = attributes.get('location', self.slug)
 
     @staticmethod
     def _normalize_slug(slug: str) -> str:

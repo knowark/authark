@@ -1,5 +1,5 @@
 from typing import Dict, Any
-from ..services import TenantService, CatalogService, Tenant
+from ..services import TenantService, CatalogService
 from .types import DominionDict, RoleDict
 
 

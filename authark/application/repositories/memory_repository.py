@@ -9,16 +9,9 @@ from .errors import EntityNotFoundError
 
 class MemoryRepository(Repository, Generic[T]):
     def __init__(self,  parser: ExpressionParser,
-                 tenant_service: TenantService,
-                 tenants: List[str]) -> None:
+                 tenant_service: TenantService) -> None:
         super().__init__(tenant_service)
-        if not tenants:
-            raise ValueError("At least one tenant must be provided.")
-
-        self.data: Dict[str, Dict[str, T]] = {
-            tenant: {} for tenant in tenants
-        }
-
+        self.data: Dict[str, Dict[str, T]] = {}
         self.parser = parser
 
     def get(self, id: str) -> T:
@@ -33,7 +26,6 @@ class MemoryRepository(Repository, Generic[T]):
         slug = self.tenant_service.get_tenant().slug
         setattr(item, 'id', getattr(item, 'id') or str(uuid4()))
         self.data[slug][getattr(item, 'id')] = item
-        # self.items[getattr(item, 'id')] = item
         return item
 
     def update(self, item: T) -> bool:

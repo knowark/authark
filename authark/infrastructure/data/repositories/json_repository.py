@@ -3,6 +3,7 @@ from json import load, dump
 from uuid import uuid4
 from typing import Dict, List, Optional, Any, Type, TypeVar, Callable, Generic
 from ....application.utilities import ExpressionParser
+from ....application.services import TenantService
 from ....application.repositories import (
     Repository, QueryDomain, EntityNotFoundError)
 
@@ -12,11 +13,13 @@ T = TypeVar('T')
 
 class JsonRepository(Repository, Generic[T]):
     def __init__(self, file_path: str, parser: ExpressionParser,
-                 collection_name: str, item_class: Type[T]) -> None:
+                 collection_name: str, item_class: Type[T],
+                 tenant_service: TenantService) -> None:
+        super().__init__(tenant_service)
         self.file_path = file_path
         self.parser = parser
         self.collection_name = collection_name
-        self.item_class = item_class  # type: Callable[..., T]
+        self.item_class: Callable[..., T] = item_class
 
     def get(self, id: str) -> T:
         with open(self.file_path) as f:
@@ -29,7 +32,7 @@ class JsonRepository(Repository, Generic[T]):
             return self.item_class(**item_dict)
 
     def add(self, item: T) -> T:
-        data = {}  # type: Dict[str, Any]
+        data: Dict[str, Any] = {}
         with open(self.file_path, 'r') as f:
             data = load(f)
         setattr(item, 'id', getattr(item, 'id') or str(uuid4()))

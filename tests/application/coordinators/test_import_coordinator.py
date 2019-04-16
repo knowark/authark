@@ -17,4 +17,5 @@ def test_import_coordinator_create_ranking_no_role(
         import_coordinator: ImportCoordinator):
     user = User(username='Dummy', email='dummy@example.com')
     import_coordinator._create_ranking(None, user)
-    assert len(getattr(import_coordinator.ranking_repository, 'items')) == 1
+    assert len(getattr(import_coordinator.ranking_repository, 'data')[
+               'default']) == 1
