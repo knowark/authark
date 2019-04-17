@@ -23,9 +23,19 @@ class TenantsScreen(Screen):
             return
 
         self.table = self.build_table(domain=[])
+        select_button = urwid.Button('SELECT ALL')
+        select_button._label.align = 'center'
+        export_button = urwid.Button('EXPORT')
+        export_button._label.align = 'center'
+
+        commands = urwid.Columns([
+            select_button, export_button])
         box_table = urwid.BoxAdapter(self.table, 24)
 
         self.pile = urwid.Pile([
+            urwid.Divider(),
+            commands,
+            urwid.Divider(),
             box_table
         ])
         body = urwid.Filler(self.pile)
@@ -33,25 +43,17 @@ class TenantsScreen(Screen):
         frame = urwid.Frame(header=header, body=body, footer=footer)
         widget = urwid.Overlay(
             frame, self.parent,
-            align='center', width=('relative', 80),
-            valign='middle', height=('relative', 80),
+            align='center', width=('relative', 85),
+            valign='middle', height=('relative', 85),
             min_width=20, min_height=9)
 
         return widget
 
-    def on_search_user(self, widget, value):
-        domain = []
-        if value:
-            domain = [('username', 'ilike', f"%{value}%")]
-
-        self.table = self.build_table(domain)
-        box_table = urwid.BoxAdapter(self.table, 24)
-
-        self.pile.contents[-1] = (box_table, self.pile.options('pack', None))
-
     def build_table(self, domain):
-        headers_list = ['id', 'name', 'slug']
+        headers_list = ['', 'id', 'name', 'slug']
         data = self.tenancy_reporter.search_tenants(domain)
+        data = [{**{'': urwid.CheckBox('', True)}, **item}
+                for item in data]
         return Table(data, headers_list)
 
     def set_current_tenant(self):

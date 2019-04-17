@@ -1,7 +1,7 @@
 from ..config import Config
 from ..crypto import (
-    PasslibHashService, PyJWTAccessTokenService,
-    PyJWTRefreshTokenService)
+    PasslibHashService, PyJWTTokenService,
+    PyJWTAccessTokenService, PyJWTRefreshTokenService)
 from .memory_factory import MemoryFactory
 from ...application.utilities import ExpressionParser
 from ...application.repositories import (
@@ -17,6 +17,7 @@ class CryptoFactory(MemoryFactory):
     def __init__(self, config: Config) -> None:
         super().__init__(config)
         self.path = self.config.get('database', {}).get('url')
+        self.tenant_config = self.config.get('tokens', {}).get('tenant')
         self.access_config = self.config.get('tokens', {}).get('access')
         self.refresh_config = self.config.get('tokens', {}).get('refresh')
 
@@ -24,6 +25,12 @@ class CryptoFactory(MemoryFactory):
 
     def passlib_hash_service(self) -> PasslibHashService:
         return PasslibHashService()
+
+    def pyjwt_token_service(self) -> PyJWTTokenService:
+        return PyJWTTokenService(
+            self.tenant_config['secret'],
+            self.tenant_config['algorithm'],
+            self.tenant_config['lifetime'])
 
     def pyjwt_access_token_service(self) -> PyJWTAccessTokenService:
         return PyJWTAccessTokenService(

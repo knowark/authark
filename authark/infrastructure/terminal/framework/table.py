@@ -61,7 +61,9 @@ class TableRow(urwid.WidgetWrap):
                  headers_list: List[str]) -> None:
         items_list = []
         for key in headers_list:
-            widget = urwid.Text(str(row_dict[key]), align='center')
+            widget = row_dict[key]
+            if not isinstance(row_dict[key], urwid.Widget):
+                widget = urwid.Text(str(row_dict[key]), align='center')
             items_list.append(widget)
 
         widget = urwid.AttrMap(

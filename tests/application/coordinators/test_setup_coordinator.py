@@ -51,3 +51,12 @@ def test_setup_coordinator_create_tenant_duplicate(
     tenant_dict = {"name": "Google"}
     with raises(TenantAlreadyExistsError):
         setup_coordinator.create_tenant(tenant_dict)
+
+
+def test_setup_coordinator_generate_tenant_token(setup_coordinator):
+    setup_coordinator.setup_server()
+    setup_coordinator.catalog_service.catalog = {
+        '001': Tenant(name='Amazon')
+    }
+    token_str = setup_coordinator.generate_tenant_token("001")
+    assert isinstance(token_str, str)

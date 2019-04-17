@@ -19,6 +19,10 @@ class ProductionConfig(DevelopmentConfig):
             'type': 'json',
             'dir': Path.home() / 'data'
         }
+        self['data'] = {
+            'type': 'json',
+            'dir': Path.home() / 'export'
+        }
         self['factory'] = 'JsonFactory'
         self['strategy'].update({
             "UserRepository": {
@@ -50,6 +54,9 @@ class ProductionConfig(DevelopmentConfig):
             },
             "HashService": {
                 "method": "passlib_hash_service"
+            },
+            "TokenService": {
+                "method": "pyjwt_token_service"
             },
             "AccessTokenService": {
                 "method": "pyjwt_access_token_service"

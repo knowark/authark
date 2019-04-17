@@ -156,9 +156,11 @@ class MemoryFactory(Factory):
 
     def setup_coordinator(self,
                           catalog_service: CatalogService,
-                          provision_service: ProvisionService
+                          provision_service: ProvisionService,
+                          token_service: TokenService
                           ) -> SetupCoordinator:
-        return SetupCoordinator(catalog_service, provision_service)
+        return SetupCoordinator(catalog_service, provision_service,
+                                token_service)
 
     def assignment_coordinator(
         self,

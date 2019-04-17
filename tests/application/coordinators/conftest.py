@@ -334,10 +334,11 @@ def assignment_coordinator(
 @fixture
 def setup_coordinator(
     mock_catalog_service: CatalogService,
-    mock_provision_service: ProvisionService
+    mock_provision_service: ProvisionService,
+    mock_token_service: TokenService
 ) -> SetupCoordinator:
     return SetupCoordinator(
-        mock_catalog_service, mock_provision_service)
+        mock_catalog_service, mock_provision_service, mock_token_service)
 
 
 @fixture

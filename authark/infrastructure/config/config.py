@@ -21,7 +21,13 @@ class Config(dict, ABC):
         self['flask'] = {}
         self['tenancy'] = {}
         self['data'] = {}
+        self['export'] = {}
         self['tokens'] = {
+            'tenant': {
+                'algorithm': 'HS256',
+                'secret': 'DEVSECRET123',
+                'lifetime': 86400
+            },
             'access': {
                 'algorithm': 'HS256',
                 'secret': 'DEVSECRET123',
