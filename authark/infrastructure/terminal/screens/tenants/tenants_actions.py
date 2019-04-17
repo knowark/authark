@@ -57,3 +57,50 @@ class TenantsDetailsScreen(Screen):
             min_width=20, min_height=9)
 
         return widget
+
+
+class TenantsExportScreen(Screen):
+
+    def _build_widget(self) -> urwid.Widget:
+        header = urwid.AttrMap(
+            urwid.Text(self.name, align='center'), 'info_bg')
+
+        footer = urwid.Text([
+            "Press (", ("success", "Enter"), ") to save. ",
+            "Press (", ("warning", "Esc"), ") to go back. "
+        ])
+
+        if not self.parent:
+            return
+
+        tenants_number = len(self.parent.selected_tenants)
+
+        export_location = 'Export location: "/opt/authark/export"'
+        legend = [
+            'Do you want to export the selected ',
+            ("warning", f'"{tenants_number}" '),
+            'tenants?']
+
+        body = urwid.Pile([
+            urwid.Text(export_location, align='center'),
+            urwid.Divider(),
+            urwid.Divider(),
+            urwid.Text(legend, align='center')
+        ])
+
+        body = urwid.Padding(urwid.Filler(body), align='center', width=100)
+
+        frame = urwid.Frame(header=header, body=body, footer=footer)
+
+        widget = urwid.Overlay(
+            frame, self.parent,
+            align='center', width=('relative', 50),
+            valign='middle', height=('relative', 50),
+            min_width=20, min_height=9)
+
+        return widget
+
+    def keypress(self, size, key):
+        if key in ('enter'):
+            pass
+        return super().keypress(size, key)

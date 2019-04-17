@@ -1,6 +1,7 @@
 import urwid
+from typing import Set
 from authark.infrastructure.terminal.framework import Table, Screen
-from .tenants_actions import TenantsDetailsScreen
+from .tenants_actions import TenantsDetailsScreen, TenantsExportScreen
 
 
 class TenantsScreen(Screen):
@@ -22,14 +23,17 @@ class TenantsScreen(Screen):
         if not self.parent:
             return
 
+        self.selected_tenants: Set[str] = set()
+
         self.table = self.build_table(domain=[])
         select_button = urwid.Button('SELECT ALL')
         select_button._label.align = 'center'
-        export_button = urwid.Button('EXPORT')
+        export_button = urwid.Button('EXPORT', self.show_export_screen)
         export_button._label.align = 'center'
 
         commands = urwid.Columns([
-            select_button, export_button])
+            urwid.AttrMap(select_button, 'success'),
+            urwid.AttrMap(export_button, 'warning')])
         box_table = urwid.BoxAdapter(self.table, 24)
 
         self.pile = urwid.Pile([
@@ -51,10 +55,21 @@ class TenantsScreen(Screen):
 
     def build_table(self, domain):
         headers_list = ['', 'id', 'name', 'slug']
-        data = self.tenancy_reporter.search_tenants(domain)
-        data = [{**{'': urwid.CheckBox('', True)}, **item}
-                for item in data]
+        tenants = self.tenancy_reporter.search_tenants(domain)
+        data = []
+        for item in tenants:
+            check = urwid.CheckBox('', True, False,
+                                   self.toggle_tenant, item['id'])
+            data.append({**{'': check}, **item})
+            self.selected_tenants.add(item['id'])
+
         return Table(data, headers_list)
+
+    def toggle_tenant(self, check_box, state, tenant_id):
+        if tenant_id in self.selected_tenants:
+            self.selected_tenants.remove(tenant_id)
+        else:
+            self.selected_tenants.add(tenant_id)
 
     def set_current_tenant(self):
         self.selected_item = self.table.get_selected_item()
@@ -68,7 +83,15 @@ class TenantsScreen(Screen):
         screen = TenantsDetailsScreen("TENANT'S DETAILS", self.env, self)
         return self._open_screen(screen)
 
+    def show_export_screen(self, button=None):
+        if not self.selected_tenants:
+            return None
+        screen = TenantsExportScreen("EXPORT TENANTS", self.env, self)
+        return self._open_screen(screen)
+
     def keypress(self, size, key):
+        if self.pile.focus_position <= 1:
+            return super().keypress(size, key)
         if key in ('enter'):
             self.set_current_tenant()
         if key in ('d', 'D'):
