@@ -19,7 +19,7 @@ class ProductionConfig(DevelopmentConfig):
             'type': 'json',
             'dir': Path.home() / 'data'
         }
-        self['data'] = {
+        self['export'] = {
             'type': 'json',
             'dir': Path.home() / 'export'
         }
@@ -66,6 +66,9 @@ class ProductionConfig(DevelopmentConfig):
             },
             "ImportService": {
                 "method": "json_import_service"
+            },
+            "ExportService": {
+                "method": "json_export_service"
             },
             "CatalogService": {
                 "method": "json_catalog_service"

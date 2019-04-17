@@ -9,9 +9,10 @@ from ..data import (
     JsonRankingRepository, JsonImportService,
     JsonPolicyRepository, JsonResourceRepository,
     JsonGrantRepository, JsonPermissionRepository,
-    JsonCatalogService, JsonProvisionService)
+    JsonCatalogService, JsonProvisionService,
+    JsonExportService)
 from .crypto_factory import CryptoFactory
-from ...application.services import HashService
+from ...application.services import HashService, TokenService
 
 
 class JsonFactory(CryptoFactory):
@@ -94,5 +95,10 @@ class JsonFactory(CryptoFactory):
         return JsonCatalogService(catalog_path, expression_parser)
 
     def json_provision_service(self) -> JsonProvisionService:
-        data_directory = self.config['data']['url']
+        data_directory = self.config['data']['dir']
         return JsonProvisionService(data_directory)
+
+    def json_export_service(
+            self, token_service: TokenService) -> JsonExportService:
+        export_directory = self.config['export']['dir']
+        return JsonExportService(export_directory, token_service)

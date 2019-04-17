@@ -62,6 +62,9 @@ class TenantsDetailsScreen(Screen):
 class TenantsExportScreen(Screen):
 
     def _build_widget(self) -> urwid.Widget:
+        self.export_coordinator = self.env.context.resolve(
+            'ExportCoordinator')
+
         header = urwid.AttrMap(
             urwid.Text(self.name, align='center'), 'info_bg')
 
@@ -102,5 +105,8 @@ class TenantsExportScreen(Screen):
 
     def keypress(self, size, key):
         if key in ('enter'):
-            pass
+            tenant_ids = list(self.parent.selected_tenants)
+            self.export_coordinator.export_tenants(tenant_ids)
+            self._back()
+
         return super().keypress(size, key)

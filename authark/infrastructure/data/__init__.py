@@ -16,5 +16,6 @@ from .tenancy import (
     JsonProvisionService
 )
 from .json_import_service import JsonImportService
+from .json_export_service import JsonExportService
 from .json_arranger import JsonArranger
 from .utils import load_json, LoadingError
