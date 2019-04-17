@@ -23,37 +23,31 @@ class TenantsDetailsScreen(Screen):
             return
 
         self.selected_item = self.parent.table.get_selected_item()
-        username = self.selected_item.get('username', "")
-        email = self.selected_item.get('email', "")
         name = self.selected_item.get('name', "")
-        gender = self.selected_item.get('gender', "")
+        email = self.selected_item.get('email', "")
+        active = str(self.selected_item.get('active', ""))
+        slug = self.selected_item.get('slug', "")
+        location = self.selected_item.get('location', "")
 
-        attributes = json.dumps(
-            self.selected_item.get('attributes', {}),
-            sort_keys=True, indent=2)
+        title = f"{self.name}: {name}"
 
-        title = "{}: {}".format(self.name, username)
-
-        self.username = urwid.Edit("> ", username)
+        self.name_edit = urwid.Edit("> ", name)
         self.email = urwid.Edit("> ", email)
-        self.name = urwid.Edit("> ", name)
-        self.gender = urwid.Edit("> ", gender)
-        self.password = urwid.Edit("> ", "")
-        self.attributes = urwid.Edit("", attributes, multiline=True)
+        self.active = urwid.Edit("> ", active)
+        self.slug = urwid.Edit("> ", slug)
+        self.location = urwid.Edit("> ", location)
 
         body = urwid.Pile([
             urwid.Columns([
-                urwid.Text("Username: ", align='center'), self.username]),
+                urwid.Text("Name: ", align='center'), self.name_edit]),
             urwid.Columns([
                 urwid.Text("Email: ", align='center'), self.email]),
             urwid.Columns([
-                urwid.Text("Name: ", align='center'), self.name]),
+                urwid.Text("Active: ", align='center'), self.active]),
             urwid.Columns([
-                urwid.Text("Gender: ", align='center'), self.gender]),
+                urwid.Text("Slug: ", align='center'), self.slug]),
             urwid.Columns([
-                urwid.Text("Password: ", align='center'), self.password]),
-            urwid.Columns([
-                urwid.Text("Attributes: ", align='center'), self.attributes])
+                urwid.Text("Location: ", align='center'), self.location])
         ])
 
         body = urwid.Padding(urwid.Filler(body), align='center', width=80)

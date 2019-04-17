@@ -4,9 +4,10 @@ import unicodedata
 
 class Tenant:
     def __init__(self, **attributes):
+        now = int(time.time())
         self.id = attributes.get('id', '')
-        self.created_at = int(time.time())
-        self.updated_at = int(time.time())
+        self.created_at = now
+        self.updated_at = now
         self.name = attributes['name']
         self.email = attributes.get('email', '')
         self.active = attributes.get('active', True)
