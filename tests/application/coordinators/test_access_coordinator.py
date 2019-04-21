@@ -1,5 +1,6 @@
 from inspect import signature
 from authark.application.models import User, Token
+from authark.application.services import Tenant
 from authark.application.coordinators import AccessCoordinator
 
 
@@ -52,3 +53,9 @@ def test_access_coordinator_build_permissions(access_coordinator) -> None:
             {'type': 'role', 'name': 'First Role Only', 'value': '1'}
         ]
     }
+
+
+def test_access_coordinator_build_tenant(access_coordinator) -> None:
+    tenant_id = access_coordinator._build_tenant_info()
+
+    assert tenant_id == '001'

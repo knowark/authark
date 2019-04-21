@@ -201,11 +201,13 @@ class MemoryFactory(Factory):
             grant_repository: GrantRepository,
             permission_repository: PermissionRepository,
             policy_repository: PolicyRepository,
-            token_service: AccessTokenService) -> AccessCoordinator:
+            token_service: AccessTokenService,
+            tenant_service: TenantService) -> AccessCoordinator:
         return AccessCoordinator(
             ranking_repository, role_repository,
             dominion_repository, resource_repository, grant_repository,
-            permission_repository, policy_repository, token_service)
+            permission_repository, policy_repository, token_service,
+            tenant_service)
 
     # Reporters
 

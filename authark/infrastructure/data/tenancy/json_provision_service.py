@@ -26,7 +26,6 @@ class JsonProvisionService(ProvisionService):
         if directory.exists():
             return False
 
-        print('Provisioning data setup...', str(directory))
         directory.mkdir(parents=True)
 
         return True

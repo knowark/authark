@@ -218,6 +218,7 @@ def mock_provision_service() -> ProvisionService:
 @fixture
 def mock_tenant_service() -> StandardTenantService:
     mock_tenant_service = StandardTenantService()
+    mock_tenant_service.setup(Tenant(id='001', name='Default'))
     return mock_tenant_service
 
 
@@ -369,9 +370,10 @@ def affiliation_coordinator(
 def access_coordinator(mock_ranking_repository, mock_role_repository,
                        mock_dominion_repository, mock_resource_repository,
                        mock_grant_repository, mock_permission_repository,
-                       mock_policy_repository, mock_token_service):
+                       mock_policy_repository, mock_token_service,
+                       mock_tenant_service):
     return AccessCoordinator(
         mock_ranking_repository, mock_role_repository,
         mock_dominion_repository, mock_resource_repository,
         mock_grant_repository, mock_permission_repository,
-        mock_policy_repository, mock_token_service)
+        mock_policy_repository, mock_token_service, mock_tenant_service)

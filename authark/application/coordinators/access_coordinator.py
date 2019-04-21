@@ -6,7 +6,7 @@ from ..repositories import (
     RankingRepository, RoleRepository, DominionRepository,
     ResourceRepository, GrantRepository, PermissionRepository,
     PolicyRepository)
-from ..services import AccessTokenService
+from ..services import AccessTokenService, TenantService
 
 
 class AccessCoordinator:
@@ -18,7 +18,8 @@ class AccessCoordinator:
                  grant_repository: GrantRepository,
                  permission_repository: PermissionRepository,
                  policy_repository: PolicyRepository,
-                 token_service: AccessTokenService) -> None:
+                 token_service: AccessTokenService,
+                 tenant_service: TenantService) -> None:
         self.ranking_repository = ranking_repository
         self.role_repository = role_repository
         self.dominion_repository = dominion_repository
@@ -27,6 +28,7 @@ class AccessCoordinator:
         self.permission_repository = permission_repository
         self.policy_repository = policy_repository
         self.token_service = token_service
+        self.tenant_service = tenant_service
 
     def generate_token(self, user: User) -> Token:
         access_payload = self._build_payload(user)
@@ -36,8 +38,13 @@ class AccessCoordinator:
 
     def _build_payload(self, user: User) -> Dict[str, Any]:
         payload = self._build_basic_info(user)
+        payload['tenant'] = self._build_tenant_info()
         payload['authorization'] = self._build_authorization(user)
         return payload
+
+    def _build_tenant_info(self) -> Dict[str, Any]:
+        tenant = self.tenant_service.get_tenant()
+        return tenant.id
 
     def _build_basic_info(self, user: User) -> Dict[str, Any]:
         return {

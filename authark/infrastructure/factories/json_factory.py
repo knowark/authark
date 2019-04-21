@@ -26,7 +26,6 @@ class JsonFactory(CryptoFactory):
             self, expression_parser: ExpressionParser,
             tenant_service: TenantService
     ) -> JsonUserRepository:
-        print('+++++++++++', self.path)
         return JsonUserRepository(self.path, expression_parser,
                                   tenant_service)
 
