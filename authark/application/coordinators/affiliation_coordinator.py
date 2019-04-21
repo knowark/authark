@@ -17,6 +17,9 @@ class AffiliationCoordinator:
     def resolve_tenant(self, tenant: str) -> None:
         domain = ['|', ('slug', '=', tenant), ('name', '=', tenant)]
         entities = self.catalog_service.search_tenants(domain)  # type: ignore
+        if not entities:
+            raise ValueError("Tenant not found.")
+
         for entity in entities:
             self.tenant_service.setup(entity)
 

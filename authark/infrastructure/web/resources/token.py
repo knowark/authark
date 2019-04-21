@@ -6,6 +6,8 @@ from flask.views import MethodView
 class TokenResource(MethodView):
 
     def __init__(self, resolver) -> None:
+        self.affiliation_coordinator = resolver.resolve(
+            'AffiliationCoordinator')
         self.auth_coordinator = resolver.resolve('AuthCoordinator')
 
     def get(self) -> str:
@@ -37,6 +39,8 @@ class TokenResource(MethodView):
                 tokens = self.auth_coordinator.refresh_authenticate(
                     data['refresh_token'])
             else:
+                self.affiliation_coordinator.resolve_tenant(
+                    data.get('tenant', ''))
                 username = data.get('username')
                 password = data.get('password')
                 client = data.get('client')

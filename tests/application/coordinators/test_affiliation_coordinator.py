@@ -45,3 +45,14 @@ def test_affiliation_coordinator_resolve_tenant(affiliation_coordinator):
     affiliation_coordinator.resolve_tenant('Google')
     tenant = affiliation_coordinator.tenant_service.get_tenant()
     assert tenant.slug == 'google'
+
+
+def test_affiliation_coordinator_resolve_tenant_not_found(
+        affiliation_coordinator):
+    affiliation_coordinator.catalog_service.catalog = {
+        '001': Tenant(name='Amazon'),
+        '002': Tenant(name='Google'),
+        '003': Tenant(name='Microsoft')
+    }
+    with raises(ValueError):
+        affiliation_coordinator.resolve_tenant('yahoo')
