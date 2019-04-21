@@ -30,3 +30,18 @@ def test_affiliation_coordinator_get_current_tenant(affiliation_coordinator):
     assert isinstance(current_tenant, dict)
     assert current_tenant.get('id') == '001'
     assert current_tenant.get('name') == 'Amazon'
+
+
+def test_affiliation_coordinator_resolve_tenant(affiliation_coordinator):
+    affiliation_coordinator.catalog_service.catalog = {
+        '001': Tenant(name='Amazon'),
+        '002': Tenant(name='Google'),
+        '003': Tenant(name='Microsoft')
+    }
+    affiliation_coordinator.resolve_tenant('microsoft')
+    tenant = affiliation_coordinator.tenant_service.get_tenant()
+    assert tenant.slug == 'microsoft'
+
+    affiliation_coordinator.resolve_tenant('Google')
+    tenant = affiliation_coordinator.tenant_service.get_tenant()
+    assert tenant.slug == 'google'
