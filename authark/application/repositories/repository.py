@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
-from typing import List, TypeVar, Optional, Generic
+from typing import List, Generic
 from ..services import TenantService
-from ..utilities import QueryDomain, T
+from ..utilities import T, QueryDomain
 
 
 class Repository(ABC, Generic[T]):
