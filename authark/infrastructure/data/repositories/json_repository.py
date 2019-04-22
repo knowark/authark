@@ -2,14 +2,11 @@ import os
 from pathlib import Path
 from json import load, dump
 from uuid import uuid4
-from typing import Dict, List, Optional, Any, Type, TypeVar, Callable, Generic
-from ....application.utilities import ExpressionParser, EntityNotFoundError
+from typing import Dict, List, Any, Type, Callable, Generic
 from ....application.services import TenantService
-from ....application.repositories import (
-    Repository, QueryDomain)
-
-
-T = TypeVar('T')
+from ....application.utilities import (
+    T, QueryDomain, ExpressionParser, EntityNotFoundError)
+from ....application.repositories import Repository
 
 
 class JsonRepository(Repository, Generic[T]):
