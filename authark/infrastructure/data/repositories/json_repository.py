@@ -15,7 +15,7 @@ T = TypeVar('T')
 class JsonRepository(Repository, Generic[T]):
     def __init__(self, data_path: str, parser: ExpressionParser,
                  tenant_service: TenantService,
-                 collection_name: str, item_class: Type[T]) -> None:
+                 collection_name: str, item_class: Callable[..., T]) -> None:
         super().__init__(tenant_service)
         self.data_path = data_path
         self.parser = parser
