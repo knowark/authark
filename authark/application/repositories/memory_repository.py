@@ -3,9 +3,8 @@ from uuid import uuid4
 from collections import defaultdict
 from typing import List, Dict, TypeVar, Optional, Generic
 from ..services import TenantService
-from ..utilities import ExpressionParser, QueryDomain, T
+from ..utilities import ExpressionParser, QueryDomain, T, EntityNotFoundError
 from .repository import Repository
-from .errors import EntityNotFoundError
 
 
 class MemoryRepository(Repository, Generic[T]):

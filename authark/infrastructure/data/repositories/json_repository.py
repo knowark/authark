@@ -3,10 +3,10 @@ from pathlib import Path
 from json import load, dump
 from uuid import uuid4
 from typing import Dict, List, Optional, Any, Type, TypeVar, Callable, Generic
-from ....application.utilities import ExpressionParser
+from ....application.utilities import ExpressionParser, EntityNotFoundError
 from ....application.services import TenantService
 from ....application.repositories import (
-    Repository, QueryDomain, EntityNotFoundError)
+    Repository, QueryDomain)
 
 
 T = TypeVar('T')

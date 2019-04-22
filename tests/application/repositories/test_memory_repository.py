@@ -1,10 +1,11 @@
 from typing import Dict, List
 from pytest import fixture, raises
 from inspect import signature
-from authark.application.utilities import ExpressionParser
+from authark.application.utilities import (
+    ExpressionParser, EntityNotFoundError)
 from authark.application.services import StandardTenantService, Tenant
 from authark.application.repositories import (
-    Repository, MemoryRepository, EntityNotFoundError)
+    Repository, MemoryRepository)
 
 
 class DummyEntity:
