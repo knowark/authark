@@ -1,8 +1,8 @@
-from ...application.services import TenantService
-from ...application.utilities import ExpressionParser
-from ...application.repositories import UserRepository
-from ..config import Config
-from ..data import (
+from ....application.services import TenantService
+from ....application.utilities import ExpressionParser
+from ....application.repositories import UserRepository
+from ....application.services import HashService, TokenService
+from ...data import (
     JsonCredentialRepository,
     JsonDominionRepository, JsonRoleRepository,
     JsonRepository, JsonUserRepository,
@@ -11,8 +11,8 @@ from ..data import (
     JsonGrantRepository, JsonPermissionRepository,
     JsonCatalogService, JsonProvisionService,
     JsonExportService)
+from ..config import Config
 from .crypto_factory import CryptoFactory
-from ...application.services import HashService, TokenService
 
 
 class JsonFactory(CryptoFactory):

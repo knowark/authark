@@ -1,6 +1,5 @@
-from ..config import Config
-from ...application.utilities import ExpressionParser
-from ...application.repositories import (
+from ....application.utilities import ExpressionParser
+from ....application.repositories import (
     UserRepository, MemoryUserRepository,
     CredentialRepository, MemoryCredentialRepository,
     DominionRepository, MemoryDominionRepository,
@@ -10,7 +9,7 @@ from ...application.repositories import (
     ResourceRepository, MemoryResourceRepository,
     PermissionRepository, MemoryPermissionRepository,
     GrantRepository, MemoryGrantRepository)
-from ...application.services import (
+from ....application.services import (
     HashService, MemoryHashService,
     TokenService, MemoryTokenService,
     AccessTokenService, MemoryAccessTokenService,
@@ -20,13 +19,14 @@ from ...application.services import (
     ProvisionService, MemoryProvisionService,
     TenantService, StandardTenantService,
     ExportService, MemoryExportService)
-from ...application.coordinators import (
+from ....application.coordinators import (
     AuthCoordinator, ManagementCoordinator,
     ImportCoordinator, SetupCoordinator, AssignmentCoordinator,
     AffiliationCoordinator, AccessCoordinator, ExportCoordinator)
-from ...application.reporters import (
+from ....application.reporters import (
     StandardAutharkReporter, StandardComposingReporter,
     StandardTenancyReporter)
+from ..config import Config
 from .factory import Factory
 
 

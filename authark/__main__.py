@@ -4,8 +4,7 @@ Authark entrypoint
 
 import os
 from injectark import Injectark
-from .infrastructure.config import build_config
-from .infrastructure.factories import build_factory
+from .infrastructure.core import build_config, build_factory
 from .infrastructure.cli import Cli
 
 
