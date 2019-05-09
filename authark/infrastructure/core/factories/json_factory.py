@@ -11,7 +11,7 @@ from ...data import (
     JsonGrantRepository, JsonPermissionRepository,
     JsonCatalogService, JsonProvisionService,
     JsonExportService)
-from ..config import Config
+from ..configuration import Config
 from .crypto_factory import CryptoFactory
 
 

@@ -26,7 +26,7 @@ from ....application.coordinators import (
 from ....application.reporters import (
     StandardAutharkReporter, StandardComposingReporter,
     StandardTenancyReporter)
-from ..config import Config
+from ..configuration import Config
 from .factory import Factory
 
 

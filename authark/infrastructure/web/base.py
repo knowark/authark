@@ -1,7 +1,7 @@
 from flask import Flask
 from flask_cors import CORS
 from injectark import Injectark
-from ..config import Config
+from ..core import Config
 from .api import create_api
 from .errors import register_error_handler
 

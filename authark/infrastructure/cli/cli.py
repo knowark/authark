@@ -1,7 +1,7 @@
 import sys
 from argparse import ArgumentParser, Namespace
 from injectark import Injectark
-from ..config import Config
+from ..core import Config
 from ..data import JsonArranger
 from ..web import create_app, ServerApplication
 from ..terminal import Main, Context

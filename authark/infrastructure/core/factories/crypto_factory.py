@@ -6,7 +6,7 @@ from ....application.coordinators import AuthCoordinator
 from ..crypto import (
     PasslibHashService, PyJWTTokenService,
     PyJWTAccessTokenService, PyJWTRefreshTokenService)
-from ..config import Config
+from ..configuration import Config
 from .memory_factory import MemoryFactory
 
 
