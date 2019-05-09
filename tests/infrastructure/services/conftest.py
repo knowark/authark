@@ -1,6 +1,5 @@
 from pytest import fixture
-from authark.infrastructure.crypto.pyjwt_token_service import (
-    PyJWTTokenService)
+from authark.infrastructure.core import PyJWTTokenService
 
 
 @fixture

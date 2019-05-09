@@ -1,7 +1,6 @@
 from pytest import fixture
 from injectark import Injectark
-from authark.infrastructure.config import TrialConfig
-from authark.infrastructure.factories import build_factory
+from authark.infrastructure.core import TrialConfig, build_factory
 
 
 @fixture

@@ -3,8 +3,7 @@ from injectark import Injectark
 from authark.application.models import User, Dominion, Role
 from authark.application.services import Tenant
 from authark.infrastructure.terminal.main import Main
-from authark.infrastructure.config import TrialConfig
-from authark.infrastructure.factories import build_factory
+from authark.infrastructure.core import TrialConfig, build_factory
 from authark.infrastructure.terminal.framework import Context
 
 

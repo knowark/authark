@@ -1,7 +1,7 @@
 import os
 from json import JSONDecodeError
 from pytest import raises
-from authark.infrastructure.config import (
+from authark.infrastructure.core import (
     TrialConfig, DevelopmentConfig, ProductionConfig)
 
 

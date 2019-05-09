@@ -18,10 +18,9 @@ from authark.application.services import (
 from authark.application.coordinators import (
     AuthCoordinator, AccessCoordinator)
 from authark.infrastructure.web.base import create_app
-from authark.infrastructure.config import TrialConfig
-from authark.infrastructure.factories import build_factory
-from authark.infrastructure.crypto import (
-    PyJWTRefreshTokenService, PyJWTAccessTokenService)
+from authark.infrastructure.core import (
+    TrialConfig, build_factory, PyJWTRefreshTokenService,
+    PyJWTAccessTokenService)
 
 
 @fixture
@@ -102,11 +101,13 @@ def resolver():
 
     access_token_service = PyJWTAccessTokenService(
         'TESTSECRET', 'HS256', 3600)
+
     access_coordinator = AccessCoordinator(
         ranking_repository, role_repository,
         dominion_repository, resource_repository,
         grant_repository, permission_repository,
-        policy_repository, access_token_service)
+        policy_repository, access_token_service,
+        tenant_service)
 
     refresh_token_service = PyJWTRefreshTokenService(
         'REFRESHSECRET', 'HS256', 3600, 3600)

@@ -1,8 +1,7 @@
 from pytest import fixture
 from passlib.hash import pbkdf2_sha256
-from authark.application.services.hash_service import HashService
-from authark.infrastructure.crypto.passlib_hash_service import (
-    PasslibHashService)
+from authark.application.services import HashService
+from authark.infrastructure.core import PasslibHashService
 
 
 def test_passlib_hash_service_implementation() -> None:
