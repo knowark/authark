@@ -95,7 +95,7 @@ class JsonFactory(CryptoFactory):
         return JsonCatalogService(catalog_path, expression_parser)
 
     def json_provision_service(self) -> JsonProvisionService:
-        data_directory = self.config['data']['dir']
+        data_directory = self.config['data']['json']['default']
         return JsonProvisionService(data_directory)
 
     def json_export_service(
