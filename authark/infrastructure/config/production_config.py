@@ -16,10 +16,6 @@ class ProductionConfig(DevelopmentConfig):
             'url': Path.home() / 'tenants_catalog.json'
         }
         self['data'] = {
-            "postgresql": {
-                "default":  (
-                    'postgresql://serproser:serproser@localhost/serproser')
-            },
             "json": {
                 "default": str(Path.home() / 'data')
             }
