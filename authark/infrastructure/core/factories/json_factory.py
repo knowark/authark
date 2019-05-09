@@ -12,6 +12,7 @@ from ...data import (
     JsonCatalogService, JsonProvisionService,
     JsonExportService)
 from ..configuration import Config
+from ..tenancy import TenantSupplier
 from .crypto_factory import CryptoFactory
 
 
@@ -91,7 +92,7 @@ class JsonFactory(CryptoFactory):
 
     def json_catalog_service(
             self, expression_parser: ExpressionParser) -> JsonCatalogService:
-        catalog_path = self.config['tenancy']['url']
+        catalog_path = self.config['tenancy']['json']
         return JsonCatalogService(catalog_path, expression_parser)
 
     def json_provision_service(self) -> JsonProvisionService:
@@ -102,3 +103,8 @@ class JsonFactory(CryptoFactory):
             self, token_service: TokenService) -> JsonExportService:
         export_directory = self.config['export']['dir']
         return JsonExportService(export_directory, token_service)
+
+    def tenant_supplier(self) -> TenantSupplier:
+        catalog_path = self.config['tenancy']['json']
+        directory_data = self.config['data']['json']['default']
+        return TenantSupplier(catalog_path, directory_data)

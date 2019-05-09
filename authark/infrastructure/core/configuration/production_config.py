@@ -12,8 +12,7 @@ class ProductionConfig(DevelopmentConfig):
             'loglevel': 'debug'
         })
         self['tenancy'] = {
-            'type': 'json',
-            'url': Path.home() / 'tenants_catalog.json'
+            'json': Path.home() / 'tenants.json'
         }
         self['data'] = {
             "json": {
@@ -76,5 +75,8 @@ class ProductionConfig(DevelopmentConfig):
             },
             "ProvisionService": {
                 "method": "json_provision_service"
+            },
+            "TenantSupplier": {
+                "method": "tenant_supplier"
             }
         })

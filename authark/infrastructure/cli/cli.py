@@ -61,9 +61,10 @@ class Cli:
 
     def provision(self, args: Namespace) -> None:
         print('...PROVISION::::')
-        setup_coordinator = self.resolver.resolve('SetupCoordinator')
+        tenant_supplier = self.resolver['TenantSupplier']
         tenant_dict = {'name': args.name}
-        setup_coordinator.create_tenant(tenant_dict)
+        tenant_supplier.create_tenant(tenant_dict)
+        print('...END PROVISION::::')
 
     def serve(self, args: Namespace) -> None:
         print('...SERVE:::', args)
