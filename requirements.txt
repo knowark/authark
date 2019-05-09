@@ -26,7 +26,7 @@ greenlet==0.4.15
 gunicorn==19.9.0
 idna==2.8
 imagesize==1.1.0
-injectark==0.2.0
+injectark==0.3.0
 isort==4.3.17
 itsdangerous==1.1.0
 Jinja2==2.10.1
