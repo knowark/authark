@@ -59,4 +59,4 @@ class MemoryRepository(Repository, Generic[T]):
 
     @property
     def _location(self) -> str:
-        return self.tenant_service.get_tenant().location
+        return self.tenant_service.tenant.location

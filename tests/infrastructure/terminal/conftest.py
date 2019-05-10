@@ -15,7 +15,6 @@ def context():
 
     resolver = Injectark(strategy=strategy, factory=factory)
 
-    resolver.resolve('CatalogService').setup()
     resolver.resolve('CatalogService').catalog = {
         "1": Tenant(id='1', name='Knowark')
     }

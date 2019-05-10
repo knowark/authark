@@ -2,8 +2,10 @@ from marshmallow import Schema, fields
 
 
 class TokenRequestSchema(Schema):
-    username = fields.Str(required=True, example="amlopez")
-    password = fields.Email(required=True, example="secret")
+    tenant = fields.Email(required=True, example="knowark")
+    username = fields.Str(example="amlopez")
+    password = fields.Email(example="secret")
+    refresh_token = fields.Str(example="eyJhbG.eyJzdWIiOiIx.MjM5MadQssw5c")
     client = fields.Str(example="data_server")
 
 

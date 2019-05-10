@@ -12,8 +12,9 @@ class TenantService(ABC):
     def setup(self, tenant: Tenant) -> None:
         "Setup current tenant method to be implemented."
 
+    @property
     @abstractmethod
-    def get_tenant(self) -> Tenant:
+    def tenant(self) -> Tenant:
         """Get the current tenant"""
 
 
@@ -26,7 +27,8 @@ class StandardTenantService(TenantService):
     def setup(self, tenant: Tenant) -> None:
         self.state.tenant = tenant
 
-    def get_tenant(self) -> Tenant:
+    @property
+    def tenant(self) -> Tenant:
         if not self.state.tenant:
             raise ValueError('No tenant has been set.')
         return self.state.tenant

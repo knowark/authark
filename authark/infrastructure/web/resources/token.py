@@ -1,14 +1,15 @@
 from typing import Any, Dict, Tuple
 from flask import request, jsonify
 from flask.views import MethodView
+from ..schemas import TokenRequestSchema, TokenSchema
 
 
 class TokenResource(MethodView):
 
     def __init__(self, resolver) -> None:
-        self.affiliation_coordinator = resolver.resolve(
-            'AffiliationCoordinator')
-        self.auth_coordinator = resolver.resolve('AuthCoordinator')
+        self.session_coordinator = resolver['SessionCoordinator']
+        self.auth_coordinator = resolver['AuthCoordinator']
+        self.tenant_supplier = resolver['TenantSupplier']
 
     def get(self) -> str:
         return "Authentication endpoint. Please 'Post' to '/auth'"
@@ -33,21 +34,22 @@ class TokenResource(MethodView):
                 schema:
                   $ref: "#/components/schemas/Token"
         """
-        data = request.get_json()
-        try:
-            if 'refresh_token' in data:
-                tokens = self.auth_coordinator.refresh_authenticate(
-                    data['refresh_token'])
-            else:
-                self.affiliation_coordinator.resolve_tenant(
-                    data.get('tenant', ''))
-                username = data.get('username')
-                password = data.get('password')
-                client = data.get('client')
-                tokens = self.auth_coordinator.authenticate(
-                    username, password, client)
-        except Exception as e:
-            raise e
-            return str(e), 401
+
+        token_request_dict = TokenRequestSchema().load(request.data)
+        tenant_dict = self.tenant_supplier.get_tenant(
+            token_request_dict['tenant'])
+        self.session_coordinator.set_tenant(tenant_dict)
+
+        if 'refresh_token' in token_request_dict:
+            tokens = self.auth_coordinator.refresh_authenticate(
+                token_request_dict['refresh_token'])
+        else:
+            username = token_request_dict.get('username')
+            password = token_request_dict.get('password')
+            client = token_request_dict.get('client')
+            tokens = self.auth_coordinator.authenticate(
+                username, password, client)
+
+        token_dict = TokenSchema()
 
         return jsonify(tokens), 200
