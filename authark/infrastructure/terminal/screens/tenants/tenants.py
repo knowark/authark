@@ -73,7 +73,7 @@ class TenantsScreen(Screen):
 
     def set_current_tenant(self):
         self.selected_item = self.table.get_selected_item()
-        self.session_coordinator.set_tenant(self.selected_item['id'])
+        self.session_coordinator.set_tenant(self.selected_item)
 
         self._back()
         main_menu = self.env.holder.original_widget
