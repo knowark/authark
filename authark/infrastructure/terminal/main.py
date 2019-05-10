@@ -34,10 +34,10 @@ class Main:
 
     def _setup_initial_tenant(self) -> None:
         self.tenancy_reporter = self.env.context.resolve('TenancyReporter')
-        self.affiliation_coordinator = self.env.context.resolve(
-            'AffiliationCoordinator')
+        self.session_coordinator = self.env.context.resolve(
+            'SessionCoordinator')
         first_tenant = self.tenancy_reporter.search_tenants([])[0]
-        self.affiliation_coordinator.establish_tenant(first_tenant['id'])
+        self.session_coordinator.set_tenant(first_tenant)
 
     def _unhandled_input(self, key: str):
         if key == 'meta q':

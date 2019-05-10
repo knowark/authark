@@ -43,7 +43,7 @@ class AccessCoordinator:
         return payload
 
     def _build_tenant_info(self) -> Dict[str, Any]:
-        tenant = self.tenant_service.get_tenant()
+        tenant = self.tenant_service.tenant
         return tenant.id
 
     def _build_basic_info(self, user: User) -> Dict[str, Any]:

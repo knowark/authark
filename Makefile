@@ -27,6 +27,10 @@ coverage:
 	--cov-report term-missing -s -vv \
 	-o cache_dir=/tmp/pytest/cache
 
+update:
+	pip-review --auto
+	pip freeze > requirements.txt
+
 serve:
 	python -m authark serve
 

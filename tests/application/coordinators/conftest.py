@@ -22,8 +22,8 @@ from authark.application.services import (
     TenantService, StandardTenantService, Tenant,
     ExportService, MemoryExportService)
 from authark.application.coordinators import (
-    AuthCoordinator, ManagementCoordinator, SetupCoordinator,
-    ImportCoordinator, AssignmentCoordinator, AffiliationCoordinator,
+    AuthCoordinator, ManagementCoordinator,
+    ImportCoordinator, AssignmentCoordinator,
     AccessCoordinator, ExportCoordinator, SessionCoordinator)
 from authark.application.services.hash_service import (
     HashService, MemoryHashService)
@@ -345,16 +345,6 @@ def assignment_coordinator(
         mock_policy_repository, mock_resource_repository,
         mock_permission_repository,
         mock_grant_repository)
-
-
-@fixture
-def setup_coordinator(
-    mock_catalog_service: CatalogService,
-    mock_provision_service: ProvisionService,
-    mock_token_service: TokenService
-) -> SetupCoordinator:
-    return SetupCoordinator(
-        mock_catalog_service, mock_provision_service, mock_token_service)
 
 
 @fixture

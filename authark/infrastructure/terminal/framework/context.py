@@ -8,4 +8,4 @@ class Context(ABC):
         self.resolver = resolver
 
     def resolve(self, dependency: str):
-        return self.resolver.resolve(dependency)
+        return self.resolver[dependency]

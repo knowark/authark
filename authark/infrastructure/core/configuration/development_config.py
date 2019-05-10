@@ -75,14 +75,11 @@ class DevelopmentConfig(Config):
             "ExportCoordinator": {
                 "method": "export_coordinator"
             },
-            "SetupCoordinator": {
-                "method": "setup_coordinator"
-            },
             "AssignmentCoordinator": {
                 "method": "assignment_coordinator"
             },
-            "AffiliationCoordinator": {
-                "method": "affiliation_coordinator"
+            "SessionCoordinator": {
+                "method": "session_coordinator"
             },
             "AccessCoordinator": {
                 "method": "access_coordinator"

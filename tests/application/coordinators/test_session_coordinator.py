@@ -6,19 +6,20 @@ from authark.application.services import (
 from authark.application.coordinators import SessionCoordinator
 
 
-@fixture
-def session_coordinator(
-        tenant_service: StandardTenantService) -> SessionCoordinator:
-    return SessionCoordinator(tenant_service)
-
-
 def test_session_coordinator_creation(
         session_coordinator: SessionCoordinator) -> None:
     assert hasattr(session_coordinator, 'set_tenant')
 
 
 def test_session_coordinator_set_tenant(session_coordinator):
-    tenant = Tenant(name='Amazon')
+    tenant = {'name': 'Amazon'}
     session_coordinator.set_tenant(tenant)
-    tenant = session_coordinator.tenant_service.get_tenant()
+    tenant = session_coordinator.tenant_service.tenant
     assert tenant.slug == 'amazon'
+
+
+def test_session_coordinator_get_tenant(session_coordinator):
+    tenant = {'name': 'Amazon'}
+    session_coordinator.set_tenant(tenant)
+    tenant = session_coordinator.get_tenant()
+    assert tenant['slug'] == 'amazon'

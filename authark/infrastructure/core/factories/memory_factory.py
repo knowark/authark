@@ -21,8 +21,8 @@ from ....application.services import (
     ExportService, MemoryExportService)
 from ....application.coordinators import (
     AuthCoordinator, ManagementCoordinator,
-    ImportCoordinator, SetupCoordinator, AssignmentCoordinator,
-    AffiliationCoordinator, AccessCoordinator, ExportCoordinator)
+    ImportCoordinator, AssignmentCoordinator,
+    AccessCoordinator, ExportCoordinator, SessionCoordinator)
 from ....application.reporters import (
     StandardAutharkReporter, StandardComposingReporter,
     StandardTenancyReporter)
@@ -164,14 +164,6 @@ class MemoryFactory(Factory):
                            ) -> ExportCoordinator:
         return ExportCoordinator(export_service, catalog_service)
 
-    def setup_coordinator(self,
-                          catalog_service: CatalogService,
-                          provision_service: ProvisionService,
-                          token_service: TokenService
-                          ) -> SetupCoordinator:
-        return SetupCoordinator(catalog_service, provision_service,
-                                token_service)
-
     def assignment_coordinator(
         self,
         user_repository: UserRepository,
@@ -187,11 +179,10 @@ class MemoryFactory(Factory):
             policy_repository, resource_repository, permission_repository,
             grant_repository)
 
-    def affiliation_coordinator(
-        self, catalog_service: CatalogService,
-        tenant_service: TenantService,
-    ) -> AffiliationCoordinator:
-        return AffiliationCoordinator(catalog_service, tenant_service)
+    def session_coordinator(
+        self, tenant_service: TenantService
+    ) -> SessionCoordinator:
+        return SessionCoordinator(tenant_service)
 
     def access_coordinator(
             self, ranking_repository: RankingRepository,

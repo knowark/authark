@@ -10,10 +10,10 @@ from .tenants import TenantsScreen
 class MainMenu(Screen):
 
     def _build_widget(self) -> urwid.Widget:
-        self.affiliation_coordinator = self.env.context.resolve(
-            'AffiliationCoordinator')
+        self.session_coordinator = self.env.context.resolve(
+            'SessionCoordinator')
 
-        current_tenant = self.affiliation_coordinator.get_current_tenant()
+        current_tenant = self.session_coordinator.get_current_tenant()
         current_tenant_name = current_tenant.get('name', '').upper()
 
         title = urwid.AttrMap(

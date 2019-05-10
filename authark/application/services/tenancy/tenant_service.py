@@ -1,7 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import List, Dict, Any, Optional
 from threading import local
-from .catalog_service import CatalogService
 from .tenant import Tenant
 
 
