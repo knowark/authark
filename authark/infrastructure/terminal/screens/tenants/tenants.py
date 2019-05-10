@@ -7,9 +7,9 @@ from .tenants_actions import TenantsDetailsScreen, TenantsExportScreen
 class TenantsScreen(Screen):
 
     def _build_widget(self) -> urwid.Widget:
-        self.tenancy_reporter = self.env.context.resolve('TenancyReporter')
-        self.affiliation_coordinator = self.env.context.resolve(
-            'AffiliationCoordinator')
+        self.tenancy_supplier = self.env.context.resolve('TenantSupplier')
+        self.session_coordinator = self.env.context.resolve(
+            'SessionCoordinator')
 
         header = urwid.AttrMap(
             urwid.Text(self.name, align='center'), 'success_bg')
@@ -55,7 +55,7 @@ class TenantsScreen(Screen):
 
     def build_table(self, domain):
         headers_list = ['', 'id', 'name', 'slug']
-        tenants = self.tenancy_reporter.search_tenants(domain)
+        tenants = self.tenancy_supplier.search_tenants(domain)
         data = []
         for item in tenants:
             check = urwid.CheckBox('', True, False,
@@ -73,7 +73,7 @@ class TenantsScreen(Screen):
 
     def set_current_tenant(self):
         self.selected_item = self.table.get_selected_item()
-        self.affiliation_coordinator.establish_tenant(self.selected_item['id'])
+        self.session_coordinator.set_tenant(self.selected_item['id'])
 
         self._back()
         main_menu = self.env.holder.original_widget

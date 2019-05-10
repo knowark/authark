@@ -33,10 +33,10 @@ class Main:
         return top
 
     def _setup_initial_tenant(self) -> None:
-        self.tenancy_reporter = self.env.context.resolve('TenancyReporter')
+        self.tenancy_supplier = self.env.context.resolve('TenantSupplier')
         self.session_coordinator = self.env.context.resolve(
             'SessionCoordinator')
-        first_tenant = self.tenancy_reporter.search_tenants([])[0]
+        first_tenant = self.tenancy_supplier.search_tenants([])[0]
         self.session_coordinator.set_tenant(first_tenant)
 
     def _unhandled_input(self, key: str):

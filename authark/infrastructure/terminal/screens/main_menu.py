@@ -13,7 +13,7 @@ class MainMenu(Screen):
         self.session_coordinator = self.env.context.resolve(
             'SessionCoordinator')
 
-        current_tenant = self.session_coordinator.get_current_tenant()
+        current_tenant = self.session_coordinator.get_tenant()
         current_tenant_name = current_tenant.get('name', '').upper()
 
         title = urwid.AttrMap(

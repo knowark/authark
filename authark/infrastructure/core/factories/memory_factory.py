@@ -15,17 +15,13 @@ from ....application.services import (
     AccessTokenService, MemoryAccessTokenService,
     RefreshTokenService, MemoryRefreshTokenService,
     ImportService, MemoryImportService,
-    CatalogService, MemoryCatalogService,
-    ProvisionService, MemoryProvisionService,
-    TenantService, StandardTenantService,
-    ExportService, MemoryExportService)
+    TenantService, StandardTenantService)
 from ....application.coordinators import (
     AuthCoordinator, ManagementCoordinator,
     ImportCoordinator, AssignmentCoordinator,
-    AccessCoordinator, ExportCoordinator, SessionCoordinator)
+    AccessCoordinator, SessionCoordinator)
 from ....application.reporters import (
-    StandardAutharkReporter, StandardComposingReporter,
-    StandardTenancyReporter)
+    StandardAutharkReporter, StandardComposingReporter)
 from ..configuration import Config
 from .factory import Factory
 
@@ -107,17 +103,6 @@ class MemoryFactory(Factory):
     def memory_import_service(self) -> MemoryImportService:
         return MemoryImportService()
 
-    def memory_export_service(self) -> MemoryExportService:
-        return MemoryExportService()
-
-    def memory_catalog_service(
-            self, expression_parser: ExpressionParser
-    ) -> MemoryCatalogService:
-        return MemoryCatalogService(expression_parser)
-
-    def memory_provision_service(self) -> MemoryProvisionService:
-        return MemoryProvisionService()
-
     def standard_tenant_service(self) -> StandardTenantService:
         return StandardTenantService()
 
@@ -157,12 +142,6 @@ class MemoryFactory(Factory):
         return ImportCoordinator(import_service, user_repository,
                                  credential_repository, role_repository,
                                  ranking_repository, dominion_repository)
-
-    def export_coordinator(self,
-                           export_service: ExportService,
-                           catalog_service: CatalogService
-                           ) -> ExportCoordinator:
-        return ExportCoordinator(export_service, catalog_service)
 
     def assignment_coordinator(
         self,
@@ -228,8 +207,3 @@ class MemoryFactory(Factory):
             dominion_repository, role_repository, ranking_repository,
             resource_repository, policy_repository, permission_repository,
             grant_repository)
-
-    def standard_tenancy_reporter(
-        self, catalog_service: CatalogService
-    ) -> StandardTenancyReporter:
-        return StandardTenancyReporter(catalog_service)

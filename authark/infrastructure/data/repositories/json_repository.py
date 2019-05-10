@@ -91,5 +91,5 @@ class JsonRepository(Repository, Generic[T]):
 
     @property
     def _file_path(self) -> Path:
-        location = self.tenant_service.get_tenant().location
+        location = self.tenant_service.tenant.location
         return Path(self.data_path) / location / f"{location}.json"

@@ -27,3 +27,6 @@ class TenantSupplier:
 
     def create_tenant(self, tenant_dict: Dict[str, Any]) -> None:
         self.arranger.create_tenant(tenant_dict)
+
+    def search_tenants(self, domain):
+        return self.provider.search_tenants(domain)

@@ -51,9 +51,6 @@ class DevelopmentConfig(Config):
             "ImportService": {
                 "method": "memory_import_service"
             },
-            "ExportService": {
-                "method": "memory_export_service"
-            },
             "CatalogService": {
                 "method": "memory_catalog_service"
             },
@@ -72,9 +69,6 @@ class DevelopmentConfig(Config):
             "ImportCoordinator": {
                 "method": "import_coordinator"
             },
-            "ExportCoordinator": {
-                "method": "export_coordinator"
-            },
             "AssignmentCoordinator": {
                 "method": "assignment_coordinator"
             },
@@ -89,8 +83,5 @@ class DevelopmentConfig(Config):
             },
             "ComposingReporter": {
                 "method": "standard_composing_reporter"
-            },
-            "TenancyReporter": {
-                "method": "standard_tenancy_reporter"
             }
         }
