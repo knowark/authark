@@ -34,6 +34,9 @@ update:
 serve:
 	python -m authark serve
 
+terminal:
+	python -m authark terminal
+
 PART ?= patch
 
 version:
