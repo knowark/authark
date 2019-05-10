@@ -1,5 +1,5 @@
 from typing import Any, Dict, Tuple
-from flask import request, jsonify
+from flask import request, jsonify, abort
 from flask.views import MethodView
 from ..schemas import TokenRequestSchema, TokenSchema
 
@@ -35,10 +35,13 @@ class TokenResource(MethodView):
                   $ref: "#/components/schemas/Token"
         """
 
-        token_request_dict = TokenRequestSchema().load(request.data)
-        tenant_dict = self.tenant_supplier.get_tenant(
-            token_request_dict['tenant'])
-        self.session_coordinator.set_tenant(tenant_dict)
+        token_request_dict = TokenRequestSchema().loads(request.data)
+        tenant = token_request_dict['tenant']
+        tenants = self.tenant_supplier.search_tenants([('slug', '=', tenant)])
+        if not tenants:
+            abort(400, f"Tenant '{tenant}' not found.")
+
+        self.session_coordinator.set_tenant(tenants[0])
 
         if 'refresh_token' in token_request_dict:
             tokens = self.auth_coordinator.refresh_authenticate(
@@ -50,6 +53,6 @@ class TokenResource(MethodView):
             tokens = self.auth_coordinator.authenticate(
                 username, password, client)
 
-        token_dict = TokenSchema()
+        tokens_dict = TokenSchema().load(tokens)
 
-        return jsonify(tokens), 200
+        return jsonify(tokens_dict), 200

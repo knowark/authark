@@ -2,16 +2,16 @@ from marshmallow import Schema, fields
 
 
 class TokenRequestSchema(Schema):
-    tenant = fields.Email(required=True, example="knowark")
+    tenant = fields.Str(required=True, example="knowark")
     username = fields.Str(example="amlopez")
-    password = fields.Email(example="secret")
+    password = fields.Str(example="secret")
     refresh_token = fields.Str(example="eyJhbG.eyJzdWIiOiIx.MjM5MadQssw5c")
     client = fields.Str(example="data_server")
 
 
 class TokenSchema(Schema):
     refresh_token = fields.Str(example="eyJhbG.eyJzdWIiOiIx.MjM5MadQssw5c")
-    access_token = fields.Email(example="eyJhbG.kpvaG4gRMyfQ.SflKxwssw5cdfs")
+    access_token = fields.Str(example="eyJhbG.kpvaG4gRMyfQ.SflKxwssw5cdfs")
 
 
 class AccessTokenPayloadSchema(Schema):
