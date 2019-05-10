@@ -27,6 +27,9 @@ coverage:
 	--cov-report term-missing -s -vv \
 	-o cache_dir=/tmp/pytest/cache
 
+serve:
+	python -m authark serve
+
 PART ?= patch
 
 version:
