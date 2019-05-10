@@ -10,9 +10,9 @@ from .repository import Repository
 class MemoryRepository(Repository, Generic[T]):
     def __init__(self,  parser: ExpressionParser,
                  tenant_service: TenantService) -> None:
-        super().__init__(tenant_service)
         self.data: Dict[str, Dict[str, T]] = defaultdict(dict)
         self.parser = parser
+        self.tenant_service = tenant_service
 
     def get(self, id: str) -> T:
         item = self.data[self._location].get(id)

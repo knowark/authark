@@ -7,11 +7,6 @@ from ..utilities import T, QueryDomain
 class Repository(ABC, Generic[T]):
 
     @abstractmethod
-    def __init__(self, tenant_service: TenantService) -> None:
-        "__init__ method to be implemented."
-        self.tenant_service = tenant_service
-
-    @abstractmethod
     def get(self, id: str) -> T:
         "Get method to be implemented. Raises if missing."
 

@@ -13,11 +13,11 @@ class JsonRepository(Repository, Generic[T]):
     def __init__(self, data_path: str, parser: ExpressionParser,
                  tenant_service: TenantService,
                  collection_name: str, item_class: Callable[..., T]) -> None:
-        super().__init__(tenant_service)
         self.data_path = data_path
         self.parser = parser
         self.collection_name = collection_name
         self.item_class: Callable[..., T] = item_class
+        self.tenant_service = tenant_service
 
     def get(self, id: str) -> T:
         with self._file_path.open() as f:
