@@ -12,17 +12,17 @@ from ....application.repositories import Repository
 class JsonRepository(Repository, Generic[T]):
     def __init__(self, data_path: str, parser: ExpressionParser,
                  tenant_service: TenantService,
-                 collection_name: str, item_class: Callable[..., T]) -> None:
+                 collection: str, item_class: Callable[..., T]) -> None:
         self.data_path = data_path
         self.parser = parser
-        self.collection_name = collection_name
+        self.collection = collection
         self.item_class: Callable[..., T] = item_class
         self.tenant_service = tenant_service
 
     def get(self, id: str) -> T:
         with self._file_path.open() as f:
             data = load(f)
-            items = data.get(self.collection_name, {})
+            items = data.get(self.collection, {})
             item_dict = items.get(id)
             if not item_dict:
                 raise EntityNotFoundError(
@@ -34,7 +34,7 @@ class JsonRepository(Repository, Generic[T]):
         with self._file_path.open() as f:
             data = load(f)
         setattr(item, 'id', getattr(item, 'id') or str(uuid4()))
-        data[self.collection_name].update({getattr(item, 'id'): vars(item)})
+        data[self.collection].update({getattr(item, 'id'): vars(item)})
         with self._file_path.open('w') as f:
             dump(data, f, indent=2)
         return item
@@ -42,7 +42,7 @@ class JsonRepository(Repository, Generic[T]):
     def update(self, item: T) -> bool:
         with self._file_path.open() as f:
             data = load(f)
-            items_dict = data.get(self.collection_name)
+            items_dict = data.get(self.collection)
 
         id = getattr(item, 'id')
         if id not in items_dict:
@@ -57,7 +57,7 @@ class JsonRepository(Repository, Generic[T]):
     def search(self, domain: QueryDomain, limit=0, offset=0) -> List[T]:
         with self._file_path.open() as f:
             data = load(f)
-            items_dict = data.get(self.collection_name, {})
+            items_dict = data.get(self.collection, {})
 
         items = []
         limit = int(limit) if limit > 0 else 10000
@@ -77,7 +77,7 @@ class JsonRepository(Repository, Generic[T]):
     def remove(self, item: T) -> bool:
         with self._file_path.open() as f:
             data = load(f)
-            items_dict = data.get(self.collection_name)
+            items_dict = data.get(self.collection)
 
         id = getattr(item, 'id')
         if id not in items_dict:
@@ -92,4 +92,5 @@ class JsonRepository(Repository, Generic[T]):
     @property
     def _file_path(self) -> Path:
         location = self.tenant_service.tenant.location
-        return Path(self.data_path) / location / f"{location}.json"
+        path = Path(self.data_path) / location / f"{ self.collection}.json"
+        return path

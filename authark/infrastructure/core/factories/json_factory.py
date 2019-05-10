@@ -17,7 +17,7 @@ from .crypto_factory import CryptoFactory
 class JsonFactory(CryptoFactory):
     def __init__(self, config: Config) -> None:
         super().__init__(config)
-        self.path = self.config.get('data', {}).get('url')
+        self.path = self.config['data']['json']['default']
 
     # Repositories
 
