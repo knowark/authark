@@ -17,14 +17,11 @@ from authark.application.repositories import (
 from authark.application.services import (
     TokenService, MemoryTokenService,
     RefreshTokenService, ImportService, MemoryImportService,
-    CatalogService, MemoryCatalogService,
-    ProvisionService, MemoryProvisionService,
-    TenantService, StandardTenantService, Tenant,
-    ExportService, MemoryExportService)
+    TenantService, StandardTenantService, Tenant)
 from authark.application.coordinators import (
     AuthCoordinator, ManagementCoordinator,
     ImportCoordinator, AssignmentCoordinator,
-    AccessCoordinator, ExportCoordinator, SessionCoordinator)
+    AccessCoordinator, SessionCoordinator)
 from authark.application.services.hash_service import (
     HashService, MemoryHashService)
 
@@ -203,29 +200,10 @@ def mock_hash_service() -> HashService:
 
 
 @fixture
-def mock_catalog_service() -> CatalogService:
-    parser = ExpressionParser()
-    mock_catalog_service = MemoryCatalogService(parser)
-    return mock_catalog_service
-
-
-@fixture
-def mock_provision_service() -> ProvisionService:
-    mock_provision_service = MemoryProvisionService()
-    return mock_provision_service
-
-
-@fixture
 def mock_tenant_service() -> StandardTenantService:
     mock_tenant_service = StandardTenantService()
     mock_tenant_service.setup(Tenant(id='001', name='Default'))
     return mock_tenant_service
-
-
-@fixture
-def mock_export_service() -> ExportService:
-    mock_export_service = MemoryExportService()
-    return mock_export_service
 
 
 @fixture
@@ -319,14 +297,6 @@ def import_coordinator(
         mock_import_service, mock_user_repository,
         mock_credential_repository, mock_role_repository,
         mock_ranking_repository, mock_dominion_repository)
-
-
-@fixture
-def export_coordinator(
-    mock_export_service: ExportService,
-    mock_catalog_service: CatalogService,
-) -> ExportCoordinator:
-    return ExportCoordinator(mock_export_service, mock_catalog_service)
 
 
 @fixture

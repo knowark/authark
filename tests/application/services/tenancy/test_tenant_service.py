@@ -3,6 +3,11 @@ from authark.application.services import (
     TenantService, StandardTenantService, Tenant)
 
 
+@fixture
+def tenant_service() -> TenantService:
+    return StandardTenantService()
+
+
 def test_tenant_service_methods():
     abstract_methods = TenantService.__abstractmethods__
 
@@ -24,9 +29,9 @@ def test_standard_tenant_service_get_tenant(tenant_service):
     tenant = Tenant(name='Alpina')
     assert tenant_service.state.tenant is None
     tenant_service.setup(tenant)
-    assert tenant_service.get_tenant() == tenant
+    assert tenant_service.tenant == tenant
 
 
 def test_standard_tenant_service_get_tenant_not_set(tenant_service):
     with raises(ValueError):
-        assert tenant_service.get_tenant()
+        assert tenant_service.tenant
