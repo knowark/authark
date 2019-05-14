@@ -36,8 +36,10 @@ class Main:
         self.tenancy_supplier = self.env.context.resolve('TenantSupplier')
         self.session_coordinator = self.env.context.resolve(
             'SessionCoordinator')
-        first_tenant = self.tenancy_supplier.search_tenants([])[0]
-        self.session_coordinator.set_tenant(first_tenant)
+        first_tenant = next(
+            iter(self.tenancy_supplier.search_tenants([])), None)
+        if first_tenant:
+            self.session_coordinator.set_tenant(first_tenant)
 
     def _unhandled_input(self, key: str):
         if key == 'meta q':

@@ -7,8 +7,9 @@ from .json_factory import JsonFactory
 
 
 def build_factory(config: Config) -> Factory:
+    factory = config['factory']
     return {
-        'MemoryFactory': MemoryFactory(config),
-        'CryptoFactory': CryptoFactory(config),
-        'JsonFactory': JsonFactory(config)
-    }.get(config.get('factory', 'MemoryFactory'), MemoryFactory(config))
+        'MemoryFactory': lambda config: MemoryFactory(config),
+        'CryptoFactory': lambda config: CryptoFactory(config),
+        'JsonFactory': lambda config: JsonFactory(config)
+    }[factory](config)

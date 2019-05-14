@@ -83,5 +83,8 @@ class DevelopmentConfig(Config):
             },
             "ComposingReporter": {
                 "method": "standard_composing_reporter"
+            },
+            "TenantSupplier": {
+                "method": "memory_tenant_supplier"
             }
         }

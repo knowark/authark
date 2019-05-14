@@ -27,18 +27,18 @@ def json_repository(tmp_path) -> JsonRepository:
     }
     tenant_directory = tmp_path / "default"
     tenant_directory.mkdir(parents=True)
-    file_path = str(tenant_directory / 'default.json')
+    collection = 'dummies'
+    file_path = str(tenant_directory / f'{collection}.json')
 
-    collection_name = 'dummies'
     with open(file_path, 'w') as f:
-        dump({collection_name: item_dict}, f, indent=2)
+        dump({collection: item_dict}, f, indent=2)
 
     parser = ExpressionParser()
     tenant_service = StandardTenantService(Tenant(name="Default"))
     json_repository = JsonRepository(data_path=str(tmp_path),
                                      parser=parser,
                                      tenant_service=tenant_service,
-                                     collection_name=collection_name,
+                                     collection=collection,
                                      item_class=DummyEntity)
 
     return json_repository
@@ -58,7 +58,7 @@ def test_json_repository_add(json_repository):
     item = DummyEntity('5', 'value_5')
     json_repository.add(item)
 
-    file_path = Path(json_repository.data_path) / "default/default.json"
+    file_path = Path(json_repository.data_path) / "default/dummies.json"
     with file_path.open() as f:
         data = loads(f.read())
         items = data.get("dummies")

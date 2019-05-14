@@ -10,7 +10,7 @@ from ...data import (
     JsonPolicyRepository, JsonResourceRepository,
     JsonGrantRepository, JsonPermissionRepository)
 from ..configuration import Config
-from ..tenancy import TenantSupplier
+from ..tenancy import TenantSupplier, JsonTenantSupplier
 from .crypto_factory import CryptoFactory
 
 
@@ -88,7 +88,7 @@ class JsonFactory(CryptoFactory):
             self, hash_service: HashService) -> JsonImportService:
         return JsonImportService(hash_service)
 
-    def tenant_supplier(self) -> TenantSupplier:
+    def json_tenant_supplier(self) -> TenantSupplier:
         catalog_path = self.config['tenancy']['json']
         directory_data = self.config['data']['json']['default']
-        return TenantSupplier(catalog_path, directory_data)
+        return JsonTenantSupplier(catalog_path, directory_data)

@@ -1,25 +1,33 @@
+from abc import ABC, abstractmethod
 from typing import Dict, Any
 from tenark.resolver import (
     resolve_cataloguer, resolve_provider, resolve_arranger)
 
 
-class TenantSupplier:
+class TenantSupplier(ABC):
 
-    def __init__(self, catalog_path: str,  directory_data: str,
-                 directory_template='__template__') -> None:
-        cataloguer = resolve_cataloguer({
-            "cataloguer_kind": "json",
-            "catalog_path": catalog_path
-        })
+    @abstractmethod
+    def get_tenant(self, tenant_id: str) -> Dict[str, Any]:
+        """Get tenant method to be implemented."""
+
+    @abstractmethod
+    def create_tenant(self, tenant_dict: Dict[str, Any]) -> None:
+        """Create tenant method to be implemented."""
+
+    @abstractmethod
+    def search_tenants(self, domain):
+        """Search tenant method to be implemented."""
+
+
+class MemoryTenantSupplier(TenantSupplier):
+
+    def __init__(self) -> None:
+        cataloguer = resolve_cataloguer({})
         self.provider = resolve_provider({
             'cataloguer': cataloguer
         })
         self.arranger = resolve_arranger({
-            'cataloguer': cataloguer,
-            'provisioner_kind': 'directory',
-            'provision_template': (
-                directory_data + f"/{directory_template}"),
-            'data_directory': directory_data,
+            'cataloguer': cataloguer
         })
 
     def get_tenant(self, tenant_id: str) -> Dict[str, Any]:

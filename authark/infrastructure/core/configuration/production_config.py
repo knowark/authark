@@ -77,6 +77,6 @@ class ProductionConfig(DevelopmentConfig):
                 "method": "json_provision_service"
             },
             "TenantSupplier": {
-                "method": "tenant_supplier"
+                "method": "json_tenant_supplier"
             }
         })

@@ -23,6 +23,7 @@ from ....application.coordinators import (
 from ....application.reporters import (
     StandardAutharkReporter, StandardComposingReporter)
 from ..configuration import Config
+from ..tenancy import TenantSupplier, MemoryTenantSupplier
 from .factory import Factory
 
 
@@ -207,3 +208,6 @@ class MemoryFactory(Factory):
             dominion_repository, role_repository, ranking_repository,
             resource_repository, policy_repository, permission_repository,
             grant_repository)
+
+    def memory_tenant_supplier(self) -> TenantSupplier:
+        return MemoryTenantSupplier()

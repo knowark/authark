@@ -16,7 +16,7 @@ from authark.application.repositories import (
 from authark.application.services import (
     MemoryHashService, StandardTenantService, Tenant)
 from authark.application.coordinators import (
-    AuthCoordinator, AccessCoordinator)
+    AuthCoordinator, AccessCoordinator, SessionCoordinator)
 from authark.infrastructure.web.base import create_app
 from authark.infrastructure.core import (
     TrialConfig, build_factory, PyJWTRefreshTokenService,
@@ -26,7 +26,8 @@ from authark.infrastructure.core import (
 @fixture
 def resolver():
     parser = ExpressionParser()
-    tenant_service = StandardTenantService(Tenant(name="Default"))
+    tenant = Tenant(id='1', name="Default")
+    tenant_service = StandardTenantService(tenant)
     user_repository = MemoryUserRepository(parser, tenant_service)
     credential_repository = MemoryCredentialRepository(parser, tenant_service)
     user_repository.load({
@@ -117,6 +118,8 @@ def resolver():
         hash_service, access_coordinator,
         refresh_token_service)
 
+    session_coordinator = SessionCoordinator(tenant_service)
+
     resolver = Injectark()
 
     config = TrialConfig()
@@ -126,6 +129,10 @@ def resolver():
     resolver = Injectark(strategy=strategy, factory=factory)
 
     resolver.registry['AuthCoordinator'] = auth_coordinator
+    resolver.registry['SessionCoordinator'] = session_coordinator
+    resolver['TenantSupplier'].arranger.cataloguer.catalog = {
+        "1": tenant
+    }
 
     return resolver
 
@@ -153,6 +160,7 @@ def test_auth_post_route_failed_authentication(app: Flask) -> None:
     response = app.post(
         '/auth',
         data=json.dumps(dict(
+            tenant="default",
             username="eecheverry",
             password="ABC1234"
         )),
@@ -165,6 +173,7 @@ def test_auth_post_route_successful_authentication(app: Flask) -> None:
     response = app.post(
         '/auth',
         data=json.dumps(dict(
+            tenant="default",
             username="eecheverry",
             password="ABC1234",
             # client="mobile"
@@ -181,6 +190,7 @@ def test_auth_post_route_with_refresh_token(app: Flask) -> None:
     response = app.post(
         '/auth',
         data=json.dumps(dict(
+            tenant="default",
             refresh_token=token
         )),
         content_type='application/json')
@@ -193,6 +203,7 @@ def test_register_post_route(app: Flask) -> None:
     response = app.post(
         '/register',
         data=json.dumps(dict(
+            tenant="default",
             username="gecheverry",
             email="gecheverry@gmail.com",
             password="POI123"
