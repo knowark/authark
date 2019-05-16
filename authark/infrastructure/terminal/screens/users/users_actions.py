@@ -132,7 +132,7 @@ class UsersUpdateScreen(Screen):
             urwid.Text(self.name, align='center'), 'primary_bg')
 
         footer = urwid.Text([
-            "Press (", ("success", "Enter"), ") to save. ",
+            "Press (", ("success", "Alt+Enter"), ") to save. ",
             "Press (", ("warning", "Esc"), ") to go back. "
         ])
 
@@ -179,8 +179,8 @@ class UsersUpdateScreen(Screen):
 
         widget = urwid.Overlay(
             frame, self.parent,
-            align='center', width=('relative', 50),
-            valign='middle', height=('relative', 50),
+            align='center', width=('relative', 80),
+            valign='middle', height=('relative', 80),
             min_width=20, min_height=9)
 
         return widget
