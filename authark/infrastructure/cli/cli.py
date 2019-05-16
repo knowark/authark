@@ -2,9 +2,6 @@ import sys
 from argparse import ArgumentParser, Namespace
 from injectark import Injectark
 from ..core import Config
-from ..data import JsonArranger
-from ..web import create_app, ServerApplication
-from ..terminal import Main, Context
 
 
 class Cli:
@@ -67,6 +64,7 @@ class Cli:
 
     def serve(self, args: Namespace) -> None:
         print('...SERVE:::', args)
+        from ..web import create_app, ServerApplication
 
         app = create_app(self.config, self.resolver)
         gunicorn_config = self.config['gunicorn']
@@ -74,6 +72,7 @@ class Cli:
 
     def terminal(self, args: Namespace) -> None:
         print('...TERMINAL:::', args)
+        from ..terminal import Main, Context
 
         context = Context(self.config, self.resolver)
         app = Main(context)
