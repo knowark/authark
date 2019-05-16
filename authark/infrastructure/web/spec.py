@@ -31,7 +31,7 @@ class ResourcePlugin(BasePlugin):
 def create_spec() -> APISpec:
     spec = APISpec(
         title="Authark",
-        version="1.2.0",
+        version="1.0.0",
         openapi_version="3.0.2",
         plugins=[MarshmallowPlugin(), ResourcePlugin()],
         info=dict(
