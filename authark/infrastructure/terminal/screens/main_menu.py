@@ -5,6 +5,7 @@ from .users import UsersScreen
 from .dominions import DominionsScreen
 from .policies import PoliciesScreen
 from .tenants import TenantsScreen
+from .... import __version__
 
 
 class MainMenu(Screen):
@@ -16,8 +17,8 @@ class MainMenu(Screen):
         current_tenant = self.session_coordinator.get_tenant()
         current_tenant_name = current_tenant.get('name', '').upper()
 
-        title = urwid.AttrMap(
-            urwid.Text('AUTHARK', align='center'), 'secondary_bg')
+        title = urwid.AttrMap(urwid.Text(
+            f'AUTHARK v{__version__}', align='center'), 'secondary_bg')
         tenant_button = urwid.Button(
             current_tenant_name, on_press=self.show_tenants_screen)
         tenant_button._label.align = 'center'
