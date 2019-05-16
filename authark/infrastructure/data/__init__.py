@@ -12,5 +12,4 @@ from .repositories import (
     JsonPermissionRepository
 )
 from .json_import_service import JsonImportService
-from .json_arranger import JsonArranger
 from .utils import load_json, LoadingError
