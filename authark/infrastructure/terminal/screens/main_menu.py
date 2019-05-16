@@ -1,11 +1,11 @@
 import urwid
 from typing import Dict, Callable, Any
+from .... import __version__
 from ..framework import Screen, Environment
 from .users import UsersScreen
 from .dominions import DominionsScreen
 from .policies import PoliciesScreen
 from .tenants import TenantsScreen
-from .... import __version__
 
 
 class MainMenu(Screen):
