@@ -12,22 +12,26 @@ def test_access_coordinator_generate_token(access_coordinator) -> None:
 
 
 def test_access_coordinator_build_payload(access_coordinator) -> None:
+    tenant = Tenant(name='Default')
     user = User(id='1', username='johndoe', email='johndoe')
-    payload = access_coordinator._build_payload(user)
+    payload = access_coordinator._build_payload(tenant, user)
 
     assert isinstance(payload, dict)
-    assert 'sub' in payload
+    assert 'tid' in payload
+    assert 'uid' in payload
     assert 'email' in payload
     assert 'attributes' in payload
     assert 'authorization' in payload
 
 
 def test_access_coordinator_build_basic_info(access_coordinator) -> None:
+    tenant = Tenant(id='1', name='Default')
     user = User(id='1', username='johndoe', email='johndoe')
-    info = access_coordinator._build_basic_info(user)
+    info = access_coordinator._build_basic_info(tenant, user)
 
     assert isinstance(info, dict)
-    assert info['sub'] == user.id
+    assert info['tid'] == tenant.id
+    assert info['uid'] == user.id
     assert info['email'] == user.email
     assert info['attributes'] == user.attributes
 
@@ -53,9 +57,3 @@ def test_access_coordinator_build_permissions(access_coordinator) -> None:
             {'type': 'role', 'name': 'First Role Only', 'value': '1'}
         ]
     }
-
-
-def test_access_coordinator_build_tenant(access_coordinator) -> None:
-    tenant_id = access_coordinator._build_tenant_info()
-
-    assert tenant_id == '001'
