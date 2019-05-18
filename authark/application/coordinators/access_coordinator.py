@@ -46,9 +46,8 @@ class AccessCoordinator:
         return {
             'tid': tenant.id,
             'uid': user.id,
-            'email': user.email,
             'name': user.name,
-            'gender': user.gender,
+            'email': user.email,
             'attributes': user.attributes
         }
 

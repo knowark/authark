@@ -19,6 +19,7 @@ def test_access_coordinator_build_payload(access_coordinator) -> None:
     assert isinstance(payload, dict)
     assert 'tid' in payload
     assert 'uid' in payload
+    assert 'name' in payload
     assert 'email' in payload
     assert 'attributes' in payload
     assert 'authorization' in payload
@@ -32,6 +33,7 @@ def test_access_coordinator_build_basic_info(access_coordinator) -> None:
     assert isinstance(info, dict)
     assert info['tid'] == tenant.id
     assert info['uid'] == user.id
+    assert info['name'] == user.name
     assert info['email'] == user.email
     assert info['attributes'] == user.attributes
 
