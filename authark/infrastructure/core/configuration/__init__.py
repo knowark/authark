@@ -16,8 +16,6 @@ def build_config(config_path: str, mode: str) -> Config:
     if loaded_config is not None:
         production_config.update(loaded_config)
 
-    print('<<< Config::', production_config)
-
     return production_config
 
 
@@ -28,5 +26,5 @@ def load_config(config_path: str) -> Optional[Config]:
         if not path.exists():
             return None
 
-    with open(config_path) as f:
+    with path.open() as f:
         return load(f)
