@@ -102,7 +102,8 @@ ENV/
 .vscode/
 
 # authark
-/authark_data.json
+authark_data.json
+config.json
 
 # pytest
 .pytest_cache
