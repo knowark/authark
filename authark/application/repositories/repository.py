@@ -1,6 +1,5 @@
 from abc import ABC, abstractmethod
 from typing import List, Generic
-from ..services import TenantService
 from ..utilities import T, QueryDomain
 
 

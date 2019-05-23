@@ -1,10 +1,11 @@
+from pathlib import Path
 from ....application.utilities import ExpressionParser
 from ....application.repositories import (
     UserRepository, CredentialRepository)
 from ....application.services import HashService, TokenService
 from ....application.coordinators import AuthCoordinator
 from ..crypto import (
-    PasslibHashService, PyJWTTokenService,
+    PasslibHashService, PyJWTTokenService, JwtSupplier,
     PyJWTAccessTokenService, PyJWTRefreshTokenService)
 from ..configuration import Config
 from .memory_factory import MemoryFactory
@@ -41,3 +42,7 @@ class CryptoFactory(MemoryFactory):
             self.refresh_config['algorithm'],
             self.refresh_config['lifetime'],
             self.refresh_config['threshold'])
+
+    def jwt_supplier(self) -> JwtSupplier:
+        secret = self.access_config['secret']
+        return JwtSupplier(secret)

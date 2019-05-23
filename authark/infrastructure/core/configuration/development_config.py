@@ -54,8 +54,8 @@ class DevelopmentConfig(Config):
             "CatalogService": {
                 "method": "memory_catalog_service"
             },
-            "TenantService": {
-                "method": "standard_tenant_service"
+            "TenantProvider": {
+                "method": "standard_tenant_provider"
             },
             "ProvisionService": {
                 "method": "memory_provision_service"

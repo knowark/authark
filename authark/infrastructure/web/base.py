@@ -2,8 +2,8 @@ from flask import Flask
 from flask_cors import CORS
 from injectark import Injectark
 from ..core import Config
+from .hooks import register_error_handler
 from .api import create_api
-from .errors import register_error_handler
 
 
 def create_app(config: Config, resolver: Injectark) -> Flask:

@@ -3,8 +3,7 @@ from ..models import AuthError, Token, User, Credential
 from ..repositories import UserRepository, CredentialRepository
 from ..utilities import UserCreationError
 from ..services import (
-    TokenService, RefreshTokenService, HashService)
-from .access_coordinator import AccessCoordinator
+    TokenService, RefreshTokenService, HashService, AccessService)
 from .types import TokenString, TokensDict, UserDict
 
 
@@ -13,12 +12,12 @@ class AuthCoordinator:
     def __init__(self, user_repository: UserRepository,
                  credential_repository: CredentialRepository,
                  hash_service: HashService,
-                 access_coordinator: AccessCoordinator,
+                 access_service: AccessService,
                  refresh_token_service: RefreshTokenService) -> None:
         self.user_repository = user_repository
         self.credential_repository = credential_repository
         self.hash_service = hash_service
-        self.access_coordinator = access_coordinator
+        self.access_service = access_service
         self.refresh_token_service = refresh_token_service
 
     def authenticate(self, username: str, password: str, client: str
@@ -42,7 +41,7 @@ class AuthCoordinator:
         if not self.hash_service.verify_password(password, user_password):
             raise AuthError("Authentication Error: Password mismatch.")
 
-        access_token = self.access_coordinator.generate_token(user)
+        access_token = self.access_service.generate_token(user)
 
         # Create new refresh token
         client = client or 'ALL'
@@ -71,7 +70,7 @@ class AuthCoordinator:
 
         user = self.user_repository.get(credential.user_id)
 
-        tokens_dict['access_token'] = self.access_coordinator.generate_token(
+        tokens_dict['access_token'] = self.access_service.generate_token(
             user).value
 
         return tokens_dict

@@ -2,6 +2,7 @@ from typing import Tuple
 from flask import request, jsonify, abort
 from flask.views import MethodView
 from marshmallow import ValidationError
+from ..helpers import get_request_filter
 from ..schemas import UserSchema
 
 
@@ -10,6 +11,32 @@ class UserResource(MethodView):
     def __init__(self, resolver) -> None:
         self.auth_coordinator = resolver['AuthCoordinator']
         self.tenant_supplier = resolver['TenantSupplier']
+        self.authark_reporter = resolver['AutharkReporter']
+
+    def get(self):
+        """
+        ---
+        summary: Return all users.
+        tags:
+          - Users
+        responses:
+          200:
+            description: "Successful response"
+            content:
+              application/json:
+                schema:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/User'
+        """
+
+        domain, limit, offset = get_request_filter(request)
+
+        users = UserSchema().dump(
+            self.authark_reporter.search_users(
+                domain), many=True)
+
+        return jsonify(users)
 
     def post(self) -> Tuple[str, int]:
         """

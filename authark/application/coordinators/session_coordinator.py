@@ -1,15 +1,15 @@
 from typing import Dict, Any
-from ..services import TenantService, Tenant
+from ..utilities import TenantProvider, Tenant
 
 
 class SessionCoordinator:
-    def __init__(self, tenant_service: TenantService) -> None:
-        self.tenant_service = tenant_service
+    def __init__(self, tenant_provider: TenantProvider) -> None:
+        self.tenant_provider = tenant_provider
 
     def set_tenant(self, tenant_dict: Dict[str, Any]) -> None:
         tenant = Tenant(**tenant_dict)
-        self.tenant_service.setup(tenant)
+        self.tenant_provider.setup(tenant)
 
     def get_tenant(self) -> Dict[str, Any]:
-        tenant = self.tenant_service.tenant
+        tenant = self.tenant_provider.tenant
         return vars(tenant)

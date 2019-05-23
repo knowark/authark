@@ -2,17 +2,17 @@ from abc import ABC, abstractmethod
 from uuid import uuid4
 from collections import defaultdict
 from typing import List, Dict, TypeVar, Optional, Generic
-from ..services import TenantService
-from ..utilities import ExpressionParser, QueryDomain, T, EntityNotFoundError
+from ..utilities import (
+    TenantProvider, ExpressionParser, QueryDomain, T, EntityNotFoundError)
 from .repository import Repository
 
 
 class MemoryRepository(Repository, Generic[T]):
     def __init__(self,  parser: ExpressionParser,
-                 tenant_service: TenantService) -> None:
+                 tenant_provider: TenantProvider) -> None:
         self.data: Dict[str, Dict[str, T]] = defaultdict(dict)
         self.parser = parser
-        self.tenant_service = tenant_service
+        self.tenant_provider = tenant_provider
 
     def get(self, id: str) -> T:
         item = self.data[self._location].get(id)
@@ -59,4 +59,4 @@ class MemoryRepository(Repository, Generic[T]):
 
     @property
     def _location(self) -> str:
-        return self.tenant_service.tenant.location
+        return self.tenant_provider.tenant.location

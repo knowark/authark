@@ -1,4 +1,3 @@
-from .access_coordinator import AccessCoordinator
 from .auth_coordinator import AuthCoordinator
 from .management_coordinator import ManagementCoordinator
 from .assignment_coordinator import AssignmentCoordinator

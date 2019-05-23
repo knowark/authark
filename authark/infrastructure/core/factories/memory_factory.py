@@ -1,4 +1,5 @@
-from ....application.utilities import ExpressionParser
+from ....application.utilities import (
+    ExpressionParser, TenantProvider, StandardTenantProvider)
 from ....application.repositories import (
     UserRepository, MemoryUserRepository,
     CredentialRepository, MemoryCredentialRepository,
@@ -14,12 +15,11 @@ from ....application.services import (
     TokenService, MemoryTokenService,
     AccessTokenService, MemoryAccessTokenService,
     RefreshTokenService, MemoryRefreshTokenService,
-    ImportService, MemoryImportService,
-    TenantService, StandardTenantService)
+    ImportService, MemoryImportService, AccessService)
 from ....application.coordinators import (
     AuthCoordinator, ManagementCoordinator,
     ImportCoordinator, AssignmentCoordinator,
-    AccessCoordinator, SessionCoordinator)
+    SessionCoordinator)
 from ....application.reporters import (
     StandardAutharkReporter, StandardComposingReporter)
 from ..configuration import Config
@@ -38,55 +38,55 @@ class MemoryFactory(Factory):
 
     def memory_user_repository(
             self, expression_parser: ExpressionParser,
-            tenant_service: TenantService
+            tenant_service: TenantProvider
     ) -> MemoryUserRepository:
         return MemoryUserRepository(expression_parser, tenant_service)
 
     def memory_credential_repository(
             self, expression_parser: ExpressionParser,
-            tenant_service: TenantService
+            tenant_service: TenantProvider
     ) -> MemoryCredentialRepository:
         return MemoryCredentialRepository(expression_parser, tenant_service)
 
     def memory_dominion_repository(
             self, expression_parser: ExpressionParser,
-            tenant_service: TenantService
+            tenant_service: TenantProvider
     ) -> MemoryDominionRepository:
         return MemoryDominionRepository(expression_parser, tenant_service)
 
     def memory_role_repository(
             self, expression_parser: ExpressionParser,
-            tenant_service: TenantService
+            tenant_service: TenantProvider
     ) -> MemoryRoleRepository:
         return MemoryRoleRepository(expression_parser, tenant_service)
 
     def memory_ranking_repository(
             self, expression_parser: ExpressionParser,
-            tenant_service: TenantService
+            tenant_service: TenantProvider
     ) -> MemoryRankingRepository:
         return MemoryRankingRepository(expression_parser, tenant_service)
 
     def memory_policy_repository(
             self, expression_parser: ExpressionParser,
-            tenant_service: TenantService
+            tenant_service: TenantProvider
     ) -> MemoryPolicyRepository:
         return MemoryPolicyRepository(expression_parser, tenant_service)
 
     def memory_resource_repository(
             self, expression_parser: ExpressionParser,
-            tenant_service: TenantService
+            tenant_service: TenantProvider
     ) -> MemoryResourceRepository:
         return MemoryResourceRepository(expression_parser, tenant_service)
 
     def memory_permission_repository(
             self, expression_parser: ExpressionParser,
-            tenant_service: TenantService
+            tenant_service: TenantProvider
     ) -> MemoryPermissionRepository:
         return MemoryPermissionRepository(expression_parser, tenant_service)
 
     def memory_grant_repository(
             self, expression_parser: ExpressionParser,
-            tenant_service: TenantService
+            tenant_service: TenantProvider
     ) -> MemoryGrantRepository:
         return MemoryGrantRepository(expression_parser, tenant_service)
 
@@ -104,8 +104,8 @@ class MemoryFactory(Factory):
     def memory_import_service(self) -> MemoryImportService:
         return MemoryImportService()
 
-    def standard_tenant_service(self) -> StandardTenantService:
-        return StandardTenantService()
+    def standard_tenant_service(self) -> StandardTenantProvider:
+        return StandardTenantProvider()
 
     # Coordinators
 
@@ -113,11 +113,11 @@ class MemoryFactory(Factory):
             self, user_repository: UserRepository,
             credential_repository: CredentialRepository,
             hash_service: HashService,
-            access_coordinator: AccessCoordinator,
+            access_service: AccessService,
             refresh_token_service: RefreshTokenService) -> AuthCoordinator:
         return AuthCoordinator(
             user_repository, credential_repository,
-            hash_service, access_coordinator, refresh_token_service)
+            hash_service, access_service, refresh_token_service)
 
     def management_coordinator(
         self, user_repository: UserRepository,
@@ -160,11 +160,11 @@ class MemoryFactory(Factory):
             grant_repository)
 
     def session_coordinator(
-        self, tenant_service: TenantService
+        self, tenant_service: TenantProvider
     ) -> SessionCoordinator:
         return SessionCoordinator(tenant_service)
 
-    def access_coordinator(
+    def access_service(
             self, ranking_repository: RankingRepository,
             role_repository: RoleRepository,
             dominion_repository: DominionRepository,
@@ -173,8 +173,8 @@ class MemoryFactory(Factory):
             permission_repository: PermissionRepository,
             policy_repository: PolicyRepository,
             token_service: AccessTokenService,
-            tenant_service: TenantService) -> AccessCoordinator:
-        return AccessCoordinator(
+            tenant_service: TenantProvider) -> AccessService:
+        return AccessService(
             ranking_repository, role_repository,
             dominion_repository, resource_repository, grant_repository,
             permission_repository, policy_repository, token_service,

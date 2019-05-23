@@ -3,7 +3,7 @@ from threading import local
 from .tenant import Tenant
 
 
-class TenantService(ABC):
+class TenantProvider(ABC):
     """Tenant service."""
 
     @abstractmethod
@@ -16,7 +16,7 @@ class TenantService(ABC):
         """Get the current tenant"""
 
 
-class StandardTenantService(TenantService):
+class StandardTenantProvider(TenantProvider):
 
     def __init__(self, tenant=None) -> None:
         self.state = local()

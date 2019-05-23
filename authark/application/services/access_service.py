@@ -6,10 +6,11 @@ from ..repositories import (
     RankingRepository, RoleRepository, DominionRepository,
     ResourceRepository, GrantRepository, PermissionRepository,
     PolicyRepository)
-from ..services import AccessTokenService, TenantService, Tenant
+from ..utilities import TenantProvider, Tenant
+from .token_service import AccessTokenService
 
 
-class AccessCoordinator:
+class AccessService:
 
     def __init__(self, ranking_repository: RankingRepository,
                  role_repository: RoleRepository,
@@ -19,7 +20,7 @@ class AccessCoordinator:
                  permission_repository: PermissionRepository,
                  policy_repository: PolicyRepository,
                  token_service: AccessTokenService,
-                 tenant_service: TenantService) -> None:
+                 tenant_provider: TenantProvider) -> None:
         self.ranking_repository = ranking_repository
         self.role_repository = role_repository
         self.dominion_repository = dominion_repository
@@ -28,10 +29,10 @@ class AccessCoordinator:
         self.permission_repository = permission_repository
         self.policy_repository = policy_repository
         self.token_service = token_service
-        self.tenant_service = tenant_service
+        self.tenant_provider = tenant_provider
 
     def generate_token(self, user: User) -> Token:
-        tenant = self.tenant_service.tenant
+        tenant = self.tenant_provider.tenant
         access_payload = self._build_payload(tenant, user)
         access_token = self.token_service.generate_token(access_payload)
 

@@ -3,7 +3,7 @@ from pathlib import Path
 from json import load, dump
 from uuid import uuid4
 from typing import Dict, List, Any, Type, Callable, Generic
-from ....application.services import TenantService
+from ....application.services import TenantProvider
 from ....application.utilities import (
     T, QueryDomain, ExpressionParser, EntityNotFoundError)
 from ....application.repositories import Repository
@@ -11,13 +11,13 @@ from ....application.repositories import Repository
 
 class JsonRepository(Repository, Generic[T]):
     def __init__(self, data_path: str, parser: ExpressionParser,
-                 tenant_service: TenantService,
+                 tenant_provider: TenantProvider,
                  collection: str, item_class: Callable[..., T]) -> None:
         self.data_path = data_path
         self.parser = parser
         self.collection = collection
         self.item_class: Callable[..., T] = item_class
-        self.tenant_service = tenant_service
+        self.tenant_provider = tenant_provider
 
     def get(self, id: str) -> T:
         with self._file_path.open() as f:
@@ -91,6 +91,6 @@ class JsonRepository(Repository, Generic[T]):
 
     @property
     def _file_path(self) -> Path:
-        location = self.tenant_service.tenant.location
+        location = self.tenant_provider.tenant.location
         path = Path(self.data_path) / location / f"{ self.collection}.json"
         return path
