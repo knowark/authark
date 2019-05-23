@@ -35,7 +35,7 @@ class Authenticate:
                 self.session_coordinator.set_tenant(tenant_dict)
 
                 user_dict = UserSchema().load(token_payload)
-                self.session_coordinator.set_user(user_dict)
+                # self.session_coordinator.set_user(user_dict)
             except Exception as e:
                 raise AuthenticationError(
                     "Couldn't authenticate the request.")

@@ -38,57 +38,57 @@ class MemoryFactory(Factory):
 
     def memory_user_repository(
             self, expression_parser: ExpressionParser,
-            tenant_service: TenantProvider
+            tenant_provider: TenantProvider
     ) -> MemoryUserRepository:
-        return MemoryUserRepository(expression_parser, tenant_service)
+        return MemoryUserRepository(expression_parser, tenant_provider)
 
     def memory_credential_repository(
             self, expression_parser: ExpressionParser,
-            tenant_service: TenantProvider
+            tenant_provider: TenantProvider
     ) -> MemoryCredentialRepository:
-        return MemoryCredentialRepository(expression_parser, tenant_service)
+        return MemoryCredentialRepository(expression_parser, tenant_provider)
 
     def memory_dominion_repository(
             self, expression_parser: ExpressionParser,
-            tenant_service: TenantProvider
+            tenant_provider: TenantProvider
     ) -> MemoryDominionRepository:
-        return MemoryDominionRepository(expression_parser, tenant_service)
+        return MemoryDominionRepository(expression_parser, tenant_provider)
 
     def memory_role_repository(
             self, expression_parser: ExpressionParser,
-            tenant_service: TenantProvider
+            tenant_provider: TenantProvider
     ) -> MemoryRoleRepository:
-        return MemoryRoleRepository(expression_parser, tenant_service)
+        return MemoryRoleRepository(expression_parser, tenant_provider)
 
     def memory_ranking_repository(
             self, expression_parser: ExpressionParser,
-            tenant_service: TenantProvider
+            tenant_provider: TenantProvider
     ) -> MemoryRankingRepository:
-        return MemoryRankingRepository(expression_parser, tenant_service)
+        return MemoryRankingRepository(expression_parser, tenant_provider)
 
     def memory_policy_repository(
             self, expression_parser: ExpressionParser,
-            tenant_service: TenantProvider
+            tenant_provider: TenantProvider
     ) -> MemoryPolicyRepository:
-        return MemoryPolicyRepository(expression_parser, tenant_service)
+        return MemoryPolicyRepository(expression_parser, tenant_provider)
 
     def memory_resource_repository(
             self, expression_parser: ExpressionParser,
-            tenant_service: TenantProvider
+            tenant_provider: TenantProvider
     ) -> MemoryResourceRepository:
-        return MemoryResourceRepository(expression_parser, tenant_service)
+        return MemoryResourceRepository(expression_parser, tenant_provider)
 
     def memory_permission_repository(
             self, expression_parser: ExpressionParser,
-            tenant_service: TenantProvider
+            tenant_provider: TenantProvider
     ) -> MemoryPermissionRepository:
-        return MemoryPermissionRepository(expression_parser, tenant_service)
+        return MemoryPermissionRepository(expression_parser, tenant_provider)
 
     def memory_grant_repository(
             self, expression_parser: ExpressionParser,
-            tenant_service: TenantProvider
+            tenant_provider: TenantProvider
     ) -> MemoryGrantRepository:
-        return MemoryGrantRepository(expression_parser, tenant_service)
+        return MemoryGrantRepository(expression_parser, tenant_provider)
 
     # Services
 
@@ -104,7 +104,7 @@ class MemoryFactory(Factory):
     def memory_import_service(self) -> MemoryImportService:
         return MemoryImportService()
 
-    def standard_tenant_service(self) -> StandardTenantProvider:
+    def standard_tenant_provider(self) -> StandardTenantProvider:
         return StandardTenantProvider()
 
     # Coordinators
@@ -160,9 +160,9 @@ class MemoryFactory(Factory):
             grant_repository)
 
     def session_coordinator(
-        self, tenant_service: TenantProvider
+        self, tenant_provider: TenantProvider
     ) -> SessionCoordinator:
-        return SessionCoordinator(tenant_service)
+        return SessionCoordinator(tenant_provider)
 
     def access_service(
             self, ranking_repository: RankingRepository,
@@ -173,12 +173,12 @@ class MemoryFactory(Factory):
             permission_repository: PermissionRepository,
             policy_repository: PolicyRepository,
             token_service: AccessTokenService,
-            tenant_service: TenantProvider) -> AccessService:
+            tenant_provider: TenantProvider) -> AccessService:
         return AccessService(
             ranking_repository, role_repository,
             dominion_repository, resource_repository, grant_repository,
             permission_repository, policy_repository, token_service,
-            tenant_service)
+            tenant_provider)
 
     # Reporters
 

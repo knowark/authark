@@ -23,7 +23,7 @@ class ProductionConfig(DevelopmentConfig):
             'type': 'json',
             'dir': Path.home() / 'export'
         }
-        self['factory'] = 'JsonFactory'
+        self['factory'] = 'HttpFactory'
         self['strategy'].update({
             "UserRepository": {
                 "method": "json_user_repository"
@@ -78,5 +78,11 @@ class ProductionConfig(DevelopmentConfig):
             },
             "TenantSupplier": {
                 "method": "json_tenant_supplier"
+            },
+            "JwtSupplier": {
+                "method":  "jwt_supplier"
+            },
+            "Authenticate": {
+                "method": "middleware_authenticate"
             }
         })

@@ -1,3 +1,3 @@
 from .auth import DominionAuthorizationSchema
 from .token import TokenSchema, TokenRequestSchema, AccessTokenPayloadSchema
-from .user import UserSchema
+from .user import UserSchema, UserAuthSchema

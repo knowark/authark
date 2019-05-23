@@ -60,6 +60,9 @@ class DevelopmentConfig(Config):
             "ProvisionService": {
                 "method": "memory_provision_service"
             },
+            "AccessService": {
+                "method": "access_service"
+            },
             "AuthCoordinator": {
                 "method": "auth_coordinator"
             },
@@ -74,9 +77,6 @@ class DevelopmentConfig(Config):
             },
             "SessionCoordinator": {
                 "method": "session_coordinator"
-            },
-            "AccessCoordinator": {
-                "method": "access_coordinator"
             },
             "AutharkReporter": {
                 "method": "standard_authark_reporter"

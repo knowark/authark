@@ -3,7 +3,7 @@ from flask import request, jsonify, abort
 from flask.views import MethodView
 from marshmallow import ValidationError
 from ..helpers import get_request_filter
-from ..schemas import UserSchema
+from ..schemas import UserSchema, UserAuthSchema
 
 
 class UserResource(MethodView):
@@ -55,7 +55,7 @@ class UserResource(MethodView):
             description: "User created"
         """
 
-        user_registration_dict = UserSchema().loads(request.data)
+        user_registration_dict = UserAuthSchema().loads(request.data)
         tenant = user_registration_dict['tenant']
         tenants = self.tenant_supplier.search_tenants([('slug', '=', tenant)])
         if not tenants:
