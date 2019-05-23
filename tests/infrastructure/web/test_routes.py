@@ -14,9 +14,9 @@ from authark.application.repositories import (
     MemoryGrantRepository, MemoryPermissionRepository,
     MemoryPolicyRepository)
 from authark.application.services import (
-    MemoryHashService, StandardTenantService, Tenant)
+    MemoryHashService, StandardTenantProvider, Tenant)
 from authark.application.coordinators import (
-    AuthCoordinator, AccessCoordinator, SessionCoordinator)
+    AuthCoordinator, AccessService, SessionCoordinator)
 from authark.infrastructure.web.base import create_app
 from authark.infrastructure.core import (
     TrialConfig, build_factory, PyJWTRefreshTokenService,
@@ -27,9 +27,9 @@ from authark.infrastructure.core import (
 def resolver():
     parser = ExpressionParser()
     tenant = Tenant(id='1', name="Default")
-    tenant_service = StandardTenantService(tenant)
-    user_repository = MemoryUserRepository(parser, tenant_service)
-    credential_repository = MemoryCredentialRepository(parser, tenant_service)
+    tenant_provider = StandardTenantProvider(tenant)
+    user_repository = MemoryUserRepository(parser, tenant_provider)
+    credential_repository = MemoryCredentialRepository(parser, tenant_provider)
     user_repository.load({
         "default": {
             '1': User(
@@ -53,47 +53,47 @@ def resolver():
         }
 
     })
-    ranking_repository = MemoryRankingRepository(parser, tenant_service)
+    ranking_repository = MemoryRankingRepository(parser, tenant_provider)
     ranking_repository.load({
         "default": {
             "1": Ranking(id='1', user_id='1', role_id='1',
                          description="Service's Administrator")
         }
     })
-    role_repository = MemoryRoleRepository(parser, tenant_service)
+    role_repository = MemoryRoleRepository(parser, tenant_provider)
     role_repository.load({
         "default": {
             "1": Role(id='1', name='admin', dominion_id='1',
                       description="Service's Administrator")
         }
     })
-    dominion_repository = MemoryDominionRepository(parser, tenant_service)
+    dominion_repository = MemoryDominionRepository(parser, tenant_provider)
     dominion_repository.load({
         "default": {
             "1": Dominion(id='1', name='Data Server',
                           url="https://dataserver.nubark.com")
         }
     })
-    resource_repository = MemoryResourceRepository(parser, tenant_service)
+    resource_repository = MemoryResourceRepository(parser, tenant_provider)
     resource_repository.load({
         "default": {
             "1": Resource(id='1', name='employees',
                           dominion_id='1')
         }
     })
-    grant_repository = MemoryGrantRepository(parser, tenant_service)
+    grant_repository = MemoryGrantRepository(parser, tenant_provider)
     grant_repository.load({
         "default": {
             '001': Grant(id='001', permission_id='001', role_id='1')
         }
     })
-    permission_repository = MemoryPermissionRepository(parser, tenant_service)
+    permission_repository = MemoryPermissionRepository(parser, tenant_provider)
     permission_repository.load({
         "default": {
             "001": Permission(id='001', policy_id='001', resource_id='1')
         }
     })
-    policy_repository = MemoryPolicyRepository(parser, tenant_service)
+    policy_repository = MemoryPolicyRepository(parser, tenant_provider)
     policy_repository.load({
         "default": {
             "001": Policy(id='001', name='First Role Only', value="1")
@@ -103,22 +103,22 @@ def resolver():
     access_token_service = PyJWTAccessTokenService(
         'TESTSECRET', 'HS256', 3600)
 
-    access_coordinator = AccessCoordinator(
+    access_service = AccessService(
         ranking_repository, role_repository,
         dominion_repository, resource_repository,
         grant_repository, permission_repository,
         policy_repository, access_token_service,
-        tenant_service)
+        tenant_provider)
 
     refresh_token_service = PyJWTRefreshTokenService(
         'REFRESHSECRET', 'HS256', 3600, 3600)
     hash_service = MemoryHashService()
     auth_coordinator = AuthCoordinator(
         user_repository, credential_repository,
-        hash_service, access_coordinator,
+        hash_service, access_service,
         refresh_token_service)
 
-    session_coordinator = SessionCoordinator(tenant_service)
+    session_coordinator = SessionCoordinator(tenant_provider)
 
     resolver = Injectark()
 

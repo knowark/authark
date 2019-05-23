@@ -37,7 +37,7 @@ def context():
                       description='Production Manager')
         }
     })
-    resolver['SessionCoordinator'].tenant_service.setup(tenant)
+    resolver['SessionCoordinator'].tenant_provider.setup(tenant)
 
     return Context(config, resolver)
 

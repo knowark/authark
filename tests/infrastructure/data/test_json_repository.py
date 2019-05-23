@@ -1,7 +1,7 @@
 from json import dump, loads
 from pathlib import Path
 from pytest import fixture, raises
-from authark.application.services import StandardTenantService, Tenant
+from authark.application.services import StandardTenantProvider, Tenant
 from authark.application.utilities import (
     ExpressionParser, EntityNotFoundError)
 from authark.application.repositories import Repository
@@ -34,10 +34,10 @@ def json_repository(tmp_path) -> JsonRepository:
         dump({collection: item_dict}, f, indent=2)
 
     parser = ExpressionParser()
-    tenant_service = StandardTenantService(Tenant(name="Default"))
+    tenant_provider = StandardTenantProvider(Tenant(name="Default"))
     json_repository = JsonRepository(data_path=str(tmp_path),
                                      parser=parser,
-                                     tenant_service=tenant_service,
+                                     tenant_provider=tenant_provider,
                                      collection=collection,
                                      item_class=DummyEntity)
 

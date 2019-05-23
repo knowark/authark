@@ -3,7 +3,8 @@ from pytest import fixture, raises
 from authark.application.models import (
     AuthError, User, Credential, Token, Dominion, Role, Ranking,
     Policy, Resource, Permission, Grant)
-from authark.application.utilities import ExpressionParser
+from authark.application.utilities import (
+    ExpressionParser, TenantProvider, StandardTenantProvider, Tenant)
 from authark.application.repositories import (
     UserRepository, MemoryUserRepository,
     CredentialRepository, MemoryCredentialRepository,
@@ -15,13 +16,12 @@ from authark.application.repositories import (
     PermissionRepository, MemoryPermissionRepository,
     GrantRepository, MemoryGrantRepository)
 from authark.application.services import (
-    TokenService, MemoryTokenService,
-    RefreshTokenService, ImportService, MemoryImportService,
-    TenantService, StandardTenantService, Tenant)
+    TokenService, MemoryTokenService, AccessService,
+    RefreshTokenService, ImportService, MemoryImportService)
 from authark.application.coordinators import (
     AuthCoordinator, ManagementCoordinator,
     ImportCoordinator, AssignmentCoordinator,
-    AccessCoordinator, SessionCoordinator)
+    SessionCoordinator)
 from authark.application.services.hash_service import (
     HashService, MemoryHashService)
 
@@ -33,7 +33,7 @@ from authark.application.services.hash_service import (
 
 @fixture
 def mock_user_repository() -> UserRepository:
-    tenant_service = StandardTenantService(Tenant(name="Default"))
+    tenant_provider = StandardTenantProvider(Tenant(name="Default"))
     parser = ExpressionParser()
     user_dict = {
         "default": {
@@ -49,7 +49,7 @@ def mock_user_repository() -> UserRepository:
         }
     }
     mock_user_repository = MemoryUserRepository(
-        parser, tenant_service)
+        parser, tenant_provider)
     mock_user_repository.load(user_dict)
 
     return mock_user_repository
@@ -57,7 +57,7 @@ def mock_user_repository() -> UserRepository:
 
 @fixture
 def mock_credential_repository() -> CredentialRepository:
-    tenant_service = StandardTenantService(Tenant(name="Default"))
+    tenant_provider = StandardTenantProvider(Tenant(name="Default"))
     credentials_dict = {
         "default": {
             "1": Credential(id='1', user_id='1', value="HASHED: PASS1"),
@@ -68,14 +68,14 @@ def mock_credential_repository() -> CredentialRepository:
     }
     parser = ExpressionParser()
     credential_repository = MemoryCredentialRepository(
-        parser, tenant_service)
+        parser, tenant_provider)
     credential_repository.load(credentials_dict)
     return credential_repository
 
 
 @fixture
 def mock_dominion_repository() -> DominionRepository:
-    tenant_service = StandardTenantService(Tenant(name="Default"))
+    tenant_provider = StandardTenantProvider(Tenant(name="Default"))
     dominions_dict = {
         "default": {
             "1": Dominion(id='1', name='Data Server',
@@ -85,14 +85,14 @@ def mock_dominion_repository() -> DominionRepository:
     }
     parser = ExpressionParser()
     dominion_repository = MemoryDominionRepository(
-        parser, tenant_service)
+        parser, tenant_provider)
     dominion_repository.load(dominions_dict)
     return dominion_repository
 
 
 @fixture
 def mock_role_repository() -> RoleRepository:
-    tenant_service = StandardTenantService(Tenant(name="Default"))
+    tenant_provider = StandardTenantProvider(Tenant(name="Default"))
     roles_dict = {
         "default": {
             "1": Role(id='1',
@@ -102,14 +102,14 @@ def mock_role_repository() -> RoleRepository:
         }
     }
     parser = ExpressionParser()
-    role_repository = MemoryRoleRepository(parser, tenant_service)
+    role_repository = MemoryRoleRepository(parser, tenant_provider)
     role_repository.load(roles_dict)
     return role_repository
 
 
 @fixture
 def mock_ranking_repository() -> RankingRepository:
-    tenant_service = StandardTenantService(Tenant(name="Default"))
+    tenant_provider = StandardTenantProvider(Tenant(name="Default"))
     rankings_dict = {
         "default": {
             "1": Ranking(id='1',
@@ -119,14 +119,14 @@ def mock_ranking_repository() -> RankingRepository:
     }
     parser = ExpressionParser()
     ranking_repository = MemoryRankingRepository(
-        parser, tenant_service)
+        parser, tenant_provider)
     ranking_repository.load(rankings_dict)
     return ranking_repository
 
 
 @fixture
 def mock_policy_repository() -> PolicyRepository:
-    tenant_service = StandardTenantService(Tenant(name="Default"))
+    tenant_provider = StandardTenantProvider(Tenant(name="Default"))
     policy_dict = {
         "default": {
             "001": Policy(id='001', name='First Role Only', value="1")
@@ -134,14 +134,14 @@ def mock_policy_repository() -> PolicyRepository:
     }
     parser = ExpressionParser()
     policy_repository = MemoryPolicyRepository(
-        parser, tenant_service)
+        parser, tenant_provider)
     policy_repository.load(policy_dict)
     return policy_repository
 
 
 @fixture
 def mock_resource_repository() -> ResourceRepository:
-    tenant_service = StandardTenantService(Tenant(name="Default"))
+    tenant_provider = StandardTenantProvider(Tenant(name="Default"))
     resource_dict = {
         "default": {
             "1": Resource(id='1', name='employees', dominion_id='1')
@@ -149,14 +149,14 @@ def mock_resource_repository() -> ResourceRepository:
     }
     parser = ExpressionParser()
     resource_repository = MemoryResourceRepository(
-        parser, tenant_service)
+        parser, tenant_provider)
     resource_repository.load(resource_dict)
     return resource_repository
 
 
 @fixture
 def mock_permission_repository() -> PermissionRepository:
-    tenant_service = StandardTenantService(Tenant(name="Default"))
+    tenant_provider = StandardTenantProvider(Tenant(name="Default"))
     permission_dict = {
         "default": {
             "001": Permission(id='001', policy_id='001', resource_id='1')
@@ -164,21 +164,21 @@ def mock_permission_repository() -> PermissionRepository:
     }
     parser = ExpressionParser()
     permission_repository = MemoryPermissionRepository(
-        parser, tenant_service)
+        parser, tenant_provider)
     permission_repository.load(permission_dict)
     return permission_repository
 
 
 @fixture
 def mock_grant_repository() -> GrantRepository:
-    tenant_service = StandardTenantService(Tenant(name="Default"))
+    tenant_provider = StandardTenantProvider(Tenant(name="Default"))
     grants_dict = {
         "default": {
             '001': Grant(id='001', permission_id='001', role_id='1')
         }
     }
     parser = ExpressionParser()
-    grant_repository = MemoryGrantRepository(parser, tenant_service)
+    grant_repository = MemoryGrantRepository(parser, tenant_provider)
     grant_repository.load(grants_dict)
     return grant_repository
 
@@ -200,10 +200,10 @@ def mock_hash_service() -> HashService:
 
 
 @fixture
-def mock_tenant_service() -> StandardTenantService:
-    mock_tenant_service = StandardTenantService()
-    mock_tenant_service.setup(Tenant(id='001', name='Default'))
-    return mock_tenant_service
+def mock_tenant_provider() -> StandardTenantProvider:
+    mock_tenant_provider = StandardTenantProvider()
+    mock_tenant_provider.setup(Tenant(id='001', name='Default'))
+    return mock_tenant_provider
 
 
 @fixture
@@ -261,11 +261,11 @@ def mock_import_service() -> ImportService:
 def auth_coordinator(mock_user_repository: UserRepository,
                      mock_credential_repository: CredentialRepository,
                      mock_hash_service: HashService,
-                     access_coordinator: AccessCoordinator,
+                     access_service: AccessService,
                      mock_refresh_token_service: RefreshTokenService
                      ) -> AuthCoordinator:
     return AuthCoordinator(mock_user_repository, mock_credential_repository,
-                           mock_hash_service, access_coordinator,
+                           mock_hash_service, access_service,
                            mock_refresh_token_service)
 
 
@@ -319,19 +319,19 @@ def assignment_coordinator(
 
 @fixture
 def session_coordinator(
-    mock_tenant_service: TenantService
+    mock_tenant_provider: TenantProvider
 ) -> SessionCoordinator:
-    return SessionCoordinator(mock_tenant_service)
+    return SessionCoordinator(mock_tenant_provider)
 
 
 @fixture
-def access_coordinator(mock_ranking_repository, mock_role_repository,
-                       mock_dominion_repository, mock_resource_repository,
-                       mock_grant_repository, mock_permission_repository,
-                       mock_policy_repository, mock_token_service,
-                       mock_tenant_service):
-    return AccessCoordinator(
+def access_service(mock_ranking_repository, mock_role_repository,
+                   mock_dominion_repository, mock_resource_repository,
+                   mock_grant_repository, mock_permission_repository,
+                   mock_policy_repository, mock_token_service,
+                   mock_tenant_provider):
+    return AccessService(
         mock_ranking_repository, mock_role_repository,
         mock_dominion_repository, mock_resource_repository,
         mock_grant_repository, mock_permission_repository,
-        mock_policy_repository, mock_token_service, mock_tenant_service)
+        mock_policy_repository, mock_token_service, mock_tenant_provider)

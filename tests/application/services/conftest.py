@@ -6,7 +6,7 @@
 # from authark.application.utilities import ExpressionParser
 # from authark.application.services import (
 #     TokenService, MemoryTokenService,
-#     TenantService, StandardTenantService)
+#     TenantProvider, StandardTenantProvider)
 # from authark.application.repositories import (
 #     DominionRepository, MemoryDominionRepository,
 #     RoleRepository, MemoryRoleRepository,
@@ -110,8 +110,8 @@
 
 
 # @fixture
-# def tenant_service() -> TenantService:
-#     return StandardTenantService()
+# def tenant_provider() -> TenantProvider:
+#     return StandardTenantProvider()
 
 
 # @fixture

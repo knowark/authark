@@ -1,4 +1,3 @@
-
 from ..models import AuthError, Token, User, Credential
 from ..repositories import UserRepository, CredentialRepository
 from ..utilities import UserCreationError

@@ -2,14 +2,13 @@ from typing import Dict, List
 from pytest import fixture, raises
 from inspect import signature
 from authark.application.utilities import (
-    ExpressionParser, EntityNotFoundError)
-from authark.application.services import StandardTenantService, Tenant
+    ExpressionParser, EntityNotFoundError, StandardTenantProvider, Tenant)
 from authark.application.repositories import (
     Repository, MemoryRepository)
 
 
 class DummyEntity:
-    def __init__(self, id: str = "", field_1: str = "") -> None:
+    def __init__(self, id: str="", field_1: str="") -> None:
         self.id = id
         self.field_1 = field_1
 
@@ -20,9 +19,9 @@ def test_memory_repository_implementation() -> None:
 
 @fixture
 def memory_repository() -> MemoryRepository:
-    tenant_service = StandardTenantService(Tenant(name="Default"))
+    tenant_provider = StandardTenantProvider(Tenant(name="Default"))
     parser = ExpressionParser()
-    repository = MemoryRepository[DummyEntity](parser, tenant_service)
+    repository = MemoryRepository[DummyEntity](parser, tenant_provider)
     repository.load({"default": {}})
     return repository
 
@@ -40,8 +39,8 @@ def filled_memory_repository(memory_repository) -> MemoryRepository:
     return memory_repository
 
 
-def test_memory_repository_tenant_service(filled_memory_repository) -> None:
-    assert filled_memory_repository.tenant_service is not None
+def test_memory_repository_tenant_provider(filled_memory_repository) -> None:
+    assert filled_memory_repository.tenant_provider is not None
 
 
 def test_memory_repository_get(filled_memory_repository) -> None:

@@ -1,20 +1,19 @@
 from inspect import signature
 from authark.application.models import User, Token
-from authark.application.services import Tenant
-from authark.application.coordinators import AccessCoordinator
+from authark.application.services import Tenant, AccessService
 
 
-def test_access_coordinator_generate_token(access_coordinator) -> None:
+def test_access_service_generate_token(access_service) -> None:
     user = User(id='1', username='johndoe', email='johndoe')
-    token = access_coordinator.generate_token(user)
+    token = access_service.generate_token(user)
 
     assert isinstance(token, Token)
 
 
-def test_access_coordinator_build_payload(access_coordinator) -> None:
+def test_access_service_build_payload(access_service) -> None:
     tenant = Tenant(name='Default')
     user = User(id='1', username='johndoe', email='johndoe')
-    payload = access_coordinator._build_payload(tenant, user)
+    payload = access_service._build_payload(tenant, user)
 
     assert isinstance(payload, dict)
     assert 'tid' in payload
@@ -25,10 +24,10 @@ def test_access_coordinator_build_payload(access_coordinator) -> None:
     assert 'authorization' in payload
 
 
-def test_access_coordinator_build_basic_info(access_coordinator) -> None:
+def test_access_service_build_basic_info(access_service) -> None:
     tenant = Tenant(id='1', name='Default')
     user = User(id='1', username='johndoe', email='johndoe')
-    info = access_coordinator._build_basic_info(tenant, user)
+    info = access_service._build_basic_info(tenant, user)
 
     assert isinstance(info, dict)
     assert info['tid'] == tenant.id
@@ -38,20 +37,20 @@ def test_access_coordinator_build_basic_info(access_coordinator) -> None:
     assert info['attributes'] == user.attributes
 
 
-def test_access_coordinator_build_authorization(access_coordinator) -> None:
+def test_access_service_build_authorization(access_service) -> None:
     user = User(id='1', username='johndoe', email='johndoe')
-    authorization = access_coordinator._build_authorization(user)
+    authorization = access_service._build_authorization(user)
 
     assert isinstance(authorization, dict)
     assert 'Data Server' in authorization
     assert 'admin' in authorization['Data Server']['roles']
 
 
-def test_access_coordinator_build_permissions(access_coordinator) -> None:
-    dominion = access_coordinator.dominion_repository.get('1')
-    roles = [access_coordinator.role_repository.get('1')]
+def test_access_service_build_permissions(access_service) -> None:
+    dominion = access_service.dominion_repository.get('1')
+    roles = [access_service.role_repository.get('1')]
 
-    permissions_dict = access_coordinator._build_permissions(dominion, roles)
+    permissions_dict = access_service._build_permissions(dominion, roles)
 
     assert isinstance(permissions_dict, dict)
     assert permissions_dict == {

@@ -1,37 +1,37 @@
 from pytest import fixture, raises
-from authark.application.services import (
-    TenantService, StandardTenantService, Tenant)
+from authark.application.utilities import (
+    TenantProvider, StandardTenantProvider, Tenant)
 
 
 @fixture
-def tenant_service() -> TenantService:
-    return StandardTenantService()
+def tenant_provider() -> TenantProvider:
+    return StandardTenantProvider()
 
 
-def test_tenant_service_methods():
-    abstract_methods = TenantService.__abstractmethods__
+def test_tenant_provider_methods():
+    abstract_methods = TenantProvider.__abstractmethods__
 
     assert 'setup' in abstract_methods
 
 
-def test_standard_tenant_service_instantiation(tenant_service):
-    assert isinstance(tenant_service, TenantService)
+def test_standard_tenant_provider_instantiation(tenant_provider):
+    assert isinstance(tenant_provider, TenantProvider)
 
 
-def test_standard_tenant_service_setup(tenant_service):
+def test_standard_tenant_provider_setup(tenant_provider):
     tenant = Tenant(name='Alpina')
-    assert tenant_service.state.tenant is None
-    tenant_service.setup(tenant)
-    assert tenant_service.state.tenant == tenant
+    assert tenant_provider.state.tenant is None
+    tenant_provider.setup(tenant)
+    assert tenant_provider.state.tenant == tenant
 
 
-def test_standard_tenant_service_get_tenant(tenant_service):
+def test_standard_tenant_provider_get_tenant(tenant_provider):
     tenant = Tenant(name='Alpina')
-    assert tenant_service.state.tenant is None
-    tenant_service.setup(tenant)
-    assert tenant_service.tenant == tenant
+    assert tenant_provider.state.tenant is None
+    tenant_provider.setup(tenant)
+    assert tenant_provider.tenant == tenant
 
 
-def test_standard_tenant_service_get_tenant_not_set(tenant_service):
+def test_standard_tenant_provider_get_tenant_not_set(tenant_provider):
     with raises(ValueError):
-        assert tenant_service.tenant
+        assert tenant_provider.tenant
