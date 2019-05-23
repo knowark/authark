@@ -1,6 +1,7 @@
 
 from ..models import AuthError, Token, User, Credential
 from ..repositories import UserRepository, CredentialRepository
+from ..utilities import UserCreationError
 from ..services import (
     TokenService, RefreshTokenService, HashService)
 from .access_coordinator import AccessCoordinator
@@ -22,7 +23,11 @@ class AuthCoordinator:
 
     def authenticate(self, username: str, password: str, client: str
                      ) -> TokensDict:
-        users = self.user_repository.search([('username', '=', username)])
+        domain = [('username', '=', username)]
+        if '@' in username:
+            domain = [('email', '=', username)]
+
+        users = self.user_repository.search(domain)
         if not users:
             raise AuthError("Authentication Error: User not found.")
 
@@ -72,10 +77,26 @@ class AuthCoordinator:
         return tokens_dict
 
     def register(self, user_dict: UserDict) -> UserDict:
+        user = User(**user_dict)
+
+        if any((character in '@.+-_') for character in user.username):
+            raise UserCreationError(
+                f"The username '{user.username}' has forbidden characters")
+
+        users = self.user_repository.search([
+            '|', ('username', '=', user.username),
+            ('email', '=', user.email)])
+
+        for existing_user in users:
+            message = f"A user with email '{user.email}' already exists."
+            if user.username == existing_user.username:
+                message = (
+                    f"A user with username '{user.username}' already exists.")
+            raise UserCreationError(message)
+
+        user = self.user_repository.add(user)
         hashed_password = self.hash_service.generate_hash(
             user_dict['password'])
-        user = User(**user_dict)
-        user = self.user_repository.add(user)
         credential = Credential(user_id=user.id, value=hashed_password)
         self.credential_repository.add(credential)
         return vars(user)

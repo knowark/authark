@@ -14,3 +14,9 @@ class RepositoryError(ApplicationError):
 
 class EntityNotFoundError(RepositoryError):
     """The entity was not found in the repository."""
+
+
+# Coordinators
+
+class UserCreationError(ApplicationError):
+    """The user couldn't be created."""
