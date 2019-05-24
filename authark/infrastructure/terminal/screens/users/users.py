@@ -49,7 +49,7 @@ class UsersScreen(Screen):
         self.pile.contents[-1] = (box_table, self.pile.options('pack', None))
 
     def build_table(self, domain):
-        headers_list = ['username', 'email']
+        headers_list = ['id', 'username', 'email']
         data = self.auth_reporter.search_users(domain)
         return Table(data, headers_list)
 
