@@ -21,15 +21,7 @@ class AuthCoordinator:
 
     def authenticate(self, username: str, password: str, client: str
                      ) -> TokensDict:
-        domain = [('username', '=', username)]
-        if '@' in username:
-            domain = [('email', '=', username)]
-
-        users = self.user_repository.search(domain)
-        if not users:
-            raise AuthError("Authentication Error: User not found.")
-
-        user = users[0]
+        user = self._find_user(username)
         credentials = self.credential_repository.search([
             ('user_id', '=', user.id), ('type', '=', 'password')])
 
@@ -93,14 +85,13 @@ class AuthCoordinator:
             raise UserCreationError(message)
 
         user = self.user_repository.add(user)
-        hashed_password = self.hash_service.generate_hash(
-            user_dict['password'])
-        credential = Credential(user_id=user.id, value=hashed_password)
-        self.credential_repository.add(credential)
+        self._make_password_credential(user.id, user_dict['password'])
         return vars(user)
 
     def update(self, user_dict: UserDict) -> bool:
         user = User(**user_dict)
+        if 'password' in user_dict:
+            self._make_password_credential(user.id, user_dict['password'])
         return self.user_repository.update(user)
 
     def deregister(self, user_id: str) -> bool:
@@ -112,6 +103,16 @@ class AuthCoordinator:
         self.user_repository.remove(user)
 
         return True
+
+    def _find_user(self, username: str):
+        domain = [('username', '=', username)]
+        if '@' in username:
+            domain = [('email', '=', username)]
+
+        users = self.user_repository.search(domain)
+        if not users:
+            raise AuthError("Authentication Error: User not found.")
+        return users[0]
 
     def _generate_refresh_token(self, user_id: str, client: str
                                 ) -> TokenString:
@@ -134,3 +135,12 @@ class AuthCoordinator:
         self.credential_repository.add(credential)
 
         return refresh_token.value
+
+    def _make_password_credential(self, user_id: str, password: str):
+        credentials = self.credential_repository.search([
+            ('user_id', '=', user_id), ('type', '=', 'password')])
+        for credential in credentials:
+            self.credential_repository.remove(credential)
+        hashed_password = self.hash_service.generate_hash(password)
+        credential = Credential(user_id=user_id, value=hashed_password)
+        self.credential_repository.add(credential)

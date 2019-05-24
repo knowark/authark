@@ -34,6 +34,24 @@ def test_auth_coordinator_authenticate(
     assert 'access_token' in tokens.keys()
 
 
+def test_auth_coordinator_find_user_by_email(
+        auth_coordinator: AuthCoordinator) -> None:
+
+    user = auth_coordinator._find_user("tebanep@gmail.com")
+
+    assert isinstance(user, User)
+    assert user.id == '2'
+
+
+def test_auth_coordinator_find_user(
+        auth_coordinator: AuthCoordinator) -> None:
+
+    user = auth_coordinator._find_user("tebanep")
+
+    assert isinstance(user, User)
+    assert user.id == '2'
+
+
 def test_auth_coordinator_update(
         auth_coordinator: AuthCoordinator) -> None:
 
