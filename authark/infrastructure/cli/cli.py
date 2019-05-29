@@ -43,6 +43,7 @@ class Cli:
         load_parser.add_argument('input_file')
         load_parser.add_argument('-s', '--source')
         load_parser.add_argument('-p', '--password_field')
+        load_parser.add_argument('-t', '--tenant')
         load_parser.set_defaults(func=self.load)
 
         if len(sys.argv[1:]) == 0:
@@ -87,5 +88,18 @@ class Cli:
         password_field = args.password_field
         if not password_field:
             password_field = 'password'
+        tenant = args.tenant
+        if not tenant:
+            print('A tenant is required.')
+            return
+
+        tenant_supplier = self.resolver.resolve('TenantSupplier')
+        tenant_dict = next(
+            iter(tenant_supplier.search_tenants(
+                [('slug', '=', tenant)])), None)
+
+        session_coordinator = self.resolver.resolve('SessionCoordinator')
+        session_coordinator.set_tenant(tenant_dict)
+
         import_coordinator = self.resolver.resolve('ImportCoordinator')
         import_coordinator.import_users(input_file, source, password_field)
