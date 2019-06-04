@@ -69,20 +69,8 @@ class AuthCoordinator:
     def register(self, user_dict: UserDict) -> UserDict:
         user = User(**user_dict)
 
-        if any((character in '@.+-_') for character in user.username):
-            raise UserCreationError(
-                f"The username '{user.username}' has forbidden characters")
-
-        users = self.user_repository.search([
-            '|', ('username', '=', user.username),
-            ('email', '=', user.email)])
-
-        for existing_user in users:
-            message = f"A user with email '{user.email}' already exists."
-            if user.username == existing_user.username:
-                message = (
-                    f"A user with username '{user.username}' already exists.")
-            raise UserCreationError(message)
+        self._validate_username(user.username)
+        self._validate_duplicates(user)
 
         user = self.user_repository.add(user)
         self._make_password_credential(user.id, user_dict['password'])
@@ -103,6 +91,23 @@ class AuthCoordinator:
         self.user_repository.remove(user)
 
         return True
+
+    def _validate_username(self, username: str) -> None:
+        if any((character in '@.+-_') for character in username):
+            raise UserCreationError(
+                f"The username '{username}' has forbidden characters")
+
+    def _validate_duplicates(self, user: User):
+        users = self.user_repository.search([
+            '|', ('username', '=', user.username),
+            ('email', '=', user.email)])
+
+        for existing_user in users:
+            message = f"A user with email '{user.email}' already exists."
+            if user.username == existing_user.username:
+                message = (
+                    f"A user with username '{user.username}' already exists.")
+            raise UserCreationError(message)
 
     def _find_user(self, username: str):
         domain = [('username', '=', username)]

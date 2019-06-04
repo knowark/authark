@@ -1,7 +1,7 @@
 from typing import Dict, cast
 from pytest import fixture, raises
 from authark.application.coordinators.auth_coordinator import AuthCoordinator
-from authark.application.utilities import ExpressionParser
+from authark.application.utilities import ExpressionParser, UserCreationError
 from authark.application.repositories.user_repository import (
     UserRepository, MemoryUserRepository)
 from authark.application.repositories.credential_repository import (
@@ -11,9 +11,7 @@ from authark.application.services.token_service import (
 from authark.application.services.hash_service import (
     HashService, MemoryHashService)
 from authark.application.models.error import AuthError
-from authark.application.models.user import User
-from authark.application.models.credential import Credential
-from authark.application.models.token import Token
+from authark.application.models import User, Credential, Token
 
 
 ########
@@ -62,6 +60,22 @@ def test_auth_coordinator_update(
     assert updated is True
     items = getattr(auth_coordinator.user_repository, 'data')['default']
     assert items['2'].email == 'newmail@eep.com'
+
+
+def test_auth_coordinator_update_with_password(
+        auth_coordinator: AuthCoordinator) -> None:
+
+    user_dict = {'id': '2', 'username': 'tebanep',
+                 'email': 'newmail@eep.com', 'password': 'newpass123'}
+    updated = auth_coordinator.update(user_dict)
+
+    assert updated is True
+    users = getattr(auth_coordinator.user_repository, 'data')['default']
+    assert users['2'].email == 'newmail@eep.com'
+
+    credentials = auth_coordinator.credential_repository.search([
+        ('user_id', '=', users['2'].id), ('type', '=', 'password')])
+    assert credentials[0].value == 'HASHED: newpass123'
 
 
 def test_auth_coordinator_authenticate_no_credentials(
@@ -191,6 +205,24 @@ def test_auth_coordinator_register(
     assert isinstance(user_dict, dict)
     assert len(user_repository.data['default']) == 4
     assert len(credential_repository.data['default']) == 4
+
+
+def test_auth_coordinator_validate_username(
+        auth_coordinator: AuthCoordinator) -> None:
+
+    auth_coordinator._validate_username('johndoe')
+
+    with raises(UserCreationError):
+        auth_coordinator._validate_username('johnd@e')
+
+
+def test_auth_coordinator_validate_duplicates(
+        auth_coordinator: AuthCoordinator) -> None:
+
+    user = User(**{"username": "tebanep", "email": "tebanep@gmail.com",
+                   "password": "PASS4"})
+    with raises(UserCreationError):
+        auth_coordinator._validate_duplicates(user)
 
 
 def test_auth_coordinator_deregister(
