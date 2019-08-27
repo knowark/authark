@@ -2,7 +2,9 @@ from typing import Callable
 from functools import wraps
 from flask import request
 from ....application.coordinators import SessionCoordinator
-from ...core import JwtSupplier, AuthenticationError, TenantSupplier
+from ...core.crypto import JwtSupplier
+from ...core.common import AuthenticationError
+from ...core.tenancy import TenantSupplier
 from ..schemas import UserSchema
 
 

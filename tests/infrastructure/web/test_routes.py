@@ -6,17 +6,17 @@ from injectark import Injectark
 from authark.application.models import (
     User, Credential, Dominion, Role, Ranking,
     Resource, Grant, Policy, Permission)
-from authark.application.utilities import ExpressionParser
+from authark.application.utilities import (
+    ExpressionParser, StandardTenantProvider, Tenant)
 from authark.application.repositories import (
     MemoryUserRepository, MemoryCredentialRepository,
     MemoryDominionRepository, MemoryRoleRepository,
     MemoryRankingRepository, MemoryResourceRepository,
     MemoryGrantRepository, MemoryPermissionRepository,
     MemoryPolicyRepository)
-from authark.application.services import (
-    MemoryHashService, StandardTenantProvider, Tenant)
+from authark.application.services import MemoryHashService, AccessService
 from authark.application.coordinators import (
-    AuthCoordinator, AccessService, SessionCoordinator)
+    AuthCoordinator, SessionCoordinator)
 from authark.infrastructure.web.base import create_app
 from authark.infrastructure.core import (
     TrialConfig, build_factory, PyJWTRefreshTokenService,

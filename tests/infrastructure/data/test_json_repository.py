@@ -1,9 +1,8 @@
 from json import dump, loads
 from pathlib import Path
 from pytest import fixture, raises
-from authark.application.services import StandardTenantProvider, Tenant
 from authark.application.utilities import (
-    ExpressionParser, EntityNotFoundError)
+    ExpressionParser, EntityNotFoundError, StandardTenantProvider, Tenant)
 from authark.application.repositories import Repository
 from authark.infrastructure.data import JsonRepository
 
