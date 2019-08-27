@@ -1,7 +1,7 @@
 from typing import Dict, cast
 from pytest import fixture, raises
 from authark.application.coordinators.auth_coordinator import AuthCoordinator
-from authark.application.utilities import ExpressionParser
+from authark.application.utilities import ExpressionParser, UserCreationError
 from authark.application.repositories.user_repository import (
     UserRepository, MemoryUserRepository)
 from authark.application.repositories.credential_repository import (
@@ -56,7 +56,7 @@ def test_auth_coordinator_update(
         auth_coordinator: AuthCoordinator) -> None:
 
     user_dict = {'id': '2', 'username': 'tebanep',
-                 'email': 'newmail@eep.com'}
+                 'email': 'newmail@eep.com', 'password': 'PASS'}
     updated = auth_coordinator.update(user_dict)
 
     assert updated is True
@@ -191,6 +191,24 @@ def test_auth_coordinator_register(
     assert isinstance(user_dict, dict)
     assert len(user_repository.data['default']) == 4
     assert len(credential_repository.data['default']) == 4
+
+
+def test_auth_coordinator_register_username_special_characters_error(
+        auth_coordinator: AuthCoordinator) -> None:
+    with raises(UserCreationError):
+        user_dict = {"username": "mvp@gmail.com", "email": "mvp@gmail.com",
+                     "password": "PASS4"}
+        auth_coordinator.register(user_dict)
+
+
+def test_auth_coordinator_register_duplicated_username_error(
+        auth_coordinator: AuthCoordinator) -> None:
+    with raises(UserCreationError):
+        user_dict = {"username": "mvp", "email": "mvp@gmail.com",
+                     "password": "PASS4"}
+        auth_coordinator.register(user_dict)
+        user_dict['email'] = "mvp2@gmail.com"
+        auth_coordinator.register(user_dict)
 
 
 def test_auth_coordinator_deregister(
