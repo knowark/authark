@@ -1,12 +1,10 @@
 from ....application.models import Ranking
-from ....application.services import TenantProvider
-from ....application.utilities import ExpressionParser
+from ....application.utilities import ExpressionParser, TenantProvider
 from ....application.repositories import RankingRepository
 from .json_repository import JsonRepository
 
 
-class JsonRankingRepository(
-        JsonRepository[Ranking], RankingRepository):
+class JsonRankingRepository(JsonRepository[Ranking], RankingRepository):
     """Json Ranking Repository"""
 
     def __init__(self, file_path: str, parser: ExpressionParser,

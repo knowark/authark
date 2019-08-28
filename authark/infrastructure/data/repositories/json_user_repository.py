@@ -1,6 +1,5 @@
 from ....application.models import User
-from ....application.services import TenantProvider
-from ....application.utilities import ExpressionParser
+from ....application.utilities import ExpressionParser, TenantProvider
 from ....application.repositories import UserRepository
 from .json_repository import JsonRepository
 

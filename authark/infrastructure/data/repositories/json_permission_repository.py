@@ -1,6 +1,5 @@
 from ....application.models import Permission
-from ....application.services import TenantProvider
-from ....application.utilities import ExpressionParser
+from ....application.utilities import ExpressionParser, TenantProvider
 from ....application.repositories import PermissionRepository
 from .json_repository import JsonRepository
 
