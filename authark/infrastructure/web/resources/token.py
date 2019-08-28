@@ -38,8 +38,6 @@ class TokenResource(MethodView):
         token_request_dict = TokenRequestSchema().loads(request.data)
         tenant = token_request_dict['tenant']
         tenants = self.tenant_supplier.search_tenants([('slug', '=', tenant)])
-        if not tenants:
-            abort(400, f"Tenant '{tenant}' not found.")
 
         self.session_coordinator.set_tenant(tenants[0])
 

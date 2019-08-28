@@ -23,6 +23,8 @@ from authark.infrastructure.core import (
     PyJWTAccessTokenService)
 
 
+# Fixtures
+
 @fixture
 def resolver():
     parser = ExpressionParser()
@@ -161,6 +163,7 @@ def headers() -> dict:
                                       algorithm='HS256').decode('utf-8'))
     }
 
+# /auth
 
 def test_auth_get_route(app: Flask) -> None:
     response = app.get('/auth')
@@ -210,6 +213,8 @@ def test_auth_post_route_with_refresh_token(app: Flask) -> None:
     data = response.get_data()
     assert len(data) > 0
 
+
+# register
 
 def test_register_post_route(app: Flask, headers) -> None:
     response = app.post(
