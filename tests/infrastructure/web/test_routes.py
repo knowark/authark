@@ -17,6 +17,7 @@ from authark.application.repositories import (
 from authark.application.services import MemoryHashService, AccessService
 from authark.application.coordinators import (
     AuthCoordinator, SessionCoordinator)
+from authark.application.reporters import StandardAutharkReporter
 from authark.infrastructure.web.base import create_app
 from authark.infrastructure.core import (
     TrialWebConfig, build_factory, PyJWTRefreshTokenService,
@@ -28,7 +29,7 @@ from authark.infrastructure.core import (
 @fixture
 def resolver():
     parser = ExpressionParser()
-    tenant = Tenant(id='1', name="Default")
+    tenant = Tenant(id='1', name="Default", location="default")
     tenant_provider = StandardTenantProvider(tenant)
     user_repository = MemoryUserRepository(parser, tenant_provider)
     credential_repository = MemoryCredentialRepository(parser, tenant_provider)
@@ -122,6 +123,15 @@ def resolver():
 
     session_coordinator = SessionCoordinator(tenant_provider)
 
+    authark_reporter = StandardAutharkReporter(
+        user_repository=user_repository,
+        credential_repository=credential_repository,
+        dominion_repository=dominion_repository,
+        role_repository=role_repository,
+        policy_repository=policy_repository,
+        resource_repository=resource_repository
+    )
+
     resolver = Injectark()
 
     config = TrialWebConfig()
@@ -135,6 +145,7 @@ def resolver():
     resolver['TenantSupplier'].arranger.cataloguer.catalog = {
         "1": tenant
     }
+    resolver.registry['AutharkReporter'] = authark_reporter
 
     return resolver
 
@@ -163,7 +174,7 @@ def headers() -> dict:
                                       algorithm='HS256').decode('utf-8'))
     }
 
-# /auth
+# Tokens resource tests
 
 
 def test_auth_get_route(app: Flask) -> None:
@@ -214,8 +225,14 @@ def test_auth_post_route_with_refresh_token(app: Flask) -> None:
     data = response.get_data()
     assert len(data) > 0
 
+# Users resource tests
 
-# register
+
+def test_get_users(app: Flask, headers) -> None:
+    response = app.get("/register", headers=headers)
+    assert response.status_code == 200
+    assert len(json.loads(str(response.data, 'utf-8'))) == 2
+
 
 def test_register_post_route(app: Flask, headers) -> None:
     response = app.post(
