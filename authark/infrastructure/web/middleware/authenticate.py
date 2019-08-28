@@ -22,7 +22,6 @@ class Authenticate:
             token = authorization.replace('Bearer ', '')
             if not token:
                 token = request.args.get('access_token')
-
             try:
                 token_payload = self.jwt_supplier.decode(
                     token, verify=False)

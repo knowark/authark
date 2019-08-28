@@ -149,6 +149,19 @@ def app(resolver) -> Flask:
     return app
 
 
+@fixture
+def headers() -> dict:
+
+    payload_dict = {
+        "tid": "1", "uid": "1", "name": "eecheverry",
+        "email": "eecheverry@nubark.com"}
+
+    return {
+        "Authorization":  (jwt.encode(payload_dict, "DEVSECRET123",
+                                      algorithm='HS256').decode('utf-8'))
+    }
+
+
 def test_auth_get_route(app: Flask) -> None:
     response = app.get('/auth')
     expected_response = (b"Authentication endpoint. "
@@ -198,7 +211,7 @@ def test_auth_post_route_with_refresh_token(app: Flask) -> None:
     assert len(data) > 0
 
 
-def test_register_post_route(app: Flask) -> None:
+def test_register_post_route(app: Flask, headers) -> None:
     response = app.post(
         '/register',
         data=json.dumps(dict(
@@ -207,7 +220,8 @@ def test_register_post_route(app: Flask) -> None:
             email="gecheverry@gmail.com",
             password="POI123"
         )),
-        content_type='application/json')
+        content_type='application/json',
+        headers=headers)
 
     assert response.status_code == 201
     assert b"username<gecheverry>" in response.get_data()

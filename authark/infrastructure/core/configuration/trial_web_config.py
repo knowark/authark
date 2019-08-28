@@ -10,6 +10,9 @@ class TrialWebConfig(TrialConfig):
         })
         self['factory'] = 'WebFactory'
         self['strategy'].update({
+            "JwtSupplier": {
+                "method":  "jwt_supplier"
+            },
             "Authenticate": {
                 "method": "middleware_authenticate"
             }
