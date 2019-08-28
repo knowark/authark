@@ -1,6 +1,6 @@
 import json
 import jwt
-from pytest import fixture
+from pytest import fixture, raises
 from flask import Flask
 from injectark import Injectark
 from authark.application.models import (
@@ -21,7 +21,7 @@ from authark.application.reporters import StandardAutharkReporter
 from authark.infrastructure.web.base import create_app
 from authark.infrastructure.core import (
     TrialWebConfig, build_factory, PyJWTRefreshTokenService,
-    PyJWTAccessTokenService)
+    PyJWTAccessTokenService, AuthenticationError)
 
 
 # Fixtures
@@ -177,17 +177,21 @@ def headers() -> dict:
 # General tests
 
 
-def test_root_resource(app: Flask, headers: dict) -> None:
-    response = app.get('/', headers=headers)
+def test_root_resource(app: Flask) -> None:
+    response = app.get('/')
     data = str(response.data, 'utf-8')
     assert data is not None
 
 
-def test_root_resource_request_none(app: Flask, headers: dict) -> None:
-    response = app.get('/?api', headers=headers)
+def test_root_resource_request_none(app: Flask) -> None:
+    response = app.get('/?api')
     data = str(response.data, 'utf-8')
     assert data is not None
 
+
+def test_get_invalid_headers(app: Flask) -> None:
+    with raises(AuthenticationError):
+        app.get('/register')
 
 # Tokens resource tests
 
@@ -243,13 +247,21 @@ def test_auth_post_route_with_refresh_token(app: Flask) -> None:
 # Users resource tests
 
 
-def test_get_users(app: Flask, headers) -> None:
-    response = app.get("/register", headers=headers)
+def test_get_users(app: Flask, headers: dict) -> None:
+    response = app.get(
+        '/register?filter=[["id", "=", "1"]]', headers=headers)
+    assert response.status_code == 200
+    assert len(json.loads(str(response.data, 'utf-8'))) == 1
+
+
+def test_get_filter_error(app: Flask, headers: dict) -> None:
+    response = app.get(
+        '/register?filter=[** BAD FILTER **]', headers=headers)
     assert response.status_code == 200
     assert len(json.loads(str(response.data, 'utf-8'))) == 2
 
 
-def test_register_post_route(app: Flask, headers) -> None:
+def test_register_post_route(app: Flask, headers: dict) -> None:
     response = app.post(
         '/register',
         data=json.dumps(dict(
