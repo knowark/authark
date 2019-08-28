@@ -5,6 +5,7 @@ from .memory_factory import MemoryFactory
 from .crypto_factory import CryptoFactory
 from .json_factory import JsonFactory
 from .http_factory import HttpFactory
+from .web_factory import WebFactory
 
 
 def build_factory(config: Config) -> Factory:
@@ -13,5 +14,6 @@ def build_factory(config: Config) -> Factory:
         'MemoryFactory': lambda config: MemoryFactory(config),
         'CryptoFactory': lambda config: CryptoFactory(config),
         'JsonFactory': lambda config: JsonFactory(config),
-        'HttpFactory': lambda config: HttpFactory(config)
+        'HttpFactory': lambda config: HttpFactory(config),
+        'WebFactory': lambda config: WebFactory(config)
     }[factory](config)

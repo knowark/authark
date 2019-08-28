@@ -19,7 +19,7 @@ from authark.application.coordinators import (
     AuthCoordinator, SessionCoordinator)
 from authark.infrastructure.web.base import create_app
 from authark.infrastructure.core import (
-    TrialConfig, build_factory, PyJWTRefreshTokenService,
+    TrialWebConfig, build_factory, PyJWTRefreshTokenService,
     PyJWTAccessTokenService)
 
 
@@ -122,7 +122,7 @@ def resolver():
 
     resolver = Injectark()
 
-    config = TrialConfig()
+    config = TrialWebConfig()
     factory = build_factory(config)
     strategy = config['strategy']
 
@@ -140,7 +140,7 @@ def resolver():
 @fixture
 def app(resolver) -> Flask:
     """Create app testing client"""
-    config = TrialConfig()
+    config = TrialWebConfig()
 
     app = create_app(config=config, resolver=resolver)
     app.testing = True
@@ -176,7 +176,6 @@ def test_auth_post_route_successful_authentication(app: Flask) -> None:
             tenant="default",
             username="eecheverry",
             password="ABC1234",
-            # client="mobile"
         )),
         content_type='application/json')
     assert response.status_code == 200
