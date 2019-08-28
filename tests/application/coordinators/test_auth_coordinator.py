@@ -11,9 +11,7 @@ from authark.application.services.token_service import (
 from authark.application.services.hash_service import (
     HashService, MemoryHashService)
 from authark.application.models.error import AuthError
-from authark.application.models.user import User
-from authark.application.models.credential import Credential
-from authark.application.models.token import Token
+from authark.application.models import User, Credential, Token
 
 
 ########
@@ -62,6 +60,22 @@ def test_auth_coordinator_update(
     assert updated is True
     items = getattr(auth_coordinator.user_repository, 'data')['default']
     assert items['2'].email == 'newmail@eep.com'
+
+
+def test_auth_coordinator_update_with_password(
+        auth_coordinator: AuthCoordinator) -> None:
+
+    user_dict = {'id': '2', 'username': 'tebanep',
+                 'email': 'newmail@eep.com', 'password': 'newpass123'}
+    updated = auth_coordinator.update(user_dict)
+
+    assert updated is True
+    users = getattr(auth_coordinator.user_repository, 'data')['default']
+    assert users['2'].email == 'newmail@eep.com'
+
+    credentials = auth_coordinator.credential_repository.search([
+        ('user_id', '=', users['2'].id), ('type', '=', 'password')])
+    assert credentials[0].value == 'HASHED: newpass123'
 
 
 def test_auth_coordinator_authenticate_no_credentials(

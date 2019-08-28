@@ -1,4 +1,5 @@
 from typing import List, Optional, Any
+from ..utilities import QueryDomain
 from ..services import ImportService
 from ..repositories import (
     UserRepository, CredentialRepository, RoleRepository, RankingRepository,
@@ -39,10 +40,8 @@ class ImportCoordinator:
                 self._generate_ranking_user(roles, user)
 
     def _search_user(self, user: User) -> Optional[User]:
-        domain = [
-            ('external_source', '=', user.external_source),
-            ('external_id', '=', user.external_id)
-        ]
+        domain: QueryDomain = ['|', ('username', '=', user.username),
+                               ('email', '=', user.email)]
         if user.id:
             domain = [('id', '=', user.id)]
         user_result = self.user_repository.search(domain)
