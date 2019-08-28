@@ -165,6 +165,7 @@ def headers() -> dict:
 
 # /auth
 
+
 def test_auth_get_route(app: Flask) -> None:
     response = app.get('/auth')
     expected_response = (b"Authentication endpoint. "

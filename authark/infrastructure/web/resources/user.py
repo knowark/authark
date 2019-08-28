@@ -58,8 +58,6 @@ class UserResource(MethodView):
         user_registration_dict = UserAuthSchema().loads(request.data)
         tenant = user_registration_dict['tenant']
         tenants = self.tenant_supplier.search_tenants([('slug', '=', tenant)])
-        if not tenants:
-            abort(400, f"Tenant '{tenant}' not found.")
 
         user = self.auth_coordinator.register(user_registration_dict)
 

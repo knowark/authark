@@ -9,23 +9,30 @@ test:
 	pytest
 
 COVFILE ?= .coverage
+PWD = $(shell pwd)
 
 coverage-application:
 	mypy authark/application
-	export COVERAGE_FILE=$(COVFILE); pytest -x --cov=authark/application \
-	tests/application/ --cov-report term-missing -s -vv \
+	export COVERAGE_FILE=$(PWD)/$(COVFILE); pytest -x \
+	--cov=$(PWD)/authark/application $(PWD)/tests/application/ \
+	--cov-report term-missing \
+	--cov-report xml:$(PWD)/$(COVFILE).xml -s -vv \
 	-o cache_dir=/tmp/pytest/cache
 
 coverage-infrastructure:
 	mypy authark/infrastructure
-	export COVERAGE_FILE=$(COVFILE); pytest -x --cov=authark/infrastructure \
-	tests/infrastructure/ --cov-report term-missing -s -vv \
+	export COVERAGE_FILE=$(PWD)/$(COVFILE); pytest -x \
+	--cov=$(PWD)/authark/infrastructure $(PWD)/tests/infrastructure/ \
+	--cov-report term-missing \
+	--cov-report xml:$(PWD)/$(COVFILE).xml -s -vv \
 	-o cache_dir=/tmp/pytest/cache
 
 coverage: 
 	mypy authark
-	export COVERAGE_FILE=$(COVFILE); pytest -x --cov=authark tests/ \
-	--cov-report term-missing -s -vv \
+	export COVERAGE_FILE=$(PWD)/$(COVFILE); pytest -x \
+	--cov=$(PWD)/authark $(PWD)/tests/ \
+	--cov-report term-missing \
+	--cov-report xml:$(PWD)/$(COVFILE).xml -s -vv \
 	-o cache_dir=/tmp/pytest/cache
 
 update:
