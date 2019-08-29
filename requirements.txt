@@ -44,7 +44,6 @@ mkdocs==1.0.4
 more-itertools==7.2.0
 mypy==0.720
 mypy-extensions==0.4.1
-mypyls==0.1
 openapi-spec-validator==0.2.8
 packaging==19.1
 passlib==1.7.1
