@@ -5,6 +5,8 @@ from authark.infrastructure.terminal.framework.table import Table
 from authark.infrastructure.terminal.screens.dominions import (
     DominionsScreen, DominionsAddScreen, DominionsRolesScreen,
     DominionsAddRoleScreen)
+from authark.infrastructure.terminal.screens.dominions.roles.permissions \
+    import PermissionsScreen
 
 
 class MockParent:
@@ -26,6 +28,10 @@ def test_dominions_add_screen_instantiation(dominions_add_screen):
     assert dominions_add_screen is not None
 
 
+def test_dominions_roles_screen(main):
+    assert DominionsRolesScreen('DOMINION ROLES', main.env, None) is not None
+
+
 @fixture
 def dominions_roles_screen(main):
     return DominionsRolesScreen('DOMINION ROLES', main.env, MockParent())
@@ -39,6 +45,9 @@ def test_dominions_roles_screen_keypress(dominions_roles_screen):
     dominions_roles_screen.keypress(None, 'A')
     focused_widget = dominions_roles_screen.env.holder.original_widget
     assert isinstance(focused_widget, DominionsAddRoleScreen)
+    dominions_roles_screen.keypress(None, 'P')
+    focused_widget = dominions_roles_screen.env.holder.original_widget
+    assert isinstance(focused_widget, PermissionsScreen)
     unhandled = dominions_roles_screen.keypress((40, 40), 'F')
     assert unhandled == 'F'
 

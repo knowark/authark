@@ -2,6 +2,8 @@ import urwid
 from pytest import raises, fixture
 from authark.infrastructure.terminal.screens.dominions import (
     DominionsScreen, DominionsAddScreen, DominionsRolesScreen)
+from authark.infrastructure.terminal.screens.dominions.resources import (
+    DominionsResourcesScreen)
 
 
 @fixture
@@ -30,3 +32,13 @@ def test_dominions_screen_keypress_roles(dominions_screen):
     dominions_screen.table.data_list = []
     unhandled = dominions_screen.keypress((40, 40), 'R')
     assert unhandled == 'R'
+
+
+def test_dominions_screen_keypress_resources(dominions_screen):
+    dominions_screen.keypress((40, 40), 'S')
+
+    focused_widget = dominions_screen.env.holder.original_widget
+    assert isinstance(focused_widget, DominionsResourcesScreen)
+    dominions_screen.table.data_list = []
+    unhandled = dominions_screen.keypress((40, 40), 'S')
+    assert unhandled == 'S'
