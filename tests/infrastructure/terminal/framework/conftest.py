@@ -2,6 +2,7 @@ import urwid
 from pytest import fixture
 from authark.infrastructure.terminal.framework import (
     palette, Environment, Screen, Table, Selection)
+from authark.infrastructure.terminal.framework.selection import SelectionList
 
 
 @fixture
