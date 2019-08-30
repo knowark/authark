@@ -1,7 +1,7 @@
 """
 Authark entrypoint
 """
-
+import sys
 import os
 from injectark import Injectark
 from .infrastructure.core import build_config, build_factory
@@ -17,7 +17,7 @@ def main():  # pragma: no cover
     strategy = config['strategy']
     resolver = Injectark(strategy=strategy, factory=factory)
 
-    Cli(config, resolver)
+    Cli(config, resolver).run(sys.argv[1:])
 
 
 if __name__ == '__main__':  # pragma: no cover
