@@ -1,7 +1,8 @@
 import urwid
 from typing import Set
 from authark.infrastructure.terminal.framework import Table, Screen
-from .tenants_actions import TenantsDetailsScreen, TenantsExportScreen
+from .tenants_actions import TenantsDetailsScreen
+# from .tenants_actions import TenantsExportScreen
 
 
 class TenantsScreen(Screen):
@@ -28,12 +29,13 @@ class TenantsScreen(Screen):
         self.table = self.build_table(domain=[])
         select_button = urwid.Button('SELECT ALL')
         select_button._label.align = 'center'
-        export_button = urwid.Button('EXPORT', self.show_export_screen)
-        export_button._label.align = 'center'
+        # export_button = urwid.Button('EXPORT', self.show_export_screen)
+        # export_button._label.align = 'center'
 
         commands = urwid.Columns([
             urwid.AttrMap(select_button, 'success'),
-            urwid.AttrMap(export_button, 'warning')])
+            # urwid.AttrMap(export_button, 'warning')
+        ])
         box_table = urwid.BoxAdapter(self.table, 24)
 
         self.pile = urwid.Pile([
@@ -83,11 +85,11 @@ class TenantsScreen(Screen):
         screen = TenantsDetailsScreen("TENANT'S DETAILS", self.env, self)
         return self._open_screen(screen)
 
-    def show_export_screen(self, button=None):
-        if not self.selected_tenants:
-            return None
-        screen = TenantsExportScreen("EXPORT TENANTS", self.env, self)
-        return self._open_screen(screen)
+    # def show_export_screen(self, button=None):
+    #     if not self.selected_tenants:
+    #         return None
+    #     screen = TenantsExportScreen("EXPORT TENANTS", self.env, self)
+    #     return self._open_screen(screen)
 
     def keypress(self, size, key):
         if self.pile.focus_position <= 1:

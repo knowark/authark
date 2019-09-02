@@ -1,12 +1,11 @@
 import urwid
 from pytest import raises, fixture
-from authark.infrastructure.terminal.framework.screen import Screen
-from authark.infrastructure.terminal.framework.table import Table
+from authark.infrastructure.terminal.framework import Screen, Table
 from authark.infrastructure.terminal.screens.users import (
     UsersScreen, UsersAddScreen, UsersDeleteScreen, UsersCredentialsScreen)
 
 
-class MockParent:
+class MockParent(Screen):
     def __init__(self):
         self.table = Table([
             {'id': '1', 'username': 'eecheverry', 'password': '123'}

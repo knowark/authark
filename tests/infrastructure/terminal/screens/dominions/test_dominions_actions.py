@@ -1,7 +1,6 @@
 import urwid
 from pytest import raises, fixture
-from authark.infrastructure.terminal.framework.screen import Screen
-from authark.infrastructure.terminal.framework.table import Table
+from authark.infrastructure.terminal.framework import Table, Screen
 from authark.infrastructure.terminal.screens.dominions import (
     DominionsScreen, DominionsAddScreen, DominionsRolesScreen,
     DominionsAddRoleScreen)
@@ -9,7 +8,7 @@ from authark.infrastructure.terminal.screens.dominions.roles.permissions \
     import PermissionsScreen
 
 
-class MockParent:
+class MockParent(Screen):
     def __init__(self):
         self.dominion = {'id': '1', 'name': 'Data Server',
                          'url': 'https://dataserver.nubark.cloud'}
