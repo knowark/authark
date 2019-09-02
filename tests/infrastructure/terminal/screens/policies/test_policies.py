@@ -7,7 +7,7 @@ from authark.infrastructure.terminal.screens.policies.policies_actions import (
 
 @fixture
 def policies_screen(main):
-    return PoliciesScreen('USERS', main.env)
+    return PoliciesScreen('USERS', main.env, main)
 
 
 def test_policies_screen_instantiation(policies_screen):
