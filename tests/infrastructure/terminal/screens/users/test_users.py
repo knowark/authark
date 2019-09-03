@@ -51,6 +51,11 @@ def test_users_screen_keypress(users_screen):
     assert unhandled == 'F'
 
 
-def test_users_screen_keypress_focus_out_(users_screen):
+def test_users_screen_keypress_focus_out(users_screen):
     with raises(TypeError):
         users_screen.keypress(None, 'down')
+
+
+def test_users_screen_on_search_user_no_users(users_screen):
+    users_screen.on_search_user(None, "")
+    assert len(users_screen.table.data_list) == 0
