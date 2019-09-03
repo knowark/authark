@@ -91,7 +91,11 @@ def test_users_deassign_role_screen_instance(users_deassign_role_screen):
     assert users_deassign_role_screen is not None
 
 
-def test_users_deassign_role_keypress(users_deassign_role_screen):
+def test_users_deassign_role_keypress_enter(users_deassign_role_screen):
     users_deassign_role_screen.keypress((0, 0), "enter")
     assert isinstance(users_deassign_role_screen.env.holder.original_widget,
                       UsersRolesScreen)
+
+
+def test_users_deassign_role_keypress_unhandled(users_deassign_role_screen):
+    assert users_deassign_role_screen.keypress((0, 0), "F") == "F"

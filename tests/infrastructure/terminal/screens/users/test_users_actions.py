@@ -1,5 +1,6 @@
 import urwid
 from pytest import raises, fixture
+from authark.application.models import AuthError
 from authark.infrastructure.terminal.framework import Screen, Table
 from authark.infrastructure.terminal.screens.main_menu import MainMenu
 from authark.infrastructure.terminal.screens.users import (
@@ -130,7 +131,7 @@ def test_users_update_screen_instantiation(users_update_screen):
     assert users_update_screen is not None
 
 
-def test_users_update_screen_keypress_enter(users_update_screen):
+def test_users_update_screen_keypress_enter_with_password(users_update_screen):
     users_update_screen.password.edit_text = "MY_PASSWORD"
     users_update_screen.keypress((0, 0), "meta enter")
     auth_coordinator = users_update_screen.auth_coordinator
@@ -138,6 +139,16 @@ def test_users_update_screen_keypress_enter(users_update_screen):
         "eecheverry", "MY_PASSWORD", "ALL")
     assert response["refresh_token"] is not None
     assert response["access_token"] is not None
+
+
+def test_users_update_screen_keypress_enter_without_password(
+        users_update_screen):
+    with raises(AuthError):
+        users_update_screen.password.edit_text = ""
+        users_update_screen.keypress((0, 0), "meta enter")
+        auth_coordinator = users_update_screen.auth_coordinator
+        auth_coordinator.authenticate(
+            "eecheverry", "MY_PASSWORD", "ALL")
 
 
 def test_users_update_screen_keypress_left(users_update_screen):
