@@ -95,9 +95,3 @@ def test_users_deassign_role_keypress(users_deassign_role_screen):
     users_deassign_role_screen.keypress((0, 0), "enter")
     assert isinstance(users_deassign_role_screen.env.holder.original_widget,
                       UsersRolesScreen)
-
-
-def test_users_deassign_role_go_back(users_deassign_role_screen):
-    users_deassign_role_screen._go_back()
-    assert isinstance(users_deassign_role_screen.env.holder.original_widget,
-                      UsersRolesScreen)
