@@ -63,3 +63,13 @@ def test_configuration_build_config_production(config_data):
     config = build_config(config_file, mode)
 
     assert isinstance(config, ProductionConfig)
+
+
+def test_configuration_build_config_none_production_build(config_data):
+    config_file, config_dict = config_data
+    config_file.write_text(json.dumps(config_dict))
+    mode = 'PROD'
+
+    config = build_config("", mode)
+
+    assert isinstance(config, ProductionConfig)
