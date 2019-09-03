@@ -231,9 +231,9 @@ def test_auth_coordinator_register_duplicated_username_error(
         user_dict = {"username": "mvp", "email": "mvp@gmail.com",
                      "password": "PASS4"}
         auth_coordinator.register(user_dict)
-        user_dict['username'] = "mvp"
-        user_dict['email'] = "mvp@gmail.com"
-        auth_coordinator.register(user_dict)
+        # user_dict['username'] = "mvp"
+        # user_dict['email'] = "mvp@gmail.com"
+        # auth_coordinator.register(user_dict)
         user_dict['username'] = "mvp2"
         user_dict['email'] = "mvp@gmail.com"
         auth_coordinator.register(user_dict)
