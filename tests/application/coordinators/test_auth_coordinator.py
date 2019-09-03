@@ -61,6 +61,16 @@ def test_auth_coordinator_update(
     items = getattr(auth_coordinator.user_repository, 'data')['default']
     assert items['2'].email == 'newmail@eep.com'
 
+    # Testing without password
+
+    user_dict = {'id': '2', 'username': 'tebanep',
+                 'email': 'newmail@eep.com'}
+    updated = auth_coordinator.update(user_dict)
+
+    assert updated is True
+    items = getattr(auth_coordinator.user_repository, 'data')['default']
+    assert items['2'].email == 'newmail@eep.com'
+
 
 def test_auth_coordinator_update_with_password(
         auth_coordinator: AuthCoordinator) -> None:
