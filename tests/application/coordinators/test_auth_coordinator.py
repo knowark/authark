@@ -227,7 +227,7 @@ def test_auth_coordinator_register_username_special_characters_error(
 
 def test_auth_coordinator_register_duplicated_username_error(
         auth_coordinator: AuthCoordinator) -> None:
-    with raises(UserCreationError):
+    try:
         user_dict = {"username": "mvp", "email": "mvp@gmail.com",
                      "password": "PASS4"}
         auth_coordinator.register(user_dict)
@@ -237,6 +237,8 @@ def test_auth_coordinator_register_duplicated_username_error(
         user_dict['username'] = "mvp"
         user_dict['email'] = "mvp@gmail.com"
         auth_coordinator.register(user_dict)
+    except UserCreationError as e:
+        assert "username" in e
 
 
 def test_auth_coordinator_deregister(
