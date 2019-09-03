@@ -110,7 +110,7 @@ def test_cli_load(cli, monkeypatch, namespace):
 
     # With source and password
     namespace.source = "source"
-    namespace.password = "my_password"
+    namespace.password_field = "my_password"
     temp_stdout = StringIO()
     with contextlib.redirect_stdout(temp_stdout):
         cli.load(namespace)
