@@ -52,3 +52,8 @@ def test_selection_list_keypress_none_item_list(selection_list):
     selection_list.item_list = None
     selection_list.keypress((0,), "enter")
     assert selection_list.list_box.focus.original_widget.text == "A"
+
+
+def test_selection_list_keypress_unhandled(selection_list):
+    selection_list.item_list = None
+    assert selection_list.keypress((0,), "F") == "F"
