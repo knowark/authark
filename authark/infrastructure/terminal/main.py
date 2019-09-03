@@ -38,8 +38,7 @@ class Main:
             'SessionCoordinator')
         first_tenant = next(
             iter(self.tenancy_supplier.search_tenants([])), None)
-        if first_tenant:
-            self.session_coordinator.set_tenant(first_tenant)
+        self.session_coordinator.set_tenant(first_tenant)
 
     def _unhandled_input(self, key: str):
         if key == 'meta q':
