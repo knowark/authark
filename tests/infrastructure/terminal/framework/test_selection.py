@@ -1,6 +1,15 @@
 import urwid
+from pytest import fixture
 from authark.infrastructure.terminal.framework.selection import (
     Selection, SelectionList)
+
+
+@fixture
+def selection_list(selection):
+    selection._show_selection(None)
+    selection_list = selection.holder.original_widget
+    assert isinstance(selection_list, SelectionList)
+    return selection_list
 
 
 def test_selection_instantiation(selection):
@@ -33,3 +42,12 @@ def test_selection_key_press():
     selection_list.item_list = item_list
     selection_list.list_box.focus_position = 0
     selection_list.keypress((0,), "enter")
+
+
+def test_selection_list_instance(selection_list):
+    assert selection_list is not None
+
+
+def test_selection_list_keypress(selection_list):
+    selection_list.keypress((0,), "enter")
+    assert selection_list.list_box.focus.original_widget.text == "A"
