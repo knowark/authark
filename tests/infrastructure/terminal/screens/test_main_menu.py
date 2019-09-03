@@ -41,6 +41,10 @@ def test_main_menu_show_policies_screen(main_menu):
     assert isinstance(main_menu.env.holder.original_widget, PoliciesScreen)
 
 
-def test_main_menu_keypress(main_menu):
+def test_main_menu_keypress_tenant_screen(main_menu):
     main_menu.keypress((0, 0), "T")
     assert isinstance(main_menu.env.holder.original_widget, TenantsScreen)
+
+
+def test_main_menu_keypress_unhandled(main_menu):
+    assert main_menu.keypress((0, 0), "F") == "F"
