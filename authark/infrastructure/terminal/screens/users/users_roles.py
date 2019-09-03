@@ -188,7 +188,10 @@ class UsersDeassignRoleScreen(Screen):
         if key == 'enter':
             id = self.selected_item.get('ranking_id')
             user = self.management_coordinator.deassign_role(id)
-            self._back()
-            users_screen = self.env.stack.pop()
-            users_screen.show_roles_screen()
+            self._go_back()
         return super().keypress(size, key)
+
+    def _go_back(self):
+        self._back()
+        users_screen = self.env.stack.pop()
+        users_screen.show_roles_screen()
