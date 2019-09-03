@@ -8,12 +8,12 @@ def test_handler_error():
     app.config['TESTING'] = True
     app.config['LIVESERVER_PORT'] = 0
 
-    @app.route("/test")
-    def test():
+    @app.route("/test1")
+    def test1():
         abort(400, "Test error handled")
 
     register_error_handler(app)
 
-    response = app.test_client().get("/test")
+    response = app.test_client().get("/test1")
 
     assert response.status == '400 BAD REQUEST'
