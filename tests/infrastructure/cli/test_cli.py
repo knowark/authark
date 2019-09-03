@@ -108,6 +108,14 @@ def test_cli_load(cli, monkeypatch, namespace):
     output = temp_stdout.getvalue().strip()
     assert output == '::::::LOAD:::::'
 
+    namespace.source = "source"
+    temp_stdout = StringIO()
+    with contextlib.redirect_stdout(temp_stdout):
+        cli.load(namespace)
+
+    output = temp_stdout.getvalue().strip()
+    assert output == '::::::LOAD:::::'
+
 
 def test_cli_load_no_tentant_setted(cli, monkeypatch, namespace):
     namespace.input_file = ""
