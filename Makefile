@@ -10,27 +10,28 @@ test:
 
 COVFILE ?= .coverage
 PWD = $(shell pwd)
+PROJECT = authark
 
 coverage-application:
-	mypy authark/application
+	mypy $(PROJECT)/application
 	export COVERAGE_FILE=$(PWD)/$(COVFILE); pytest -x \
-	--cov=$(PWD)/authark/application $(PWD)/tests/application/ \
+	--cov=$(PWD)/$(PROJECT)/application $(PWD)/tests/application/ \
 	--cov-report term-missing \
 	--cov-report xml:$(PWD)/$(COVFILE).xml -s -vv \
 	-o cache_dir=/tmp/pytest/cache
 
 coverage-infrastructure:
-	mypy authark/infrastructure
+	mypy $(PROJECT)/infrastructure
 	export COVERAGE_FILE=$(PWD)/$(COVFILE); pytest -x \
-	--cov=$(PWD)/authark/infrastructure $(PWD)/tests/infrastructure/ \
+	--cov=$(PWD)/$(PROJECT)/infrastructure $(PWD)/tests/infrastructure/ \
 	--cov-report term-missing \
 	--cov-report xml:$(PWD)/$(COVFILE).xml -s -vv \
 	-o cache_dir=/tmp/pytest/cache
 
 coverage: 
-	mypy authark
+	mypy $(PROJECT)
 	export COVERAGE_FILE=$(PWD)/$(COVFILE); pytest -x \
-	--cov=$(PWD)/authark $(PWD)/tests/ \
+	--cov=$(PWD)/$(PROJECT) $(PWD)/tests/ \
 	--cov-report term-missing \
 	--cov-report xml:$(PWD)/$(COVFILE).xml -s -vv \
 	-o cache_dir=/tmp/pytest/cache
@@ -40,12 +41,12 @@ update:
 	pip freeze > requirements.txt
 
 serve:
-	python -m authark serve
+	python -m $(PROJECT) serve
 
 terminal:
-	python -m authark terminal
+	python -m $(PROJECT) terminal
 
 PART ?= patch
 
 version:
-	bump2version $(PART) authark/__init__.py --tag --commit
+	bump2version $(PART) $(PROJECT)/__init__.py --tag --commit
