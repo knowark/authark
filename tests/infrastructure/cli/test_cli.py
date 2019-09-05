@@ -1,4 +1,5 @@
 import contextlib
+from typing import List
 from pytest import raises
 from unittest.mock import Mock, call
 from authark.infrastructure.cli import cli as cli_module
@@ -13,7 +14,7 @@ def test_cli_instantiation(cli):
 def test_cli_run(cli):
     mock_parse = Mock()
     cli.parse = mock_parse
-    argv = []
+    argv: List = []
     cli.run(argv)
 
     assert mock_parse.call_count == 1
