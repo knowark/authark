@@ -20,7 +20,7 @@ def mock_config():
                     "default": '/tmp/data'
                 }
             }
-            self['tokens']={
+            self['tokens'] = {
                 'tenant': {
                     "secret": "",
                     "algorithm": "",
