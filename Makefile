@@ -13,7 +13,7 @@ PWD = $(shell pwd)
 PROJECT = authark
 
 coverage-application:
-	#mypy $(PROJECT)/application
+	mypy $(PROJECT)/application
 	export COVERAGE_FILE=$(PWD)/$(COVFILE); pytest -x \
 	--cov=$(PWD)/$(PROJECT)/application $(PWD)/tests/application/ \
 	--cov-report term-missing \
