@@ -72,7 +72,7 @@ class AuthCoordinator:
         self._validate_username(user.username)
         self._validate_duplicates(user)
 
-        user = self.user_repository.add(user)
+        user = self.user_repository.add(user).pop()
         self._make_password_credential(user.id, user_dict['password'])
         return vars(user)
 

@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from uuid import uuid4
 from collections import defaultdict
-from typing import List, Dict, TypeVar, Optional, Generic
+from typing import List, Dict, TypeVar, Optional, Generic, Union
 from ..utilities import (
     TenantProvider, ExpressionParser, QueryDomain, T, EntityNotFoundError)
 from .repository import Repository
@@ -21,10 +21,12 @@ class MemoryRepository(Repository, Generic[T]):
                 f"The entity with id {id} was not found.")
         return item
 
-    def add(self, item: T) -> T:
-        setattr(item, 'id', getattr(item, 'id') or str(uuid4()))
-        self.data[self._location][getattr(item, 'id')] = item
-        return item
+    def add(self, item: Union[T, List[T]]) -> List[T]:
+        items = item if isinstance(item, list) else [item]
+        for item in items:
+            setattr(item, 'id', getattr(item, 'id') or str(uuid4()))
+            self.data[self._location][getattr(item, 'id')] = item
+        return items
 
     def update(self, item: T) -> bool:
         id = getattr(item, 'id')

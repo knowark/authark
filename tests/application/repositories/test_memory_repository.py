@@ -164,3 +164,14 @@ def test_memory_repository_remove_false(filled_memory_repository):
     items = filled_memory_repository.data['default']
     assert deleted is False
     assert len(items) == 3
+
+
+def test_memory_repository_bulk_add(memory_repository):
+    item_1 = DummyEntity("1", "value_1")
+    item_2 = DummyEntity("2", "value_1")
+
+    items = memory_repository.add([item_1, item_2])
+
+    assert len(memory_repository.data['default']) == 2
+    assert "1" in memory_repository.data['default'].keys()
+    assert "2" in memory_repository.data['default'].keys()

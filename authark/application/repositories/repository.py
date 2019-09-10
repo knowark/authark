@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import List, Generic
+from typing import List, Generic, Union
 from ..utilities import T, QueryDomain
 
 
@@ -10,11 +10,11 @@ class Repository(ABC, Generic[T]):
         "Get method to be implemented. Raises if missing."
 
     @abstractmethod
-    def add(self, item: T) -> T:
+    def add(self, item: Union[T, List[T]]) -> List[T]:
         "Add method to be implemented."
 
     @abstractmethod
-    def update(self, item: T) -> bool:
+    def update(self, item: Union[T, List[T]]) -> bool:
         "Update method to be implemented."
 
     @abstractmethod
@@ -22,5 +22,5 @@ class Repository(ABC, Generic[T]):
         "Search users matching a query domain"
 
     @abstractmethod
-    def remove(self, item: T) -> bool:
+    def remove(self, item: Union[T, List[T]]) -> bool:
         "Remove method to be implemented."
