@@ -107,3 +107,6 @@ config.json
 
 # pytest
 .pytest_cache
+
+# dolphin
+.directory

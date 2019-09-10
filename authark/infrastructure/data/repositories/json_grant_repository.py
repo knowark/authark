@@ -1,12 +1,10 @@
 from ....application.models import Grant
-from ....application.services import TenantProvider
-from ....application.utilities import ExpressionParser
+from ....application.utilities import ExpressionParser, TenantProvider
 from ....application.repositories import GrantRepository
 from .json_repository import JsonRepository
 
 
-class JsonGrantRepository(
-        JsonRepository[Grant], GrantRepository):
+class JsonGrantRepository(JsonRepository[Grant], GrantRepository):
     """Json Grant Repository"""
 
     def __init__(self, file_path: str, parser: ExpressionParser,

@@ -22,7 +22,6 @@ class Authenticate:
             token = authorization.replace('Bearer ', '')
             if not token:
                 token = request.args.get('access_token')
-
             try:
                 token_payload = self.jwt_supplier.decode(
                     token, verify=False)
@@ -31,6 +30,7 @@ class Authenticate:
                     token_payload['tid'])
 
                 # secret = tenant_dict['secret']
+
                 token_payload = self.jwt_supplier.decode(token, secret=None)
                 self.session_coordinator.set_tenant(tenant_dict)
 

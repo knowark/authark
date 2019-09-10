@@ -54,6 +54,16 @@ def test_auth_coordinator_update(
         auth_coordinator: AuthCoordinator) -> None:
 
     user_dict = {'id': '2', 'username': 'tebanep',
+                 'email': 'newmail@eep.com', 'password': 'PASS'}
+    updated = auth_coordinator.update(user_dict)
+
+    assert updated is True
+    items = getattr(auth_coordinator.user_repository, 'data')['default']
+    assert items['2'].email == 'newmail@eep.com'
+
+    # Testing without password
+
+    user_dict = {'id': '2', 'username': 'tebanep',
                  'email': 'newmail@eep.com'}
     updated = auth_coordinator.update(user_dict)
 
@@ -207,22 +217,38 @@ def test_auth_coordinator_register(
     assert len(credential_repository.data['default']) == 4
 
 
-def test_auth_coordinator_validate_username(
+def test_auth_coordinator_register_username_special_characters_error(
         auth_coordinator: AuthCoordinator) -> None:
-
-    auth_coordinator._validate_username('johndoe')
-
     with raises(UserCreationError):
-        auth_coordinator._validate_username('johnd@e')
+        user_dict = {"username": "mvp@gmail.com", "email": "mvp@gmail.com",
+                     "password": "PASS4"}
+        auth_coordinator.register(user_dict)
 
 
-def test_auth_coordinator_validate_duplicates(
+def test_auth_coordinator_register_duplicated_email_error(
         auth_coordinator: AuthCoordinator) -> None:
+    try:
+        user_dict = {"username": "mvp", "email": "mvp@gmail.com",
+                     "password": "PASS4"}
+        auth_coordinator.register(user_dict)
+        user_dict['username'] = "mvp2"
+        user_dict['email'] = "mvp@gmail.com"
+        auth_coordinator.register(user_dict)
+    except UserCreationError as e:
+        assert "email" in str(e)
 
-    user = User(**{"username": "tebanep", "email": "tebanep@gmail.com",
-                   "password": "PASS4"})
-    with raises(UserCreationError):
-        auth_coordinator._validate_duplicates(user)
+
+def test_auth_coordinator_register_duplicated_username_error(
+        auth_coordinator: AuthCoordinator) -> None:
+    try:
+        user_dict = {"username": "mvp", "email": "mvp@gmail.com",
+                     "password": "PASS4"}
+        auth_coordinator.register(user_dict)
+        user_dict['username'] = "mvp"
+        user_dict['email'] = "mvp2@gmail.com"
+        auth_coordinator.register(user_dict)
+    except UserCreationError as e:
+        assert "username" in str(e)
 
 
 def test_auth_coordinator_deregister(

@@ -24,6 +24,9 @@ class DevelopmentConfig(Config):
             "DominionRepository": {
                 "method": "memory_dominion_repository"
             },
+            "GrantRepository": {
+                "method": "memory_grant_repository"
+            },
             "RoleRepository": {
                 "method": "memory_role_repository"
             },

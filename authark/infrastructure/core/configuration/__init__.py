@@ -5,6 +5,7 @@ from .config import Config
 from .development_config import DevelopmentConfig
 from .production_config import ProductionConfig
 from .trial_config import TrialConfig
+from .trial_web_config import TrialWebConfig
 
 
 def build_config(config_path: str, mode: str) -> Config:
@@ -21,10 +22,8 @@ def build_config(config_path: str, mode: str) -> Config:
 
 def load_config(config_path: str) -> Optional[Config]:
     path = Path(config_path)
-    if not path.exists():
-        path = Path(Path.home() / 'config.json')
-        if not path.exists():
-            return None
+    if not path.exists() or path.is_dir():
+        return None
 
-    with path.open() as f:
+    with open(config_path) as f:
         return load(f)

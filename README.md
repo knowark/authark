@@ -10,7 +10,7 @@ Authentication and authorization server.
 
 # Coverage
 
-[![codecov](https://codecov.io/gh/authark/authark/branch/master/graph/sunburst.svg)](https://codecov.io/gh//authark)
+[![codecov](https://codecov.io/gh/authark/authark/branch/master/graph/sunburst.svg)](https://codecov.io/gh/authark)
 
 # License
 

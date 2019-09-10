@@ -75,4 +75,5 @@ class UsersScreen(Screen):
             return self._open_screen(screen)
         if key in ('r', 'R', 'enter'):
             self.show_roles_screen()
+            return
         return super().keypress(size, key)

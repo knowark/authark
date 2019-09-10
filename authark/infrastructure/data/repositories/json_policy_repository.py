@@ -1,12 +1,10 @@
 from ....application.models import Policy
-from ....application.services import TenantProvider
-from ....application.utilities import ExpressionParser
+from ....application.utilities import ExpressionParser, TenantProvider
 from ....application.repositories import PolicyRepository
 from .json_repository import JsonRepository
 
 
-class JsonPolicyRepository(
-        JsonRepository[Policy], PolicyRepository):
+class JsonPolicyRepository(JsonRepository[Policy], PolicyRepository):
     """Json Policy Repository"""
 
     def __init__(self, file_path: str, parser: ExpressionParser,

@@ -1,20 +1,26 @@
 import sys
 from argparse import ArgumentParser, Namespace
 from injectark import Injectark
+from typing import List
 from ..core import Config
+from ..web import create_app, ServerApplication
+from ..terminal import Main, Context
 
 
 class Cli:
     def __init__(self, config: Config, resolver: Injectark) -> None:
         self.config = config
         self.resolver = resolver
+        self.registry = resolver
+        self.parser = ArgumentParser('Authark')
 
-        args = self.parse()
+    def run(self, argv: List[str]):
+        args = self.parse(argv)
         args.func(args)
 
-    def parse(self) -> Namespace:
-        parser = ArgumentParser('Authark')
-        subparsers = parser.add_subparsers()
+    def parse(self, argv: List[str]) -> Namespace:
+
+        subparsers = self.parser.add_subparsers()
 
         # Setup
         setup_parser = subparsers.add_parser(
@@ -46,11 +52,11 @@ class Cli:
         load_parser.add_argument('-t', '--tenant')
         load_parser.set_defaults(func=self.load)
 
-        if len(sys.argv[1:]) == 0:
-            parser.print_help()
-            parser.exit()
+        if len(argv) == 0:
+            self.parser.print_help()
+            self.parser.exit()
 
-        return parser.parse_args()
+        return self.parser.parse_args(argv)
 
     def setup(self, args: Namespace) -> None:
         print('...SETUP:::', args)
@@ -65,15 +71,13 @@ class Cli:
 
     def serve(self, args: Namespace) -> None:
         print('...SERVE:::', args)
-        from ..web import create_app, ServerApplication
 
+        print(create_app)
         app = create_app(self.config, self.resolver)
-        gunicorn_config = self.config['gunicorn']
-        ServerApplication(app, gunicorn_config).run()
+        ServerApplication(app, self.config['gunicorn']).run()
 
     def terminal(self, args: Namespace) -> None:
         print('...TERMINAL:::', args)
-        from ..terminal import Main, Context
 
         context = Context(self.config, self.resolver)
         app = Main(context)

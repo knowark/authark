@@ -1,32 +1,35 @@
 import json
 import jwt
-from pytest import fixture
+from pytest import fixture, raises
 from flask import Flask
 from injectark import Injectark
 from authark.application.models import (
     User, Credential, Dominion, Role, Ranking,
     Resource, Grant, Policy, Permission)
-from authark.application.utilities import ExpressionParser
+from authark.application.utilities import (
+    ExpressionParser, StandardTenantProvider, Tenant)
 from authark.application.repositories import (
     MemoryUserRepository, MemoryCredentialRepository,
     MemoryDominionRepository, MemoryRoleRepository,
     MemoryRankingRepository, MemoryResourceRepository,
     MemoryGrantRepository, MemoryPermissionRepository,
     MemoryPolicyRepository)
-from authark.application.services import (
-    MemoryHashService, StandardTenantProvider, Tenant)
+from authark.application.services import MemoryHashService, AccessService
 from authark.application.coordinators import (
-    AuthCoordinator, AccessService, SessionCoordinator)
+    AuthCoordinator, SessionCoordinator)
+from authark.application.reporters import StandardAutharkReporter
 from authark.infrastructure.web.base import create_app
 from authark.infrastructure.core import (
-    TrialConfig, build_factory, PyJWTRefreshTokenService,
-    PyJWTAccessTokenService)
+    TrialWebConfig, build_factory, PyJWTRefreshTokenService,
+    PyJWTAccessTokenService, AuthenticationError)
 
+
+# Fixtures
 
 @fixture
 def resolver():
     parser = ExpressionParser()
-    tenant = Tenant(id='1', name="Default")
+    tenant = Tenant(id='1', name="Default", location="default")
     tenant_provider = StandardTenantProvider(tenant)
     user_repository = MemoryUserRepository(parser, tenant_provider)
     credential_repository = MemoryCredentialRepository(parser, tenant_provider)
@@ -120,9 +123,18 @@ def resolver():
 
     session_coordinator = SessionCoordinator(tenant_provider)
 
+    authark_reporter = StandardAutharkReporter(
+        user_repository=user_repository,
+        credential_repository=credential_repository,
+        dominion_repository=dominion_repository,
+        role_repository=role_repository,
+        policy_repository=policy_repository,
+        resource_repository=resource_repository
+    )
+
     resolver = Injectark()
 
-    config = TrialConfig()
+    config = TrialWebConfig()
     factory = build_factory(config)
     strategy = config['strategy']
 
@@ -133,6 +145,7 @@ def resolver():
     resolver['TenantSupplier'].arranger.cataloguer.catalog = {
         "1": tenant
     }
+    resolver.registry['AutharkReporter'] = authark_reporter
 
     return resolver
 
@@ -140,13 +153,47 @@ def resolver():
 @fixture
 def app(resolver) -> Flask:
     """Create app testing client"""
-    config = TrialConfig()
+    config = TrialWebConfig()
 
     app = create_app(config=config, resolver=resolver)
     app.testing = True
     app = app.test_client()
 
     return app
+
+
+@fixture
+def headers() -> dict:
+
+    payload_dict = {
+        "tid": "1", "uid": "1", "name": "eecheverry",
+        "email": "eecheverry@nubark.com"}
+
+    return {
+        "Authorization":  (jwt.encode(payload_dict, "DEVSECRET123",
+                                      algorithm='HS256').decode('utf-8'))
+    }
+
+# General tests
+
+
+def test_root_resource(app: Flask) -> None:
+    response = app.get('/')
+    data = str(response.data, 'utf-8')
+    assert data is not None
+
+
+def test_root_resource_request_none(app: Flask) -> None:
+    response = app.get('/?api')
+    data = str(response.data, 'utf-8')
+    assert data is not None
+
+
+def test_get_invalid_headers(app: Flask) -> None:
+    with raises(AuthenticationError):
+        app.get('/register')
+
+# Tokens resource tests
 
 
 def test_auth_get_route(app: Flask) -> None:
@@ -176,7 +223,6 @@ def test_auth_post_route_successful_authentication(app: Flask) -> None:
             tenant="default",
             username="eecheverry",
             password="ABC1234",
-            # client="mobile"
         )),
         content_type='application/json')
     assert response.status_code == 200
@@ -198,8 +244,24 @@ def test_auth_post_route_with_refresh_token(app: Flask) -> None:
     data = response.get_data()
     assert len(data) > 0
 
+# Users resource tests
 
-def test_register_post_route(app: Flask) -> None:
+
+def test_get_users(app: Flask, headers: dict) -> None:
+    response = app.get(
+        '/register?filter=[["id", "=", "1"]]', headers=headers)
+    assert response.status_code == 200
+    assert len(json.loads(str(response.data, 'utf-8'))) == 1
+
+
+def test_get_filter_error(app: Flask, headers: dict) -> None:
+    response = app.get(
+        '/register?filter=[** BAD FILTER **]', headers=headers)
+    assert response.status_code == 200
+    assert len(json.loads(str(response.data, 'utf-8'))) == 2
+
+
+def test_register_post_route(app: Flask, headers: dict) -> None:
     response = app.post(
         '/register',
         data=json.dumps(dict(
@@ -208,7 +270,8 @@ def test_register_post_route(app: Flask) -> None:
             email="gecheverry@gmail.com",
             password="POI123"
         )),
-        content_type='application/json')
+        content_type='application/json',
+        headers=headers)
 
     assert response.status_code == 201
     assert b"username<gecheverry>" in response.get_data()
