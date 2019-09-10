@@ -28,11 +28,18 @@ class MemoryRepository(Repository, Generic[T]):
             self.data[self._location][getattr(item, 'id')] = item
         return items
 
-    def update(self, item: T) -> bool:
-        id = getattr(item, 'id')
-        if id not in self.data[self._location]:
-            return False
-        self.data[self._location][id] = item
+    def update(self, item: Union[T, List[T]]) -> bool:
+        items = item if isinstance(item, list) else [item]
+
+        for item in items:
+            id = getattr(item, 'id')
+            if id not in self.data[self._location]:
+                return False
+
+        for item in items:
+            id = getattr(item, 'id')
+            self.data[self._location][id] = item
+
         return True
 
     def search(self, domain: QueryDomain, limit=0, offset=0) -> List[T]:
@@ -49,11 +56,17 @@ class MemoryRepository(Repository, Generic[T]):
 
         return items
 
-    def remove(self, item: T) -> bool:
-        id = getattr(item, 'id')
-        if id not in self.data[self._location]:
-            return False
-        del self.data[self._location][id]
+    def remove(self, item: Union[T, List[T]]) -> bool:
+        items = item if isinstance(item, list) else [item]
+        for item in items:
+            id = getattr(item, 'id')
+            if id not in self.data[self._location]:
+                return False
+
+        for item in items:
+            id = getattr(item, 'id')
+            del self.data[self._location][id]
+
         return True
 
     def load(self, data: Dict[str, Dict[str, T]]) -> None:

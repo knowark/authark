@@ -168,10 +168,24 @@ def test_memory_repository_remove_false(filled_memory_repository):
 
 def test_memory_repository_bulk_add(memory_repository):
     item_1 = DummyEntity("1", "value_1")
-    item_2 = DummyEntity("2", "value_1")
+    item_2 = DummyEntity("2", "value_2")
 
     items = memory_repository.add([item_1, item_2])
 
     assert len(memory_repository.data['default']) == 2
     assert "1" in memory_repository.data['default'].keys()
     assert "2" in memory_repository.data['default'].keys()
+
+
+def test_memory_repository_bulk_update(filled_memory_repository):
+    item_1 = DummyEntity("1", "updated_value_1")
+    item_2 = DummyEntity("3", "updated_value_3")
+
+    result = filled_memory_repository.update([item_1, item_2])
+
+    items = filled_memory_repository.data['default']
+    assert result is True
+    assert len(items) == 3
+    assert items['1'].field_1 == 'updated_value_1'
+    assert items['2'].field_1 == 'value_2'
+    assert items['3'].field_1 == 'updated_value_3'
