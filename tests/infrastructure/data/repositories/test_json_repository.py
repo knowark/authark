@@ -168,3 +168,21 @@ def test_json_repository_remove_false(json_repository):
 
     assert deleted is False
     assert len(items_dict) == 3
+
+
+def test_json_repository_bulk_add(json_repository):
+    item_4 = DummyEntity("4", "value_4")
+    item_5 = DummyEntity("5", "value_5")
+
+    items = json_repository.add([item_4, item_5])
+
+    file_path = Path(json_repository.data_path) / "default/dummies.json"
+    with file_path.open() as f:
+        data = loads(f.read())
+        items = data.get("dummies")
+
+        item_dict_4 = items.get('4')
+        item_dict_5 = items.get('5')
+
+        assert item_dict_4.get('field_1') == item_4.field_1
+        assert item_dict_5.get('field_1') == item_5.field_1

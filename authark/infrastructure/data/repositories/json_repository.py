@@ -2,7 +2,7 @@ import os
 from pathlib import Path
 from json import load, dump
 from uuid import uuid4
-from typing import Dict, List, Any, Type, Callable, Generic
+from typing import Dict, List, Any, Type, Callable, Generic, Union
 from ....application.services import TenantProvider
 from ....application.utilities import (
     T, QueryDomain, ExpressionParser, EntityNotFoundError)
@@ -29,15 +29,20 @@ class JsonRepository(Repository, Generic[T]):
                     f"The entity with id {id} was not found.")
             return self.item_class(**item_dict)
 
-    def add(self, item: T) -> T:
+    def add(self, item: Union[T, List[T]]) -> List[T]:
+        items = item if isinstance(item, list) else [item]
         data: Dict[str, Any] = {}
         with self._file_path.open() as f:
             data = load(f)
-        setattr(item, 'id', getattr(item, 'id') or str(uuid4()))
-        data[self.collection].update({getattr(item, 'id'): vars(item)})
+
+        for item in items:
+            setattr(item, 'id', getattr(item, 'id') or str(uuid4()))
+            data[self.collection].update({getattr(item, 'id'): vars(item)})
+
         with self._file_path.open('w') as f:
             dump(data, f, indent=2)
-        return item
+
+        return items
 
     def update(self, item: T) -> bool:
         with self._file_path.open() as f:
