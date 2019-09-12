@@ -44,19 +44,21 @@ class JsonRepository(Repository, Generic[T]):
 
         return items
 
-    def update(self, item: T) -> bool:
+    def update(self, item: Union[T, List[T]]) -> bool:
+        items = item if isinstance(item, list) else [item]
+        data: Dict[str, Any] = {}
         with self._file_path.open() as f:
             data = load(f)
-            items_dict = data.get(self.collection)
 
-        id = getattr(item, 'id')
-        if id not in items_dict:
-            return False
-
-        items_dict[id] = vars(item)
+        for item in items:
+            id = getattr(item, 'id')
+            if id not in data[self.collection]:
+                return False
+            data[self.collection].update({id: vars(item)})
 
         with self._file_path.open('w') as f:
             dump(data, f, indent=2)
+
         return True
 
     def search(self, domain: QueryDomain, limit=0, offset=0) -> List[T]:
@@ -79,19 +81,21 @@ class JsonRepository(Repository, Generic[T]):
 
         return items
 
-    def remove(self, item: T) -> bool:
+    def remove(self, item: Union[T, List[T]]) -> bool:
+        items = item if isinstance(item, list) else [item]
+        data: Dict[str, Any] = {}
         with self._file_path.open() as f:
             data = load(f)
-            items_dict = data.get(self.collection)
 
-        id = getattr(item, 'id')
-        if id not in items_dict:
-            return False
-
-        del items_dict[id]
+        for item in items:
+            id = getattr(item, 'id')
+            if id not in data[self.collection]:
+                return False
+            del data[self.collection][id]
 
         with self._file_path.open('w') as f:
             dump(data, f, indent=2)
+
         return True
 
     @property

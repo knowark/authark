@@ -186,3 +186,43 @@ def test_json_repository_bulk_add(json_repository):
 
         assert item_dict_4.get('field_1') == item_4.field_1
         assert item_dict_5.get('field_1') == item_5.field_1
+
+
+def test_json_repository_bulk_update(json_repository):
+    item_1 = DummyEntity("1", "updated_value_1")
+    item_3 = DummyEntity("3", "updated_value_3")
+
+    result = json_repository.update([item_1, item_3])
+
+    file_path = Path(json_repository.data_path) / "default/dummies.json"
+    with file_path.open() as f:
+        data = loads(f.read())
+        items = data.get("dummies")
+
+        item_dict_1 = items.get('1')
+        item_dict_2 = items.get('2')
+        item_dict_3 = items.get('3')
+
+        assert result is True
+        assert len(items) == 3
+        assert item_dict_1.get('field_1') == 'updated_value_1'
+        assert item_dict_2.get('field_1') == 'value_2'
+        assert item_dict_3.get('field_1') == 'updated_value_3'
+
+
+def test_json_repository_bulk_delete(json_repository):
+    item_1 = DummyEntity("1", "value_1")
+    item_3 = DummyEntity("3", "value_3")
+
+    result = json_repository.remove([item_1, item_3])
+
+    file_path = Path(json_repository.data_path) / "default/dummies.json"
+    with file_path.open() as f:
+        data = loads(f.read())
+        items = data.get("dummies")
+
+        item_dict_2 = items.get('2')
+
+        assert result is True
+        assert len(items) == 1
+        assert item_dict_2.get('field_1') == 'value_2'
