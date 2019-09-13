@@ -190,8 +190,8 @@ def test_root_resource_request_none(app: Flask) -> None:
 
 
 def test_get_invalid_headers(app: Flask) -> None:
-    with raises(AuthenticationError):
-        app.get('/register')
+    response = app.get('/register')
+    assert response.status_code == 500
 
 # Tokens resource tests
 
