@@ -27,15 +27,3 @@ def test_main_run(main):
     main.loop = MockLoop()
     main.run()
     assert called
-
-
-# def test_setup_initial_tenant_no_tenants():
-#     config = TrialConfig()
-#     factory = build_factory(config)
-#     strategy = config['strategy']
-#     resolver = Injectark(strategy=strategy, factory=factory)
-#     context = Context(config, resolver)
-
-#     main = Main(context)
-#     main._setup_initial_tenant()
-#     print("TENANT:::: ", main.session_coordinator.tenant_provider.state.tenant)
