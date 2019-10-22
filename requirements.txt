@@ -49,7 +49,7 @@ passlib==1.7.1
 pathlib==1.0.1
 pathtools==0.1.2
 pep8==1.7.1
-Pillow==6.1.0
+Pillow==6.2.0
 pip-review==1.0
 pluggy==0.12.0
 port-for==0.4
