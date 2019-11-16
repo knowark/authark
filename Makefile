@@ -14,26 +14,26 @@ PROJECT = authark
 
 coverage-application:
 	mypy $(PROJECT)/application
-	export COVERAGE_FILE=$(PWD)/$(COVFILE); pytest -x \
+	export COVERAGE_FILE=$(COVFILE); pytest -x \
 	--cov=$(PWD)/$(PROJECT)/application $(PWD)/tests/application/ \
 	--cov-report term-missing \
-	--cov-report xml:$(PWD)/$(COVFILE).xml -s -vv \
+	--cov-report xml:$(COVFILE).xml -s -vv \
 	-o cache_dir=/tmp/pytest/cache
 
 coverage-infrastructure:
 	mypy $(PROJECT)/infrastructure
-	export COVERAGE_FILE=$(PWD)/$(COVFILE); pytest -x \
+	export COVERAGE_FILE=$(COVFILE); pytest -x \
 	--cov=$(PWD)/$(PROJECT)/infrastructure $(PWD)/tests/infrastructure/ \
 	--cov-report term-missing \
-	--cov-report xml:$(PWD)/$(COVFILE).xml -s -vv \
+	--cov-report xml:$(COVFILE).xml -s -vv \
 	-o cache_dir=/tmp/pytest/cache
 
 coverage: 
 	mypy $(PROJECT)
-	export COVERAGE_FILE=$(PWD)/$(COVFILE); pytest -x \
+	export COVERAGE_FILE=$(COVFILE); pytest -x \
 	--cov=$(PWD)/$(PROJECT) $(PWD)/tests/ \
 	--cov-report term-missing \
-	--cov-report xml:$(PWD)/$(COVFILE).xml -s -vv \
+	--cov-report xml:$(COVFILE).xml -s -vv \
 	-o cache_dir=/tmp/pytest/cache
 
 update:
