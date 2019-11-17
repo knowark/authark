@@ -5,15 +5,14 @@ from flask import Flask
 from injectark import Injectark
 from authark.application.models import (
     User, Credential, Dominion, Role, Ranking,
-    Resource, Grant, Policy, Permission)
+    Resource, Policy, Permission)
 from authark.application.utilities import (
     ExpressionParser, StandardTenantProvider, Tenant)
 from authark.application.repositories import (
     MemoryUserRepository, MemoryCredentialRepository,
     MemoryDominionRepository, MemoryRoleRepository,
     MemoryRankingRepository, MemoryResourceRepository,
-    MemoryGrantRepository, MemoryPermissionRepository,
-    MemoryPolicyRepository)
+    MemoryPermissionRepository, MemoryPolicyRepository)
 from authark.application.services import MemoryHashService, AccessService
 from authark.application.coordinators import (
     AuthCoordinator, SessionCoordinator)
@@ -84,12 +83,6 @@ def resolver():
                           dominion_id='1')
         }
     })
-    grant_repository = MemoryGrantRepository(parser, tenant_provider)
-    grant_repository.load({
-        "default": {
-            '001': Grant(id='001', permission_id='001', role_id='1')
-        }
-    })
     permission_repository = MemoryPermissionRepository(parser, tenant_provider)
     permission_repository.load({
         "default": {
@@ -109,7 +102,7 @@ def resolver():
     access_service = AccessService(
         ranking_repository, role_repository,
         dominion_repository, resource_repository,
-        grant_repository, permission_repository,
+        permission_repository,
         policy_repository, access_token_service,
         tenant_provider)
 

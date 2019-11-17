@@ -72,9 +72,6 @@ def mock_strategy():
         "ResourceRepository": {
             "method": "json_resource_repository"
         },
-        "GrantRepository": {
-            "method": "json_grant_repository"
-        },
         "PermissionRepository": {
             "method": "json_permission_repository"
         },

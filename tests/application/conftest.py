@@ -2,7 +2,7 @@ from typing import Dict
 from pytest import fixture, raises
 from authark.application.models import (
     AuthError, User, Credential, Token, Dominion, Role, Ranking,
-    Policy, Resource, Permission, Grant)
+    Policy, Resource, Permission)
 from authark.application.utilities import (
     ExpressionParser, TenantProvider, StandardTenantProvider, Tenant)
 from authark.application.repositories import (
@@ -13,8 +13,7 @@ from authark.application.repositories import (
     RankingRepository, MemoryRankingRepository,
     PolicyRepository, MemoryPolicyRepository,
     ResourceRepository, MemoryResourceRepository,
-    PermissionRepository, MemoryPermissionRepository,
-    GrantRepository, MemoryGrantRepository)
+    PermissionRepository, MemoryPermissionRepository)
 from authark.application.services import (
     TokenService, MemoryTokenService, AccessService,
     RefreshTokenService, ImportService, MemoryImportService)
@@ -170,20 +169,6 @@ def mock_permission_repository() -> PermissionRepository:
 
 
 @fixture
-def mock_grant_repository() -> GrantRepository:
-    tenant_provider = StandardTenantProvider(Tenant(name="Default"))
-    grants_dict = {
-        "default": {
-            '001': Grant(id='001', permission_id='001', role_id='1')
-        }
-    }
-    parser = ExpressionParser()
-    grant_repository = MemoryGrantRepository(parser, tenant_provider)
-    grant_repository.load(grants_dict)
-    return grant_repository
-
-
-@fixture
 def mock_token_service() -> TokenService:
     return MemoryTokenService()
 
@@ -308,15 +293,13 @@ def assignment_coordinator(
     mock_ranking_repository: RankingRepository,
     mock_policy_repository: PolicyRepository,
     mock_resource_repository: ResourceRepository,
-    mock_permission_repository: PermissionRepository,
-    mock_grant_repository: GrantRepository
+    mock_permission_repository: PermissionRepository
 ) -> AssignmentCoordinator:
     return AssignmentCoordinator(
         mock_user_repository, mock_role_repository,
         mock_ranking_repository,
         mock_policy_repository, mock_resource_repository,
-        mock_permission_repository,
-        mock_grant_repository)
+        mock_permission_repository)
 
 
 @fixture
@@ -329,11 +312,11 @@ def session_coordinator(
 @fixture
 def access_service(mock_ranking_repository, mock_role_repository,
                    mock_dominion_repository, mock_resource_repository,
-                   mock_grant_repository, mock_permission_repository,
+                   mock_permission_repository,
                    mock_policy_repository, mock_token_service,
                    mock_tenant_provider):
     return AccessService(
         mock_ranking_repository, mock_role_repository,
         mock_dominion_repository, mock_resource_repository,
-        mock_grant_repository, mock_permission_repository,
+        mock_permission_repository,
         mock_policy_repository, mock_token_service, mock_tenant_provider)

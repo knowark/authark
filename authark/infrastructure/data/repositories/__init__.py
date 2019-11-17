@@ -6,5 +6,4 @@ from .json_user_repository import JsonUserRepository
 from .json_ranking_repository import JsonRankingRepository
 from .json_policy_repository import JsonPolicyRepository
 from .json_resource_repository import JsonResourceRepository
-from .json_grant_repository import JsonGrantRepository
 from .json_permission_repository import JsonPermissionRepository

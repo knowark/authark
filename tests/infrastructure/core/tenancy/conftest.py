@@ -23,7 +23,7 @@ def directory_template(tmp_path):
 
     Path.mkdir(template_path)
 
-    data = ["credentials", "dominions", "errors", "grants", "permissions",
+    data = ["credentials", "dominions", "errors", "permissions",
             "policies", "rankings", "resources", "roles", "tokens", "types",
             "users"]
 

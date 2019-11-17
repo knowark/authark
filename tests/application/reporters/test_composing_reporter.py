@@ -38,12 +38,3 @@ def test_composing_reporter_list_resource_policies(composing_reporter):
                          'policy': 'Administrators Only',
                          'type': 'role',
                          'value': 'admin'}
-
-
-def test_composing_reporter_list_role_permissions(composing_reporter):
-    role_id = '1'
-    result = composing_reporter.list_role_permissions(role_id)
-    assert isinstance(result, list)
-    assert result[0] == {
-        'grant_id': '1', 'permission_id': '1', 'resource': 'products',
-        'policy': 'Administrators Only', 'type': 'role', 'value': 'admin'}

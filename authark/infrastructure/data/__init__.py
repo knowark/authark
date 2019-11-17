@@ -8,7 +8,6 @@ from .repositories import (
     JsonRankingRepository,
     JsonPolicyRepository,
     JsonResourceRepository,
-    JsonGrantRepository,
     JsonPermissionRepository
 )
 from .json_import_service import JsonImportService

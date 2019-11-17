@@ -8,8 +8,7 @@ from ....application.repositories import (
     RankingRepository, MemoryRankingRepository,
     PolicyRepository, MemoryPolicyRepository,
     ResourceRepository, MemoryResourceRepository,
-    PermissionRepository, MemoryPermissionRepository,
-    GrantRepository, MemoryGrantRepository)
+    PermissionRepository, MemoryPermissionRepository)
 from ....application.services import (
     HashService, MemoryHashService,
     TokenService, MemoryTokenService,
@@ -84,12 +83,6 @@ class MemoryFactory(Factory):
     ) -> MemoryPermissionRepository:
         return MemoryPermissionRepository(expression_parser, tenant_provider)
 
-    def memory_grant_repository(
-            self, expression_parser: ExpressionParser,
-            tenant_provider: TenantProvider
-    ) -> MemoryGrantRepository:
-        return MemoryGrantRepository(expression_parser, tenant_provider)
-
     # Services
 
     def memory_hash_service(self) -> MemoryHashService:
@@ -153,13 +146,11 @@ class MemoryFactory(Factory):
         ranking_repository: RankingRepository,
         policy_repository: PolicyRepository,
         resource_repository: ResourceRepository,
-        permission_repository: PermissionRepository,
-        grant_repository: GrantRepository
+        permission_repository: PermissionRepository
     ) -> AssignmentCoordinator:
         return AssignmentCoordinator(
             user_repository, role_repository, ranking_repository,
-            policy_repository, resource_repository, permission_repository,
-            grant_repository)
+            policy_repository, resource_repository, permission_repository)
 
     def session_coordinator(
         self, tenant_provider: TenantProvider
@@ -171,14 +162,13 @@ class MemoryFactory(Factory):
             role_repository: RoleRepository,
             dominion_repository: DominionRepository,
             resource_repository: ResourceRepository,
-            grant_repository: GrantRepository,
             permission_repository: PermissionRepository,
             policy_repository: PolicyRepository,
             token_service: AccessTokenService,
             tenant_provider: TenantProvider) -> AccessService:
         return AccessService(
             ranking_repository, role_repository,
-            dominion_repository, resource_repository, grant_repository,
+            dominion_repository, resource_repository,
             permission_repository, policy_repository, token_service,
             tenant_provider)
 
@@ -203,13 +193,11 @@ class MemoryFactory(Factory):
         ranking_repository: RankingRepository,
         resource_repository: ResourceRepository,
         policy_repository: PolicyRepository,
-        permission_repository: PermissionRepository,
-        grant_repository: GrantRepository
+        permission_repository: PermissionRepository
     ) -> StandardComposingReporter:
         return StandardComposingReporter(
             dominion_repository, role_repository, ranking_repository,
-            resource_repository, policy_repository, permission_repository,
-            grant_repository)
+            resource_repository, policy_repository, permission_repository)
 
     def memory_tenant_supplier(self) -> TenantSupplier:
         return MemoryTenantSupplier()

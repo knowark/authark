@@ -8,4 +8,3 @@ from .ranking import Ranking
 from .policy import Policy
 from .permission import Permission
 from .resource import Resource
-from .grant import Grant

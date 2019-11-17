@@ -12,5 +12,4 @@ from .resource_repository import ResourceRepository, MemoryResourceRepository
 from .policy_repository import PolicyRepository, MemoryPolicyRepository
 from .permission_repository import (
     PermissionRepository, MemoryPermissionRepository)
-from .grant_repository import GrantRepository, MemoryGrantRepository
 from ..utilities import QueryDomain
