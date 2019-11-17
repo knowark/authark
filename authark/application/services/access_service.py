@@ -1,5 +1,5 @@
 import json
-from typing import Dict, Any, List, Optional
+from typing import Dict, Any, List
 from abc import ABC, abstractmethod
 from ..models import User, Token, Role, Dominion
 from ..repositories import (
@@ -31,7 +31,7 @@ class AccessService:
         self.token_service = token_service
         self.tenant_provider = tenant_provider
 
-    def generate_token(self, user: User, dominion: Dominion = None) -> Token:
+    def generate_token(self, user: User, dominion: Dominion) -> Token:
         tenant = self.tenant_provider.tenant
         access_payload = self._build_payload(tenant, user, dominion)
         access_token = self.token_service.generate_token(access_payload)
@@ -39,9 +39,9 @@ class AccessService:
         return access_token
 
     def _build_payload(self, tenant: Tenant, user: User,
-                       dominion: Optional[Dominion]) -> Dict[str, Any]:
+                       dominion: Dominion) -> Dict[str, Any]:
         payload = self._build_basic_info(tenant, user)
-        # payload['roles'] = self._build_roles(user, dominion)
+        payload['roles'] = self._build_roles(user, dominion)
         payload['authorization'] = self._build_authorization(user)
         return payload
 

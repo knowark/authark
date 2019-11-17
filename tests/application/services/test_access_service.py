@@ -5,7 +5,9 @@ from authark.application.services import Tenant, AccessService
 
 def test_access_service_generate_token(access_service) -> None:
     user = User(id='1', username='johndoe', email='johndoe')
-    token = access_service.generate_token(user)
+    dominion = Dominion(id='1', name='Data Server',
+                        url="https://dataserver.nubark.com")
+    token = access_service.generate_token(user, dominion)
 
     assert isinstance(token, Token)
 
@@ -13,7 +15,9 @@ def test_access_service_generate_token(access_service) -> None:
 def test_access_service_build_payload(access_service) -> None:
     tenant = Tenant(name='Default')
     user = User(id='1', username='johndoe', email='johndoe')
-    payload = access_service._build_payload(tenant, user, None)
+    dominion = Dominion(id='1', name='Data Server',
+                        url="https://dataserver.nubark.com")
+    payload = access_service._build_payload(tenant, user, dominion)
 
     assert isinstance(payload, dict)
     assert 'tid' in payload

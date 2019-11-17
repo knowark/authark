@@ -1,4 +1,4 @@
-from ..models import AuthError, Token, User, Credential
+from ..models import AuthError, Token, User, Credential, Dominion
 from ..repositories import (
     UserRepository, CredentialRepository, DominionRepository)
 from ..utilities import UserCreationError
@@ -17,12 +17,13 @@ class AuthCoordinator:
                  refresh_token_service: RefreshTokenService) -> None:
         self.user_repository = user_repository
         self.credential_repository = credential_repository
+        self.dominion_repository = dominion_repository
         self.hash_service = hash_service
         self.access_service = access_service
         self.refresh_token_service = refresh_token_service
 
     def authenticate(self, username: str, password: str, client: str,
-                     dominion: str = None) -> TokensDict:
+                     dominion_name: str = None) -> TokensDict:
         user = self._find_user(username)
         credentials = self.credential_repository.search([
             ('user_id', '=', user.id), ('type', '=', 'password')])
@@ -34,7 +35,12 @@ class AuthCoordinator:
         if not self.hash_service.verify_password(password, user_password):
             raise AuthError("Authentication Error: Password mismatch.")
 
-        access_token = self.access_service.generate_token(user)
+        dominion_domain = [
+            ('name', '=', dominion_name)] if dominion_name else []
+        dominion: Dominion = next(
+            iter(self.dominion_repository.search(dominion_domain)))
+
+        access_token = self.access_service.generate_token(user, dominion)
 
         # Create new refresh token
         client = client or 'ALL'
@@ -45,7 +51,8 @@ class AuthCoordinator:
             'access_token': access_token.value
         }
 
-    def refresh_authenticate(self, refresh_token: TokenString) -> TokensDict:
+    def refresh_authenticate(self, refresh_token: TokenString,
+                             dominion_name: str = None) -> TokensDict:
         credentials = self.credential_repository.search([
             ('value', '=', refresh_token), ('type', '=', 'refresh_token')])
         if not credentials:
@@ -63,8 +70,13 @@ class AuthCoordinator:
 
         user = self.user_repository.get(credential.user_id)
 
+        dominion_domain = [
+            ('name', '=', dominion_name)] if dominion_name else []
+        dominion: Dominion = next(
+            iter(self.dominion_repository.search(dominion_domain)))
+
         tokens_dict['access_token'] = self.access_service.generate_token(
-            user).value
+            user, dominion).value
 
         return tokens_dict
 
