@@ -57,13 +57,6 @@ core, and so are the **Dominion** and **Role**.
     <tr><td port="id">id</td></tr>
     </table>>];
 
-    Resource [label=<
-    <table border="0" cellborder="1" cellspacing="0">
-    <tr><td><i>Resource</i></td></tr>
-    <tr><td port="id">id</td></tr>
-    <tr><td port="dominion_id">dominion_id</td></tr>
-    </table>>];
-
     Policy [label=<
     <table border="0" cellborder="1" cellspacing="0">
     <tr><td><i>Policy</i></td></tr>
@@ -72,52 +65,25 @@ core, and so are the **Dominion** and **Role**.
     <tr><td port="value">value</td></tr>
     </table>>];
 
-    Permission [label=<
-    <table border="0" cellborder="1" cellspacing="0">
-    <tr><td><i>Permission</i></td></tr>
-    <tr><td port="id">id</td></tr>
-    <tr><td port="match">match</td></tr> 
-    <tr><td port="resource_id">resource_id</td></tr> 
-    <tr><td port="policy_id">policy_id</td></tr> 
-    </table>>];
-
-    Grant [label=<
-    <table border="0" cellborder="1" cellspacing="0">
-    <tr><td><i>Grant</i></td></tr>
-    <tr><td port="id">id</td></tr>
-    <tr><td port="role_id">role_id</td></tr> 
-    <tr><td port="permission_id">permission_id</td></tr>
-    </table>>];
-
     Ranking:user_id -> User:id;
     Ranking:role_id -> Role:id;
     Credential:dominion_id ->  Dominion:id;
     Credential:user_id -> User:id;
     Role:dominion_id -> Dominion:id;
-    Resource:dominion_id -> Dominion:id;
-    Permission:resource_id -> Resource:id; 
-    Permission:policy_id -> Policy:id;
-    Grant:role_id -> Role:id;
-    Grant:permission_id -> Permission:id;
     }
 
 
-Dominions can have multiple roles for authorization purposes, each been able
-to hold multiple users. As a user can as well belong to multiple groups, the 
-**Ranking** structure is the responsible of representing such binding. A user
-may have multiple **Credentials** to authenticate against Authark. Each 
+Dominions can have multiple **Roles** for authorization purposes, each been
+able to hold multiple users. As a user can as well belong to multiple groups,
+the **Ranking** structure is the responsible of representing such binding.
+A user may have multiple **Credentials** to authenticate against Authark. Each 
 **Credential** must be either of the type 'password' or 'token' (i.e. refresh
 token) and belong to a single **Dominion**. Moreover, **Users** may have
 optional *attributes* in the form of *key-value* pairs that represent
 any kind of informative features or data suitable for authorization logic.
 
-A service or data **Dominion** may have one or more **Resources** to which it
-can give access. To do that, **Policies** are created to filter out the kind
-of records a user can get access to, and a set of **Permissions** link them to
-the specified **Resource**.
-
-The **Policy** type may be one of *user*, *role*, *time* or *domain*.
-**Permissions** should define a *match* attribute which can be *all* or *any*.
+A services platform or data **Dominion** may have one or more **Roles**
+representing the different access groups that it has.
 
 **Tokens** are issued as value objects by Authark in return of a successful
 authentication transaction initiated by a Client application. This **Token**
