@@ -112,11 +112,13 @@ class MemoryFactory(Factory):
     def auth_coordinator(
             self, user_repository: UserRepository,
             credential_repository: CredentialRepository,
+            dominion_repository: DominionRepository,
             hash_service: HashService,
             access_service: AccessService,
             refresh_token_service: RefreshTokenService) -> AuthCoordinator:
         return AuthCoordinator(
             user_repository, credential_repository,
+            dominion_repository,
             hash_service, access_service, refresh_token_service)
 
     def management_coordinator(

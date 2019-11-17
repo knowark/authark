@@ -1,5 +1,6 @@
 from ..models import AuthError, Token, User, Credential
-from ..repositories import UserRepository, CredentialRepository
+from ..repositories import (
+    UserRepository, CredentialRepository, DominionRepository)
 from ..utilities import UserCreationError
 from ..services import (
     TokenService, RefreshTokenService, HashService, AccessService)
@@ -10,6 +11,7 @@ class AuthCoordinator:
 
     def __init__(self, user_repository: UserRepository,
                  credential_repository: CredentialRepository,
+                 dominion_repository: DominionRepository,
                  hash_service: HashService,
                  access_service: AccessService,
                  refresh_token_service: RefreshTokenService) -> None:

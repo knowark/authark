@@ -260,11 +260,13 @@ def mock_import_service() -> ImportService:
 @fixture
 def auth_coordinator(mock_user_repository: UserRepository,
                      mock_credential_repository: CredentialRepository,
+                     mock_dominion_repository: DominionRepository,
                      mock_hash_service: HashService,
                      access_service: AccessService,
                      mock_refresh_token_service: RefreshTokenService
                      ) -> AuthCoordinator:
     return AuthCoordinator(mock_user_repository, mock_credential_repository,
+                           mock_dominion_repository,
                            mock_hash_service, access_service,
                            mock_refresh_token_service)
 

@@ -118,6 +118,7 @@ def resolver():
     hash_service = MemoryHashService()
     auth_coordinator = AuthCoordinator(
         user_repository, credential_repository,
+        dominion_repository,
         hash_service, access_service,
         refresh_token_service)
 
