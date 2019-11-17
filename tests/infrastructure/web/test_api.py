@@ -165,19 +165,11 @@ def app(resolver) -> Flask:
 
 @fixture
 def headers() -> dict:
-
-    payload_dict = {
-        "tid": "1", "uid": "1", "name": "eecheverry",
-        "email": "eecheverry@nubark.com"}
-
     return {
-        "Authorization":  (jwt.encode(payload_dict, "DEVSECRET123",
-                                      algorithm='HS256').decode('utf-8')),
         "From": "eecheverry@nubark.com",
         "TenantId": "1",
         "UserId": "1",
         "Roles": ["user"]
-
     }
 
 # General tests
