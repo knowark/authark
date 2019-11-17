@@ -36,20 +36,22 @@ class TokenResource(MethodView):
         """
         data = str(request.data, encoding='utf8')
         token_request_dict = TokenRequestSchema().loads(data)
-        tenant = token_request_dict['tenant']
-        tenants = self.tenant_supplier.search_tenants([('slug', '=', tenant)])
+        tenant_name = token_request_dict['tenant']
+        tenants = self.tenant_supplier.search_tenants(
+            [('slug', '=', tenant_name)])
+        dominion = token_request_dict.get('dominion')
 
         self.session_coordinator.set_tenant(tenants[0])
 
         if 'refresh_token' in token_request_dict:
             tokens = self.auth_coordinator.refresh_authenticate(
-                token_request_dict['refresh_token'])
+                token_request_dict['refresh_token'], dominion)
         else:
             username = token_request_dict.get('username')
             password = token_request_dict.get('password')
             client = token_request_dict.get('client')
             tokens = self.auth_coordinator.authenticate(
-                username, password, client)
+                username, password, client, dominion)
 
         tokens_dict = TokenSchema().load(tokens)
 

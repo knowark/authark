@@ -7,6 +7,7 @@ class TokenRequestSchema(Schema):
     password = fields.Str(example="secret")
     refresh_token = fields.Str(example="eyJhbG.eyJzdWIiOiIx.MjM5MadQssw5c")
     client = fields.Str(example="data_server")
+    dominion = fields.Str(example="platform_xyz")
 
 
 class TokenSchema(Schema):
