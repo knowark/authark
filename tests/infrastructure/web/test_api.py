@@ -172,7 +172,12 @@ def headers() -> dict:
 
     return {
         "Authorization":  (jwt.encode(payload_dict, "DEVSECRET123",
-                                      algorithm='HS256').decode('utf-8'))
+                                      algorithm='HS256').decode('utf-8')),
+        "From": "eecheverry@nubark.com",
+        "TenantId": "1",
+        "UserId": "1",
+        "Roles": ["user"]
+
     }
 
 # General tests
@@ -189,10 +194,6 @@ def test_root_resource_request_none(app: Flask) -> None:
     data = str(response.data, 'utf-8')
     assert data is not None
 
-
-def test_get_invalid_headers(app: Flask) -> None:
-    with raises(AuthenticationError):
-        app.get('/register')
 
 # Tokens resource tests
 

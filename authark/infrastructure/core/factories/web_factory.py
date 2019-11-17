@@ -17,8 +17,6 @@ class WebFactory(CryptoFactory):
         super().__init__(config)
 
     def middleware_authenticate(
-            self, jwt_supplier: JwtSupplier,
-            tenant_supplier: TenantSupplier,
+            self, tenant_supplier: TenantSupplier,
             session_coordinator: SessionCoordinator) -> Authenticate:
-        return Authenticate(
-            jwt_supplier, tenant_supplier, session_coordinator)
+        return Authenticate(tenant_supplier, session_coordinator)
