@@ -19,8 +19,8 @@ class AuthCoordinator:
         self.access_service = access_service
         self.refresh_token_service = refresh_token_service
 
-    def authenticate(self, username: str, password: str, client: str
-                     ) -> TokensDict:
+    def authenticate(self, username: str, password: str, client: str,
+                     dominion: str = None) -> TokensDict:
         user = self._find_user(username)
         credentials = self.credential_repository.search([
             ('user_id', '=', user.id), ('type', '=', 'password')])

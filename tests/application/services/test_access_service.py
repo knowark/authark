@@ -1,5 +1,5 @@
 from inspect import signature
-from authark.application.models import User, Token
+from authark.application.models import User, Token, Dominion
 from authark.application.services import Tenant, AccessService
 
 
@@ -13,7 +13,7 @@ def test_access_service_generate_token(access_service) -> None:
 def test_access_service_build_payload(access_service) -> None:
     tenant = Tenant(name='Default')
     user = User(id='1', username='johndoe', email='johndoe')
-    payload = access_service._build_payload(tenant, user)
+    payload = access_service._build_payload(tenant, user, None)
 
     assert isinstance(payload, dict)
     assert 'tid' in payload
@@ -21,6 +21,7 @@ def test_access_service_build_payload(access_service) -> None:
     assert 'name' in payload
     assert 'email' in payload
     assert 'attributes' in payload
+    assert 'roles' in payload
     assert 'authorization' in payload
 
 
@@ -44,6 +45,17 @@ def test_access_service_build_authorization(access_service) -> None:
     assert isinstance(authorization, dict)
     assert 'Data Server' in authorization
     assert 'admin' in authorization['Data Server']['roles']
+
+
+def test_access_service_build_roles(access_service) -> None:
+    user = User(id='1', username='johndoe', email='johndoe')
+    dominion = Dominion(id='1', name='Data Server',
+                        url="https://dataserver.nubark.com")
+    roles = access_service._build_roles(user, dominion)
+
+    assert isinstance(roles, list)
+
+    assert 'admin' in roles
 
 
 def test_access_service_build_permissions(access_service) -> None:

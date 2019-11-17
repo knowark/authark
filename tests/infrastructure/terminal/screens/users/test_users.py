@@ -30,7 +30,7 @@ def test_users_show_roles_screen(users_screen):
         users_screen.env.holder.original_widget, UsersRolesScreen)
 
 
-def test_users_screen_keypress(users_screen):
+def xtest_users_screen_keypress(users_screen):
     users_screen.pile.focus_position = 1
     users_screen.keypress(None, 'A')
     assert isinstance(

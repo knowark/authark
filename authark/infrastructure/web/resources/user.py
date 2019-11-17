@@ -54,8 +54,8 @@ class UserResource(MethodView):
           201:
             description: "User created"
         """
-
-        user_registration_dict = UserAuthSchema().loads(request.data)
+        data = str(request.data, encoding='utf8')
+        user_registration_dict = UserAuthSchema().loads(data)
         tenant = user_registration_dict['tenant']
         tenants = self.tenant_supplier.search_tenants([('slug', '=', tenant)])
 

@@ -34,8 +34,8 @@ class TokenResource(MethodView):
                 schema:
                   $ref: "#/components/schemas/Token"
         """
-
-        token_request_dict = TokenRequestSchema().loads(request.data)
+        data = str(request.data, encoding='utf8')
+        token_request_dict = TokenRequestSchema().loads(data)
         tenant = token_request_dict['tenant']
         tenants = self.tenant_supplier.search_tenants([('slug', '=', tenant)])
 
