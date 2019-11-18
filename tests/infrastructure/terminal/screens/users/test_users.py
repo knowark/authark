@@ -30,7 +30,7 @@ def test_users_show_roles_screen(users_screen):
         users_screen.env.holder.original_widget, UsersRolesScreen)
 
 
-def xtest_users_screen_keypress(users_screen):
+def test_users_screen_keypress(users_screen):
     users_screen.pile.focus_position = 1
     users_screen.keypress(None, 'A')
     assert isinstance(
@@ -47,6 +47,7 @@ def xtest_users_screen_keypress(users_screen):
     users_screen.keypress(None, 'R')
     assert isinstance(
         users_screen.env.holder.original_widget, UsersRolesScreen)
+    users_screen.pile._selectable = False
     unhandled = users_screen.keypress((40, 40), 'F')
     assert unhandled == 'F'
 

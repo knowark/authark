@@ -58,6 +58,7 @@ class UsersScreen(Screen):
         return self._open_screen(screen)
 
     def keypress(self, size, key):
+        print('KEY:::', size, key)
         if self.pile.focus_position == 0:
             return super().keypress(size, key)
         if key in ('a', 'A'):
@@ -74,6 +75,5 @@ class UsersScreen(Screen):
                 "USER'S CREDENTIALS", self.env, self)
             return self._open_screen(screen)
         if key in ('r', 'R', 'enter'):
-            self.show_roles_screen()
-            return
-        return super().keypress(size, key)
+            return self.show_roles_screen()
+        return self.__super.keypress(size, key)
