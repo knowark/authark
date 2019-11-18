@@ -1,5 +1,5 @@
 from typing import Tuple
-from flask import request, jsonify, abort
+from flask import request, jsonify, abort, make_response
 from flask.views import MethodView
 from marshmallow import ValidationError
 from ..helpers import get_request_filter
@@ -12,6 +12,21 @@ class UserResource(MethodView):
         self.auth_coordinator = resolver['AuthCoordinator']
         self.tenant_supplier = resolver['TenantSupplier']
         self.authark_reporter = resolver['AutharkReporter']
+
+    def head(self) -> int:
+        """
+        ---
+        summary: Return users headers.
+        tags:
+          - Users
+        """
+        domain, _, _ = get_request_filter(request)
+
+        response = make_response()
+        response.headers['Total-Count'] = len(
+            self.authark_reporter.search_users(domain, None, None))
+
+        return response
 
     def get(self):
         """

@@ -37,7 +37,8 @@ class StandardAutharkReporter(AutharkReporter):
         self.dominion_repository = dominion_repository
         self.role_repository = role_repository
 
-    def search_users(self, domain: QueryDomain) -> UserDictList:
+    def search_users(self, domain: QueryDomain,
+                     limit=100, offset=0) -> UserDictList:
         return [vars(user) for user in sorted(
             self.user_repository.search(domain),
             key=lambda x: x.username)]

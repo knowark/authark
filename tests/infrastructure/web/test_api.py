@@ -215,6 +215,13 @@ def test_get_users(app: Flask, headers: dict) -> None:
     assert len(json.loads(str(response.data, 'utf-8'))) == 1
 
 
+def test_users_head(app: Flask, headers) -> None:
+    response = app.head('/users', headers=headers)
+    count = response.headers.get('Total-Count')
+
+    assert int(count) == 2
+
+
 def test_get_filter_error(app: Flask, headers: dict) -> None:
     response = app.get(
         '/register?filter=[** BAD FILTER **]', headers=headers)
