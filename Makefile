@@ -31,7 +31,8 @@ coverage:
 	export COVERAGE_FILE=$(COVFILE); pytest -x \
 	--cov=$(PWD)/$(PROJECT) $(PWD)/tests/ \
 	--cov-report term-missing -s -vv \
-	-o cache_dir=/tmp/pytest/cache
+	-o cache_dir=/tmp/pytest/cache \
+	-p no:warnings
 
 update:
 	pip-review --auto
