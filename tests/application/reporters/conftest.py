@@ -1,7 +1,6 @@
 from pytest import fixture, raises
 from authark.application.models import (
-    User, Credential, Dominion, Role, Ranking,
-    Policy, Resource)
+    User, Credential, Dominion, Role, Ranking, Resource)
 from authark.application.utilities import (
     ExpressionParser, Tenant, StandardTenantProvider)
 from authark.application.repositories import (
@@ -10,7 +9,6 @@ from authark.application.repositories import (
     DominionRepository, MemoryDominionRepository,
     RoleRepository, MemoryRoleRepository,
     RankingRepository, MemoryRankingRepository,
-    PolicyRepository, MemoryPolicyRepository,
     ResourceRepository, MemoryResourceRepository)
 from authark.application.reporters import (
     AutharkReporter, StandardAutharkReporter,
@@ -96,19 +94,6 @@ def ranking_repository() -> RankingRepository:
     return ranking_repository
 
 
-@fixture
-def policy_repository() -> PolicyRepository:
-    tenant_provider = StandardTenantProvider(Tenant(name="Default"))
-    policy_dict = {
-        "default": {
-            "1": Policy(id='1', name="Administrators Only", value="admin")
-        }
-    }
-    parser = ExpressionParser()
-    policy_repository = MemoryPolicyRepository(parser, tenant_provider)
-    policy_repository.load(policy_dict)
-    return policy_repository
-
 
 @fixture
 def resource_repository() -> ResourceRepository:
@@ -129,19 +114,19 @@ def resource_repository() -> ResourceRepository:
 @fixture
 def authark_reporter(
         user_repository, credential_repository,
-        dominion_repository, role_repository, policy_repository,
+        dominion_repository, role_repository,
         resource_repository
 ) -> AutharkReporter:
     return StandardAutharkReporter(user_repository, credential_repository,
                                    dominion_repository, role_repository,
-                                   policy_repository, resource_repository)
+                                   resource_repository)
 
 
 @fixture
 def composing_reporter(
         dominion_repository, role_repository, ranking_repository,
-        resource_repository, policy_repository
+        resource_repository
 ) -> ComposingReporter:
     return StandardComposingReporter(
         dominion_repository, role_repository, ranking_repository,
-        resource_repository, policy_repository)
+        resource_repository)

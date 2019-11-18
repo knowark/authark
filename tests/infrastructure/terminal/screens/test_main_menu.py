@@ -4,7 +4,6 @@ from authark.infrastructure.terminal.screens.main_menu import MainMenu
 from authark.infrastructure.terminal.screens.users import UsersScreen
 from authark.infrastructure.terminal.screens.dominions import DominionsScreen
 from authark.infrastructure.terminal.screens.tenants import TenantsScreen
-from authark.infrastructure.terminal.screens.policies import PoliciesScreen
 
 
 @fixture
@@ -34,11 +33,6 @@ def test_main_menu_show_dominions_screen(main_menu):
 def test_main_menu_show_tenants_screen(main_menu):
     main_menu.show_tenants_screen()
     assert isinstance(main_menu.env.holder.original_widget, TenantsScreen)
-
-
-def test_main_menu_show_policies_screen(main_menu):
-    main_menu.show_policies_screen()
-    assert isinstance(main_menu.env.holder.original_widget, PoliciesScreen)
 
 
 def test_main_menu_keypress_tenant_screen(main_menu):

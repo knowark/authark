@@ -5,14 +5,13 @@ from flask import Flask
 from injectark import Injectark
 from authark.application.models import (
     User, Credential, Dominion, Role, Ranking,
-    Resource, Policy)
+    Resource)
 from authark.application.utilities import (
     ExpressionParser, StandardTenantProvider, Tenant)
 from authark.application.repositories import (
     MemoryUserRepository, MemoryCredentialRepository,
     MemoryDominionRepository, MemoryRoleRepository,
-    MemoryRankingRepository, MemoryResourceRepository,
-    MemoryPolicyRepository)
+    MemoryRankingRepository, MemoryResourceRepository)
 from authark.application.services import MemoryHashService, AccessService
 from authark.application.coordinators import (
     AuthCoordinator, SessionCoordinator)
@@ -83,12 +82,6 @@ def resolver():
                           dominion_id='1')
         }
     })
-    policy_repository = MemoryPolicyRepository(parser, tenant_provider)
-    policy_repository.load({
-        "default": {
-            "001": Policy(id='001', name='First Role Only', value="1")
-        }
-    })
 
     access_token_service = PyJWTAccessTokenService(
         'TESTSECRET', 'HS256', 3600)
@@ -96,8 +89,7 @@ def resolver():
     access_service = AccessService(
         ranking_repository, role_repository,
         dominion_repository, resource_repository,
-        policy_repository, access_token_service,
-        tenant_provider)
+        access_token_service, tenant_provider)
 
     refresh_token_service = PyJWTRefreshTokenService(
         'REFRESHSECRET', 'HS256', 3600, 3600)
@@ -115,7 +107,6 @@ def resolver():
         credential_repository=credential_repository,
         dominion_repository=dominion_repository,
         role_repository=role_repository,
-        policy_repository=policy_repository,
         resource_repository=resource_repository
     )
 

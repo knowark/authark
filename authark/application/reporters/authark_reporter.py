@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from authark.application.repositories import (
     UserRepository, CredentialRepository, DominionRepository,
-    RoleRepository, PolicyRepository, ResourceRepository)
+    RoleRepository, ResourceRepository)
 from .types import (
     QueryDomain, UserDictList, CredentialDictList,
     DominionDictList, RoleDictList, ResultDictList)
@@ -25,9 +25,7 @@ class AutharkReporter(ABC):
     def search_roles(self, domain: QueryDomain) -> RoleDictList:
         """Search Authark's roles"""
 
-    @abstractmethod
-    def search_policies(self, domain: QueryDomain) -> ResultDictList:
-        """Search Authark's policies"""
+
 
     @abstractmethod
     def search_resources(self, domain: QueryDomain) -> ResultDictList:
@@ -40,13 +38,11 @@ class StandardAutharkReporter(AutharkReporter):
                  credential_repository: CredentialRepository,
                  dominion_repository: DominionRepository,
                  role_repository: RoleRepository,
-                 policy_repository: PolicyRepository,
                  resource_repository: ResourceRepository) -> None:
         self.user_repository = user_repository
         self.credential_repository = credential_repository
         self.dominion_repository = dominion_repository
         self.role_repository = role_repository
-        self.policy_repository = policy_repository
         self.resource_repository = resource_repository
 
     def search_users(self, domain: QueryDomain) -> UserDictList:
@@ -66,11 +62,6 @@ class StandardAutharkReporter(AutharkReporter):
     def search_roles(self, domain: QueryDomain) -> RoleDictList:
         return [vars(role) for role in
                 sorted(self.role_repository.search(domain),
-                       key=lambda x: x.name)]
-
-    def search_policies(self, domain: QueryDomain) -> RoleDictList:
-        return [vars(policy) for policy in
-                sorted(self.policy_repository.search(domain),
                        key=lambda x: x.name)]
 
     def search_resources(self, domain: QueryDomain) -> RoleDictList:

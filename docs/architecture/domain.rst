@@ -57,14 +57,6 @@ core, and so are the **Dominion** and **Role**.
     <tr><td port="id">id</td></tr>
     </table>>];
 
-    Policy [label=<
-    <table border="0" cellborder="1" cellspacing="0">
-    <tr><td><i>Policy</i></td></tr>
-    <tr><td port="id">id</td></tr>
-    <tr><td port="type">type</td></tr> 
-    <tr><td port="value">value</td></tr>
-    </table>>];
-
     Ranking:user_id -> User:id;
     Ranking:role_id -> Role:id;
     Credential:dominion_id ->  Dominion:id;

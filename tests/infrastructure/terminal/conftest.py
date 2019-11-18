@@ -1,7 +1,7 @@
 from pytest import fixture
 from injectark import Injectark
 from authark.application.models import (
-    User, Dominion, Role, Policy, Resource, Ranking)
+    User, Dominion, Role, Resource, Ranking)
 from authark.application.services import Tenant
 from authark.infrastructure.terminal.main import Main
 from authark.infrastructure.core import TrialConfig, build_factory
@@ -36,12 +36,6 @@ def context():
         "knowark": {
             "1": Role(id='1', name='manager', dominion_id='1',
                       description='Production Manager')
-        }
-    })
-    resolver['ComposingReporter'].policy_repository.load({
-        "knowark": {
-            "1": Policy(id='1', type='string', name='Function access',
-                        value="enabled")
         }
     })
     resolver['ComposingReporter'].resource_repository.load({

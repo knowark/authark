@@ -9,5 +9,4 @@ from .ranking_repository import (
     RankingRepository, MemoryRankingRepository)
 from .role_repository import RoleRepository, MemoryRoleRepository
 from .resource_repository import ResourceRepository, MemoryResourceRepository
-from .policy_repository import PolicyRepository, MemoryPolicyRepository
 from ..utilities import QueryDomain

@@ -4,7 +4,6 @@ from .... import __version__
 from ..framework import Screen, Environment
 from .users import UsersScreen
 from .dominions import DominionsScreen
-from .policies import PoliciesScreen
 from .tenants import TenantsScreen
 
 
@@ -28,8 +27,7 @@ class MainMenu(Screen):
         widget_list = [
             urwid.Divider(),
             self._build_menu_option('Users', self.show_users_screen),
-            self._build_menu_option('Dominions', self.show_dominions_screen),
-            self._build_menu_option('Policies', self.show_policies_screen)
+            self._build_menu_option('Dominions', self.show_dominions_screen)
         ]
 
         body = urwid.ListBox(urwid.SimpleFocusListWalker(widget_list))
@@ -61,10 +59,6 @@ class MainMenu(Screen):
 
     def show_dominions_screen(self, button=None):
         screen = DominionsScreen('DOMINIONS', self.env)
-        return self._open_screen(screen)
-
-    def show_policies_screen(self, button=None):
-        screen = PoliciesScreen('POLICIES', self.env)
         return self._open_screen(screen)
 
     def keypress(self, size, key):

@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from authark.application.repositories import (
     UserRepository, DominionRepository, RoleRepository, RankingRepository,
-    ResourceRepository, PolicyRepository)
+    ResourceRepository)
 from .types import (
     QueryDomain, UserDictList, DominionDictList, RoleDictList,
     ExtendedRankingDictList, ExtendedDictList)
@@ -20,14 +20,12 @@ class StandardComposingReporter(ComposingReporter):
                  dominion_repository: DominionRepository,
                  role_repository: RoleRepository,
                  ranking_repository: RankingRepository,
-                 resource_repository: ResourceRepository,
-                 policy_repository: PolicyRepository
+                 resource_repository: ResourceRepository
                  ) -> None:
         self.dominion_repository = dominion_repository
         self.role_repository = role_repository
         self.ranking_repository = ranking_repository
         self.resource_repository = resource_repository
-        self.policy_repository = policy_repository
 
     def list_user_roles(self, user_id: str) -> ExtendedRankingDictList:
         rankings = self.ranking_repository.search(

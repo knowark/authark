@@ -2,7 +2,7 @@ from typing import Dict
 from pytest import fixture, raises
 from authark.application.models import (
     AuthError, User, Credential, Token, Dominion, Role, Ranking,
-    Policy, Resource)
+    Resource)
 from authark.application.utilities import (
     ExpressionParser, TenantProvider, StandardTenantProvider, Tenant)
 from authark.application.repositories import (
@@ -11,7 +11,6 @@ from authark.application.repositories import (
     DominionRepository, MemoryDominionRepository,
     RoleRepository, MemoryRoleRepository,
     RankingRepository, MemoryRankingRepository,
-    PolicyRepository, MemoryPolicyRepository,
     ResourceRepository, MemoryResourceRepository)
 from authark.application.services import (
     TokenService, MemoryTokenService, AccessService,
@@ -119,21 +118,6 @@ def mock_ranking_repository() -> RankingRepository:
         parser, tenant_provider)
     ranking_repository.load(rankings_dict)
     return ranking_repository
-
-
-@fixture
-def mock_policy_repository() -> PolicyRepository:
-    tenant_provider = StandardTenantProvider(Tenant(name="Default"))
-    policy_dict = {
-        "default": {
-            "001": Policy(id='001', name='First Role Only', value="1")
-        }
-    }
-    parser = ExpressionParser()
-    policy_repository = MemoryPolicyRepository(
-        parser, tenant_provider)
-    policy_repository.load(policy_dict)
-    return policy_repository
 
 
 @fixture
@@ -245,13 +229,12 @@ def management_coordinator(
     mock_dominion_repository: DominionRepository,
     mock_role_repository: RoleRepository,
     mock_ranking_repository: RankingRepository,
-    mock_policy_repository: PolicyRepository,
     mock_resource_repository: ResourceRepository
 ) -> ManagementCoordinator:
     return ManagementCoordinator(
         mock_user_repository, mock_dominion_repository,
         mock_role_repository, mock_ranking_repository,
-        mock_policy_repository, mock_resource_repository)
+        mock_resource_repository)
 
 
 @fixture
@@ -279,9 +262,8 @@ def session_coordinator(
 @fixture
 def access_service(mock_ranking_repository, mock_role_repository,
                    mock_dominion_repository, mock_resource_repository,
-                   mock_policy_repository, mock_token_service,
-                   mock_tenant_provider):
+                   mock_token_service, mock_tenant_provider):
     return AccessService(
         mock_ranking_repository, mock_role_repository,
         mock_dominion_repository, mock_resource_repository,
-        mock_policy_repository, mock_token_service, mock_tenant_provider)
+        mock_token_service, mock_tenant_provider)

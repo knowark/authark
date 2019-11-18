@@ -1,8 +1,8 @@
 from typing import Dict
-from ..models import Dominion, Role, Ranking, Policy, Resource
+from ..models import Dominion, Role, Ranking, Resource
 from ..repositories import (
     UserRepository, DominionRepository, RoleRepository, RankingRepository,
-    PolicyRepository, ResourceRepository)
+    ResourceRepository)
 from .types import DominionDict, RoleDict
 
 
@@ -12,13 +12,11 @@ class ManagementCoordinator:
                  dominion_repository: DominionRepository,
                  role_repository: RoleRepository,
                  ranking_repository: RankingRepository,
-                 policy_repository: PolicyRepository,
                  resource_repository: ResourceRepository) -> None:
         self.user_repository = user_repository
         self.dominion_repository = dominion_repository
         self.role_repository = role_repository
         self.ranking_repository = ranking_repository
-        self.policy_repository = policy_repository
         self.resource_repository = resource_repository
 
     def create_dominion(self, dominion_dict: DominionDict) -> None:
@@ -37,15 +35,6 @@ class ManagementCoordinator:
     def remove_resource(self, resource_id: str) -> bool:
         resource = self.resource_repository.get(resource_id)
         self.resource_repository.remove(resource)
-        return True
-
-    def create_policy(self, policy_dict: Dict[str, str]) -> None:
-        policy = Policy(**policy_dict)
-        self.policy_repository.add(policy)
-
-    def remove_policy(self, policy_id: str) -> bool:
-        policy = self.policy_repository.get(policy_id)
-        self.policy_repository.remove(policy)
         return True
 
     def create_role(self, role_dict: RoleDict) -> None:

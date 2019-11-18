@@ -30,9 +30,6 @@ class DevelopmentConfig(Config):
             "RankingRepository": {
                 "method": "memory_ranking_repository"
             },
-            "PolicyRepository": {
-                "method": "memory_policy_repository"
-            },
             "ResourceRepository": {
                 "method": "memory_resource_repository"
             },

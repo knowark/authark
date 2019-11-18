@@ -6,7 +6,6 @@ from .repositories import (
     JsonRepository,
     JsonUserRepository,
     JsonRankingRepository,
-    JsonPolicyRepository,
     JsonResourceRepository
 )
 from .json_import_service import JsonImportService

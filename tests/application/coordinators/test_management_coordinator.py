@@ -39,21 +39,6 @@ def test_management_coordinator_remove_resource(management_coordinator):
     assert len(management_coordinator.resource_repository.data['default']) == 0
 
 
-def test_management_coordinator_create_policy(management_coordinator):
-    policy_dict = dict(
-        id='002', name='Records After 2018', type='domain',
-        value='[("date", ">", "2018-12-31")]')
-    management_coordinator.create_policy(policy_dict)
-    assert len(management_coordinator.policy_repository.data['default']) == 2
-    assert '002' in management_coordinator.policy_repository.data['default']
-
-
-def test_management_coordinator_remove_policy(management_coordinator):
-    policy_id = '001'
-    management_coordinator.remove_policy(policy_id)
-    assert len(management_coordinator.policy_repository.data['default']) == 0
-
-
 def test_management_coordinator_create_role(management_coordinator):
     role_dict = dict(
         id='2', name='admin', dominion_id='abc001',

@@ -66,9 +66,6 @@ def mock_strategy():
         "RankingRepository": {
             "method": "json_ranking_repository"
         },
-        "PolicyRepository": {
-            "method": "json_policy_repository"
-        },
         "ResourceRepository": {
             "method": "json_resource_repository"
         },
