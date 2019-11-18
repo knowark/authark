@@ -58,7 +58,6 @@ class UsersScreen(Screen):
         return self._open_screen(screen)
 
     def keypress(self, size, key):
-        print('KEY:::', size, key)
         if self.pile.focus_position == 0:
             return super().keypress(size, key)
         if key in ('a', 'A'):
