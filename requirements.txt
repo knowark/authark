@@ -9,7 +9,6 @@ Babel==2.7.0
 blinker==1.4
 blockdiag==1.5.4
 bump2version==0.5.11
-bumpversion==0.5.3
 certifi==2019.9.11
 chardet==3.0.4
 Click==7.0
