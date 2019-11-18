@@ -7,8 +7,7 @@ from ....application.repositories import (
     RoleRepository, MemoryRoleRepository,
     RankingRepository, MemoryRankingRepository,
     PolicyRepository, MemoryPolicyRepository,
-    ResourceRepository, MemoryResourceRepository,
-    PermissionRepository, MemoryPermissionRepository)
+    ResourceRepository, MemoryResourceRepository)
 from ....application.services import (
     HashService, MemoryHashService,
     TokenService, MemoryTokenService,
@@ -17,8 +16,7 @@ from ....application.services import (
     ImportService, MemoryImportService, AccessService)
 from ....application.coordinators import (
     AuthCoordinator, ManagementCoordinator,
-    ImportCoordinator, AssignmentCoordinator,
-    SessionCoordinator)
+    ImportCoordinator, SessionCoordinator)
 from ....application.reporters import (
     StandardAutharkReporter, StandardComposingReporter)
 from ..configuration import Config
@@ -77,12 +75,6 @@ class MemoryFactory(Factory):
     ) -> MemoryResourceRepository:
         return MemoryResourceRepository(expression_parser, tenant_provider)
 
-    def memory_permission_repository(
-            self, expression_parser: ExpressionParser,
-            tenant_provider: TenantProvider
-    ) -> MemoryPermissionRepository:
-        return MemoryPermissionRepository(expression_parser, tenant_provider)
-
     # Services
 
     def memory_hash_service(self) -> MemoryHashService:
@@ -139,19 +131,6 @@ class MemoryFactory(Factory):
                                  credential_repository, role_repository,
                                  ranking_repository, dominion_repository)
 
-    def assignment_coordinator(
-        self,
-        user_repository: UserRepository,
-        role_repository: RoleRepository,
-        ranking_repository: RankingRepository,
-        policy_repository: PolicyRepository,
-        resource_repository: ResourceRepository,
-        permission_repository: PermissionRepository
-    ) -> AssignmentCoordinator:
-        return AssignmentCoordinator(
-            user_repository, role_repository, ranking_repository,
-            policy_repository, resource_repository, permission_repository)
-
     def session_coordinator(
         self, tenant_provider: TenantProvider
     ) -> SessionCoordinator:
@@ -162,15 +141,13 @@ class MemoryFactory(Factory):
             role_repository: RoleRepository,
             dominion_repository: DominionRepository,
             resource_repository: ResourceRepository,
-            permission_repository: PermissionRepository,
             policy_repository: PolicyRepository,
             token_service: AccessTokenService,
             tenant_provider: TenantProvider) -> AccessService:
         return AccessService(
             ranking_repository, role_repository,
             dominion_repository, resource_repository,
-            permission_repository, policy_repository, token_service,
-            tenant_provider)
+            policy_repository, token_service, tenant_provider)
 
     # Reporters
 
@@ -192,12 +169,11 @@ class MemoryFactory(Factory):
         role_repository: RoleRepository,
         ranking_repository: RankingRepository,
         resource_repository: ResourceRepository,
-        policy_repository: PolicyRepository,
-        permission_repository: PermissionRepository
+        policy_repository: PolicyRepository
     ) -> StandardComposingReporter:
         return StandardComposingReporter(
             dominion_repository, role_repository, ranking_repository,
-            resource_repository, policy_repository, permission_repository)
+            resource_repository, policy_repository)
 
     def memory_tenant_supplier(self) -> TenantSupplier:
         return MemoryTenantSupplier()

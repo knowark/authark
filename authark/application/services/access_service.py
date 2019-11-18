@@ -4,8 +4,7 @@ from abc import ABC, abstractmethod
 from ..models import User, Token, Role, Dominion
 from ..repositories import (
     RankingRepository, RoleRepository, DominionRepository,
-    ResourceRepository, PermissionRepository,
-    PolicyRepository)
+    ResourceRepository, PolicyRepository)
 from ..utilities import TenantProvider, Tenant
 from .token_service import AccessTokenService
 
@@ -16,7 +15,6 @@ class AccessService:
                  role_repository: RoleRepository,
                  dominion_repository: DominionRepository,
                  resource_repository: ResourceRepository,
-                 permission_repository: PermissionRepository,
                  policy_repository: PolicyRepository,
                  token_service: AccessTokenService,
                  tenant_provider: TenantProvider) -> None:
@@ -24,7 +22,6 @@ class AccessService:
         self.role_repository = role_repository
         self.dominion_repository = dominion_repository
         self.resource_repository = resource_repository
-        self.permission_repository = permission_repository
         self.policy_repository = policy_repository
         self.token_service = token_service
         self.tenant_provider = tenant_provider

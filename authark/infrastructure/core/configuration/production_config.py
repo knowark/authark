@@ -46,9 +46,6 @@ class ProductionConfig(DevelopmentConfig):
             "ResourceRepository": {
                 "method": "json_resource_repository"
             },
-            "PermissionRepository": {
-                "method": "json_permission_repository"
-            },
             "HashService": {
                 "method": "passlib_hash_service"
             },

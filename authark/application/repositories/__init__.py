@@ -10,6 +10,4 @@ from .ranking_repository import (
 from .role_repository import RoleRepository, MemoryRoleRepository
 from .resource_repository import ResourceRepository, MemoryResourceRepository
 from .policy_repository import PolicyRepository, MemoryPolicyRepository
-from .permission_repository import (
-    PermissionRepository, MemoryPermissionRepository)
 from ..utilities import QueryDomain

@@ -36,9 +36,6 @@ class DevelopmentConfig(Config):
             "ResourceRepository": {
                 "method": "memory_resource_repository"
             },
-            "PermissionRepository": {
-                "method": "memory_permission_repository"
-            },
             "HashService": {
                 "method": "memory_hash_service"
             },
@@ -71,9 +68,6 @@ class DevelopmentConfig(Config):
             },
             "ImportCoordinator": {
                 "method": "import_coordinator"
-            },
-            "AssignmentCoordinator": {
-                "method": "assignment_coordinator"
             },
             "SessionCoordinator": {
                 "method": "session_coordinator"
