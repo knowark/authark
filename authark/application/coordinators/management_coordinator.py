@@ -1,8 +1,7 @@
 from typing import Dict
-from ..models import Dominion, Role, Ranking, Resource
+from ..models import Dominion, Role, Ranking
 from ..repositories import (
-    UserRepository, DominionRepository, RoleRepository, RankingRepository,
-    ResourceRepository)
+    UserRepository, DominionRepository, RoleRepository, RankingRepository)
 from .types import DominionDict, RoleDict
 
 
@@ -11,13 +10,11 @@ class ManagementCoordinator:
     def __init__(self, user_repository: UserRepository,
                  dominion_repository: DominionRepository,
                  role_repository: RoleRepository,
-                 ranking_repository: RankingRepository,
-                 resource_repository: ResourceRepository) -> None:
+                 ranking_repository: RankingRepository) -> None:
         self.user_repository = user_repository
         self.dominion_repository = dominion_repository
         self.role_repository = role_repository
         self.ranking_repository = ranking_repository
-        self.resource_repository = resource_repository
 
     def create_dominion(self, dominion_dict: DominionDict) -> None:
         dominion = Dominion(**dominion_dict)
@@ -26,15 +23,6 @@ class ManagementCoordinator:
     def remove_dominion(self, dominion_id: str) -> bool:
         dominion = self.dominion_repository.get(dominion_id)
         self.dominion_repository.remove(dominion)
-        return True
-
-    def create_resource(self, dominion_dict: DominionDict) -> None:
-        resource = Resource(**dominion_dict)
-        self.resource_repository.add(resource)
-
-    def remove_resource(self, resource_id: str) -> bool:
-        resource = self.resource_repository.get(resource_id)
-        self.resource_repository.remove(resource)
         return True
 
     def create_role(self, role_dict: RoleDict) -> None:

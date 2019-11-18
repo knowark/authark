@@ -5,8 +5,7 @@ from ....application.repositories import (
     CredentialRepository, MemoryCredentialRepository,
     DominionRepository, MemoryDominionRepository,
     RoleRepository, MemoryRoleRepository,
-    RankingRepository, MemoryRankingRepository,
-    ResourceRepository, MemoryResourceRepository)
+    RankingRepository, MemoryRankingRepository)
 from ....application.services import (
     HashService, MemoryHashService,
     TokenService, MemoryTokenService,
@@ -62,12 +61,6 @@ class MemoryFactory(Factory):
     ) -> MemoryRankingRepository:
         return MemoryRankingRepository(expression_parser, tenant_provider)
 
-    def memory_resource_repository(
-            self, expression_parser: ExpressionParser,
-            tenant_provider: TenantProvider
-    ) -> MemoryResourceRepository:
-        return MemoryResourceRepository(expression_parser, tenant_provider)
-
     # Services
 
     def memory_hash_service(self) -> MemoryHashService:
@@ -103,13 +96,11 @@ class MemoryFactory(Factory):
         self, user_repository: UserRepository,
         dominion_repository: DominionRepository,
         role_repository: RoleRepository,
-        ranking_repository: RankingRepository,
-        resource_repository: ResourceRepository
+        ranking_repository: RankingRepository
     ) -> ManagementCoordinator:
         return ManagementCoordinator(
             user_repository, dominion_repository,
-            role_repository, ranking_repository,
-            resource_repository)
+            role_repository, ranking_repository)
 
     def import_coordinator(self,
                            import_service: ImportService,
@@ -132,12 +123,11 @@ class MemoryFactory(Factory):
             self, ranking_repository: RankingRepository,
             role_repository: RoleRepository,
             dominion_repository: DominionRepository,
-            resource_repository: ResourceRepository,
             token_service: AccessTokenService,
             tenant_provider: TenantProvider) -> AccessService:
         return AccessService(
             ranking_repository, role_repository,
-            dominion_repository, resource_repository,
+            dominion_repository,
             token_service, tenant_provider)
 
     # Reporters
@@ -147,22 +137,18 @@ class MemoryFactory(Factory):
         credential_repository: CredentialRepository,
         dominion_repository: DominionRepository,
         role_repository: RoleRepository,
-        resource_repository: ResourceRepository
     ) -> StandardAutharkReporter:
         return StandardAutharkReporter(
             user_repository, credential_repository,
-            dominion_repository, role_repository,
-            resource_repository)
+            dominion_repository, role_repository)
 
     def standard_composing_reporter(
         self, dominion_repository: DominionRepository,
         role_repository: RoleRepository,
-        ranking_repository: RankingRepository,
-        resource_repository: ResourceRepository
+        ranking_repository: RankingRepository
     ) -> StandardComposingReporter:
         return StandardComposingReporter(
-            dominion_repository, role_repository, ranking_repository,
-            resource_repository)
+            dominion_repository, role_repository, ranking_repository)
 
     def memory_tenant_supplier(self) -> TenantSupplier:
         return MemoryTenantSupplier()

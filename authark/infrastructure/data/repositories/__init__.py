@@ -4,4 +4,4 @@ from .json_role_repository import JsonRoleRepository
 from .json_repository import JsonRepository
 from .json_user_repository import JsonUserRepository
 from .json_ranking_repository import JsonRankingRepository
-from .json_resource_repository import JsonResourceRepository
+

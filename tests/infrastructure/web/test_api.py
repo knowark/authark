@@ -4,14 +4,13 @@ from pytest import fixture, raises
 from flask import Flask
 from injectark import Injectark
 from authark.application.models import (
-    User, Credential, Dominion, Role, Ranking,
-    Resource)
+    User, Credential, Dominion, Role, Ranking)
 from authark.application.utilities import (
     ExpressionParser, StandardTenantProvider, Tenant)
 from authark.application.repositories import (
     MemoryUserRepository, MemoryCredentialRepository,
     MemoryDominionRepository, MemoryRoleRepository,
-    MemoryRankingRepository, MemoryResourceRepository)
+    MemoryRankingRepository)
 from authark.application.services import MemoryHashService, AccessService
 from authark.application.coordinators import (
     AuthCoordinator, SessionCoordinator)
@@ -75,21 +74,13 @@ def resolver():
                           url="https://dataserver.nubark.com")
         }
     })
-    resource_repository = MemoryResourceRepository(parser, tenant_provider)
-    resource_repository.load({
-        "default": {
-            "1": Resource(id='1', name='employees',
-                          dominion_id='1')
-        }
-    })
 
     access_token_service = PyJWTAccessTokenService(
         'TESTSECRET', 'HS256', 3600)
 
     access_service = AccessService(
         ranking_repository, role_repository,
-        dominion_repository, resource_repository,
-        access_token_service, tenant_provider)
+        dominion_repository, access_token_service, tenant_provider)
 
     refresh_token_service = PyJWTRefreshTokenService(
         'REFRESHSECRET', 'HS256', 3600, 3600)
@@ -106,8 +97,7 @@ def resolver():
         user_repository=user_repository,
         credential_repository=credential_repository,
         dominion_repository=dominion_repository,
-        role_repository=role_repository,
-        resource_repository=resource_repository
+        role_repository=role_repository
     )
 
     resolver = Injectark()

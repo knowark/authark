@@ -26,19 +26,6 @@ def test_management_coordinator_remove_dominion(management_coordinator):
         'default']) == 0
 
 
-def test_management_coordinator_create_resource(management_coordinator):
-    resource_dict = dict(id='002', name='products', dominion_id='001')
-    management_coordinator.create_resource(resource_dict)
-    assert len(management_coordinator.resource_repository.data['default']) == 2
-    assert '002' in management_coordinator.resource_repository.data['default']
-
-
-def test_management_coordinator_remove_resource(management_coordinator):
-    resource_id = '1'
-    management_coordinator.remove_resource(resource_id)
-    assert len(management_coordinator.resource_repository.data['default']) == 0
-
-
 def test_management_coordinator_create_role(management_coordinator):
     role_dict = dict(
         id='2', name='admin', dominion_id='abc001',

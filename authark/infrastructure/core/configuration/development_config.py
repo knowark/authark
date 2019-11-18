@@ -30,9 +30,6 @@ class DevelopmentConfig(Config):
             "RankingRepository": {
                 "method": "memory_ranking_repository"
             },
-            "ResourceRepository": {
-                "method": "memory_resource_repository"
-            },
             "HashService": {
                 "method": "memory_hash_service"
             },

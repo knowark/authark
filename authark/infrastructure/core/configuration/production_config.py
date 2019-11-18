@@ -40,9 +40,6 @@ class ProductionConfig(DevelopmentConfig):
             "RankingRepository": {
                 "method": "json_ranking_repository"
             },
-            "ResourceRepository": {
-                "method": "json_resource_repository"
-            },
             "HashService": {
                 "method": "passlib_hash_service"
             },

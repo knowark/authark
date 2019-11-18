@@ -2,8 +2,7 @@ from pytest import fixture
 from unittest.mock import Mock
 from authark.infrastructure.data import (
     JsonCredentialRepository, JsonDominionRepository,
-    JsonRankingRepository, JsonResourceRepository,
-    JsonRoleRepository, JsonUserRepository)
+    JsonRankingRepository, JsonRoleRepository, JsonUserRepository)
 from authark.application.utilities import (
     ExpressionParser, StandardTenantProvider)
 
@@ -37,13 +36,6 @@ def test_json_ranking_repository_instantiation(
     json_ranking_repository = JsonRankingRepository(
         "", expresion_parser, tenant_provider)
     assert isinstance(json_ranking_repository, JsonRankingRepository)
-
-
-def test_json_resource_repository_instantiation(
-        expresion_parser, tenant_provider):
-    json_resource_repository = JsonResourceRepository(
-        "", expresion_parser, tenant_provider)
-    assert isinstance(json_resource_repository, JsonResourceRepository)
 
 
 def test_json_role_repository_instantiation(

@@ -5,8 +5,7 @@ from .repositories import (
     JsonRoleRepository,
     JsonRepository,
     JsonUserRepository,
-    JsonRankingRepository,
-    JsonResourceRepository
+    JsonRankingRepository
 )
 from .json_import_service import JsonImportService
 from .utils import load_json, LoadingError

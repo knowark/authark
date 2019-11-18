@@ -3,8 +3,7 @@ from typing import Dict, Any, List
 from abc import ABC, abstractmethod
 from ..models import User, Token, Role, Dominion
 from ..repositories import (
-    RankingRepository, RoleRepository, DominionRepository,
-    ResourceRepository)
+    RankingRepository, RoleRepository, DominionRepository)
 from ..utilities import TenantProvider, Tenant
 from .token_service import AccessTokenService
 
@@ -14,13 +13,11 @@ class AccessService:
     def __init__(self, ranking_repository: RankingRepository,
                  role_repository: RoleRepository,
                  dominion_repository: DominionRepository,
-                 resource_repository: ResourceRepository,
                  token_service: AccessTokenService,
                  tenant_provider: TenantProvider) -> None:
         self.ranking_repository = ranking_repository
         self.role_repository = role_repository
         self.dominion_repository = dominion_repository
-        self.resource_repository = resource_repository
         self.token_service = token_service
         self.tenant_provider = tenant_provider
 
