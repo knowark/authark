@@ -12,7 +12,6 @@ def test_user_creation_default():
     assert user.attributes == {}
     assert user.email == "eecheverry@nubark.com"
     assert user.name == ""
-    assert user.gender == ""
 
 
 def test_user_creation() -> None:
@@ -21,7 +20,6 @@ def test_user_creation() -> None:
         username="tebanep",
         email="eecheverry@nubark.com",
         name="Esteban Echeverry Pérez",
-        gender="male",
         attributes={
             'key_1': 'value_1',
             'key_2': 'value_2'
@@ -31,7 +29,6 @@ def test_user_creation() -> None:
     assert user.username == "tebanep"
     assert user.email == "eecheverry@nubark.com"
     assert user.name == "Esteban Echeverry Pérez"
-    assert user.gender == "male"
     assert user.attributes == {
         'key_1': 'value_1',
         'key_2': 'value_2'

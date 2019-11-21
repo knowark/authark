@@ -20,7 +20,6 @@ class UsersAddScreen(Screen):
         self.username = urwid.Edit()
         self.email = urwid.Edit()
         self.name = urwid.Edit()
-        self.gender = urwid.Edit()
         self.password = urwid.Edit()
 
         body = urwid.Pile([
@@ -30,8 +29,6 @@ class UsersAddScreen(Screen):
                 urwid.Text("Email: ", align='center'), self.email]),
             urwid.Columns([
                 urwid.Text("Name: ", align='center'), self.name]),
-            urwid.Columns([
-                urwid.Text("Gender: ", align='center'), self.gender]),
             urwid.Columns([
                 urwid.Text("Password: ", align='center'), self.password]),
         ])
@@ -53,7 +50,6 @@ class UsersAddScreen(Screen):
             user_dict['username'] = self.username.edit_text
             user_dict['email'] = self.email.edit_text
             user_dict['name'] = self.name.edit_text
-            user_dict['gender'] = self.gender.edit_text
             user_dict['password'] = self.password.edit_text
 
             user = self.auth_coordinator.register(user_dict)
@@ -143,7 +139,6 @@ class UsersUpdateScreen(Screen):
         username = self.selected_item.get('username')
         email = self.selected_item.get('email')
         name = self.selected_item.get('name')
-        gender = self.selected_item.get('gender')
 
         attributes = json.dumps(
             self.selected_item.get('attributes', {}),
@@ -154,7 +149,6 @@ class UsersUpdateScreen(Screen):
         self.username = urwid.Edit("> ", username)
         self.email = urwid.Edit("> ", email)
         self.name = urwid.Edit("> ", name)
-        self.gender = urwid.Edit("> ", gender)
         self.password = urwid.Edit("> ", "")
         self.attributes = urwid.Edit("", attributes, multiline=True)
 
@@ -165,8 +159,6 @@ class UsersUpdateScreen(Screen):
                 urwid.Text("Email: ", align='center'), self.email]),
             urwid.Columns([
                 urwid.Text("Name: ", align='center'), self.name]),
-            urwid.Columns([
-                urwid.Text("Gender: ", align='center'), self.gender]),
             urwid.Columns([
                 urwid.Text("Password: ", align='center'), self.password]),
             urwid.Columns([
@@ -190,7 +182,6 @@ class UsersUpdateScreen(Screen):
             self.selected_item['username'] = self.username.edit_text
             self.selected_item['email'] = self.email.edit_text
             self.selected_item['name'] = self.name.edit_text
-            self.selected_item['gender'] = self.gender.edit_text
 
             if self.password.edit_text:
                 self.selected_item['password'] = self.password.edit_text
