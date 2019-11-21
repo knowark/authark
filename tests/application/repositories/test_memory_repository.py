@@ -138,7 +138,7 @@ def test_memory_repository_search_limit(filled_memory_repository):
 def test_memory_repository_search_limit_zero(filled_memory_repository):
     items = filled_memory_repository.search([], limit=0)
 
-    assert len(items) == 3
+    assert len(items) == 0
 
 
 def test_memory_repository_search_offset(filled_memory_repository):

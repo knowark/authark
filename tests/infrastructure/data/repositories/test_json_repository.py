@@ -130,7 +130,7 @@ def test_json_repository_search_limit(json_repository):
 
 def test_json_repository_search_limit_zero(json_repository):
     items = json_repository.search([], limit=0)
-    assert len(items) == 3
+    assert len(items) == 0
 
 
 def test_json_repository_search_offset(json_repository):

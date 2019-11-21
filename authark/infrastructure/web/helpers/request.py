@@ -6,7 +6,7 @@ from flask import Request
 def get_request_filter(request: Request) -> Tuple:
     domain: List[Any] = []
     filter = request.args.get('filter')
-    limit = int(request.args.get('limit') or 0)
+    limit = int(request.args.get('limit') or 1000)
     offset = int(request.args.get('offset') or 0)
 
     if filter:

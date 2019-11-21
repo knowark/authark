@@ -49,7 +49,7 @@ class UserResource(MethodView):
 
         users = UserSchema().dump(
             self.authark_reporter.search_users(
-                domain), many=True)
+                domain, limit, offset), many=True)
 
         return jsonify(users)
 
