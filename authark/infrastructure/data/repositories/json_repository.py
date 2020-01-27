@@ -74,12 +74,15 @@ class JsonRepository(Repository, Generic[T]):
             if filter_function(item):
                 items.append(item)
 
-        if limit is not None:
-            items = items[:limit]
-        if offset is not None:
-            items = items[offset:]
+        # if limit is not None:
+        #     items = items[:limit]
+        # if offset is not None:
+        #     items = items[offset:]
 
-        return items
+        start_position = min(offset, len(items)-1)
+        end_position = min(offset+limit, len(items)-1)
+
+        return items[start_position:end_position]
 
     def remove(self, item: Union[T, List[T]]) -> bool:
         items = item if isinstance(item, list) else [item]
