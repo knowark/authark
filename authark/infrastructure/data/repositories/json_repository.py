@@ -74,10 +74,10 @@ class JsonRepository(Repository, Generic[T]):
             if filter_function(item):
                 items.append(item)
 
-        if limit is not None:
-            items = items[:limit]
         if offset is not None:
             items = items[offset:]
+        if limit is not None:
+            items = items[:limit]
 
         return items
 
