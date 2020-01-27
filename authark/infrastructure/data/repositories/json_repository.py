@@ -1,5 +1,4 @@
 import os
-import logging
 from pathlib import Path
 from json import load, dump
 from uuid import uuid4
