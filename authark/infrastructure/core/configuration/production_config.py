@@ -7,6 +7,7 @@ class ProductionConfig(DevelopmentConfig):
         super().__init__()
         self['mode'] = 'PROD'
         self['gunicorn'].update({
+            'limit_request_line': 0,
             'debug': True,
             'accesslog': '-',
             'loglevel': 'debug'
