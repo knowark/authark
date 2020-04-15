@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/authark/authark.svg?branch=master)](https://travis-ci.org/authark/authark) [![codecov](https://codecov.io/gh/authark/authark/branch/master/graph/badge.svg)](https://codecov.io/gh/authark/authark)
+[![Build Status](https://travis-ci.org/knowark/authark.svg?branch=master)](https://travis-ci.org/knowark/authark) [![codecov](https://codecov.io/gh/knowark/authark/branch/master/graph/badge.svg)](https://codecov.io/gh/knowark/authark)
 
 # Authark
 
@@ -10,7 +10,7 @@ Authentication and authorization server.
 
 # Coverage
 
-[![codecov](https://codecov.io/gh/authark/authark/branch/master/graph/sunburst.svg)](https://codecov.io/gh/authark)
+[![codecov](https://codecov.io/gh/knowark/authark/branch/master/graph/sunburst.svg)](https://codecov.io/gh/authark)
 
 # License
 
