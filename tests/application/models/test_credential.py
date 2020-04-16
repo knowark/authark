@@ -1,7 +1,7 @@
 from authark.application.models.credential import Credential
 
 
-def test_credential_creation() -> None:
+def test_credential_creation():
     id_ = "1"
     user_id = "af1209fade"
     value = "e9cee71ab932fde863338d08be4de9dfe39ea049bdafb342ce659ec5450b69ae"

@@ -1,7 +1,7 @@
 from authark.application.models.token import Token
 
 
-def test_token_creation() -> None:
+def test_token_creation():
     value = "xyz123"
 
     token = Token(value=value)

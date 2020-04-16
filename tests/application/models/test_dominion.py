@@ -1,7 +1,7 @@
 from authark.application.models import Dominion
 
 
-def test_dominion_creation() -> None:
+def test_dominion_creation():
     id_ = "af1209fade"
     name = "Data Server"
     url = "https://dataserver.nubark.com"

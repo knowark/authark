@@ -1,7 +1,7 @@
 from authark.application.models import Role
 
 
-def test_role_creation() -> None:
+def test_role_creation():
     id_ = "1"
     name = "admin"
     dominion_id = "1"

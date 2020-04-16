@@ -1,6 +1,9 @@
-class Credential:
-    def __init__(self, **attributes) -> None:
-        self.id = attributes.get('id', '')
+from .entity import Entity
+
+
+class Credential(Entity):
+    def __init__(self, **attributes):
+        super().__init__(**attributes)
         self.user_id = attributes.get('user_id', '')
         self.type = attributes.get('type', 'password')
         self.client = attributes.get('client', 'ALL')

@@ -1,3 +1,4 @@
+from .entity import Entity, T
 from .credential import Credential
 from .dominion import Dominion
 from .error import AuthError

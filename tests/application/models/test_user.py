@@ -14,7 +14,7 @@ def test_user_creation_default():
     assert user.name == ""
 
 
-def test_user_creation() -> None:
+def test_user_creation():
     user = User(
         id="af1209fade",
         username="tebanep",

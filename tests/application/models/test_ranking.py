@@ -1,7 +1,7 @@
 from authark.application.models import Ranking
 
 
-def test_ranking_creation() -> None:
+def test_ranking_creation():
     id_ = "1"
     user_id = "1"
     role_id = "1"
