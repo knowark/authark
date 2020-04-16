@@ -1,16 +1,16 @@
 from pytest import fixture
 from unittest.mock import Mock
 from fnmatch import fnmatchcase
-from authark.application.utilities import ExpressionParser
+from authark.application.utilities import QueryParser
 
 
 @fixture
-def parser() -> ExpressionParser:
-    return ExpressionParser()
+def parser() -> QueryParser:
+    return QueryParser()
 
 
 def test_expression_parser_object_creation(parser):
-    assert isinstance(parser, ExpressionParser)
+    assert isinstance(parser, QueryParser)
 
 
 def test_expression_parser_parse_tuple(parser):

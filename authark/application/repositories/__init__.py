@@ -1,11 +1,9 @@
-from .memory_repository import MemoryRepository
 from .repository import Repository
-from .user_repository import UserRepository, MemoryUserRepository
-from .credential_repository import (
-    CredentialRepository, MemoryCredentialRepository)
-from .dominion_repository import (
-    DominionRepository, MemoryDominionRepository)
-from .ranking_repository import (
-    RankingRepository, MemoryRankingRepository)
-from .role_repository import RoleRepository, MemoryRoleRepository
+from .memory_repository import MemoryRepository
+from .memory_model_repositories import (
+    CredentialRepository, MemoryCredentialRepository,
+    DominionRepository, MemoryDominionRepository,
+    RankingRepository, MemoryRankingRepository,
+    RoleRepository, MemoryRoleRepository,
+    UserRepository, MemoryUserRepository)
 from ..utilities import QueryDomain

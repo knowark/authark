@@ -1,5 +1,5 @@
 from .entity import Entity
-from .types import Attributes
+from ..utilities.types import Attributes
 
 
 class User(Entity):

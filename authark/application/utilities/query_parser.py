@@ -1,9 +1,9 @@
-from typing import Sequence, List, Union, Callable
+from typing import List, Union, Callable, Sequence
 from fnmatch import fnmatchcase
 from .types import TermTuple
 
 
-class ExpressionParser:
+class QueryParser:
     def __init__(self) -> None:
         self.comparison_dict = {
             '=': lambda field, value: (
