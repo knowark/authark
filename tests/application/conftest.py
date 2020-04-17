@@ -42,7 +42,7 @@ def mock_tenant_provider() -> StandardTenantProvider:
 
 @fixture
 def mock_user_repository(mock_tenant_provider, parser) -> UserRepository:
-    mock_user_repository = MemoryUserRepository(parser, mock_user_repository)
+    mock_user_repository = MemoryUserRepository(parser, mock_tenant_provider)
     mock_user_repository.load({
         "default": {
             "1": User(
@@ -63,7 +63,7 @@ def mock_user_repository(mock_tenant_provider, parser) -> UserRepository:
 def mock_credential_repository(
         mock_tenant_provider, parser) -> CredentialRepository:
     mock_credential_repository = MemoryCredentialRepository(
-        parser, mock_credential_repository)
+        parser, mock_tenant_provider)
     mock_credential_repository.load({
         "default": {
             "1": Credential(id='1', user_id='1', value="HASHED: PASS1"),
@@ -198,49 +198,34 @@ def access_service(mock_ranking_repository, mock_role_repository,
 
 # COORDINATORS
 
-# @fixture
-# def auth_coordinator(mock_user_repository: UserRepository,
-#                      mock_credential_repository: CredentialRepository,
-#                      mock_dominion_repository: DominionRepository,
-#                      mock_hash_service: HashService,
-#                      access_service: AccessService,
-#                      mock_refresh_token_service: RefreshTokenService
-#                      ) -> AuthCoordinator:
-#     return AuthCoordinator(mock_user_repository, mock_credential_repository,
-#                            mock_dominion_repository,
-#                            mock_hash_service, access_service,
-#                            mock_refresh_token_service)
+
+@fixture
+def auth_coordinator(mock_user_repository, mock_credential_repository,
+                     mock_dominion_repository, mock_hash_service,
+                     access_service, mock_refresh_token_service):
+    return AuthCoordinator(mock_user_repository, mock_credential_repository,
+                           mock_dominion_repository, mock_hash_service,
+                           access_service, mock_refresh_token_service)
 
 
-# @fixture
-# def management_coordinator(
-#     mock_user_repository: UserRepository,
-#     mock_dominion_repository: DominionRepository,
-#     mock_role_repository: RoleRepository,
-#     mock_ranking_repository: RankingRepository
-# ) -> ManagementCoordinator:
-#     return ManagementCoordinator(
-#         mock_user_repository, mock_dominion_repository,
-#         mock_role_repository, mock_ranking_repository)
+@fixture
+def management_coordinator(
+        mock_user_repository, mock_dominion_repository,
+        mock_role_repository, mock_ranking_repository):
+    return ManagementCoordinator(mock_user_repository, mock_dominion_repository,
+                                 mock_role_repository, mock_ranking_repository)
 
 
-# @fixture
-# def import_coordinator(
-#     mock_import_service: ImportService,
-#     mock_user_repository: UserRepository,
-#     mock_credential_repository: CredentialRepository,
-#     mock_role_repository: RoleRepository,
-#     mock_ranking_repository: RankingRepository,
-#     mock_dominion_repository: DominionRepository
-# ) -> ImportCoordinator:
-#     return ImportCoordinator(
-#         mock_import_service, mock_user_repository,
-#         mock_credential_repository, mock_role_repository,
-#         mock_ranking_repository, mock_dominion_repository)
+@fixture
+def import_coordinator(
+        mock_import_service, mock_user_repository,
+        mock_credential_repository, mock_role_repository,
+        mock_ranking_repository, mock_dominion_repository):
+    return ImportCoordinator(mock_import_service, mock_user_repository,
+                             mock_credential_repository, mock_role_repository,
+                             mock_ranking_repository, mock_dominion_repository)
 
 
-# @fixture
-# def session_coordinator(
-#     mock_tenant_provider: TenantProvider
-# ) -> SessionCoordinator:
-#     return SessionCoordinator(mock_tenant_provider)
+@fixture
+def session_coordinator(mock_tenant_provider):
+    return SessionCoordinator(mock_tenant_provider)

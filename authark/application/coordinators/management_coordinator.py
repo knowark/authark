@@ -16,38 +16,38 @@ class ManagementCoordinator:
         self.role_repository = role_repository
         self.ranking_repository = ranking_repository
 
-    def create_dominion(self, dominion_dict: DominionDict) -> None:
+    async def create_dominion(self, dominion_dict: DominionDict) -> None:
         dominion = Dominion(**dominion_dict)
-        self.dominion_repository.add(dominion)
+        await self.dominion_repository.add(dominion)
 
-    def remove_dominion(self, dominion_id: str) -> bool:
-        dominion = self.dominion_repository.get(dominion_id)
-        self.dominion_repository.remove(dominion)
+    async def remove_dominion(self, dominion_id: str) -> bool:
+        dominion = await self.dominion_repository.search(dominion_id)
+        await self.dominion_repository.remove(dominion)
         return True
 
-    def create_role(self, role_dict: RoleDict) -> None:
+    async def create_role(self, role_dict: RoleDict) -> None:
         role = Role(**role_dict)
-        self.role_repository.add(role)
+        await self.role_repository.add(role)
 
-    def remove_role(self, role_id: str) -> bool:
-        role = self.role_repository.get(role_id)
-        self.role_repository.remove(role)
+    async def remove_role(self, role_id: str) -> bool:
+        role = await self.role_repository.search(role_id)
+        await self.role_repository.remove(role)
         return True
 
-    def assign_role(self, user_id: str, role_id: str) -> bool:
-        user = self.user_repository.get(user_id)
-        role = self.role_repository.get(role_id)
+    async def assign_role(self, user_id: str, role_id: str) -> bool:
+        user = await self.user_repository.search(user_id)
+        role = await self.role_repository.search(role_id)
 
         ranking = Ranking(user_id=user.id, role_id=role.id)
-        duplicate = self.ranking_repository.search([
+        duplicate = await self.ranking_repository.search([
             ('user_id', '=', user.id), ('role_id', '=', role.id)
         ])
         if duplicate:
             return False
 
-        self.ranking_repository.add(ranking)
+        await self.ranking_repository.add(ranking)
         return True
 
-    def deassign_role(self, ranking_id: str) -> bool:
-        ranking = self.ranking_repository.get(ranking_id)
-        return self.ranking_repository.remove(ranking)
+    async def deassign_role(self, ranking_id: str) -> bool:
+        ranking = await self.ranking_repository.search(ranking_id)
+        return await self.ranking_repository.remove(ranking)
