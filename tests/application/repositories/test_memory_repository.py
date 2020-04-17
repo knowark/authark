@@ -220,7 +220,7 @@ async def test_memory_repository_remove_idempotent(filled_memory_repository):
     assert len(items) == 2
 
 
-async def test_memory_repository_bulk_add(memory_repository):
+async def test_memory_repository_add_multiple(memory_repository):
     item_1 = DummyEntity("1", "value_1")
     item_2 = DummyEntity("2", "value_2")
 
@@ -231,21 +231,21 @@ async def test_memory_repository_bulk_add(memory_repository):
     assert "2" in memory_repository.data['default'].keys()
 
 
-async def test_memory_repository_bulk_update(filled_memory_repository):
-    item_1 = DummyEntity("1", "updated_value_1")
-    item_2 = DummyEntity("3", "updated_value_3")
+# async def test_memory_repository_bulk_update(filled_memory_repository):
+#     item_1 = DummyEntity("1", "updated_value_1")
+#     item_2 = DummyEntity("3", "updated_value_3")
 
-    result = await filled_memory_repository.update([item_1, item_2])
+#     result = await filled_memory_repository.update([item_1, item_2])
 
-    items = filled_memory_repository.data['default']
-    assert result is True
-    assert len(items) == 3
-    assert items['1'].field_1 == 'updated_value_1'
-    assert items['2'].field_1 == 'value_2'
-    assert items['3'].field_1 == 'updated_value_3'
+#     items = filled_memory_repository.data['default']
+#     assert result is True
+#     assert len(items) == 3
+#     assert items['1'].field_1 == 'updated_value_1'
+#     assert items['2'].field_1 == 'value_2'
+#     assert items['3'].field_1 == 'updated_value_3'
 
 
-async def test_memory_repository_bulk_remove(filled_memory_repository):
+async def test_memory_repository_remove_multiple(filled_memory_repository):
     item_1 = DummyEntity("1", "value_1")
     item_2 = DummyEntity("3", "value_3")
 

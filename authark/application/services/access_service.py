@@ -44,11 +44,11 @@ class AccessService:
             'roles': []
         }
 
-    def _build_roles(self, user: User, dominion: Dominion) -> List[str]:
+    async def _build_roles(self, user: User, dominion: Dominion) -> List[str]:
         dominion_roles = self.role_repository.search(
             [('dominion_id', '=', dominion.id)])
         ranking_role_ids = [
-            ranking.role_id for ranking in self.ranking_repository.search(
+            ranking.role_id for ranking in await self.ranking_repository.search(
                 [('user_id', '=', user.id)])]
 
         roles = [role.name for role in dominion_roles

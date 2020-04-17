@@ -1,48 +1,50 @@
-from ..models import (
-    Credential, Dominion, Ranking, Role, User)
+# from ..models import (
+#     Credential, Dominion, Ranking, Role, User)
 from .repository import Repository
 from .memory_repository import MemoryRepository
 
 
-class CredentialRepository(Repository[Credential]):
+class CredentialRepository(Repository):
     """Credential Repository"""
 
 
 class MemoryCredentialRepository(
-        MemoryRepository[Credential], CredentialRepository):
+        MemoryRepository, CredentialRepository):
     """Memory Credential Repository"""
 
 
-class DominionRepository(Repository[Dominion]):
+class DominionRepository(Repository):
     """Dominion Repository"""
 
 
 class MemoryDominionRepository(
-        MemoryRepository[Dominion], DominionRepository):
+        MemoryRepository, DominionRepository):
     """Memory Dominion Repository"""
 
 
-class RankingRepository(Repository[Ranking]):
+class RankingRepository(Repository):
     """Ranking Repository"""
 
 
 class MemoryRankingRepository(
-        MemoryRepository[Ranking], RankingRepository):
+        MemoryRepository, RankingRepository):
     """Memory Ranking Repository"""
 
 
-class RoleRepository(Repository[Role]):
+class RoleRepository(Repository):
     """Role Repository"""
 
 
 class MemoryRoleRepository(
-        MemoryRepository[Role], RoleRepository):
+        MemoryRepository, RoleRepository):
     """Memory Role Repository"""
 
 
-class UserRepository(Repository[User]):
+class UserRepository(Repository):
     """User Repository"""
 
 
-class MemoryUserRepository(MemoryRepository[User], UserRepository):
+class MemoryUserRepository(
+        MemoryRepository, UserRepository):
     """Memory User Repository"""
+
