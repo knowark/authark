@@ -3,11 +3,11 @@ from authark.application.models import User, Token, Dominion
 from authark.application.services import Tenant, AccessService
 
 
-async def test_access_service_generate_token(access_service) -> None:
+def test_access_service_generate_token(access_service) -> None:
     user = User(id='1', username='johndoe', email='johndoe')
     dominion = Dominion(id='1', name='Data Server',
                         url="https://dataserver.nubark.com")
-    token = await access_service.generate_token(user, dominion)
+    token = access_service.generate_token(user, dominion)
 
     assert isinstance(token, Token)
 

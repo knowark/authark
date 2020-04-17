@@ -221,14 +221,17 @@ async def test_memory_repository_remove_idempotent(filled_memory_repository):
 
 
 async def test_memory_repository_add_multiple(memory_repository):
-    item_1 = DummyEntity("1", "value_1")
-    item_2 = DummyEntity("2", "value_2")
+    items = [
+        DummyEntity(field_1="value_1"),
+        DummyEntity(field_1="value_2")
+    ]
 
-    items = await memory_repository.add([item_1, item_2])
+    returned_items = await memory_repository.add(items)
 
-    assert len(memory_repository.data['default']) == 2
-    assert "1" in memory_repository.data['default'].keys()
-    assert "2" in memory_repository.data['default'].keys()
+    items = memory_repository.data['default']
+    assert len(returned_items) == 2
+    assert returned_items[0].field_1 == 'value_1'
+    assert returned_items[1].field_1 == 'value_2'
 
 
 # async def test_memory_repository_bulk_update(filled_memory_repository):
@@ -246,10 +249,12 @@ async def test_memory_repository_add_multiple(memory_repository):
 
 
 async def test_memory_repository_remove_multiple(filled_memory_repository):
-    item_1 = DummyEntity("1", "value_1")
-    item_2 = DummyEntity("3", "value_3")
+    items = [
+        DummyEntity(field_1="value_1"),
+        DummyEntity(field_1="value_2")
+    ]
 
-    result = await filled_memory_repository.remove([item_1, item_2])
+    result = await filled_memory_repository.remove(items)
 
     items = filled_memory_repository.data['default']
     assert result is True

@@ -25,6 +25,7 @@ class AuthCoordinator:
     async def authenticate(self, username: str, password: str, client: str,
                      dominion_name: str = None) -> TokensDict:
         user = self._find_user(username)
+        print("user en aut coor    ",user)
         credentials = await self.credential_repository.search([
             ('user_id', '=', user.id), ('type', '=', 'password')])
 

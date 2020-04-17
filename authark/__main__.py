@@ -13,9 +13,8 @@ from .infrastructure.cli import Cli
 
 
 async def main(args=None):
-    mode = os.environ.get('AUTHARK_MODE', 'PROD')
     config_path = os.environ.get('AUTHARK_CONFIG', 'config.json')
-    config = build_config(mode, config_path)
+    config = build_config('PROD', config_path)
 
     factory = build_factory(config)
     strategy = build_strategy(config['strategies'], config['strategy'])

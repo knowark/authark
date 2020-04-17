@@ -35,9 +35,9 @@ class ImportCoordinator:
                 user = await self.user_repository.add(user)
             if credential:
                 credential.user_id = user.id
-                self._update_credential(credential)
+                await self._update_credential(credential)
             if roles:
-                self._generate_ranking_user(roles, user)
+                await self._generate_ranking_user(roles, user)
 
     async def _search_user(self, user: User) -> Optional[User]:
         domain: QueryDomain = ['|', ('username', '=', user.username),
