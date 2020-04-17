@@ -29,17 +29,3 @@ class StandardTenantProvider(TenantProvider):
         if not tenant_var.get():
             raise ValueError('No tenant has been set.')
         return tenant_var.get()
-
-
-    # def __init__(self, tenant=None) -> None:
-    #     self.state = local()
-    #     self.state.__dict__.setdefault('tenant', tenant)
-
-    # def setup(self, tenant: Tenant) -> None:
-    #     self.state.tenant = tenant
-
-    # @property
-    # def tenant(self) -> Tenant:
-    #     if not self.state.tenant:
-    #         raise ValueError('No tenant has been set.')
-    #     return self.state.tenant

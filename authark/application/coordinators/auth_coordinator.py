@@ -1,7 +1,7 @@
-from ..models import AuthError, Token, User, Credential, Dominion
+from ..models import Token, User, Credential, Dominion
 from ..repositories import (
     UserRepository, CredentialRepository, DominionRepository)
-from ..utilities import UserCreationError
+from ..utilities import exceptions
 from ..services import (
     TokenService, RefreshTokenService, HashService, AccessService)
 from .types import TokenString, TokensDict, UserDict
@@ -23,9 +23,9 @@ class AuthCoordinator:
         self.refresh_token_service = refresh_token_service
 
     async def authenticate(self, username: str, password: str, client: str,
-                     dominion_name: str = None) -> TokensDict:
+                           dominion_name: str = None) -> TokensDict:
         user = self._find_user(username)
-        print("user en aut coor    ",user)
+        print("user en aut coor    ", user)
         credentials = await self.credential_repository.search([
             ('user_id', '=', user.id), ('type', '=', 'password')])
 
@@ -53,7 +53,7 @@ class AuthCoordinator:
         }
 
     async def refresh_authenticate(self, refresh_token: TokenString,
-                             dominion_name: str = None) -> TokensDict:
+                                   dominion_name: str = None) -> TokensDict:
         credentials = await self.credential_repository.search([
             ('value', '=', refresh_token), ('type', '=', 'refresh_token')])
         if not credentials:
@@ -135,7 +135,7 @@ class AuthCoordinator:
         return users[0]
 
     async def _generate_refresh_token(self, user_id: str, client: str
-                                ) -> TokenString:
+                                      ) -> TokenString:
         refresh_payload = {'type': 'refresh_token',
                            'client': client,
                            'sub': user_id}

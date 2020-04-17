@@ -1,4 +1,5 @@
-from typing import Sequence, List, Dict, Union, Tuple, MutableMapping, Any
+from typing import (Sequence, List, Dict, Union, Tuple, Any,
+                    TypeVar, MutableMapping)
 
 
 TermTuple = Tuple[str, str, Union[str, int, float, bool, list, tuple]]

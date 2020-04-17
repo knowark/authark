@@ -8,7 +8,7 @@ from ..utilities import TenantProvider, Tenant
 from .token_service import AccessTokenService
 
 
-class AccessService: # funciona como coordinator
+class AccessService:  # funciona como coordinator
 
     def __init__(self, ranking_repository: RankingRepository,
                  role_repository: RoleRepository,
@@ -21,17 +21,17 @@ class AccessService: # funciona como coordinator
         self.token_service = token_service
         self.tenant_provider = tenant_provider
 
-    def generate_token(self, user: User, dominion: Dominion) -> Token:
+    async def generate_token(self, user: User, dominion: Dominion) -> Token:
         tenant = self.tenant_provider.tenant
-        access_payload = self._build_payload(tenant, user, dominion)
+        access_payload = await self._build_payload(tenant, user, dominion)
         access_token = self.token_service.generate_token(access_payload)
 
         return access_token
 
-    def _build_payload(self, tenant: Tenant, user: User,
+    async def _build_payload(self, tenant: Tenant, user: User,
                        dominion: Dominion) -> Dict[str, Any]:
         payload = self._build_basic_info(tenant, user)
-        payload['roles'] = self._build_roles(user, dominion)
+        payload['roles'] = await self._build_roles(user, dominion)
         return payload
 
     def _build_basic_info(self, tenant: Tenant, user: User) -> Dict[str, Any]:
@@ -45,13 +45,11 @@ class AccessService: # funciona como coordinator
         }
 
     async def _build_roles(self, user: User, dominion: Dominion) -> List[str]:
-        dominion_roles = self.role_repository.search(
+        dominion_roles = await self.role_repository.search(
             [('dominion_id', '=', dominion.id)])
         ranking_role_ids = [
             ranking.role_id for ranking in await self.ranking_repository.search(
                 [('user_id', '=', user.id)])]
-
         roles = [role.name for role in dominion_roles
                  if role.id in ranking_role_ids]
-
         return roles
