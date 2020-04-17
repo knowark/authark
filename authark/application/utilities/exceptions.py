@@ -5,13 +5,13 @@
 class ApplicationError(Exception):
     """Application's base error class."""
 
-# Models
 
+# Models
 
 class AuthError(Exception):
     pass
     """Authark's Error Models"""
-    
+
 # Repository
 
 
