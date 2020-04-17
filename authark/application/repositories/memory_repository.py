@@ -13,15 +13,8 @@ class MemoryRepository(Repository, Generic[T]):
                  tenant_provider: TenantProvider) -> None:
         self.data: Dict[str, Dict[str, T]] = defaultdict(dict)
         self.parser: QueryParser = parser
-        self.tenant_provider = tenant_provider
+        self.tenant_provider: TenantProvider = tenant_provider
         self.max_items = 10_000
-
-    # def get(self, id: str) -> T:
-    #     item = self.data[self._location].get(id)
-    #     if not item:
-    #         raise EntityNotFoundError(
-    #             f"The entity with id {id} was not found.")
-    #     return item
 
     async def add(self, item: Union[T, List[T]]) -> List[T]:
         items = item if isinstance(item, list) else [item]
@@ -36,27 +29,6 @@ class MemoryRepository(Repository, Generic[T]):
 
             self.data[self._location][item.id] = item
         return items
-
-    # async def add(self, item: Union[T, List[T]]) -> List[T]:
-    #     items = item if isinstance(item, list) else [item]
-    #     for item in items:
-    #         setattr(item, 'id', getattr(item, 'id') or str(uuid4()))
-    #         self.data[self._location][getattr(item, 'id')] = item
-    #     return items
-
-    # def update(self, item: Union[T, List[T]]) -> bool:
-    #     items = item if isinstance(item, list) else [item]
-
-    #     for item in items:
-    #         id = getattr(item, 'id')
-    #         if id not in self.data[self._location]:
-    #             return False
-
-    #     for item in items:
-    #         id = getattr(item, 'id')
-    #         self.data[self._location][id] = item
-
-    #     return True
 
     async def search(self, domain: QueryDomain,
                      limit=10_000, offset=0) -> List[T]:
@@ -74,20 +46,6 @@ class MemoryRepository(Repository, Generic[T]):
 
         return items
 
-    # def search(self, domain: QueryDomain, limit=1000, offset=0) -> List[T]:
-    #     items = []
-    #     filter_function = self.parser.parse(domain)
-    #     for item in list(self.data[self._location].values()):
-    #         if filter_function(item):
-    #             items.append(item)
-
-    #     if limit is not None:
-    #         items = items[:limit]
-    #     if offset is not None:
-    #         items = items[offset:]
-
-    #     return items
-
     async def remove(self, item: Union[T, List[T]]) -> bool:
         items = item if isinstance(item, list) else [item]
         deleted = False
@@ -96,19 +54,6 @@ class MemoryRepository(Repository, Generic[T]):
             deleted = bool(deleted_item) or deleted
 
         return deleted
-
-    # def remove(self, item: Union[T, List[T]]) -> bool:
-    #     items = item if isinstance(item, list) else [item]
-    #     for item in items:
-    #         id = getattr(item, 'id')
-    #         if id not in self.data[self._location]:
-    #             return False
-
-    #     for item in items:
-    #         id = getattr(item, 'id')
-    #         del self.data[self._location][id]
-
-    #     return True
 
     async def count(self, domain: QueryDomain = None) -> int:
         count = 0
@@ -125,7 +70,3 @@ class MemoryRepository(Repository, Generic[T]):
     @property
     def _location(self) -> str:
         return self.tenant_provider.tenant.zone or 'default'
-
-    # @property
-    # def _location(self) -> str:
-    #     return self.tenant_provider.tenant.location

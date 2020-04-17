@@ -15,12 +15,3 @@ def test_token_instantiation(token):
 
 def test_token_attributes(token):
     assert token.value == 'xyz123'
-
-
-# def test_token_creation():
-#     value = "xyz123"
-
-#     token = Token(value=value)
-
-#     assert token.value == value
-#     assert isinstance(token.value, str)
