@@ -10,7 +10,12 @@ DataDict = MutableMapping[str, Any]
 
 RecordList = List[DataDict]
 
-
+# model user
 Attribute = Union[int, str, float]
 
 Attributes = Dict[str, Attribute]
+
+# composing informer
+ExtendedRankingDict = Dict[str, Any]
+
+ExtendedRankingDictList = List[ExtendedRankingDict]
