@@ -41,3 +41,7 @@ class TenantLocationError(TenantError):
 
 class UserCreationError(ApplicationError):
     """The user couldn't be created."""
+
+
+class TenantAlreadyExistsError(Exception):
+    """Raised when attempting to create an already existing tenant"""

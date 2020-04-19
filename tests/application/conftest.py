@@ -40,38 +40,38 @@ def mock_tenant_provider() -> StandardTenantProvider:
 
 # # REPOSITORIES
 
-# @fixture
-# def mock_user_repository(mock_tenant_provider, parser) -> UserRepository:
-#     mock_user_repository = MemoryUserRepository(parser, mock_tenant_provider)
-#     mock_user_repository.load({
-#         "default": {
-#             "1": User(
-#                 id='1', username='valenep', email='valenep@gmail.com',
-#                 external_source='erp.users', external_id='1'),
-#             "2": User(
-#                 id='2', username='tebanep', email='tebanep@gmail.com',
-#                 external_source='erp.users'),
-#             "3": User(
-#                 id='3', username='gabeche', email='gabeche@gmail.com',
-#                 external_source='erp.users', external_id='3')
-#         }
-#     })
-#     return mock_user_repository
+@fixture
+def mock_user_repository(mock_tenant_provider, parser) -> UserRepository:
+    mock_user_repository = MemoryUserRepository(parser, mock_tenant_provider)
+    mock_user_repository.load({
+        "default": {
+            "1": User(
+                id='1', username='valenep', email='valenep@gmail.com',
+                external_source='erp.users', external_id='1'),
+            "2": User(
+                id='2', username='tebanep', email='tebanep@gmail.com',
+                external_source='erp.users'),
+            "3": User(
+                id='3', username='gabeche', email='gabeche@gmail.com',
+                external_source='erp.users', external_id='3')
+        }
+    })
+    return mock_user_repository
 
 
-# @fixture
-# def mock_credential_repository(
-#         mock_tenant_provider, parser) -> CredentialRepository:
-#     mock_credential_repository = MemoryCredentialRepository(
-#         parser, mock_tenant_provider)
-#     mock_credential_repository.load({
-#         "default": {
-#             "1": Credential(id='1', user_id='1', value="HASHED: PASS1"),
-#             "2": Credential(id='2', user_id='2', value="HASHED: PASS2"),
-#             "3": Credential(id='3', user_id='3', value="HASHED: PASS3")
-#         }
-#     })
-#     return mock_credential_repository
+@fixture
+def mock_credential_repository(
+        mock_tenant_provider, parser) -> CredentialRepository:
+    mock_credential_repository = MemoryCredentialRepository(
+        parser, mock_tenant_provider)
+    mock_credential_repository.load({
+        "default": {
+            "1": Credential(id='1', user_id='1', value="HASHED: PASS1"),
+            "2": Credential(id='2', user_id='2', value="HASHED: PASS2"),
+            "3": Credential(id='3', user_id='3', value="HASHED: PASS3")
+        }
+    })
+    return mock_credential_repository
 
 
 @fixture
@@ -135,7 +135,7 @@ def mock_hash_service() -> HashService:
 
 
 @fixture
-def mock_import_service() -> ImportService:
+def mock_import_service() -> ImportService:   #duda
     mock_import_service = MemoryImportService()
     user_1 = User(**{'id': "1",
                      'external_source': "erp.users",
@@ -199,33 +199,33 @@ def access_service(mock_ranking_repository, mock_role_repository,
 # # COORDINATORS
 
 
-# @fixture
-# def auth_coordinator(mock_user_repository, mock_credential_repository,
-#                      mock_dominion_repository, mock_hash_service,
-#                      access_service, mock_refresh_token_service):
-#     return AuthCoordinator(mock_user_repository, mock_credential_repository,
-#                            mock_dominion_repository, mock_hash_service,
-#                            access_service, mock_refresh_token_service)
+@fixture
+def auth_coordinator(mock_user_repository, mock_credential_repository,
+                     mock_dominion_repository, mock_hash_service,
+                     access_service, mock_refresh_token_service):
+    return AuthCoordinator(mock_user_repository, mock_credential_repository,
+                           mock_dominion_repository, mock_hash_service,
+                           access_service, mock_refresh_token_service)
 
 
-# @fixture
-# def management_coordinator(
-#         mock_user_repository, mock_dominion_repository,
-#         mock_role_repository, mock_ranking_repository):
-#     return ManagementCoordinator(mock_user_repository, mock_dominion_repository,
-#                                  mock_role_repository, mock_ranking_repository)
+@fixture
+def management_coordinator(
+        mock_user_repository, mock_dominion_repository,
+        mock_role_repository, mock_ranking_repository):
+    return ManagementCoordinator(mock_user_repository, mock_dominion_repository,
+                                 mock_role_repository, mock_ranking_repository)
 
 
-# @fixture
-# def import_coordinator(
-#         mock_import_service, mock_user_repository,
-#         mock_credential_repository, mock_role_repository,
-#         mock_ranking_repository, mock_dominion_repository):
-#     return ImportCoordinator(mock_import_service, mock_user_repository,
-#                              mock_credential_repository, mock_role_repository,
-#                              mock_ranking_repository, mock_dominion_repository)
+@fixture
+def import_coordinator(
+        mock_import_service, mock_user_repository,
+        mock_credential_repository, mock_role_repository,
+        mock_ranking_repository, mock_dominion_repository):
+    return ImportCoordinator(mock_import_service, mock_user_repository,
+                             mock_credential_repository, mock_role_repository,
+                             mock_ranking_repository, mock_dominion_repository)
 
 
-# @fixture
-# def session_coordinator(mock_tenant_provider):
-#     return SessionCoordinator(mock_tenant_provider)
+@fixture
+def session_coordinator(mock_tenant_provider):
+    return SessionCoordinator(mock_tenant_provider)

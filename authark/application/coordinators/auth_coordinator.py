@@ -1,10 +1,12 @@
+from typing import List
+from .types import TokenString, TokensDict
 from ..models import Token, User, Credential, Dominion
 from ..repositories import (
     UserRepository, CredentialRepository, DominionRepository)
-from ..utilities import exceptions
+from ..utilities.exceptions import AuthError, UserCreationError
+from ..utilities.types import RecordList
 from ..services import (
     TokenService, RefreshTokenService, HashService, AccessService)
-from .types import TokenString, TokensDict, UserDict
 
 
 class AuthCoordinator:
@@ -24,8 +26,7 @@ class AuthCoordinator:
 
     async def authenticate(self, username: str, password: str, client: str,
                            dominion_name: str = None) -> TokensDict:
-        user = self._find_user(username)
-        print("user en aut coor    ", user)
+        user = await self._find_user(username)
         credentials = await self.credential_repository.search([
             ('user_id', '=', user.id), ('type', '=', 'password')])
 
@@ -33,7 +34,7 @@ class AuthCoordinator:
             raise AuthError("Authentication Error: No credentials found.")
 
         user_password = credentials[0].value
-        if not await self.hash_service.verify_password(password, user_password):
+        if not self.hash_service.verify_password(password, user_password):
             raise AuthError("Authentication Error: Password mismatch.")
 
         dominion_domain = [
@@ -45,7 +46,7 @@ class AuthCoordinator:
 
         # Create new refresh token
         client = client or 'ALL'
-        refresh_token_str = self._generate_refresh_token(user.id, client)
+        refresh_token_str = await self._generate_refresh_token(user.id, client)
 
         return {
             'refresh_token': refresh_token_str,
@@ -60,16 +61,17 @@ class AuthCoordinator:
             raise AuthError("Authentication Error: Refresh token not found.")
 
         token = Token(refresh_token)
-        await self.refresh_token_service.valid(token)
+        self.refresh_token_service.valid(token)
 
         tokens_dict = {}
         credential = credentials[0]
 
-        if await self.refresh_token_service.renew(token):
-            tokens_dict['refresh_token'] = self._generate_refresh_token(
+        if self.refresh_token_service.renew(token):
+            tokens_dict['refresh_token'] = await self._generate_refresh_token(
                 credential.user_id, credential.client)
 
-        user = await self.user_repository.search(credential.user_id)
+        user = await self.user_repository.search(
+            [('id', '=', credential.user_id)])
 
         dominion_domain = [
             ('name', '=', dominion_name)] if dominion_name else []
@@ -77,37 +79,47 @@ class AuthCoordinator:
             iter(await self.dominion_repository.search(dominion_domain)))
 
         tokens_dict['access_token'] = await self.access_service.generate_token(
-            user, dominion).value
+            user[0], dominion)
 
         return tokens_dict
 
-    async def register(self, user_dict: UserDict) -> UserDict:
-        user = User(**user_dict)
+    async def register(self, user_dicts: RecordList) -> None:  # duda
+        users = ([
+            User(**user_dict)
+            for user_dict in user_dicts])
+        for user in users:
+            self._validate_username(user.username)
+            await self._validate_duplicates(user)
 
-        self._validate_username(user.username)
-        self._validate_duplicates(user)
+        users = await self.user_repository.add([
+            User(**user_dict)
+            for user_dict in user_dicts])
+        # await self.user_repository.remove(users)  # pop previous code
+        i = 0
+        for user in users:
+            await self._make_password_credential(
+                user.id, user_dicts[i]['password'])
+            i = i+1
 
-        user = await self.user_repository.add(user).pop()
-        self._make_password_credential(user.id, user_dict['password'])
-        return vars(user)
+        # return vars(user)
+        return users
 
-    # async def update(self, user_dict: UserDict) -> bool:
-    #     user = User(**user_dict)
-    #     if 'password' in user_dict:
-    #         self._make_password_credential(user.id, user_dict['password'])
-    #     return await self.user_repository.update(user)
-
-    async def deregister(self, user_id: str) -> bool:
-        user = await self.user_repository.search(user_id)
-        credentials = await self.credential_repository.search(
-            [('user_id', '=', user.id)])
+    async def deregister(self, user_ids: List[str]) -> bool:
+        users = await self.user_repository.search(
+            [('id', 'in', user_ids)])
+        if not users:
+            return False
+        for user in users:
+            credentials = await self.credential_repository.search(
+                [('user_id', '=', user.id)])
         for credential in credentials:
             await self.credential_repository.remove(credential)
-        await self.user_repository.remove(user)
+        for user in users:
+            await self.user_repository.remove(user)
 
         return True
 
-    async def _validate_username(self, username: str) -> None:
+    def _validate_username(self, username: str) -> None:
         if any((character in '@.+-_') for character in username):
             raise UserCreationError(
                 f"The username '{username}' has forbidden characters")
@@ -139,7 +151,7 @@ class AuthCoordinator:
         refresh_payload = {'type': 'refresh_token',
                            'client': client,
                            'sub': user_id}
-        refresh_token = await self.refresh_token_service.generate_token(
+        refresh_token = self.refresh_token_service.generate_token(
             refresh_payload)
 
         # Remove previous refresh tokens as a user should have only one
@@ -161,6 +173,6 @@ class AuthCoordinator:
             ('user_id', '=', user_id), ('type', '=', 'password')])
         for credential in credentials:
             await self.credential_repository.remove(credential)
-        hashed_password = await self.hash_service.generate_hash(password)
+        hashed_password = self.hash_service.generate_hash(password)
         credential = Credential(user_id=user_id, value=hashed_password)
         await self.credential_repository.add(credential)

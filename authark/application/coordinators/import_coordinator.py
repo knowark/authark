@@ -82,8 +82,8 @@ class ImportCoordinator:
 
     async def _generate_ranking_user(self, roles: List[Any], user: User) -> None:
         for role, dominion in roles:
-            existing_dominion = self._search_dominion(dominion)
+            existing_dominion = await self._search_dominion(dominion)
             if existing_dominion:
                 domain = [('name', '=', role.name)]
                 existing_role = await self.role_repository.search(domain)
-                self._create_ranking(existing_role, user)
+                await self._create_ranking(existing_role, user)

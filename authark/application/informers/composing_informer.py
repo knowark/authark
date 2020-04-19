@@ -30,7 +30,6 @@ class StandardComposingInformer(ComposingInformer):
                 [('id', '=', ranking.role_id)])
             dominion = await self.dominion_repository.search(
                 [('id', '=', role[0].dominion_id)])
-            print("dominion en comsposing   ",dominion[0].name)
             
             result = []    
             result.append({'ranking_id': ranking.id, 'role': role[0].name,
