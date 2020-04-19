@@ -1,4 +1,4 @@
-#import jwt
+import jwt
 from typing import Dict, cast
 from pytest import fixture
 from authark.application.utilities import (

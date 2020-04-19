@@ -1,24 +1,24 @@
-from ....application.utilities import (
-    ExpressionParser, TenantProvider, StandardTenantProvider)
-from ....application.repositories import (
+from ...application.utilities import (
+    QueryParser, TenantProvider, StandardTenantProvider)
+from ...application.repositories import (
     UserRepository, MemoryUserRepository,
     CredentialRepository, MemoryCredentialRepository,
     DominionRepository, MemoryDominionRepository,
     RoleRepository, MemoryRoleRepository,
     RankingRepository, MemoryRankingRepository)
-from ....application.services import (
+from ...application.services import (
     HashService, MemoryHashService,
     TokenService, MemoryTokenService,
     AccessTokenService, MemoryAccessTokenService,
     RefreshTokenService, MemoryRefreshTokenService,
     ImportService, MemoryImportService, AccessService)
-from ....application.coordinators import (
+from ...application.coordinators import (
     AuthCoordinator, ManagementCoordinator,
     ImportCoordinator, SessionCoordinator)
-from ....application.reporters import (
-    StandardAutharkReporter, StandardComposingReporter)
-from ..configuration import Config
-from ..tenancy import TenantSupplier, MemoryTenantSupplier
+from ...application.informers import (
+    StandardAutharkInformer, StandardComposingInformer)
+from ..config import Config
+from ..core.tenancy import TenantSupplier, MemoryTenantSupplier
 from .factory import Factory
 
 
@@ -28,38 +28,38 @@ class MemoryFactory(Factory):
 
     # Repositories
 
-    def expression_parser(self) -> ExpressionParser:
-        return ExpressionParser()
+    def query_parser(self) -> QueryParser:
+        return QueryParser()
 
     def memory_user_repository(
-            self, expression_parser: ExpressionParser,
+            self, query_parser: QueryParser,
             tenant_provider: TenantProvider
     ) -> MemoryUserRepository:
-        return MemoryUserRepository(expression_parser, tenant_provider)
+        return MemoryUserRepository(query_parser, tenant_provider)
 
     def memory_credential_repository(
-            self, expression_parser: ExpressionParser,
+            self, query_parser: QueryParser,
             tenant_provider: TenantProvider
     ) -> MemoryCredentialRepository:
-        return MemoryCredentialRepository(expression_parser, tenant_provider)
+        return MemoryCredentialRepository(query_parser, tenant_provider)
 
     def memory_dominion_repository(
-            self, expression_parser: ExpressionParser,
+            self, query_parser: QueryParser,
             tenant_provider: TenantProvider
     ) -> MemoryDominionRepository:
-        return MemoryDominionRepository(expression_parser, tenant_provider)
+        return MemoryDominionRepository(query_parser, tenant_provider)
 
     def memory_role_repository(
-            self, expression_parser: ExpressionParser,
+            self, query_parser: QueryParser,
             tenant_provider: TenantProvider
     ) -> MemoryRoleRepository:
-        return MemoryRoleRepository(expression_parser, tenant_provider)
+        return MemoryRoleRepository(query_parser, tenant_provider)
 
     def memory_ranking_repository(
-            self, expression_parser: ExpressionParser,
+            self, query_parser: QueryParser,
             tenant_provider: TenantProvider
     ) -> MemoryRankingRepository:
-        return MemoryRankingRepository(expression_parser, tenant_provider)
+        return MemoryRankingRepository(query_parser, tenant_provider)
 
     # Services
 
@@ -137,8 +137,8 @@ class MemoryFactory(Factory):
         credential_repository: CredentialRepository,
         dominion_repository: DominionRepository,
         role_repository: RoleRepository,
-    ) -> StandardAutharkReporter:
-        return StandardAutharkReporter(
+    ) -> StandardAutharkInformer:
+        return StandardAutharkInformer(
             user_repository, credential_repository,
             dominion_repository, role_repository)
 
@@ -146,8 +146,8 @@ class MemoryFactory(Factory):
         self, dominion_repository: DominionRepository,
         role_repository: RoleRepository,
         ranking_repository: RankingRepository
-    ) -> StandardComposingReporter:
-        return StandardComposingReporter(
+    ) -> StandardComposingInformer:
+        return StandardComposingInformer(
             dominion_repository, role_repository, ranking_repository)
 
     def memory_tenant_supplier(self) -> TenantSupplier:

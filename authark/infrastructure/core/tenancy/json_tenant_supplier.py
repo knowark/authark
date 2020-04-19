@@ -1,9 +1,12 @@
 from typing import Dict, Any
+from tenark.models import Tenant
 from tenark.resolver import (
-    resolve_cataloguer, resolve_provider, resolve_arranger)
+    resolve_cataloguer, resolve_provider, resolve_arranger)  # resolve_managers
 from .tenant_supplier import TenantSupplier
+#from .memory_tenant_supplier import MemoryTenantSupplier
 
 
+# class JsonTenantSupplier(MemoryTenantSupplier):
 class JsonTenantSupplier(TenantSupplier):
 
     def __init__(self, catalog_path: str,  directory_data: str,
@@ -31,3 +34,4 @@ class JsonTenantSupplier(TenantSupplier):
 
     def search_tenants(self, domain):
         return self.provider.search_tenants(domain)
+

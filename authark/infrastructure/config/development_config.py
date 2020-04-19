@@ -12,8 +12,8 @@ class DevelopmentConfig(Config):
         })
         self['factory'] = 'MemoryFactory'
         self['strategy'] = {
-            "ExpressionParser": {
-                "method": "expression_parser"
+            "QueryParser": {
+                "method": "query_parser"
             },
             "UserRepository": {
                 "method": "memory_user_repository"

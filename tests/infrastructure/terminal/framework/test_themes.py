@@ -1,4 +1,4 @@
 
 
-def test_themes_instantiation(themes):
-    assert isinstance(themes, list)
+# def test_themes_instantiation(themes):
+#     assert isinstance(themes, list)

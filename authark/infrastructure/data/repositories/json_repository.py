@@ -4,13 +4,14 @@ from json import load, dump
 from uuid import uuid4
 from typing import Dict, List, Any, Type, Callable, Generic, Union
 from ....application.services import TenantProvider
+from ....application.models import T
 from ....application.utilities import (
-    T, QueryDomain, ExpressionParser, EntityNotFoundError)
+    QueryDomain, QueryParser, EntityNotFoundError)
 from ....application.repositories import Repository
 
 
 class JsonRepository(Repository, Generic[T]):
-    def __init__(self, data_path: str, parser: ExpressionParser,
+    def __init__(self, data_path: str, parser: QueryParser,
                  tenant_provider: TenantProvider,
                  collection: str, item_class: Callable[..., T]) -> None:
         self.data_path = data_path

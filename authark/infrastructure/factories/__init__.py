@@ -1,5 +1,5 @@
 from typing import Dict, Any
-from ..configuration import Config
+from ..config import Config
 from .factory import Factory
 from .memory_factory import MemoryFactory
 from .crypto_factory import CryptoFactory

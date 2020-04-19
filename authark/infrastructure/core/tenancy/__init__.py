@@ -1,2 +1,3 @@
-from .tenant_supplier import TenantSupplier, MemoryTenantSupplier
+from .tenant_supplier import TenantSupplier
+from .memory_tenant_supplier import MemoryTenantSupplier
 from .json_tenant_supplier import JsonTenantSupplier

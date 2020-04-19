@@ -1,13 +1,13 @@
-from ....application.utilities import ExpressionParser, TenantProvider
-from ....application.repositories import UserRepository
-from ....application.services import HashService, TokenService
-from ...data import (
+from ...application.utilities import QueryParser, TenantProvider
+from ...application.repositories import UserRepository
+from ...application.services import HashService, TokenService
+from ..data import (
     JsonCredentialRepository,
     JsonDominionRepository, JsonRoleRepository,
     JsonRepository, JsonUserRepository,
     JsonRankingRepository, JsonImportService)
-from ..configuration import Config
-from ..tenancy import TenantSupplier, JsonTenantSupplier
+from ..config import Config
+from ..core.tenancy import TenantSupplier, JsonTenantSupplier
 from .crypto_factory import CryptoFactory
 
 
@@ -19,38 +19,38 @@ class JsonFactory(CryptoFactory):
     # Repositories
 
     def json_user_repository(
-            self, expression_parser: ExpressionParser,
+            self, query_parser: QueryParser,
             tenant_provider: TenantProvider
     ) -> JsonUserRepository:
-        return JsonUserRepository(self.path, expression_parser,
+        return JsonUserRepository(self.path, query_parser,
                                   tenant_provider)
 
     def json_credential_repository(
-            self, expression_parser: ExpressionParser,
+            self, query_parser: QueryParser,
             tenant_provider: TenantProvider
     ) -> JsonCredentialRepository:
-        return JsonCredentialRepository(self.path, expression_parser,
+        return JsonCredentialRepository(self.path, query_parser,
                                         tenant_provider)
 
     def json_dominion_repository(
-            self, expression_parser: ExpressionParser,
+            self, query_parser: QueryParser,
             tenant_provider: TenantProvider
     ) -> JsonDominionRepository:
-        return JsonDominionRepository(self.path, expression_parser,
+        return JsonDominionRepository(self.path, query_parser,
                                       tenant_provider)
 
     def json_role_repository(
-            self, expression_parser: ExpressionParser,
+            self, query_parser: QueryParser,
             tenant_provider: TenantProvider
     ) -> JsonRoleRepository:
-        return JsonRoleRepository(self.path, expression_parser,
+        return JsonRoleRepository(self.path, query_parser,
                                   tenant_provider)
 
     def json_ranking_repository(
-            self, expression_parser: ExpressionParser,
+            self, query_parser: QueryParser,
             tenant_provider: TenantProvider
     ) -> JsonRankingRepository:
-        return JsonRankingRepository(self.path, expression_parser,
+        return JsonRankingRepository(self.path, query_parser,
                                      tenant_provider)
 
     def json_import_service(

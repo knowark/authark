@@ -1,9 +1,9 @@
 import os
-from ....application.coordinators import SessionCoordinator
-from ...web.middleware import Authenticate
-from ..configuration import Config
-from ..tenancy import TenantSupplier
-from ..crypto import JwtSupplier
+from ...application.coordinators import SessionCoordinator
+from ..web.middleware import Authenticate
+from ..config import Config
+from ..core.tenancy import TenantSupplier
+from ..core.crypto import JwtSupplier
 from .json_factory import JsonFactory
 
 
