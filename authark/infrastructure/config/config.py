@@ -58,8 +58,8 @@ class ProductionConfig(Config):
     def __init__(self):
         super().__init__()
         self['mode'] = "PROD"
-        self["factory"] = "SqlFactory"
-        self['strategies'].extend(['sql'])
+        self["factory"] = "JsonFactory"
+        self['strategies'].extend(['json'])
         self["tenancy"] = {
             "dsn": (
                 "postgresql://authark:authark"
