@@ -13,6 +13,15 @@ def catalog_path(tmp_path):
 
 
 @fixture
+def zones(tmp_path):
+    return {
+        "default": {
+            "directory": tmp_path
+        }
+    }
+
+
+@fixture
 def directory_data(tmp_path):
     return tmp_path
 
@@ -43,17 +52,10 @@ def tenant_dict():
         "active": True,
         "slug": "servagro",
         "attributes": {},
-        "data": {
-            "directory": {
-                "default": "/home/jjalvarez/data"
-            },
-            "schema": {
-                "default": "postgresql://shiftark:shiftark@localhost/shiftark"
-            }
-        }
+        "zone": "default",
     }
 
 
 @fixture
-def json_tenant_supplier(catalog_path, directory_data, directory_template):
-    return JsonTenantSupplier(catalog_path, directory_data, directory_template)
+def json_tenant_supplier(catalog_path, zones, directory_template):
+    return JsonTenantSupplier(catalog_path, zones, directory_template)

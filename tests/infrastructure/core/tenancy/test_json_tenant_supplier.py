@@ -1,35 +1,36 @@
 import json
-from authark.infrastructure.core.tenancy import JsonTenantSupplier
 from pathlib import Path
+from pytest import fixture
+from typing import Dict, Any
+from authark.infrastructure.core.tenancy import json_tenant_supplier
+from authark.infrastructure.core.tenancy import JsonTenantSupplier
 
 
-def test_json_tenant_supplier_instantiation(json_tenant_supplier):
-    isinstance(json_tenant_supplier, JsonTenantSupplier)
+def test_json_tenant_supplier_instantiation(monkeypatch):
+    expected = {}
 
+    def mock_resolve_managers(config: Dict[str, Any]):
+        nonlocal expected
+        expected = config
+        return None, None
 
-def test_json_tenant_supplier_tenant_creation(
-        json_tenant_supplier, tenant_dict, directory_data):
-    json_tenant_supplier.create_tenant(tenant_dict)
+    monkeypatch.setattr(
+        json_tenant_supplier,  'resolve_managers', mock_resolve_managers)
+    catalog_path = "tenants.json"
+    directory_template = "__template__"
+    zones = {
+        'default': ""
+    }
 
-    with open(directory_data / "tenants.json", 'r') as catalog:
-        data = catalog.read()
+    tenant_supplier = JsonTenantSupplier(
+        catalog_path, zones, directory_template)
 
-    catalog_data = json.loads(data)
+    isinstance(tenant_supplier, JsonTenantSupplier)
 
-    assert len(catalog_data["tenants"]) == 1
-
-
-def test_json_tenant_supplier_get_tenant(
-        json_tenant_supplier, tenant_dict, directory_data):
-    json_tenant_supplier.create_tenant(tenant_dict)
-    tenant = json_tenant_supplier.get_tenant(tenant_dict["id"])
-
-    assert tenant["id"] == tenant_dict["id"]
-
-
-def test_json_tenant_supplier_search_tenants(
-        json_tenant_supplier, tenant_dict, directory_data):
-    json_tenant_supplier.create_tenant(tenant_dict)
-    tenants = json_tenant_supplier.search_tenants("")
-
-    assert len(tenants) == 1
+    assert expected == {
+        'cataloguer_kind': 'json',
+        'catalog_path': catalog_path,
+        'provisioner_kind': 'directory',
+        'provision_template': directory_template,
+        'provision_directory_zones': zones
+    }
