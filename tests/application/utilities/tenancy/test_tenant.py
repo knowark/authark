@@ -15,7 +15,7 @@ def test_tenant_default_attributes(tenant: Tenant) -> None:
     assert tenant.id == ""
     assert tenant.name == "Amazon"
     assert tenant.slug == 'amazon'
-    #assert tenant.zone == ''  # duda sobre este atributo
+    assert tenant.zone == ''  # duda sobre este atributo
 
 
 def test_tenant_attributes_from_dict() -> None:
