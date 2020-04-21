@@ -59,5 +59,7 @@ class JsonFactory(CryptoFactory):
 
     def json_tenant_supplier(self) -> TenantSupplier:
         catalog_path = self.config['tenancy']['json']
-        directory_data = self.config['data']['json']['default']
-        return JsonTenantSupplier(catalog_path, directory_data)
+        zones = self.config['data']['json']['default']
+        # zones = {key: value['path'] for key, value in
+        #          self.config['zones'].items()}
+        return JsonTenantSupplier(catalog_path, zones)

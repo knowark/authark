@@ -2,6 +2,7 @@ import multiprocessing
 from collections import defaultdict
 from typing import Dict, Any
 from abc import ABC, abstractmethod
+from json import loads, JSONDecodeError
 from pathlib import Path
 
 
@@ -60,12 +61,25 @@ class ProductionConfig(Config):
         self['mode'] = "PROD"
         self["factory"] = "JsonFactory"
         self['strategies'].extend(['json'])
-        self["tenancy"] = {
-            "dsn": (
-                "postgresql://authark:authark"
-                "@localhost/authark"),
-            "directory": ""
+        self['tenancy'] = {
+            "json": Path.home() / 'tenants.json',
+            "directory" : ""
         }
+        self['data'] = {
+            "json": {
+                "default": str(Path.home() / 'data')
+            }
+        }
+        self['export'] = {
+            'type': 'json',
+            'dir': Path.home() / 'export'
+        }
+        # self["tenancy"] = {
+        #     "dsn": (
+        #         "postgresql://authark:authark"
+        #         "@localhost/authark"),
+        #     "directory": ""
+        # }
         self["zones"] = {
             "default": {
                 "dsn": ("postgresql://authark:authark"

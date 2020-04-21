@@ -44,7 +44,7 @@ def test_configuration_build_config_default():
     path = '/tmp/config.json'
     mode = 'DEV'
 
-    config = build_config(path, mode)
+    config = build_config(mode, path)
 
     assert isinstance(config, DevelopmentConfig)
 

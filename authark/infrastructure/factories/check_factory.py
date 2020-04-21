@@ -12,7 +12,7 @@ from ..core.tenancy import TenantSupplier, MemoryTenantSupplier
 from .crypto_factory import CryptoFactory
 
 
-class WebFactory(CryptoFactory):
+class CheckFactory(CryptoFactory):
     def __init__(self, config: Config) -> None:
         super().__init__(config)
 
