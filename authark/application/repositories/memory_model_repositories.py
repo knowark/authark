@@ -1,8 +1,9 @@
+from ..models import Credential, Dominion, Ranking, Role, User
 from .repository import Repository
 from .memory_repository import MemoryRepository
 
 
-class CredentialRepository(Repository):
+class CredentialRepository(Repository[Credential]):
     """Credential Repository"""
 
 
@@ -11,7 +12,7 @@ class MemoryCredentialRepository(
     """Memory Credential Repository"""
 
 
-class DominionRepository(Repository):
+class DominionRepository(Repository[Dominion]):
     """Dominion Repository"""
 
 
@@ -20,7 +21,7 @@ class MemoryDominionRepository(
     """Memory Dominion Repository"""
 
 
-class RankingRepository(Repository):
+class RankingRepository(Repository[Ranking]):
     """Ranking Repository"""
 
 
@@ -29,7 +30,7 @@ class MemoryRankingRepository(
     """Memory Ranking Repository"""
 
 
-class RoleRepository(Repository):
+class RoleRepository(Repository[Role]):
     """Role Repository"""
 
 
@@ -38,11 +39,10 @@ class MemoryRoleRepository(
     """Memory Role Repository"""
 
 
-class UserRepository(Repository):
+class UserRepository(Repository[User]):
     """User Repository"""
 
 
 class MemoryUserRepository(
         MemoryRepository, UserRepository):
     """Memory User Repository"""
-
