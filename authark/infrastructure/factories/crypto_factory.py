@@ -8,10 +8,10 @@ from ..core.crypto import (
     PasslibHashService, PyJWTTokenService, JwtSupplier,
     PyJWTAccessTokenService, PyJWTRefreshTokenService)
 from ..config import Config
-from .memory_factory import MemoryFactory
+from .base_factory import BaseFactory
 
 
-class CryptoFactory(MemoryFactory):
+class CryptoFactory(BaseFactory):
     def __init__(self, config: Config) -> None:
         super().__init__(config)
         self.path = self.config.get('database', {}).get('url')

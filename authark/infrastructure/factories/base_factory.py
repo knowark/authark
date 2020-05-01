@@ -1,3 +1,4 @@
+from injectark import Factory
 from ...application.utilities import (
     QueryParser, TenantProvider, StandardTenantProvider)
 from ...application.repositories import (
@@ -19,10 +20,9 @@ from ...application.informers import (
     StandardAutharkInformer, StandardComposingInformer)
 from ..config import Config
 from ..core.tenancy import TenantSupplier, MemoryTenantSupplier
-from .factory import Factory
 
 
-class MemoryFactory(Factory):
+class BaseFactory(Factory):
     def __init__(self, config: Config) -> None:
         self.config = config
 

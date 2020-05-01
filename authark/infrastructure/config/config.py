@@ -1,89 +1,77 @@
-import multiprocessing
-from collections import defaultdict
 from typing import Dict, Any
-from abc import ABC, abstractmethod
-from json import loads, JSONDecodeError
 from pathlib import Path
 
 
-class Config(defaultdict, ABC):
-    @abstractmethod
-    def __init__(self):
-        self["mode"] = "BASE"
-        self['environment'] = {
-            'home': '/opt/authark'
+Config = Dict[str, Any]
+
+
+BASE: Config = {
+    "mode": "BASE",
+    "environment": {
+        "home": "/opt/authark"
+    },
+    "port": 6291,
+    "tokens": {
+        "tenant": {
+            "algorithm": "HS256",
+            "secret": "DEVSECRET123",
+            "lifetime": 86400
+        },
+        "access": {
+            "algorithm": "HS256",
+            "secret": "DEVSECRET123",
+            "lifetime": 86400
+        },
+        "refresh": {
+            "algorithm": "HS256",
+            "secret": "DEVSECRET123",
+            "lifetime": 604800,
+            "threshold": 86400
         }
-        self["port"] = 6291
-        self['tokens'] = {
-            'tenant': {
-                'algorithm': 'HS256',
-                'secret': 'DEVSECRET123',
-                'lifetime': 86400
-            },
-            'access': {
-                'algorithm': 'HS256',
-                'secret': 'DEVSECRET123',
-                'lifetime': 86400
-            },
-            'refresh': {
-                'algorithm': 'HS256',
-                'secret': 'DEVSECRET123',
-                'lifetime': 604800,
-                'threshold': 86400
-            }
-        }
-        self['strategies'] = ['base']
-        self['strategy'] = {}
-        self["tenancy"] = {
+    },
+    "strategies": ["base"],
+    "strategy": {},
+    "tenancy": {
+        "dsn": "",
+        "directory": ""
+    },
+    "zones": {
+        "default": {
             "dsn": "",
             "directory": ""
         }
+    }
+}
 
-        self["zones"] = {
-            "default": {
-                "dsn": "",
-                "directory": ""
-            }
-        }
-
-
-class DevelopmentConfig(Config):
-    def __init__(self):
-        super().__init__()
-        self["mode"] = "DEV"
-        self['factory'] = 'CheckFactory'
-        self['strategies'].extend(['check'])
+DEVELOPMENT_CONFIG: Config = {**BASE, **{
+    "mode": "DEV",
+    "factory": "CheckFactory",
+    "strategies": ["base", "check"]
+}}
 
 
-class ProductionConfig(Config):
-    def __init__(self):
-        super().__init__()
-        self['mode'] = "PROD"
-        self["factory"] = "JsonFactory"
-        self['strategies'].extend(['json'])
-        self['tenancy'] = {
-            "json": Path.home() / 'tenants.json',
-            "directory" : ""
+PRODUCTION_CONFIG: Config = {**BASE, **{
+    "mode": "PROD",
+    "factory": "JsonFactory",
+    "strategies": ["json"],
+    "tenancy": {
+        "json": Path.home() / "tenants.json",
+            "directory": ""
+    },
+    "data": {
+        "json": {
+            "default": str(Path.home() / "data")
         }
-        self['data'] = {
-            "json": {
-                "default": str(Path.home() / 'data')
-            }
+    },
+    "export": {
+        "type": "json",
+        "dir": Path.home() / "export"
+    },
+    "zones": {
+        "default": {
+            "dsn": ("postgresql://authark:authark"
+                    "@localhost/authark"),
+            "directory": ""
         }
-        self['export'] = {
-            'type': 'json',
-            'dir': Path.home() / 'export'
-        }
-        # self["tenancy"] = {
-        #     "dsn": (
-        #         "postgresql://authark:authark"
-        #         "@localhost/authark"),
-        #     "directory": ""
-        # }
-        self["zones"] = {
-            "default": {
-                "dsn": ("postgresql://authark:authark"
-                        "@localhost/authark"),
-                "directory": ""
-            }
-        }
+    }
+}}

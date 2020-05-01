@@ -66,9 +66,8 @@ class AuthCoordinator:
         tokens_dict = {}
         credential = credentials[0]
 
-        if self.refresh_token_service.renew(token):
-            tokens_dict['refresh_token'] = await self._generate_refresh_token(
-                credential.user_id, credential.client)
+        tokens_dict['refresh_token'] = await self._generate_refresh_token(
+            credential.user_id, credential.client)
 
         user = await self.user_repository.search(
             [('id', '=', credential.user_id)])

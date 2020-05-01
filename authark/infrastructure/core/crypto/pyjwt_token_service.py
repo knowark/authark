@@ -23,23 +23,9 @@ class PyJWTTokenService(TokenService):
         return token
 
     def valid(self, token: Token) -> bool:
-        decoded_payload = jwt.decode(
-            token.value, self.secret, algorithms=[self.algorithm])
+        jwt.decode(token.value, self.secret,
+                   algorithms=[self.algorithm])
         return True
-
-    def renew(self, token: Token) -> bool:
-        if self.threshold is None:
-            return False
-
-        decoded_payload = jwt.decode(
-            token.value, self.secret, algorithms=[self.algorithm])
-        expiration = decoded_payload.get('exp', -1)
-        now = time()
-
-        if expiration - self.threshold <= now <= expiration:
-            return True
-
-        return False
 
 
 class PyJWTAccessTokenService(PyJWTTokenService, AccessTokenService):

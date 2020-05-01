@@ -1,17 +1,27 @@
-# import inspect
-# from pytest import fixture, mark
-# from injectark import Injectark
-# from authark.infrastructure.factories import build_factory
+import inspect
+from injectark import Injectark
+from authark.infrastructure.config import DEVELOPMENT_CONFIG
+from authark.infrastructure.factories import (
+    factory_builder, strategy_builder)
 
 
-# def test_config(test_data):
-#     for config in test_data:
-#         print("FACTORY:::: ", config["factory"])
-#         factory = build_factory(config)
-#         resolver = Injectark(
-#             strategy=config["strategy"], factory=factory)
+config = DEVELOPMENT_CONFIG
 
-#         for resource in config["strategy"].keys():
-#             result = resolver.resolve(resource)
-#             classes = inspect.getmro(type(result))
-#             assert resource in [item.__name__ for item in classes]
+test_tuples = [
+    ('BaseFactory', ['base']),
+    ('CheckFactory', ['base', 'check'])
+]
+
+
+def test_factories():
+
+    for factory_name, strategy_names in test_tuples:
+        factory = factory_builder.build(config, name=factory_name)
+        strategy = strategy_builder.build(strategy_names)
+
+        injector = Injectark(strategy=strategy, factory=factory)
+
+        for resource in strategy.keys():
+            result = injector.resolve(resource)
+            classes = inspect.getmro(type(result))
+            assert resource in [item.__name__ for item in classes]

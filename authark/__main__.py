@@ -7,21 +7,21 @@ import sys
 import asyncio
 import uvloop
 from injectark import Injectark
-from authark.infrastructure.config import build_config
-from authark.infrastructure.factories import build_factory, build_strategy
+# from authark.infrastructure.config import build_config
+# from authark.infrastructure.factories import build_factory, build_strategy
 from .infrastructure.cli import Cli
 
 
 async def main(args=None):
     config_path = os.environ.get('AUTHARK_CONFIG', 'config.json')
-    config = build_config('PROD', config_path)
+    # config = build_config('PROD', config_path)
 
-    factory = build_factory(config)
-    strategy = build_strategy(config['strategies'], config['strategy'])
-    injector = Injectark(strategy=strategy, factory=factory)
-    injector['SetupSupplier'].setup()
+    # factory = build_factory(config)
+    # strategy = build_strategy(config['strategies'], config['strategy'])
+    # injector = Injectark(strategy=strategy, factory=factory)
+    # injector['SetupSupplier'].setup()
 
-    await Cli(config, injector).run(args or [])
+    # await Cli(config, injector).run(args or [])
 
 
 if __name__ == '__main__':

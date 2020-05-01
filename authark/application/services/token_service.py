@@ -13,10 +13,6 @@ class TokenService(ABC):
     def valid(self, token: Token) -> bool:
         "Valid method to be implemented."
 
-    @abstractmethod
-    def renew(self, token: Token) -> bool:
-        "Renew method to be implemented."
-
 
 class MemoryTokenService(TokenService):
     def generate_token(self, payload: Dict[str, Any]) -> Token:
@@ -25,8 +21,6 @@ class MemoryTokenService(TokenService):
     def valid(self, token: Token) -> bool:
         return True
 
-    def renew(self, token: Token) -> bool:
-        return False
 
 # Dedicated Aliases
 

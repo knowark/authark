@@ -1,9 +1,8 @@
 from traceback import format_tb
 from werkzeug.exceptions import HTTPException
-from flask import Flask, jsonify
 
 
-def register_error_handler(app: Flask):
+def register_error_handler(app):
 
     def handle_error(error):
         code = error.code or 500

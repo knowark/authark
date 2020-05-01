@@ -1,9 +1,8 @@
-import sys
 from argparse import ArgumentParser, Namespace
 from injectark import Injectark
 from typing import List
 from ..core import Config
-from ..web import create_app, ServerApplication
+# from ..web import create_app, ServerApplication
 from ..terminal import Main, Context
 
 
@@ -72,9 +71,9 @@ class Cli:
     def serve(self, args: Namespace) -> None:
         print('...SERVE:::', args)
 
-        print(create_app)
-        app = create_app(self.config, self.resolver)
-        ServerApplication(app, self.config['gunicorn']).run()
+        # print(create_app)
+        # app = create_app(self.config, self.resolver)
+        # ServerApplication(app, self.config['gunicorn']).run()
 
     def terminal(self, args: Namespace) -> None:
         print('...TERMINAL:::', args)

@@ -72,7 +72,6 @@ async def test_auth_coordinator_refresh_authenticate_no_renewal(
 
     assert isinstance(tokens, dict)
     assert 'access_token' in tokens.keys()
-    assert 'refresh_token' not in tokens.keys()
 
 
 async def test_auth_coordinator_refresh_authenticate_renewal(
@@ -260,6 +259,6 @@ async def test_auth_coordinator_deregister_without_ids(
 
 async def test_make_password_credential(
         auth_coordinator: AuthCoordinator) -> None:
-    user_id='2'
-    user_password=""
-    await auth_coordinator._make_password_credential(user_id,user_password)
+    user_id = '2'
+    user_password = ""
+    await auth_coordinator._make_password_credential(user_id, user_password)

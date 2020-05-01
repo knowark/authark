@@ -8,7 +8,6 @@ def test_token_service() -> None:
     methods = TokenService.__abstractmethods__  # type: ignore
     assert 'generate_token' in methods
     assert 'valid' in methods
-    assert 'renew' in methods
 
     sig = signature(TokenService.generate_token)
     assert sig.parameters.get('payload')
@@ -37,11 +36,3 @@ def test_memory_token_service_valid() -> None:
     result = token_service.valid(token)
 
     assert result is True
-
-
-def test_memory_token_service_renew() -> None:
-    token_service = MemoryTokenService()
-    token = Token('REFRESH')
-    result = token_service.renew(token)
-
-    assert result is False
