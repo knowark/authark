@@ -27,9 +27,9 @@ with open('../authark/__init__.py') as f:
     exec(f.read())
 
 # The short X.Y version
-version = __version__
+version = '0.1.0'
 # The full version, including alpha/beta/rc tags
-release = __version__
+release = '0.1.0'
 
 
 # -- General configuration ---------------------------------------------------
