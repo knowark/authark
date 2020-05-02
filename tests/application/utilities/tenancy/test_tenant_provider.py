@@ -4,7 +4,7 @@ from authark.application.utilities import (
 
 
 def test_tenant_provider_methods():
-    abstract_methods = TenantProvider.__abstractmethods__
+    abstract_methods = TenantProvider.__abstractmethods__  # type: ignore
     assert 'setup' in abstract_methods
 
 
