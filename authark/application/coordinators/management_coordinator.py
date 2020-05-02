@@ -17,44 +17,55 @@ class ManagementCoordinator:
         self.ranking_repository = ranking_repository
 
     async def create_dominion(self, dominion_dicts: RecordList) -> None:
-        dominions = ([
-            Dominion(**dominion_dict)
-            for dominion_dict in dominion_dicts])
+        dominions = ([Dominion(**dominion_dict)
+                      for dominion_dict in dominion_dicts])
         await self.dominion_repository.add(dominions)
 
     async def remove_dominion(self, dominion_ids: List[str]) -> bool:
         dominions = await self.dominion_repository.search(
             [('id', 'in', dominion_ids)])
-        await self.dominion_repository.remove(dominions)
-        return True
+        return await self.dominion_repository.remove(dominions)
 
     async def create_role(self, role_dicts: RecordList) -> None:
-        roles = ([
-            Role(**role_dict)
-            for role_dict in role_dicts])
+        roles = [Role(**role_dict) for role_dict in role_dicts]
         await self.role_repository.add(roles)
 
     async def remove_role(self, role_ids: List[str]) -> bool:
-        roles = await self.dominion_repository.search(
-            [('id', 'in', role_ids)])
-        await self.role_repository.remove(roles)
-        return True
-
-    async def assign_role(
-            self, user_ids: str, role_ids: List[str]) -> bool:
-        users = await self.user_repository.search(
-            [('id', 'in', user_ids)])
         roles = await self.role_repository.search(
             [('id', 'in', role_ids)])
-        for i in range(len(users)):
-            rankings = Ranking(user_id=users[i].id, role_id=roles[i].id)
-        duplicates = await self.ranking_repository.search([
-            ('user_id', '=', users[i].id), ('role_id', '=', roles[i].id)])
-        if duplicates:
-            return False
+        return await self.role_repository.remove(roles)
+
+    async def assign_role(self, ranking_dicts: RecordList) -> None:
+        user_set = {
+            item.id for item in await self.user_repository.search([
+                ('id', 'in', [
+                    record['user_id'] for record in ranking_dicts])])
+        }
+
+        role_set = {
+            item.id for item in await self.role_repository.search([
+                ('id', 'in', [
+                    record['role_id'] for record in ranking_dicts])])
+        }
+
+        rankings = [
+            Ranking(**record) for record in ranking_dicts
+            if record['user_id'] in user_set and
+            record['role_id'] in role_set]
+
+        existing_rankings = await self.ranking_repository.search([
+            '|', ('user_id', 'in',  [ranking.user_id for ranking in rankings]),
+            ('role_id', 'in',  [ranking.role_id for ranking in rankings])
+        ])
+
+        # Check for duplicates
+        for existing_ranking in existing_rankings:
+            for ranking in rankings:
+                if (existing_ranking.user_id == ranking.user_id and
+                        existing_ranking.role_id == ranking.role_id):
+                    ranking.id = existing_ranking.id
 
         await self.ranking_repository.add(rankings)
-        return True
 
     async def deassign_role(self, ranking_ids: List[str]) -> bool:
         rankings = await self.ranking_repository.search(

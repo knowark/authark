@@ -1,9 +1,8 @@
-from typing import Dict
-from pytest import fixture, raises
+from pytest import fixture
 from authark.application.models import (
-    User, Credential, Token, Dominion, Role, Ranking)
+    User, Credential, Dominion, Role, Ranking)
 from authark.application.utilities import (
-    QueryParser, TenantProvider, StandardTenantProvider, Tenant, exceptions)
+    QueryParser, StandardTenantProvider, Tenant, exceptions)
 from authark.application.repositories import (
     UserRepository, MemoryUserRepository,
     CredentialRepository, MemoryCredentialRepository,
@@ -12,7 +11,7 @@ from authark.application.repositories import (
     RankingRepository, MemoryRankingRepository)
 from authark.application.services import (
     TokenService, MemoryTokenService, AccessService,
-    RefreshTokenService, ImportService, MemoryImportService)
+    ImportService, MemoryImportService)
 from authark.application.coordinators import (
     AuthCoordinator, ManagementCoordinator,
     ImportCoordinator, SessionCoordinator)
@@ -110,7 +109,7 @@ def mock_ranking_repository(
     mock_ranking_repository.load({
         "default": {
             "1": Ranking(id='1', user_id='1', role_id='1'),
-            "2": Ranking(id='2', user_id='1', role_id='1')
+            "2": Ranking(id='2', user_id='2', role_id='1')
         }
     })
     return mock_ranking_repository
@@ -135,7 +134,7 @@ def mock_hash_service() -> HashService:
 
 
 @fixture
-def mock_import_service() -> ImportService:   #duda
+def mock_import_service() -> ImportService:  # duda
     mock_import_service = MemoryImportService()
     user_1 = User(**{'id': "1",
                      'external_source': "erp.users",
@@ -203,17 +202,19 @@ def access_service(mock_ranking_repository, mock_role_repository,
 def auth_coordinator(mock_user_repository, mock_credential_repository,
                      mock_dominion_repository, mock_hash_service,
                      access_service, mock_refresh_token_service):
-    return AuthCoordinator(mock_user_repository, mock_credential_repository,
-                           mock_dominion_repository, mock_hash_service,
-                           access_service, mock_refresh_token_service)
+    return AuthCoordinator(
+        mock_user_repository, mock_credential_repository,
+        mock_dominion_repository, mock_hash_service,
+        access_service, mock_refresh_token_service)
 
 
 @fixture
 def management_coordinator(
         mock_user_repository, mock_dominion_repository,
         mock_role_repository, mock_ranking_repository):
-    return ManagementCoordinator(mock_user_repository, mock_dominion_repository,
-                                 mock_role_repository, mock_ranking_repository)
+    return ManagementCoordinator(
+        mock_user_repository, mock_dominion_repository,
+        mock_role_repository, mock_ranking_repository)
 
 
 @fixture
@@ -221,9 +222,10 @@ def import_coordinator(
         mock_import_service, mock_user_repository,
         mock_credential_repository, mock_role_repository,
         mock_ranking_repository, mock_dominion_repository):
-    return ImportCoordinator(mock_import_service, mock_user_repository,
-                             mock_credential_repository, mock_role_repository,
-                             mock_ranking_repository, mock_dominion_repository)
+    return ImportCoordinator(
+        mock_import_service, mock_user_repository,
+        mock_credential_repository, mock_role_repository,
+        mock_ranking_repository, mock_dominion_repository)
 
 
 @fixture
