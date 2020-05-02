@@ -1,10 +1,9 @@
 from typing import List, Optional, Any
-from ..utilities import QueryDomain
 from ..services import ImportService
 from ..repositories import (
     UserRepository, CredentialRepository, RoleRepository, RankingRepository,
     DominionRepository)
-from ..models import User, Credential, Role, Ranking, Dominion
+from ..models import User, Credential, Ranking, Dominion
 
 
 class ImportCoordinator:
@@ -22,32 +21,16 @@ class ImportCoordinator:
         self.dominion_repository = dominion_repository
 
     async def import_users(self, filepath: str, source: str,
-                     password_field: str) -> None:
+                           password_field: str) -> None:
         users_list = self.import_service.import_users(
             filepath, source, password_field)
         for user, credential, roles in users_list:
-
-            existing_user = await self._search_user(user)
-            if existing_user:
-                user = existing_user
-                await self.user_repository.add(user)
-            else:
-                user = await self.user_repository.add(user)
+            user, *_ = await self.user_repository.add(user)
             if credential:
                 credential.user_id = user.id
                 await self._update_credential(credential)
             if roles:
                 await self._generate_ranking_user(roles, user)
-
-    async def _search_user(self, user: User) -> Optional[User]:
-        domain: QueryDomain = ['|', ('username', '=', user.username),
-                               ('email', '=', user.email)]
-        if user.id:
-            domain = [('id', '=', user.id)]
-        user_result = await self.user_repository.search(domain)
-        if user_result:
-            return user_result[0]
-        return None
 
     async def _update_credential(self, credential: Credential):
         domain = [
@@ -57,7 +40,7 @@ class ImportCoordinator:
         existing_credential = await self.credential_repository.search(domain)
         if existing_credential:
             credential.id = existing_credential[0].id
-            result = await self.credential_repository.add(credential)
+            await self.credential_repository.add(credential)
         else:
             await self.credential_repository.add(credential)
 
@@ -74,13 +57,15 @@ class ImportCoordinator:
             return None
         ranking_domain = [('user_id', '=', user.id),
                           ('role_id', '=', role[0].id)]
-        existing_ranking = await self.ranking_repository.search(ranking_domain)
+        existing_ranking = await self.ranking_repository.search(
+            ranking_domain)
         if not existing_ranking:
             ranking = Ranking(user_id=user.id,
                               role_id=role[0].id)
             await self.ranking_repository.add(ranking)
 
-    async def _generate_ranking_user(self, roles: List[Any], user: User) -> None:
+    async def _generate_ranking_user(
+            self, roles: List[Any], user: User) -> None:
         for role, dominion in roles:
             existing_dominion = await self._search_dominion(dominion)
             if existing_dominion:

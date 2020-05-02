@@ -47,7 +47,7 @@ async def test_management_coordinator_create_role(
 
 async def test_management_coordinator_remove_role(
         management_coordinator: ManagementCoordinator) -> None:
-    role_ids= ['1']
+    role_ids = ['1']
     await management_coordinator.remove_role(role_ids)
     assert len(management_coordinator.role_repository.data['default']) == 0
 
