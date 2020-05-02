@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from authark.application.repositories import (
-    UserRepository, CredentialRepository, DominionRepository,
-    RoleRepository)
+    UserRepository, CredentialRepository,
+    DominionRepository, RoleRepository)
 from ..utilities import QueryDomain, RecordList
 
 
@@ -20,7 +20,6 @@ class AutharkInformer(ABC):
                     model: str,
                     domain: QueryDomain = None) -> int:
         """Returns a the <<model>> records count"""
-
 
 
 class StandardAutharkInformer(AutharkInformer):

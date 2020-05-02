@@ -1,16 +1,9 @@
-from pytest import fixture, raises
-from authark.application.models.user import User
-from authark.application.models.credential import Credential
-from authark.application.repositories.memory_model_repositories import (
-    UserRepository, MemoryUserRepository,
-    CredentialRepository, MemoryCredentialRepository)
-from authark.application.utilities import QueryParser, QueryDomain
-from authark.application.informers.authark_informer import (
-    AutharkInformer)
+from authark.application.utilities import QueryDomain
+from authark.application.informers.authark_informer import AutharkInformer
 
 
 def test_authark_informer_methods():
-    methods = AutharkInformer.__abstractmethods__
+    methods = AutharkInformer.__abstractmethods__  # type: ignore
     assert 'search' in methods
     assert 'count' in methods
 
