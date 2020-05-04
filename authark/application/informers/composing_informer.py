@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
-from authark.application.repositories import (
+from ..domain.repositories import (
     DominionRepository, RoleRepository, RankingRepository)
-from ..utilities import ExtendedRankingDictList
+from ..domain.common import ExtendedRankingDictList
 
 
 class ComposingInformer(ABC):

@@ -9,7 +9,7 @@ import uvloop
 from injectark import Injectark
 # from authark.infrastructure.config import build_config
 # from authark.infrastructure.factories import build_factory, build_strategy
-from .infrastructure.cli import Cli
+from .infrastructure.presentation.cli import Cli
 
 
 async def main(args=None):
@@ -29,14 +29,3 @@ if __name__ == '__main__':
     loop = asyncio.get_event_loop()
     loop.run_until_complete(main(sys.argv[1:]))
     loop.close()
-
-
-#     factory = build_factory(config)
-#     strategy = config['strategy']
-#     resolver = Injectark(strategy=strategy, factory=factory)
-
-#     Cli(config, resolver).run(sys.argv[1:])
-
-
-# if __name__ == '__main__':  # pragma: no cover
-#     main()

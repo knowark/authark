@@ -1,8 +1,8 @@
 from abc import ABC, abstractmethod
-from authark.application.repositories import (
+from ..domain.repositories import (
     UserRepository, CredentialRepository,
     DominionRepository, RoleRepository)
-from ..utilities import QueryDomain, RecordList
+from ..domain.common import QueryDomain, RecordList
 
 
 class AutharkInformer(ABC):

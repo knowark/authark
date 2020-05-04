@@ -1,9 +1,9 @@
-from pytest import fixture, raises
-from authark.application.models import (
+from pytest import fixture
+from authark.application.domain.models import (
     User, Credential, Dominion, Role, Ranking)
-from authark.application.utilities import (
+from authark.application.domain.common import (
     QueryParser, Tenant, StandardTenantProvider)
-from authark.application.repositories import (
+from authark.application.domain.repositories import (
     UserRepository, MemoryUserRepository,
     CredentialRepository, MemoryCredentialRepository,
     DominionRepository, MemoryDominionRepository,

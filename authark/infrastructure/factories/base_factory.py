@@ -18,8 +18,9 @@ from ...application.coordinators import (
     ImportCoordinator, SessionCoordinator)
 from ...application.informers import (
     StandardAutharkInformer, StandardComposingInformer)
-from ..config import Config
+from ..config import Config, config
 from ..core.tenancy import TenantSupplier, MemoryTenantSupplier
+from ..web import WebApplication
 
 
 class BaseFactory(Factory):
@@ -115,9 +116,10 @@ class BaseFactory(Factory):
                                  ranking_repository, dominion_repository)
 
     def session_coordinator(
-        self, tenant_provider: TenantProvider
+        self, tenant_provider: TenantProvider,
+        auth_provider: AuthProvider
     ) -> SessionCoordinator:
-        return SessionCoordinator(tenant_provider)
+        return SessionCoordinator(tenant_provider, auth_provider)
 
     def access_service(
             self, ranking_repository: RankingRepository,
@@ -152,3 +154,8 @@ class BaseFactory(Factory):
 
     def memory_tenant_supplier(self) -> TenantSupplier:
         return MemoryTenantSupplier()
+
+    # Presentation
+
+    def web_application(self) -> WebApplication:
+        return WebApplication(self.config, self.injector)

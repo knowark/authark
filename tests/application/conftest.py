@@ -1,22 +1,21 @@
 from pytest import fixture
-from authark.application.models import (
+from authark.application.domain.models import (
     User, Credential, Dominion, Role, Ranking)
-from authark.application.utilities import (
-    QueryParser, StandardTenantProvider, Tenant, exceptions)
-from authark.application.repositories import (
+from authark.application.domain.common import (
+    QueryParser, StandardTenantProvider, Tenant,
+    StandardAuthProvider, User as CUser)
+from authark.application.domain.repositories import (
     UserRepository, MemoryUserRepository,
     CredentialRepository, MemoryCredentialRepository,
     DominionRepository, MemoryDominionRepository,
     RoleRepository, MemoryRoleRepository,
     RankingRepository, MemoryRankingRepository)
-from authark.application.services import (
+from authark.application.domain.services import (
     TokenService, MemoryTokenService, AccessService,
-    ImportService, MemoryImportService)
-from authark.application.coordinators import (
-    AuthCoordinator, ManagementCoordinator,
-    ImportCoordinator, SessionCoordinator)
-from authark.application.services.hash_service import (
+    ImportService, MemoryImportService,
     HashService, MemoryHashService)
+from authark.application.managers import (
+    AuthManager, ManagementManager, ImportManager, SessionManager)
 
 
 # # ###########
@@ -29,6 +28,13 @@ def parser():
 
 
 # PROVIDERS
+
+@fixture
+def mock_auth_provider() -> StandardAuthProvider:
+    mock_auth_provider = StandardAuthProvider()
+    mock_auth_provider.setup(CUser(id='001', name='johndoe'))
+    return mock_auth_provider
+
 
 @fixture
 def mock_tenant_provider() -> StandardTenantProvider:
@@ -199,35 +205,35 @@ def access_service(mock_ranking_repository, mock_role_repository,
 
 
 @fixture
-def auth_coordinator(mock_user_repository, mock_credential_repository,
-                     mock_dominion_repository, mock_hash_service,
-                     access_service, mock_refresh_token_service):
-    return AuthCoordinator(
+def auth_manager(mock_user_repository, mock_credential_repository,
+                 mock_dominion_repository, mock_hash_service,
+                 access_service, mock_refresh_token_service):
+    return AuthManager(
         mock_user_repository, mock_credential_repository,
         mock_dominion_repository, mock_hash_service,
         access_service, mock_refresh_token_service)
 
 
 @fixture
-def management_coordinator(
+def management_manager(
         mock_user_repository, mock_dominion_repository,
         mock_role_repository, mock_ranking_repository):
-    return ManagementCoordinator(
+    return ManagementManager(
         mock_user_repository, mock_dominion_repository,
         mock_role_repository, mock_ranking_repository)
 
 
 @fixture
-def import_coordinator(
+def import_manager(
         mock_import_service, mock_user_repository,
         mock_credential_repository, mock_role_repository,
         mock_ranking_repository, mock_dominion_repository):
-    return ImportCoordinator(
+    return ImportManager(
         mock_import_service, mock_user_repository,
         mock_credential_repository, mock_role_repository,
         mock_ranking_repository, mock_dominion_repository)
 
 
 @fixture
-def session_coordinator(mock_tenant_provider):
-    return SessionCoordinator(mock_tenant_provider)
+def session_manager(mock_tenant_provider, mock_auth_provider):
+    return SessionManager(mock_tenant_provider, mock_auth_provider)

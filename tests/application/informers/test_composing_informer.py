@@ -1,9 +1,3 @@
-from pytest import fixture, raises
-from authark.application.models.user import User
-from authark.application.models.credential import Credential
-from authark.application.repositories.memory_model_repositories import (
-    UserRepository, MemoryUserRepository, CredentialRepository, MemoryCredentialRepository)
-from authark.application.utilities import QueryParser
 from authark.application.informers import ComposingInformer
 
 

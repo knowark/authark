@@ -1,4 +1,4 @@
-from authark.application.utilities import QueryDomain
+from authark.application.domain.common import QueryDomain
 from authark.application.informers.authark_informer import AutharkInformer
 
 
