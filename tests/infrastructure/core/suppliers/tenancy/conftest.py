@@ -1,7 +1,7 @@
 from pytest import fixture
 from json import dump, loads
 from pathlib import Path
-from authark.infrastructure.core.tenancy import JsonTenantSupplier
+from authark.infrastructure.core.suppliers import JsonTenantSupplier
 
 
 @fixture

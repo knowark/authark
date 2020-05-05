@@ -1,26 +1,26 @@
 from injectark import Factory
-from ...application.utilities import (
-    QueryParser, TenantProvider, StandardTenantProvider)
-from ...application.repositories import (
+from ...application.domain.common import (
+    QueryParser, TenantProvider, StandardTenantProvider,
+    AuthProvider, StandardAuthProvider)
+from ...application.domain.repositories import (
     UserRepository, MemoryUserRepository,
     CredentialRepository, MemoryCredentialRepository,
     DominionRepository, MemoryDominionRepository,
     RoleRepository, MemoryRoleRepository,
     RankingRepository, MemoryRankingRepository)
-from ...application.services import (
+from ...application.domain.services import (
     HashService, MemoryHashService,
     TokenService, MemoryTokenService,
     AccessTokenService, MemoryAccessTokenService,
     RefreshTokenService, MemoryRefreshTokenService,
     ImportService, MemoryImportService, AccessService)
-from ...application.coordinators import (
-    AuthCoordinator, ManagementCoordinator,
-    ImportCoordinator, SessionCoordinator)
+from ...application.managers import (
+    AuthManager, ManagementManager,
+    ImportManager, SessionManager)
 from ...application.informers import (
     StandardAutharkInformer, StandardComposingInformer)
-from ..config import Config, config
-from ..core.tenancy import TenantSupplier, MemoryTenantSupplier
-from ..web import WebApplication
+from ..core.common import Config
+from ..core.suppliers.tenancy import TenantSupplier, MemoryTenantSupplier
 
 
 class BaseFactory(Factory):
@@ -76,50 +76,53 @@ class BaseFactory(Factory):
     def memory_import_service(self) -> MemoryImportService:
         return MemoryImportService()
 
+    def standard_auth_provider(self) -> StandardAuthProvider:
+        return StandardAuthProvider()
+
     def standard_tenant_provider(self) -> StandardTenantProvider:
         return StandardTenantProvider()
 
-    # Coordinators
+    # Managers
 
-    def auth_coordinator(
+    def auth_manager(
             self, user_repository: UserRepository,
             credential_repository: CredentialRepository,
             dominion_repository: DominionRepository,
             hash_service: HashService,
             access_service: AccessService,
-            refresh_token_service: RefreshTokenService) -> AuthCoordinator:
-        return AuthCoordinator(
+            refresh_token_service: RefreshTokenService) -> AuthManager:
+        return AuthManager(
             user_repository, credential_repository,
             dominion_repository,
             hash_service, access_service, refresh_token_service)
 
-    def management_coordinator(
+    def management_manager(
         self, user_repository: UserRepository,
         dominion_repository: DominionRepository,
         role_repository: RoleRepository,
         ranking_repository: RankingRepository
-    ) -> ManagementCoordinator:
-        return ManagementCoordinator(
+    ) -> ManagementManager:
+        return ManagementManager(
             user_repository, dominion_repository,
             role_repository, ranking_repository)
 
-    def import_coordinator(self,
-                           import_service: ImportService,
-                           user_repository: UserRepository,
-                           credential_repository: CredentialRepository,
-                           role_repository: RoleRepository,
-                           ranking_repository: RankingRepository,
-                           dominion_repository: DominionRepository,
-                           ) -> ImportCoordinator:
-        return ImportCoordinator(import_service, user_repository,
-                                 credential_repository, role_repository,
-                                 ranking_repository, dominion_repository)
+    def import_manager(self,
+                       import_service: ImportService,
+                       user_repository: UserRepository,
+                       credential_repository: CredentialRepository,
+                       role_repository: RoleRepository,
+                       ranking_repository: RankingRepository,
+                       dominion_repository: DominionRepository,
+                       ) -> ImportManager:
+        return ImportManager(import_service, user_repository,
+                             credential_repository, role_repository,
+                             ranking_repository, dominion_repository)
 
-    def session_coordinator(
+    def session_manager(
         self, tenant_provider: TenantProvider,
         auth_provider: AuthProvider
-    ) -> SessionCoordinator:
-        return SessionCoordinator(tenant_provider, auth_provider)
+    ) -> SessionManager:
+        return SessionManager(tenant_provider, auth_provider)
 
     def access_service(
             self, ranking_repository: RankingRepository,
@@ -155,7 +158,3 @@ class BaseFactory(Factory):
     def memory_tenant_supplier(self) -> TenantSupplier:
         return MemoryTenantSupplier()
 
-    # Presentation
-
-    def web_application(self) -> WebApplication:
-        return WebApplication(self.config, self.injector)

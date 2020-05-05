@@ -1,8 +1,7 @@
 import json
 from typing import List, Any
-from ....application.repositories import CredentialRepository
-from ....application.services import ImportService, HashService
-from ....application.models import User, Credential, Role, Dominion
+from .....application.domain.services import ImportService, HashService
+from .....application.domain.models import User, Credential, Role, Dominion
 
 
 class JsonImportService(ImportService):

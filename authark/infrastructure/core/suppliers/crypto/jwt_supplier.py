@@ -1,4 +1,3 @@
-import json
 import jwt
 from typing import Dict
 

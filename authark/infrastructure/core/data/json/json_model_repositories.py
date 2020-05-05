@@ -1,7 +1,7 @@
-from .....application.utilities import TenantProvider, QueryParser
-from .....application.models import (
+from .....application.domain.common import TenantProvider, QueryParser
+from .....application.domain.models import (
     Credential, Dominion, Ranking, Role, User)
-from .....application.repositories import (
+from .....application.domain.repositories import (
     CredentialRepository, DominionRepository, RankingRepository,
     RoleRepository, UserRepository)
 from .json_repository import JsonRepository

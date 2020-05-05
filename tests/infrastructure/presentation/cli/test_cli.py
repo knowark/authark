@@ -57,8 +57,6 @@ async def test_cli_provision(cli, monkeypatch):
     assert len(tenants) == 1
     assert tenants[0]["name"] == "custom"
 
-    print("TENANTS::::", tenants)
-
 
 # def test_cli_serve(cli, monkeypatch, namespace):
 #     called = False

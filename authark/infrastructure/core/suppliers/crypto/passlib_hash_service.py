@@ -1,6 +1,6 @@
 from typing import Dict
 from passlib.hash import pbkdf2_sha256
-from ....application.services import HashService
+from .....application.domain.services import HashService
 
 
 class PasslibHashService(HashService):

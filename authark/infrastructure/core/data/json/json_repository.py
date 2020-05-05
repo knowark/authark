@@ -1,14 +1,13 @@
-import os
 import time
 from pathlib import Path
 from collections import defaultdict
 from json import loads, load, dump
 from uuid import uuid4
-from typing import Dict, List, Any, Type, Callable, Generic, Union
-from .....application.models import T
-from .....application.repositories import Repository
-from .....application.utilities import (
-    QueryDomain, TenantProvider, QueryParser, EntityNotFoundError)
+from typing import Dict, List, Any, Callable, Generic, Union
+from .....application.domain.models import T
+from .....application.domain.repositories import Repository
+from .....application.domain.common import (
+    QueryDomain, TenantProvider, QueryParser)
 
 
 class JsonRepository(Repository, Generic[T]):
@@ -28,7 +27,7 @@ class JsonRepository(Repository, Generic[T]):
 
         items = item if isinstance(item, list) else [item]
 
-        data = defaultdict(lambda: {})  # type: Dict[str, Any]
+        data: Dict[str, Any] = defaultdict(lambda: {})
         if self.file_path.exists():
             data.update(loads(self.file_path.read_text()))
 

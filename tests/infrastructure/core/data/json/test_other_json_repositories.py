@@ -3,7 +3,7 @@ from unittest.mock import Mock
 from authark.infrastructure.core.data import (
     JsonCredentialRepository, JsonDominionRepository,
     JsonRankingRepository, JsonRoleRepository, JsonUserRepository)
-from authark.application.utilities import (
+from authark.application.domain.common import (
     QueryParser, StandardTenantProvider)
 
 

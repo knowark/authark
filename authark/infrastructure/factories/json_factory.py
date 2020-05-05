@@ -1,13 +1,10 @@
-from ...application.utilities import QueryParser, TenantProvider
-from ...application.repositories import UserRepository
-from ...application.services import HashService, TokenService
-from ..data import (
-    JsonCredentialRepository,
-    JsonDominionRepository, JsonRoleRepository,
-    JsonRepository, JsonUserRepository,
-    JsonRankingRepository, JsonImportService)
-from ..config import Config
-from ..core.tenancy import TenantSupplier, JsonTenantSupplier
+from ...application.domain.common import QueryParser, TenantProvider
+from ...application.domain.services import HashService
+from ..core.data import (
+    JsonCredentialRepository, JsonDominionRepository, JsonRoleRepository,
+    JsonUserRepository, JsonRankingRepository, JsonImportService)
+from ..core.common import Config
+from ..core.suppliers.tenancy import TenantSupplier, JsonTenantSupplier
 from .crypto_factory import CryptoFactory
 
 

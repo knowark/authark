@@ -1,8 +1,8 @@
 import jwt
 from time import time
 from typing import Dict, Any
-from ....application.models import Token
-from ....application.services import (
+from .....application.domain.models import Token
+from .....application.domain.services import (
     TokenService, AccessTokenService, RefreshTokenService)
 
 

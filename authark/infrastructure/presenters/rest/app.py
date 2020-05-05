@@ -11,7 +11,7 @@ from .middleware import middlewares
 from .spec import create_spec
 
 
-class WebApplication:
+class RestApplication:
     def __init__(self, config: Config, injector: Injectark) -> None:
         self.config = config
         self.injector = injector

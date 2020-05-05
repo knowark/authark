@@ -1,13 +1,7 @@
-from pathlib import Path
-from ...application.utilities import QueryParser
-from ...application.repositories import (
-    UserRepository, CredentialRepository)
-from ...application.services import HashService, TokenService
-from ...application.coordinators import AuthCoordinator
-from ..core.crypto import (
+from ..core.suppliers.crypto import (
     PasslibHashService, PyJWTTokenService, JwtSupplier,
     PyJWTAccessTokenService, PyJWTRefreshTokenService)
-from ..config import Config
+from ..core.common import Config
 from .base_factory import BaseFactory
 
 

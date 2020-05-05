@@ -1,4 +1,4 @@
-from ....application.utilities import ApplicationError
+from ....application.domain.common import ApplicationError
 
 
 class InfrastructureError(ApplicationError):

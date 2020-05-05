@@ -7,7 +7,6 @@ def test_passlib_hash_service_instantiation(hash_service):
 
 def test_passlib_hash_service_generate_hash(hash_service):
     result = hash_service.generate_hash('MY_SECRET_PASSWORD')
-    print('result:::', result)
     assert '$pbkdf2-sha256' in result
 
 
