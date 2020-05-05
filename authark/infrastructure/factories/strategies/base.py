@@ -1,9 +1,11 @@
 base = {
-    # --- PARSER ---
+    # --- PROVIDERS ---
     "QueryParser": {
         "method": "query_parser"
     },
-    # --- PROVIDERS ---
+    "AuthProvider": {
+        "method": "standard_auth_provider"
+    },
     "TenantProvider": {
         "method": "standard_tenant_provider"
     },
@@ -36,27 +38,8 @@ base = {
     "ImportService": {
         "method": "memory_import_service"
     },
-    "CatalogService": {
-        "method": "memory_catalog_service"
-    },
-    "ProvisionService": {
-        "method": "memory_provision_service"
-    },
     "AccessService": {
         "method": "access_service"
-    },
-    # --- COORDINATORS ---
-    "AuthCoordinator": {
-        "method": "auth_coordinator"
-    },
-    "ManagementCoordinator": {
-        "method": "management_coordinator"
-    },
-    "ImportCoordinator": {
-        "method": "import_coordinator"
-    },
-    "SessionCoordinator": {
-        "method": "session_coordinator"
     },
     # --- INFORMERS ---
     "AutharkInformer": {
@@ -64,6 +47,19 @@ base = {
     },
     "ComposingInformer": {
         "method": "standard_composing_informer"
+    },
+    # --- MANAGERS ---
+    "AuthManager": {
+        "method": "auth_manager"
+    },
+    "ManagementManager": {
+        "method": "management_manager"
+    },
+    "ImportManager": {
+        "method": "import_manager"
+    },
+    "SessionManager": {
+        "method": "session_manager"
     },
     # --- SUPPLIERS ---
     "TenantSupplier": {

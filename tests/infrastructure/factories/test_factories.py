@@ -1,6 +1,6 @@
 import inspect
 from injectark import Injectark
-from authark.infrastructure.config import DEVELOPMENT_CONFIG
+from authark.infrastructure.core.common import DEVELOPMENT_CONFIG
 from authark.infrastructure.factories import (
     factory_builder, strategy_builder)
 
@@ -9,7 +9,9 @@ config = DEVELOPMENT_CONFIG
 
 test_tuples = [
     ('BaseFactory', ['base']),
-    ('CheckFactory', ['base', 'check'])
+    ('CheckFactory', ['base', 'check']),
+    ('CryptoFactory', ['base', 'crypto']),
+    ('JsonFactory', ['base', 'crypto', 'json']),
 ]
 
 

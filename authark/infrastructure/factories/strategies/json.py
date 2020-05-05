@@ -31,24 +31,11 @@ json = {
     "ImportService": {
         "method": "json_import_service"
     },
-    "ExportService": {
-        "method": "json_export_service"
-    },
-    "CatalogService": {
-        "method": "json_catalog_service"
-    },
-    "ProvisionService": {
-        "method": "json_provision_service"
-    },
     # --- SUPPLIERS ---
     "TenantSupplier": {
         "method": "json_tenant_supplier"
     },
     "JwtSupplier": {
         "method":  "jwt_supplier"
-    },
-    # --- AUTH ---
-    "Authenticate": {
-        "method": "middleware_authenticate"
     }
 }

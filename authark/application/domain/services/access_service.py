@@ -6,7 +6,7 @@ from ..common import TenantProvider, Tenant
 from .token_service import AccessTokenService
 
 
-class AccessService:  # funciona como coordinator
+class AccessService:
 
     def __init__(self, ranking_repository: RankingRepository,
                  role_repository: RoleRepository,

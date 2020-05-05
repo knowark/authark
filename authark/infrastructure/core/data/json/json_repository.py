@@ -113,4 +113,3 @@ class JsonRepository(Repository, Generic[T]):
         slug = self.tenant_provider.tenant.slug
         path = Path(self.data_path) / zone / slug / f"{self.collection}.json"
         return path
-    # /opt/authark/data/c/knowark/dummies.json

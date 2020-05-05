@@ -32,6 +32,12 @@ class BaseFactory(Factory):
     def query_parser(self) -> QueryParser:
         return QueryParser()
 
+    def standard_auth_provider(self) -> StandardAuthProvider:
+        return StandardAuthProvider()
+
+    def standard_tenant_provider(self) -> StandardTenantProvider:
+        return StandardTenantProvider()
+
     def memory_user_repository(
             self, query_parser: QueryParser,
             tenant_provider: TenantProvider
@@ -75,12 +81,6 @@ class BaseFactory(Factory):
 
     def memory_import_service(self) -> MemoryImportService:
         return MemoryImportService()
-
-    def standard_auth_provider(self) -> StandardAuthProvider:
-        return StandardAuthProvider()
-
-    def standard_tenant_provider(self) -> StandardTenantProvider:
-        return StandardTenantProvider()
 
     # Managers
 
@@ -137,7 +137,7 @@ class BaseFactory(Factory):
 
     # Reporters
 
-    def standard_authark_reporter(
+    def standard_authark_informer(
         self, user_repository: UserRepository,
         credential_repository: CredentialRepository,
         dominion_repository: DominionRepository,
@@ -147,7 +147,7 @@ class BaseFactory(Factory):
             user_repository, credential_repository,
             dominion_repository, role_repository)
 
-    def standard_composing_reporter(
+    def standard_composing_informer(
         self, dominion_repository: DominionRepository,
         role_repository: RoleRepository,
         ranking_repository: RankingRepository
@@ -157,4 +157,3 @@ class BaseFactory(Factory):
 
     def memory_tenant_supplier(self) -> TenantSupplier:
         return MemoryTenantSupplier()
-

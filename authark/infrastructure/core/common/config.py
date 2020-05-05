@@ -32,15 +32,17 @@ BASE: Config = {
     "strategies": ["base"],
     "strategy": {},
     "tenancy": {
-        "dsn": "",
-        "directory": ""
+        "json": Path.home() / "tenants.json",
     },
     "zones": {
         "default": {
-            "dsn": "",
-            "directory": ""
+            "data": str(Path.home() / "data")
         }
-    }
+    },
+    "export": {
+        "type": "json",
+        "dir": Path.home() / "export"
+    },
 }
 
 DEVELOPMENT_CONFIG: Config = {**BASE, **{
@@ -53,25 +55,10 @@ DEVELOPMENT_CONFIG: Config = {**BASE, **{
 PRODUCTION_CONFIG: Config = {**BASE, **{
     "mode": "PROD",
     "factory": "JsonFactory",
-    "strategies": ["json"],
-    "tenancy": {
-        "json": Path.home() / "tenants.json",
-            "directory": ""
-    },
-    "data": {
-        "json": {
-            "default": str(Path.home() / "data")
-        }
-    },
-    "export": {
-        "type": "json",
-        "dir": Path.home() / "export"
-    },
+    "strategies": ["base", "crypto", "json"],
     "zones": {
         "default": {
-            "dsn": ("postgresql://authark:authark"
-                    "@localhost/authark"),
-            "directory": ""
+            "data": str(Path.home() / "data")
         }
     }
 }}
