@@ -1,12 +1,12 @@
 from typing import Callable, Dict, Any
 from aiohttp import web
 from injectark import Injectark
-from ....application.coordinators import SessionCoordinator
-from ...core import TenantSupplier
+from .....application.managers import SessionManager
+from ....core import TenantSupplier
 
 
 def authenticate_middleware_factory(injector: Injectark) -> Callable:
-    session_coordinator: SessionCoordinator = injector['SessionCoordinator']
+    session_coordinator: SessionManager = injector['SessionManager']
     tenant_supplier: TenantSupplier = injector['TenantSupplier']
 
     @web.middleware

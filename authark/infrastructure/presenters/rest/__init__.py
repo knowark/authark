@@ -1,2 +1,2 @@
-from .base import create_app
-from .app import RestApplication
+# from .base import create_app
+from .rest import RestApplication

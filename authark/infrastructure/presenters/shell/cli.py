@@ -37,9 +37,9 @@ class Cli:
         serve_parser.set_defaults(func=self.serve)
 
         # Terminal
-        terminal_parser = subparsers.add_parser(
-            'terminal', help='Open terminal interface.')
-        terminal_parser.set_defaults(func=self.terminal)
+        # terminal_parser = subparsers.add_parser(
+        #     'terminal', help='Open terminal interface.')
+        # terminal_parser.set_defaults(func=self.terminal)
 
         # Load
         load_parser = subparsers.add_parser(
@@ -68,14 +68,14 @@ class Cli:
         print('...END PROVISION::::')
 
     async def serve(self, options_dict: Dict[str, str]) -> None:
-        print('...SERVE:::', args)
+        print('...SERVE:::', options_dict)
 
         # print(create_app)
         # app = create_app(self.config, self.resolver)
         # ServerApplication(app, self.config['gunicorn']).run()
 
     async def terminal(self, options_dict: Dict[str, str]) -> None:
-        print('...TERMINAL:::', args)
+        print('...TERMINAL:::', options_dict)
 
         # context = Context(self.config, self.injector)
 
@@ -83,15 +83,15 @@ class Cli:
         terminal.run()
 
     async def load(self, options_dict: Dict[str, str]) -> None:
-        print('::::::LOAD:::::', args.input_file)
-        input_file = args.input_file
-        source = args.source
+        print('::::::LOAD:::::', options_dict)
+        input_file = options_dict.get('input_file')
+        source = options_dict.get('source')
         if not source:
             source = 'erp.users'
-        password_field = args.password_field
+        password_field = options_dict.get('password_field')
         if not password_field:
             password_field = 'password'
-        tenant = args.tenant
+        tenant = options_dict.get('tenant')
         if not tenant:
             print('A tenant is required.')
             return
