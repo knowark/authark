@@ -1,82 +1,95 @@
-from typing import Tuple
-from marshmallow import ValidationError
-from ..helpers import get_request_filter
-from ..schemas import UserSchema, UserAuthSchema
+from functools import partial
+from injectark import Injectark
+from ..schemas import UserSchema
+from .resource import Resource
 
 
-class UserResource:
+class UserResource(Resource):
+    def __init__(self, injector: Injectark) -> None:
+        informer = injector['AutharkInformer']
+        manager = injector['AuthManager']
 
-    def __init__(self, resolver) -> None:
-        self.auth_coordinator = resolver['AuthCoordinator']
-        self.tenant_supplier = resolver['TenantSupplier']
-        self.authark_reporter = resolver['AutharkReporter']
+        super().__init__(
+            UserSchema,
+            partial(informer.count, 'user'),
+            partial(informer.search, 'user'),
+            manager.register,
+            manager.deregister)
 
-    def head(self) -> int:
-        """
-        ---
-        summary: Return users headers.
-        tags:
-          - Users
-        """
-        # domain, _, _ = get_request_filter(request)
 
-        # response = make_response()
-        # response.headers['Total-Count'] = len(
-        #     self.authark_reporter.search_users(domain, None, None))
+# class UserResource:
 
-        # return response
-        return 0
+#     def __init__(self, resolver) -> None:
+#         self.auth_coordinator = resolver['AuthCoordinator']
+#         self.tenant_supplier = resolver['TenantSupplier']
+#         self.authark_reporter = resolver['AutharkReporter']
 
-    def get(self):
-        """
-        ---
-        summary: Return all users.
-        tags:
-          - Users
-        responses:
-          200:
-            description: "Successful response"
-            content:
-              application/json:
-                schema:
-                  type: array
-                  items:
-                    $ref: '#/components/schemas/User'
-        """
+#     def head(self) -> int:
+#         """
+#         ---
+#         summary: Return users headers.
+#         tags:
+#           - Users
+#         """
+#         # domain, _, _ = get_request_filter(request)
 
-        # domain, limit, offset = get_request_filter(request)
+#         # response = make_response()
+#         # response.headers['Total-Count'] = len(
+#         #     self.authark_reporter.search_users(domain, None, None))
 
-        # users = UserSchema().dump(
-        #     self.authark_reporter.search_users(
-        #         domain, limit, offset), many=True)
+#         # return response
+#         return 0
 
-        # return jsonify(users)
-        return None
+#     def get(self):
+#         """
+#         ---
+#         summary: Return all users.
+#         tags:
+#           - Users
+#         responses:
+#           200:
+#             description: "Successful response"
+#             content:
+#               application/json:
+#                 schema:
+#                   type: array
+#                   items:
+#                     $ref: '#/components/schemas/User'
+#         """
 
-    def post(self) -> None:
-        """
-        ---
-        summary: Register user.
-        tags:
-          - Users
-        requestBody:
-          required: true
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/User'
-        responses:
-          201:
-            description: "User created"
-        """
-        # data = str(request.data, encoding='utf8')
-        # user_registration_dict = UserAuthSchema().loads(data)
-        # tenant = user_registration_dict['tenant']
-        # tenants = self.tenant_supplier.search_tenants([('slug', '=', tenant)])
+#         # domain, limit, offset = get_request_filter(request)
 
-        # user = self.auth_coordinator.register(user_registration_dict)
+#         # users = UserSchema().dump(
+#         #     self.authark_reporter.search_users(
+#         #         domain, limit, offset), many=True)
 
-        # response = 'Account Created: username<{0}> - email<{1}>'.format(
-        #     user.get('username'), user.get('email'))
+#         # return jsonify(users)
+#         return None
 
-        return None
+#     def post(self) -> None:
+#         """
+#         ---
+#         summary: Register user.
+#         tags:
+#           - Users
+#         requestBody:
+#           required: true
+#           content:
+#             application/json:
+#               schema:
+#                 $ref: '#/components/schemas/User'
+#         responses:
+#           201:
+#             description: "User created"
+#         """
+#         # data = str(request.data, encoding='utf8')
+#         # user_registration_dict = UserAuthSchema().loads(data)
+#         # tenant = user_registration_dict['tenant']
+#         # tenants = self.tenant_supplier.search_tenants([('slug', '=', tenant)])
+
+#         # user = self.auth_coordinator.register(user_registration_dict)
+
+#         # response = 'Account Created: username<{0}> - email<{1}>'.format(
+#         #     user.get('username'), user.get('email'))
+
+#         return None

@@ -1,9 +1,7 @@
-from apispec import APISpec, BasePlugin
+from apispec import APISpec
 from apispec.ext.marshmallow import MarshmallowPlugin
-from apispec.yaml_utils import load_yaml_from_docstring
 from .schemas import (
-    UserSchema, TokenRequestSchema, TokenSchema, AccessTokenPayloadSchema,
-    DominionAuthorizationSchema)
+    UserSchema, TokenRequestSchema, TokenSchema)
 
 
 def create_spec() -> APISpec:
@@ -29,10 +27,6 @@ def _register_schemas(spec):
     spec.components.schema("User", schema=UserSchema)
     spec.components.schema("Token", schema=TokenSchema)
     spec.components.schema("TokenRequest", schema=TokenRequestSchema)
-    spec.components.schema("DominionAuthorization",
-                           schema=DominionAuthorizationSchema)
-    spec.components.schema("AccessTokenPayload",
-                           schema=AccessTokenPayloadSchema)
 
 
 def _register_paths(spec):

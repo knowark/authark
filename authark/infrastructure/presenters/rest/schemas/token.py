@@ -15,9 +15,9 @@ class TokenSchema(Schema):
     access_token = fields.Str(example="eyJhbG.kpvaG4gRMyfQ.SflKxwssw5cdfs")
 
 
-class AccessTokenPayloadSchema(Schema):
-    iss = fields.Str(example="authark.nubark.cloud")
-    sub = fields.Str(example="e1fbaebd-6a37-4949-83b3-fb8954b07a2a")
-    iat = fields.Int(example=1543334000)
-    ext = fields.Int(example=1543338055)
-    authorization = fields.Nested('DominionAuthorizationSchema')
+# class AccessTokenPayloadSchema(Schema):
+#     iss = fields.Str(example="authark.nubark.cloud")
+#     sub = fields.Str(example="e1fbaebd-6a37-4949-83b3-fb8954b07a2a")
+#     iat = fields.Int(example=1543334000)
+#     ext = fields.Int(example=1543338055)
+#     authorization = fields.Nested('DominionAuthorizationSchema')

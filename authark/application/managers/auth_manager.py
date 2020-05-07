@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Dict
 from ..domain.common import (
     TokenString, TokensDict, AuthError,
     UserCreationError, RecordList, QueryDomain)
@@ -23,8 +23,25 @@ class AuthManager:
         self.access_service = access_service
         self.refresh_token_service = refresh_token_service
 
-    async def authenticate(self, username: str, password: str, client: str,
-                           dominion_name: str = None) -> TokensDict:
+    async def authenticate(self, request_dict: Dict[str, str]) -> TokensDict:
+        refresh_token = request_dict.get('refresh_token', '')
+        dominion = request_dict.get('dominion', '')
+        username = request_dict.get('username', '')
+        password = request_dict.get('password', '')
+        client = request_dict.get('client', '')
+
+        if refresh_token:
+            result = await self._refresh_authenticate(
+                refresh_token, dominion)
+        else:
+            result = await self._password_authenticate(
+                username, password, client, dominion)
+
+        return result
+
+    async def _password_authenticate(
+            self, username: str, password: str,
+            client: str, dominion_name: str = None) -> TokensDict:
         user = await self._find_user(username)
         credentials = await self.credential_repository.search([
             ('user_id', '=', user.id), ('type', '=', 'password')])
@@ -52,8 +69,8 @@ class AuthManager:
             'access_token': access_token.value
         }
 
-    async def refresh_authenticate(self, refresh_token: TokenString,
-                                   dominion_name: str = None) -> TokensDict:
+    async def _refresh_authenticate(self, refresh_token: TokenString,
+                                    dominion_name: str = None) -> TokensDict:
         credentials = await self.credential_repository.search([
             ('value', '=', refresh_token), ('type', '=', 'refresh_token')])
         if not credentials:

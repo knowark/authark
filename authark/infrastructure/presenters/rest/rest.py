@@ -8,7 +8,7 @@ from injectark import Injectark
 from ...core import Config
 from .middleware import middlewares
 from .doc import create_spec
-from .resources import RootResource
+from .resources import RootResource, UserResource, TokenResource
 
 
 class RestApplication(web.Application):
@@ -16,11 +16,7 @@ class RestApplication(web.Application):
         super().__init__(middlewares=middlewares(injector))
         self.config = config
         self.injector = injector
-        # self.app = web.Application(middlewares=middlewares(injector))
         self._setup()
-
-    async def run(self, app: web.Application, port=4321) -> None:
-        await web._run_app(self, app, port=port)
 
     def _setup(self) -> None:
         templates = str(Path(__file__).parent / 'templates')
@@ -32,11 +28,11 @@ class RestApplication(web.Application):
                 allow_credentials=True, expose_headers="*",
                 allow_headers="*")})
 
-        for route in list(self.router.routes()):
-            cors.add(route)
-
         # API endpoints creation
         self._create_api()
+
+        for route in list(self.router.routes()):
+            cors.add(route)
 
     @staticmethod
     async def _http_client(app: web.Application):
@@ -62,5 +58,5 @@ class RestApplication(web.Application):
 
         # Resources
         self._bind_routes('/', RootResource(spec))
-        # self._bind_routes(self.app, '/processes', ProcessResource(injector))
-        # self._bind_routes(self.app, '/triggers', TriggerResource(injector))
+        self._bind_routes('/users', UserResource(self.injector))
+        self._bind_routes('/tokens', TokenResource(self.injector))

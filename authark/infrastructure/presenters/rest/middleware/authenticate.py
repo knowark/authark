@@ -11,7 +11,7 @@ def authenticate_middleware_factory(injector: Injectark) -> Callable:
 
     @web.middleware
     async def middleware(request: web.Request, handler: Callable):
-        if request.path == '/':
+        if request.path in ['/', '/tokens']:
             return await handler(request)
 
         try:

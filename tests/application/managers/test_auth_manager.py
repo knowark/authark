@@ -9,8 +9,13 @@ def test_auth_manager_creation(auth_manager):
 
 
 async def test_auth_manager_authenticate(auth_manager):
+    request_dict = {
+        'username': 'tebanep',
+        'password': 'PASS2',
+        'client': 'mobile'
+    }
 
-    tokens = await auth_manager.authenticate("tebanep", "PASS2", 'mobile')
+    tokens = await auth_manager.authenticate(request_dict)
 
     assert isinstance(tokens, dict)
     assert 'refresh_token' in tokens.keys()
@@ -36,9 +41,13 @@ async def test_auth_manager_find_user(auth_manager):
 async def test_auth_manager_authenticate_no_credentials(auth_manager):
     credential_repository = auth_manager.credential_repository
     credential_repository.data['default'] = {}
+    request_dict = {
+        'username': 'tebanep',
+        'password': 'PASS2',
+        'client': 'mobile'
+    }
     with raises(AuthError):
-        tokens = await auth_manager.authenticate(
-            "tebanep", "PASS2", 'mobile')
+        await auth_manager.authenticate(request_dict)
 
 
 async def test_auth_manager_refresh_authenticate_no_renewal(auth_manager):
@@ -48,7 +57,7 @@ async def test_auth_manager_refresh_authenticate_no_renewal(auth_manager):
     credential_repository.data['default']['4'] = Credential(
         id='4', user_id=user_id, value=refresh_token, type='refresh_token')
 
-    tokens = await auth_manager.refresh_authenticate(refresh_token)
+    tokens = await auth_manager.authenticate({'refresh_token': refresh_token})
 
     assert isinstance(tokens, dict)
     assert 'access_token' in tokens.keys()
@@ -65,7 +74,7 @@ async def test_auth_manager_refresh_authenticate_renewal(
     auth_manager.refresh_token_service.renew = (  # type: ignore
         lambda token: True)
 
-    tokens = await auth_manager.refresh_authenticate(refresh_token)
+    tokens = await auth_manager.authenticate({'refresh_token': refresh_token})
 
     assert isinstance(tokens, dict)
     assert 'access_token' in tokens.keys()
@@ -81,7 +90,7 @@ async def test_auth_manager_refresh_authenticate_refresh_token_not_found(
         id='4', user_id=user_id, value=refresh_token, type='refresh_token')
 
     with raises(AuthError):
-        await auth_manager.refresh_authenticate("BAD_TOKEN")
+        await auth_manager.authenticate({'refresh_token': "BAD_TOKEN"})
 
 
 async def test_generate_refresh_token(auth_manager):
@@ -111,27 +120,36 @@ async def test_generate_refresh_token_only_one(auth_manager):
 
 
 async def test_auth_manager_fail_to_authenticate(auth_manager):
-
+    request_dict = {
+        'username': 'tebanep',
+        'password': 'WRONG_PASSWORD',
+        'client': 'web'
+    }
     with raises(AuthError):
-        await auth_manager.authenticate(
-            "tebanep", "WRONG_PASSWORD", 'web')
+        await auth_manager.authenticate(request_dict)
 
 
 async def test_auth_manager_fail_to_authenticate_missing_user(auth_manager):
-
+    request_dict = {
+        'username': 'MISSING_USER',
+        'password': 'WRONG_PASSWORD',
+        'client': 'web'
+    }
     with raises(AuthError):
-        await auth_manager.authenticate(
-            "MISSING_USER", "WRONG_PASSWORD", "web")
+        await auth_manager.authenticate(request_dict)
 
 
 async def test_auth_manager_fail_to_authenticate_missing_credentials(
         auth_manager):
     credential_repository = auth_manager.credential_repository
     credential_repository.data['default'] = {}
-
+    request_dict = {
+        'username': 'tebanep',
+        'password': 'NO_CREDENTIALS',
+        'client': 'terminal'
+    }
     with raises(AuthError):
-        await auth_manager.authenticate(
-            "tebanep", "NO_CREDENTIALS", 'terminal')
+        await auth_manager.authenticate(request_dict)
 
 
 async def test_auth_manager_register(auth_manager):
