@@ -1,4 +1,4 @@
-from typing import Tuple, List, Dict, Any
+from typing import Tuple, List
 from json import loads
 from aiohttp import web
 from .format import parse_domain

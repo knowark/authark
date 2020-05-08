@@ -75,9 +75,7 @@ class Shell:
 
     # async def terminal(self, options_dict: Dict[str, str]) -> None:
     #     logger.info('TERMINAL')
-
     #     # context = Context(self.config, self.injector)
-
     #     terminal = self.injector['Terminal']
     #     terminal.run()
 

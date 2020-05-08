@@ -10,7 +10,6 @@ from ...application.domain.repositories import (
     RankingRepository, MemoryRankingRepository)
 from ...application.domain.services import (
     HashService, MemoryHashService,
-    TokenService, MemoryTokenService,
     AccessTokenService, MemoryAccessTokenService,
     RefreshTokenService, MemoryRefreshTokenService,
     ImportService, MemoryImportService, AccessService)

@@ -1,6 +1,6 @@
 import re
 from json import loads, JSONDecodeError
-from typing import List, Dict, Any
+from typing import List, Any
 
 
 def parse_domain(filter: str) -> List[Any]:

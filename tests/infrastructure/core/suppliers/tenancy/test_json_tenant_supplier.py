@@ -1,6 +1,3 @@
-import json
-from pathlib import Path
-from pytest import fixture
 from typing import Dict, Any
 from authark.infrastructure.core.suppliers import json_tenant_supplier
 from authark.infrastructure.core.suppliers import JsonTenantSupplier

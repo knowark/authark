@@ -1,12 +1,8 @@
-import time
 import unicodedata
-from typing import Mapping
-from ..exceptions import TenantLocationError
 
 
 class Tenant:
     def __init__(self, **attributes):
-        now = int(time.time())
         self.id = attributes.get('id', '')
         self.name = attributes['name']
         self.email = attributes.get('email', '')
@@ -22,5 +18,3 @@ class Tenant:
         if not normalized_slug:
             raise ValueError("Invalid tenant 'slug' name.")
         return normalized_slug
-
-

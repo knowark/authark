@@ -1,5 +1,4 @@
 import jwt
-from time import time
 from authark.infrastructure.core import PyJWTTokenService
 
 
