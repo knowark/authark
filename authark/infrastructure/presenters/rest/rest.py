@@ -23,7 +23,7 @@ class RestApplication(web.Application):
         await web._run_app(app, port=port)
 
     def _setup(self) -> None:
-        templates = str(Path(__file__).parent / 'templates')
+        templates = str(Path(__file__).parent / 'resources')
         aiohttp_jinja2.setup(self, loader=FileSystemLoader(templates))
 
         self.cleanup_ctx.append(self._http_client)

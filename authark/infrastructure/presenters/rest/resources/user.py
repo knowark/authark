@@ -1,6 +1,6 @@
 from functools import partial
 from injectark import Injectark
-from ..schemas import UserSchema
+from ..helpers import UserSchema
 from .resource import Resource
 
 

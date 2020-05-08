@@ -1,6 +1,6 @@
 from apispec import APISpec
 from apispec.ext.marshmallow import MarshmallowPlugin
-from .schemas import (
+from .helpers import (
     UserSchema, TokenRequestSchema, TokenSchema)
 
 
