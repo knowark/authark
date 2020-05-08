@@ -9,7 +9,7 @@ import uvloop
 from injectark import Injectark
 # from authark.infrastructure.config import build_config
 # from authark.infrastructure.factories import build_factory, build_strategy
-# from .infrastructure.presenters.shell import Shell
+from .infrastructure.presenters.shell import Shell
 
 
 async def main(args=None):

@@ -1,5 +1,23 @@
-from json import loads, dumps
 import jwt
+from json import loads, dumps
+from authark.infrastructure.presenters.rest import RestApplication
+from authark.infrastructure.presenters.rest import rest as rest_module
+
+
+async def test_rest_application_run(monkeypatch):
+    called = False
+
+    class web:
+        @staticmethod
+        async def _run_app(app, port=1234):
+            nonlocal called
+            called = True
+
+    monkeypatch.setattr(rest_module, 'web', web)
+
+    await RestApplication.run(None)
+
+    assert called is True
 
 
 async def test_root(app) -> None:

@@ -1,44 +1,17 @@
-# from pytest import fixture
-# from injectark import Injectark, Factory
-# from authark.infrastructure.core import DEVELOPMENT_CONFIG
-# from authark.infrastructure.presenters.shell import Cli
-# from authark.infrastructure.factories import (
-#     factory_builder, strategy_builder)
+from pytest import fixture
+from injectark import Injectark
+from authark.infrastructure.core import DEVELOPMENT_CONFIG
+from authark.infrastructure.presenters.shell import Shell
+from authark.infrastructure.factories import (
+    factory_builder, strategy_builder)
 
 
-# @fixture
-# def mock_config():
-#     return DEVELOPMENT_CONFIG
+@fixture
+def shell() -> Shell:
+    config = DEVELOPMENT_CONFIG
+    strategy = strategy_builder.build(config['strategies'])
+    factory = factory_builder.build(config)
 
+    injector = Injectark(strategy, factory)
 
-# @fixture
-# def mock_factory(mock_config):
-#     factory = factory_builder.build(mock_config)
-#     called = False
-
-#     class MockWebApplication:
-#         async def run(self):
-#             nonlocal called
-#             called = True
-
-#     def web_application():
-#         return
-
-#     factory.web_application = web_application
-
-#     return called is True
-
-
-# @fixture
-# def mock_strategy(mock_config):
-#     return strategy_builder.build(mock_config['strategies'])
-
-
-# @fixture
-# def mock_injector(mock_strategy, mock_factory):
-#     return Injectark(mock_strategy, mock_factory)
-
-
-# @fixture
-# def cli(mock_config, mock_injector) -> Cli:
-#     return Cli(mock_config, mock_injector)
+    return Shell(config, injector)

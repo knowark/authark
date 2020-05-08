@@ -18,6 +18,10 @@ class RestApplication(web.Application):
         self.injector = injector
         self._setup()
 
+    @staticmethod
+    async def run(app: web.Application, port: int = 4321):
+        await web._run_app(app, port=port)
+
     def _setup(self) -> None:
         templates = str(Path(__file__).parent / 'templates')
         aiohttp_jinja2.setup(self, loader=FileSystemLoader(templates))
