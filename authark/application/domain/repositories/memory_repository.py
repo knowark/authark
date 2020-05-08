@@ -49,8 +49,10 @@ class MemoryRepository(Repository, Generic[T]):
         items = item if isinstance(item, list) else [item]
         deleted = False
         for item in items:
-            deleted_item = self.data[self._location].pop(item.id, None)
-            deleted = bool(deleted_item) or deleted
+            if item.id not in self.data[self._location]:
+                continue
+            del self.data[self._location][item.id]
+            deleted = True
 
         return deleted
 

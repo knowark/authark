@@ -93,8 +93,9 @@ class AuthManager:
         dominion: Dominion = next(
             iter(await self.dominion_repository.search(dominion_domain)))
 
-        tokens_dict['access_token'] = await self.access_service.generate_token(
+        access_token = await self.access_service.generate_token(
             user[0], dominion)
+        tokens_dict['access_token'] = access_token.value
 
         return tokens_dict
 
