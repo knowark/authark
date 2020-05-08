@@ -1,5 +1,4 @@
 from pytest import fixture
-from aiohttp import web
 from injectark import Injectark
 from authark.infrastructure.core import DEVELOPMENT_CONFIG
 from authark.infrastructure.factories import (
