@@ -45,7 +45,7 @@ class RestApplication(web.Application):
         yield
         await session.close()
 
-    def _bind_routes(self, path: str, resource: Any):
+    def _bind(self, path: str, resource: Any):
         general_methods = ['head', 'get', 'put', 'delete', 'post', 'patch']
         identified_methods = ['get', 'delete']
         for method in general_methods + identified_methods:
@@ -61,6 +61,6 @@ class RestApplication(web.Application):
         spec = create_spec()
 
         # Resources
-        self._bind_routes('/', RootResource(spec))
-        self._bind_routes('/users', UserResource(self.injector))
-        self._bind_routes('/tokens', TokenResource(self.injector))
+        self._bind('/', RootResource(spec))
+        self._bind('/users', UserResource(self.injector))
+        self._bind('/tokens', TokenResource(self.injector))
