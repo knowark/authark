@@ -6,4 +6,6 @@ from .memory_model_repositories import (
     DominionRepository, MemoryDominionRepository,
     RankingRepository, MemoryRankingRepository,
     RoleRepository, MemoryRoleRepository,
-    UserRepository, MemoryUserRepository)
+    UserRepository, MemoryUserRepository,
+    RuleRepository, MemoryRuleRepository,
+    PolicyRepository, MemoryPolicyRepository,)

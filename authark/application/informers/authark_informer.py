@@ -1,7 +1,8 @@
 from abc import ABC, abstractmethod
 from ..domain.repositories import (
     UserRepository, CredentialRepository,
-    DominionRepository, RoleRepository)
+    DominionRepository, RoleRepository,
+    RuleRepository, PolicyRepository)
 from ..domain.common import QueryDomain, RecordList
 
 
@@ -27,11 +28,15 @@ class StandardAutharkInformer(AutharkInformer):
     def __init__(self, user_repository: UserRepository,
                  credential_repository: CredentialRepository,
                  dominion_repository: DominionRepository,
-                 role_repository: RoleRepository) -> None:
+                 role_repository: RoleRepository,
+                 rule_repository: RuleRepository,
+                 policy_repository: PolicyRepository) -> None:
         self.user_repository = user_repository
         self.credential_repository = credential_repository
         self.dominion_repository = dominion_repository
         self.role_repository = role_repository
+        self.rule_repository = rule_repository
+        self.policy_repository = policy_repository
 
     async def search(self,
                      model: str,

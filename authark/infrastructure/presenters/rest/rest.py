@@ -8,8 +8,9 @@ from injectark import Injectark
 from ...core import Config
 from .middleware import middlewares
 from .doc import create_spec
-from .resources import RootResource, UserResource, TokenResource
-
+from .resources import (
+    RootResource, UserResource, TokenResource, RuleResource, PolicyResource)
+ 
 
 class RestApplication(web.Application):
     def __init__(self, config: Config, injector: Injectark) -> None:
@@ -23,7 +24,7 @@ class RestApplication(web.Application):
         await web._run_app(app, port=port)
 
     def _setup(self) -> None:
-        templates = str(Path(__file__).parent / 'resources')
+        templates = str(Path(__file__).parent / 'templates')
         aiohttp_jinja2.setup(self, loader=FileSystemLoader(templates))
 
         self.cleanup_ctx.append(self._http_client)
@@ -45,7 +46,7 @@ class RestApplication(web.Application):
         yield
         await session.close()
 
-    def _bind(self, path: str, resource: Any):
+    def _bind_routes(self, path: str, resource: Any):
         general_methods = ['head', 'get', 'put', 'delete', 'post', 'patch']
         identified_methods = ['get', 'delete']
         for method in general_methods + identified_methods:
@@ -61,6 +62,8 @@ class RestApplication(web.Application):
         spec = create_spec()
 
         # Resources
-        self._bind('/', RootResource(spec))
-        self._bind('/users', UserResource(self.injector))
-        self._bind('/tokens', TokenResource(self.injector))
+        self._bind_routes('/', RootResource(spec))
+        self._bind_routes('/users', UserResource(self.injector))
+        self._bind_routes('/tokens', TokenResource(self.injector))
+        self._bind_routes('/rules', RuleResource(self.injector))
+        self._bind_routes('/policies', PolicyResource(self.injector))

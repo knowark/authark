@@ -1,6 +1,7 @@
 from pytest import fixture
 from authark.application.domain.models import (
-    User, Credential, Dominion, Role, Ranking)
+    User, Credential, Dominion, Role, Ranking,
+    Rule, Policy)
 from authark.application.domain.common import (
     QueryParser, Tenant, StandardTenantProvider)
 from authark.application.domain.repositories import (
@@ -8,7 +9,9 @@ from authark.application.domain.repositories import (
     CredentialRepository, MemoryCredentialRepository,
     DominionRepository, MemoryDominionRepository,
     RoleRepository, MemoryRoleRepository,
-    RankingRepository, MemoryRankingRepository)
+    RankingRepository, MemoryRankingRepository,
+    RuleRepository, MemoryRuleRepository,
+    PolicyRepository, MemoryPolicyRepository)
 from authark.application.informers import (
     AutharkInformer, StandardAutharkInformer,
     ComposingInformer, StandardComposingInformer)
@@ -80,6 +83,28 @@ def role_repository(tenant_provider, parser) -> RoleRepository:
 
 
 @fixture
+def rule_repository(tenant_provider, parser) -> RuleRepository:
+    rule_repository = MemoryRuleRepository(parser, tenant_provider)
+    rule_repository.load({
+        "default": {
+            "1": Rule(id='1', group='group name', name='group name',
+                      sequence="1", target='target name', domain="domain name")
+        }
+    })
+    return rule_repository
+
+@fixture
+def policy_repository(tenant_provider, parser) -> PolicyRepository:
+    policy_repository = MemoryPolicyRepository(parser, tenant_provider)
+    policy_repository.load({
+        "default": {
+            "1": Policy(id='1', resource='resource name', privilege='privilege name',
+                      role="role name", rule='rule name')
+        }
+    })
+    return policy_repository
+
+@fixture
 def ranking_repository(tenant_provider, parser) -> RankingRepository:
     ranking_repository = MemoryRankingRepository(parser, tenant_provider)
     ranking_repository.load({
@@ -95,13 +120,18 @@ def ranking_repository(tenant_provider, parser) -> RankingRepository:
 def authark_informer(user_repository: UserRepository,
                      credential_repository: CredentialRepository,
                      dominion_repository: DominionRepository,
-                     role_repository: RoleRepository
+                     role_repository: RoleRepository,
+                     rule_repository: RuleRepository,
+                     policy_repository: PolicyRepository
+
                      ) -> AutharkInformer:
     return StandardAutharkInformer(
         user_repository,
         credential_repository,
         dominion_repository,
-        role_repository)
+        role_repository,
+        rule_repository,
+        policy_repository)
 
 
 @fixture

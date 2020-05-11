@@ -16,6 +16,12 @@ coverage-application:
 	term-missing -x -s -W ignore::DeprecationWarning \
 	-o cache_dir=/tmp/authark/cache
 
+coverage-infrastructure:
+	export COVERAGE_FILE=$(COVFILE); pytest --cov-branch \
+	--cov=$(PROJECT)/infrastructure tests/infrastructure/ --cov-report \
+	term-missing -x -s -W ignore::DeprecationWarning \
+	-o cache_dir=/tmp/authark/cache
+
 coverage:
 	mypy authark && export COVERAGE_FILE=$(COVFILE); pytest --cov-branch \
 	--cov=$(PROJECT) $(TESTS) --cov-report term-missing -x -s \

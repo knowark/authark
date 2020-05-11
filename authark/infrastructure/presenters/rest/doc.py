@@ -1,7 +1,7 @@
 from apispec import APISpec
 from apispec.ext.marshmallow import MarshmallowPlugin
-from .helpers import (
-    UserSchema, TokenRequestSchema, TokenSchema)
+from .schemas import (
+    UserSchema, TokenRequestSchema, TokenSchema, RuleSchema, PolicySchema)
 
 
 def create_spec() -> APISpec:
@@ -27,6 +27,8 @@ def _register_schemas(spec):
     spec.components.schema("User", schema=UserSchema)
     spec.components.schema("Token", schema=TokenSchema)
     spec.components.schema("TokenRequest", schema=TokenRequestSchema)
+    spec.components.schema("Rule", schema=RuleSchema)
+    spec.components.schema("Policy", schema=PolicySchema)
 
 
 def _register_paths(spec):
@@ -44,6 +46,38 @@ def _register_paths(spec):
             'get': {
                 'tags': ['Users'],
                 'responses': _respond("Get all users", 'User')
+            }
+        }
+    ).path(
+        path="/rules",
+        operations={
+            'get': {
+                'tags': ['Rules'],
+                'responses': _respond("Get all rules", 'Rules')
+            },
+            'put': {
+                'tags': ['Rules'],
+                'responses': _respond("Modify rules", 'Rules')
+            },
+            'delete': {
+                'tags': ['Rules'],
+                'responses': _respond("Delete rules", 'Rules')
+            }
+        }
+    ).path(
+        path="/policies",
+        operations={
+            'get': {
+                'tags': ['Policies'],
+                'responses': _respond("Get all policies", 'Policies')
+            },
+            'put': {
+                'tags': ['Policies'],
+                'responses': _respond("Modify policies", 'Policies')
+            },
+            'delete': {
+                'tags': ['Policies'],
+                'responses': _respond("Delete policies", 'Policies')
             }
         }
     )

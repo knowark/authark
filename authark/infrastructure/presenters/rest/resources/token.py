@@ -1,6 +1,9 @@
+# from typing import Any, Dict, Tuple
+from ..schemas import TokenRequestSchema, TokenSchema
+
 from aiohttp import web
 from injectark import Injectark
-from ..helpers import TokenRequestSchema, TokenSchema
+from ..schemas import TokenRequestSchema, TokenSchema
 
 
 class TokenResource:

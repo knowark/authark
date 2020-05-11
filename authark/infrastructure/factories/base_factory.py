@@ -7,7 +7,9 @@ from ...application.domain.repositories import (
     CredentialRepository, MemoryCredentialRepository,
     DominionRepository, MemoryDominionRepository,
     RoleRepository, MemoryRoleRepository,
-    RankingRepository, MemoryRankingRepository)
+    RankingRepository, MemoryRankingRepository,
+    RuleRepository, MemoryRuleRepository,
+    PolicyRepository, MemoryPolicyRepository)
 from ...application.domain.services import (
     HashService, MemoryHashService,
     AccessTokenService, MemoryAccessTokenService,
@@ -60,6 +62,18 @@ class BaseFactory(Factory):
             tenant_provider: TenantProvider
     ) -> MemoryRoleRepository:
         return MemoryRoleRepository(query_parser, tenant_provider)
+    
+    def memory_rule_repository(
+            self, query_parser: QueryParser,
+            tenant_provider: TenantProvider
+    ) -> MemoryRuleRepository:
+        return MemoryRuleRepository(query_parser, tenant_provider)
+    
+    def memory_policy_repository(
+            self, query_parser: QueryParser,
+            tenant_provider: TenantProvider
+    ) -> MemoryPolicyRepository:
+        return MemoryPolicyRepository(query_parser, tenant_provider)
 
     def memory_ranking_repository(
             self, query_parser: QueryParser,
@@ -141,10 +155,13 @@ class BaseFactory(Factory):
         credential_repository: CredentialRepository,
         dominion_repository: DominionRepository,
         role_repository: RoleRepository,
+        rule_repository: RuleRepository,
+        policy_repository: PolicyRepository
     ) -> StandardAutharkInformer:
         return StandardAutharkInformer(
             user_repository, credential_repository,
-            dominion_repository, role_repository)
+            dominion_repository, role_repository,
+            rule_repository, policy_repository)
 
     def standard_composing_informer(
         self, dominion_repository: DominionRepository,

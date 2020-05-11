@@ -5,11 +5,13 @@ from ...application.domain.common import (
     QueryParser, TenantProvider, StandardTenantProvider, Tenant,
     AuthProvider, StandardAuthProvider, User as CUser)
 from ...application.domain.models import (
-    User, Credential, Ranking, Role, Dominion)
+    User, Credential, Ranking, Role, Dominion, Rule, Policy)
 from ...application.domain.repositories import (
     MemoryUserRepository, MemoryCredentialRepository,
     RankingRepository, MemoryRankingRepository,
     RoleRepository, MemoryRoleRepository,
+    RuleRepository, MemoryRuleRepository,
+    PolicyRepository, MemoryPolicyRepository,
     DominionRepository, MemoryDominionRepository)
 from ...application.domain.services import (
     AccessService, AccessTokenService)
@@ -101,6 +103,31 @@ class CheckFactory(CryptoFactory):
                          description="Service's Administrator")
         }})
         return ranking_repository
+    
+    def memory_rule_repository(
+            self, query_parser: QueryParser,
+            tenant_provider: TenantProvider
+    ) -> MemoryRuleRepository:
+        rule_repository = super().memory_rule_repository(
+            query_parser, tenant_provider)
+        rule_repository.load({'default': {
+            "1": Rule(id='1', group='group', sequence='1',
+                         name="name group", target="target name",
+                         domain="domain")
+        }})
+        return rule_repository
+
+    def memory_policy_repository(
+            self, query_parser: QueryParser,
+            tenant_provider: TenantProvider
+    ) -> MemoryPolicyRepository:
+        policy_repository = super().memory_policy_repository(
+            query_parser, tenant_provider)
+        policy_repository.load({'default': {
+            "1": Policy(id='1', resource='resource', privilege='privilege',
+                         role="name role", rule="name rule")
+        }})
+        return policy_repository
 
     def memory_dominion_repository(
             self, query_parser: QueryParser,
