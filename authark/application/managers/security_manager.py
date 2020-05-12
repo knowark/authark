@@ -33,20 +33,20 @@ class SecurityManager:
             [('id', 'in', policy_ids)])
         return await self.policy_repository.remove(policies)
 
-    async def update_rule(self, rule: Rule):
-        existing_rule = await self.rule_repository.search(
-            [('id', '=', rule.id)])
-        if existing_rule:
-            rule.id = existing_rule[0].id
-            await self.rule_repository.add(rule)
-        else:
-            await self.rule_repository.add(rule)
+    # async def update_rule(self, rule: Rule):
+    #     existing_rule = await self.rule_repository.search(
+    #         [('id', '=', rule.id)])
+    #     if existing_rule:
+    #         rule.id = existing_rule[0].id
+    #         await self.rule_repository.add(rule)
+    #     else:
+    #         await self.rule_repository.add(rule)
 
-    async def update_policy(self, policy: Policy):
-        existing_policy = await self.policy_repository.search(
-            [('id', '=', policy.id)])
-        if existing_policy:
-            policy.id = existing_policy[0].id
-            await self.policy_repository.add(policy)
-        else:
-            await self.policy_repository.add(policy)
+    # async def update_policy(self, policy: Policy):
+    #     existing_policy = await self.policy_repository.search(
+    #         [('id', '=', policy.id)])
+    #     if existing_policy:
+    #         policy.id = existing_policy[0].id
+    #         await self.policy_repository.add(policy)
+    #     else:
+    #         await self.policy_repository.add(policy)
