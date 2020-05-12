@@ -67,6 +67,9 @@ base = {
     "SessionManager": {
         "method": "session_manager"
     },
+    "SecurityManager": {
+        "method": "security_manager"
+    },
     # --- SUPPLIERS ---
     "TenantSupplier": {
         "method": "memory_tenant_supplier"

@@ -25,7 +25,9 @@ class Resource:
         domain, limit, offset = get_request_filter(request)
         records = await self.search_handler(
             domain, limit=limit, offset=offset)
-        result = self.schema().dump(records, many=True)
+        print(type(records), records[0])
+        result = self.schema(many=True).dump(records)
+        print(type(self.schema()))
         return web.json_response(result)
 
     async def put(self, request: web.Request) -> web.Response:

@@ -35,7 +35,7 @@ def _register_paths(spec):
     spec.path(
         path="/tokens",
         operations={
-            'get': {
+            'put': {
                 'tags': ['Tokens'],
                 'responses': _respond("Get all tokens", 'Token')
             }

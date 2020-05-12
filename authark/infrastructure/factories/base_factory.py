@@ -17,7 +17,7 @@ from ...application.domain.services import (
     ImportService, MemoryImportService, AccessService)
 from ...application.managers import (
     AuthManager, ManagementManager,
-    ImportManager, SessionManager)
+    ImportManager, SessionManager, SecurityManager)
 from ...application.informers import (
     StandardAutharkInformer, StandardComposingInformer)
 from ..core.common import Config
@@ -137,6 +137,12 @@ class BaseFactory(Factory):
     ) -> SessionManager:
         return SessionManager(tenant_provider, auth_provider)
 
+    def security_manager(
+        self, rule_repository: RuleRepository,
+        policy_repository: PolicyRepository
+    ) -> SecurityManager:
+        return SecurityManager(rule_repository, policy_repository)
+
     def access_service(
             self, ranking_repository: RankingRepository,
             role_repository: RoleRepository,
@@ -147,6 +153,8 @@ class BaseFactory(Factory):
             ranking_repository, role_repository,
             dominion_repository,
             token_service, tenant_provider)
+    
+   
 
     # Reporters
 

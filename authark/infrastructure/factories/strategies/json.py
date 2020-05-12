@@ -12,6 +12,12 @@ json = {
     "RoleRepository": {
         "method": "json_role_repository"
     },
+    "RuleRepository": {
+        "method": "json_rule_repository"
+    },
+    "PolicyRepository": {
+        "method": "json_policy_repository"
+    },
     "RankingRepository": {
         "method": "json_ranking_repository"
     },
