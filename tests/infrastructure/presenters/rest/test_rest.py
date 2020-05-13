@@ -134,6 +134,26 @@ async def test_users_delete(app, headers) -> None:
     assert len(data_dict) == 1
 
 
+async def test_rules_delete(app, headers) -> None:
+    response = await app.delete('/rules/1', headers=headers)
+    assert response.status == 204
+
+    response = await app.get('/rules', headers=headers)
+    data_dict = loads(await response.text())
+
+    assert len(data_dict) == 0
+
+
+async def test_policies_delete(app, headers) -> None:
+    response = await app.delete('/policies/1', headers=headers)
+    assert response.status == 204
+
+    response = await app.get('/policies', headers=headers)
+    data_dict = loads(await response.text())
+
+    assert len(data_dict) == 0
+
+
 async def test_users_delete_body(app, headers) -> None:
     ids = dumps(["1"])
     response = await app.delete(
