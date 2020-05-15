@@ -34,6 +34,16 @@ class ManagementManager:
         roles = await self.role_repository.search(
             [('id', 'in', role_ids)])
         return await self.role_repository.remove(roles)
+    
+    # async def create_ranking(self, ranking_dicts: RecordList) -> None:
+    #     existing_users = await self.user_repository.search(
+    #         [('id', 'in', ranking_dicts[0]['user_id'])])
+    #     existing_roles = await self.role_repository.search([
+    #         [('id', 'in', ranking_dicts[1]['role_id'])
+
+    #     if existing_users and existing_roles:
+    #         rankings = [Ranking(**ranking_dict) for ranking_dict in ranking_dicts]
+    #     return await self.role_repository.add(rankings)
 
     async def assign_role(self, ranking_dicts: RecordList) -> None:
         user_set = {

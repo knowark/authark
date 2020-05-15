@@ -6,6 +6,8 @@ from .resource import Resource
 from .user import UserResource
 from .rule import RuleResource
 from .policy import PolicyResource
+from .ranking import RankingResource
+
 
 class RootResource:
 

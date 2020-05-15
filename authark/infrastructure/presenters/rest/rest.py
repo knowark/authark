@@ -9,7 +9,8 @@ from ...core import Config
 from .middleware import middlewares
 from .doc import create_spec
 from .resources import (
-    RootResource, UserResource, TokenResource, RuleResource, PolicyResource)
+    RootResource, UserResource, TokenResource,
+    RuleResource, PolicyResource, RankingResource)
  
 
 class RestApplication(web.Application):
@@ -67,3 +68,4 @@ class RestApplication(web.Application):
         self._bind_routes('/tokens', TokenResource(self.injector))
         self._bind_routes('/rules', RuleResource(self.injector))
         self._bind_routes('/policies', PolicyResource(self.injector))
+        self._bind_routes('/rankings', RankingResource(self.injector))

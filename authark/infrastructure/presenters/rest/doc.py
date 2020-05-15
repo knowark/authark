@@ -1,7 +1,8 @@
 from apispec import APISpec
 from apispec.ext.marshmallow import MarshmallowPlugin
 from .schemas import (
-    UserSchema, TokenRequestSchema, TokenSchema, RuleSchema, PolicySchema)
+    UserSchema, TokenRequestSchema, TokenSchema,
+    RuleSchema, PolicySchema, RankingSchema)
 
 
 def create_spec() -> APISpec:
@@ -29,6 +30,7 @@ def _register_schemas(spec):
     spec.components.schema("TokenRequest", schema=TokenRequestSchema)
     spec.components.schema("Rule", schema=RuleSchema)
     spec.components.schema("Policy", schema=PolicySchema)
+    spec.components.schema("Ranking", schema=RankingSchema)
 
 
 def _register_paths(spec):
@@ -78,6 +80,22 @@ def _register_paths(spec):
             'delete': {
                 'tags': ['Policies'],
                 'responses': _respond("Delete policies", 'Policies')
+            }
+        }
+    ).path(
+        path="/rankings",
+        operations={
+            'get': {
+                'tags': ['Rankings'],
+                'responses': _respond("Get all rankings", 'Rankings')
+            },
+            'put': {
+                'tags': ['Rankings'],
+                'responses': _respond("Modify rankings", 'Rankings')
+            },
+            'delete': {
+                'tags': ['Rankings'],
+                'responses': _respond("Delete rankings", 'Rankings')
             }
         }
     )

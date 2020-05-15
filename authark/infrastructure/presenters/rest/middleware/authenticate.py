@@ -17,14 +17,13 @@ def authenticate_middleware_factory(injector: Injectark) -> Callable:
         try:
             user_dict = extract_user(request.headers)
             session_coordinator.set_user(user_dict)
-
             tenant_id = request.headers['TenantId']
             tenant_dict = tenant_supplier.get_tenant(tenant_id)
             session_coordinator.set_tenant(tenant_dict)
         except Exception as error:
             reason = f"{error.__class__.__name__}: {str(error)}"
             raise web.HTTPUnauthorized(reason=reason)
-
+        print('request!!!!!', request)
         return await handler(request)
 
     return middleware
