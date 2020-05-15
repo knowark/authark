@@ -15,7 +15,7 @@ class TokenResource:
     async def put(self, request: web.Request) -> web.Response:
         token_request = TokenRequestSchema().loads(await request.text())
         tenant_id = token_request['tenant']
-        tenant_dict = self.tenant_supplier.get_tenant(tenant_id)
+        tenant_dict = self.tenant_supplier.resolve_tenant(tenant_id)
         self.session_manager.set_tenant(tenant_dict)
 
         token_pair = await self.auth_manager.authenticate(token_request)
