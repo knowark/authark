@@ -23,7 +23,6 @@ def authenticate_middleware_factory(injector: Injectark) -> Callable:
         except Exception as error:
             reason = f"{error.__class__.__name__}: {str(error)}"
             raise web.HTTPUnauthorized(reason=reason)
-        print('request!!!!!', request)
         return await handler(request)
 
     return middleware

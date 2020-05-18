@@ -8,7 +8,6 @@ class RankingResource(Resource):
     def __init__(self, injector: Injectark) -> None:
         informer = injector['AutharkInformer']
         manager = injector['ManagementManager']
-
         super().__init__(
             RankingSchema,
             partial(informer.count, 'ranking'),

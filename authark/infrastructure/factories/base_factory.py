@@ -1,3 +1,4 @@
+from tests.application.informers.conftest import ranking_repository
 from injectark import Factory
 from ...application.domain.common import (
     QueryParser, TenantProvider, StandardTenantProvider,
@@ -164,12 +165,14 @@ class BaseFactory(Factory):
         dominion_repository: DominionRepository,
         role_repository: RoleRepository,
         rule_repository: RuleRepository,
-        policy_repository: PolicyRepository
+        policy_repository: PolicyRepository,
+        ranking_repository: RankingRepository
     ) -> StandardAutharkInformer:
         return StandardAutharkInformer(
             user_repository, credential_repository,
             dominion_repository, role_repository,
-            rule_repository, policy_repository)
+            rule_repository, policy_repository,
+            ranking_repository)
 
     def standard_composing_informer(
         self, dominion_repository: DominionRepository,
