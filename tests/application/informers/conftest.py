@@ -122,7 +122,8 @@ def authark_informer(user_repository: UserRepository,
                      dominion_repository: DominionRepository,
                      role_repository: RoleRepository,
                      rule_repository: RuleRepository,
-                     policy_repository: PolicyRepository
+                     policy_repository: PolicyRepository,
+                     ranking_repository: RankingRepository
 
                      ) -> AutharkInformer:
     return StandardAutharkInformer(
@@ -131,7 +132,8 @@ def authark_informer(user_repository: UserRepository,
         dominion_repository,
         role_repository,
         rule_repository,
-        policy_repository)
+        policy_repository,
+        ranking_repository)
 
 
 @fixture

@@ -68,7 +68,6 @@ class ManagementManager:
         await self.ranking_repository.add(rankings)
 
     async def deassign_role(self, ranking_ids: List[str]) -> bool:
-        print('ranking_ids>>>>', ranking_ids)
         rankings = await self.ranking_repository.search(
             [('id', 'in', ranking_ids)])
         return await self.ranking_repository.remove(rankings)
