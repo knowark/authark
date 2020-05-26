@@ -43,6 +43,14 @@ def _register_paths(spec):
             }
         }
     ).path(
+        path="/refresh",
+        operations={
+            'put': {
+                'tags': ['Refresh'],
+                'responses': _respond("Get all tokens", 'Refresh')
+            }
+        }
+    ).path(
         path="/users",
         operations={
             'get': {

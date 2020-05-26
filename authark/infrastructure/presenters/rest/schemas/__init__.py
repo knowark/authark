@@ -1,5 +1,6 @@
 from .auth import DominionAuthorizationSchema
 from .token import TokenSchema, TokenRequestSchema
+from .refresh import RefreshSchema, RefreshRequestSchema
 from .user import UserSchema
 from .rule import RuleSchema
 from .policy import PolicySchema

@@ -13,6 +13,8 @@ def authenticate_middleware_factory(injector: Injectark) -> Callable:
     async def middleware(request: web.Request, handler: Callable):
         if request.path in ['/', '/tokens']:
             return await handler(request)
+        if request.path in ['/', '/refresh']:
+            return await handler(request)
 
         try:
             user_dict = extract_user(request.headers)

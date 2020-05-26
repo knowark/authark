@@ -87,7 +87,6 @@ class Shell:
         password_field = options_dict.get('password_field', 'password')
 
         tenant_supplier = self.injector['TenantSupplier']
-        print('tenant:::', tenant)
         tenant_dict = tenant_supplier.resolve_tenant(tenant)
 
         session_manager = self.injector['SessionManager']

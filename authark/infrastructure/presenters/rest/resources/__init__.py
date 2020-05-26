@@ -2,6 +2,7 @@ from aiohttp import web
 from aiohttp_jinja2 import render_template
 from ..... import __version__
 from .token import TokenResource
+from .refresh import RefreshResource
 from .resource import Resource
 from .user import UserResource
 from .rule import RuleResource

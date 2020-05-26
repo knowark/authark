@@ -29,7 +29,6 @@ class AuthManager:
         username = request_dict.get('username', '')
         password = request_dict.get('password', '')
         client = request_dict.get('client', '')
-
         if refresh_token:
             result = await self._refresh_authenticate(
                 refresh_token, dominion)
@@ -73,6 +72,7 @@ class AuthManager:
                                     dominion_name: str = None) -> TokensDict:
         credentials = await self.credential_repository.search([
             ('value', '=', refresh_token), ('type', '=', 'refresh_token')])
+
         if not credentials:
             raise AuthError("Authentication Error: Refresh token not found.")
 

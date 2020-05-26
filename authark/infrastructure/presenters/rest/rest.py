@@ -10,7 +10,8 @@ from .middleware import middlewares
 from .doc import create_spec
 from .resources import (
     RootResource, UserResource, TokenResource,
-    RuleResource, PolicyResource, RankingResource)
+    RuleResource, PolicyResource, RankingResource,
+    RefreshResource)
  
 
 class RestApplication(web.Application):
@@ -66,6 +67,7 @@ class RestApplication(web.Application):
         self._bind_routes('/', RootResource(spec))
         self._bind_routes('/users', UserResource(self.injector))
         self._bind_routes('/tokens', TokenResource(self.injector))
+        self._bind_routes('/refresh', RefreshResource(self.injector))
         self._bind_routes('/rules', RuleResource(self.injector))
         self._bind_routes('/policies', PolicyResource(self.injector))
         self._bind_routes('/rankings', RankingResource(self.injector))
