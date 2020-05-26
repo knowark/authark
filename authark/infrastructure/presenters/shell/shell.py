@@ -5,7 +5,7 @@ from typing import List, Dict
 from ...core import Config
 from .... import __version__
 from ..rest import RestApplication
-# from ..terminal import Main, Context
+from ..console import ConsoleApplication
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger()
@@ -35,10 +35,10 @@ class Shell:
             'serve', help='Start HTTP server.')
         serve_parser.set_defaults(func=self.serve)
 
-        # Terminal
-        # terminal_parser = subparsers.add_parser(
-        #     'terminal', help='Open terminal interface.')
-        # terminal_parser.set_defaults(func=self.terminal)
+        # Console
+        console_parser = subparsers.add_parser(
+            'console', help='Open console interface.')
+        console_parser.set_defaults(func=self.console)
 
         # Load
         load_parser = subparsers.add_parser(
@@ -73,11 +73,10 @@ class Shell:
         await RestApplication.run(app, port)
         logger.info('END SERVE')
 
-    # async def terminal(self, options_dict: Dict[str, str]) -> None:
-    #     logger.info('TERMINAL')
-    #     # context = Context(self.config, self.injector)
-    #     terminal = self.injector['Terminal']
-    #     terminal.run()
+    async def console(self, options_dict: Dict[str, str]) -> None:
+        logger.info('CONSOLE')
+        app = ConsoleApplication(self.config, self.injector)
+        await app.run()
 
     async def load(self, options_dict: Dict[str, str]) -> None:
         logger.info('LOAD')
@@ -87,7 +86,6 @@ class Shell:
         password_field = options_dict.get('password_field', 'password')
 
         tenant_supplier = self.injector['TenantSupplier']
-        print('tenant:::', tenant)
         tenant_dict = tenant_supplier.resolve_tenant(tenant)
 
         session_manager = self.injector['SessionManager']

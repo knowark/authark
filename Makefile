@@ -34,8 +34,8 @@ update:
 serve:
 	python -m $(PROJECT) serve
 
-terminal:
-	python -m $(PROJECT) terminal
+console:
+	python -m $(PROJECT) console
 
 PART ?= patch
 
