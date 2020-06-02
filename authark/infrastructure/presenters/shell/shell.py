@@ -75,7 +75,7 @@ class Shell:
 
     async def console(self, options_dict: Dict[str, str]) -> None:
         logger.info('CONSOLE')
-        app = ConsoleApplication(self.config, self.injector)
+        app = ConsoleApplication(config=self.config, injector=self.injector)
         await app.run()
 
     async def load(self, options_dict: Dict[str, str]) -> None:
