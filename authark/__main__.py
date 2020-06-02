@@ -8,9 +8,9 @@ import uvloop
 from json import loads
 from pathlib import Path
 from injectark import Injectark
-from .infrastructure.core import Config, PRODUCTION_CONFIG
-from .infrastructure.factories import factory_builder, strategy_builder
-from .infrastructure.presenters.shell import Shell
+from .core import Config, PRODUCTION_CONFIG
+from .factories import factory_builder, strategy_builder
+from .presenters.shell import Shell
 
 
 async def main(args=None):
