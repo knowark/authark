@@ -34,7 +34,7 @@ coverage:
 	-o cache_dir=/tmp/pytest/cache \
 	-p no:warnings
 
-update:
+update-requirements:
 	pip-review --auto
 	pip freeze > requirements.txt
 
@@ -57,3 +57,9 @@ install-all:
 
 upgrade-all:
 	pip-review --local --auto
+
+update:
+    git clean -xdf
+    git reset --hard
+    git checkout master
+    git pull --all
