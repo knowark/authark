@@ -59,7 +59,7 @@ upgrade-all:
 	pip-review --local --auto
 
 update:
-    git clean -xdf
-    git reset --hard
-    git checkout master
-    git pull --all
+	git clean -xdf
+	git reset --hard
+	git checkout master
+	git pull --all
