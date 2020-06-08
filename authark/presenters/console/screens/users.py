@@ -37,6 +37,7 @@ class UsersScreen(Frame):
         if self.modal:
             self.remove(self.modal)
             self.modal = None
+            await self.load()
             self.render()
 
     async def on_backdrop_click(self, event: Event) -> None:
@@ -44,6 +45,7 @@ class UsersScreen(Frame):
             event.stop = True
             self.remove(self.modal)
             self.modal = None
+            await self.load()
             self.render()
 
 
@@ -91,8 +93,8 @@ class UserDetailsModal(Modal):
         if self.password.text:
             user['password'] = self.password.text
         self.item.update(user)
-        await self.auth_manager.register([self.item])
+        await self.auth_manager.update([self.item])
         await self.done({'result': 'saved'})
 
     async def on_cancel(self, event: Event) -> None:
-        print('Cancelled:', event)
+        await self.done({'result': 'cancelled'})

@@ -186,6 +186,23 @@ async def test_auth_manager_update(auth_manager):
         credential_repository.data['default'].values()]
 
 
+async def test_auth_manager_update_without_password(auth_manager):
+    user_dicts: RecordList = [{
+        "id": "1",
+        "username": "valenep",
+        "email": "valenep@outlook.com",
+    }]
+
+    await auth_manager.update(user_dicts)
+    credential_repository = auth_manager.credential_repository
+    user_repository = auth_manager.user_repository
+
+    assert len(user_repository.data['default']) == 3
+    assert len(credential_repository.data['default']) == 3
+    assert user_repository.data['default']['1'].username == "valenep"
+    assert user_repository.data['default']['1'].email == "valenep@outlook.com"
+
+
 async def test_auth_manager_register_username_special_characters_error(
         auth_manager):
     with raises(UserCreationError):

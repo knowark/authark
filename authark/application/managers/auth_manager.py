@@ -185,17 +185,21 @@ class AuthManager:
 
     async def _make_password_credentials(
             self, users: List[User], user_dicts: RecordList) -> None:
-        credentials = await self.credential_repository.search([
-            ('user_id', 'in', [user.id for user in users]),
-            ('type', '=', 'password')])
-
-        await self.credential_repository.remove(credentials)
-
+        updated_users = []
         new_credentials = []
         for user, user_dict in zip(users, user_dicts):
+            if not user_dict.get('password'):
+                continue
             hashed_password = self.hash_service.generate_hash(
                 user_dict['password'])
             credential = Credential(user_id=user.id, value=hashed_password)
+            updated_users.append(user)
             new_credentials.append(credential)
+
+        old_credentials = await self.credential_repository.search([
+            ('user_id', 'in', [user.id for user in updated_users]),
+            ('type', '=', 'password')])
+
+        await self.credential_repository.remove(old_credentials)
 
         await self.credential_repository.add(new_credentials)
