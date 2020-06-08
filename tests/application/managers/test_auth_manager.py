@@ -166,6 +166,26 @@ async def test_auth_manager_register(auth_manager):
     assert len(credential_repository.data['default']) == 4
 
 
+async def test_auth_manager_update(auth_manager):
+    user_dicts: RecordList = [{
+        "id": "1",
+        "username": "valenep",
+        "email": "valenep@gmail.com",
+        "password": "NEW: PASS1"
+    }]
+
+    await auth_manager.update(user_dicts)
+    credential_repository = auth_manager.credential_repository
+    user_repository = auth_manager.user_repository
+
+    assert len(user_repository.data['default']) == 3
+    assert len(credential_repository.data['default']) == 3
+    assert user_repository.data['default']['1'].username == "valenep"
+    assert "HASHED: NEW: PASS1" in [
+        credential.value for credential in
+        credential_repository.data['default'].values()]
+
+
 async def test_auth_manager_register_username_special_characters_error(
         auth_manager):
     with raises(UserCreationError):

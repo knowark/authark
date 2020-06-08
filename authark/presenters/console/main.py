@@ -17,9 +17,9 @@ class ConsoleApplication(Application):
     def build(self) -> None:
         self._build_menu()
         self.status = Frame(self, title='Status').title_style(
-            Color.WARNING()).style(border=[0]).grid(0, 1).weight(1, 6)
+            Color.WARNING()).style(border=[0]).grid(0, 1).weight(1, 5)
         self.content = Frame(self, border=[0]).title_style(
-            Color.SUCCESS()).style(border=[]).grid(1, 1).weight(6, 6)
+            Color.SUCCESS()).style(border=[]).grid(1, 1).weight(9, 5)
 
     def _build_menu(self) -> None:
         self.menu = Frame(self, title='Menu').title_style(

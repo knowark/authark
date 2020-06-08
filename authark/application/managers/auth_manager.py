@@ -110,6 +110,17 @@ class AuthManager:
 
         await self._make_password_credentials(users, user_dicts)
 
+    async def update(self, user_dicts: RecordList) -> None:
+        users = ([User(**user_dict) for user_dict in user_dicts])
+
+        # self._validate_usernames(users)
+        # await self._validate_duplicates(users)
+
+        users = await self.user_repository.add([
+            User(**user_dict) for user_dict in user_dicts])
+
+        await self._make_password_credentials(users, user_dicts)
+
     async def deregister(self, user_ids: List[str]) -> bool:
         users = await self.user_repository.search([('id', 'in', user_ids)])
         if not users:
