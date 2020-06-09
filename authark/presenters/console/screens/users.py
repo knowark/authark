@@ -1,3 +1,4 @@
+import json
 from widark import (
     Frame, Listbox, Label, Entry, Event, Modal, Button, Spacer, Color)
 
@@ -12,13 +13,16 @@ class UsersScreen(Frame):
         self.title = 'Users'
         self.style(Color.SUCCESS())
         self.modal = None
-        Label(self, content='\U0001F50D Search:').grid(0, 0)
-        self.search = Entry(self, content=' ').grid(0, 1).style(border=[0])
+        Button(self, content='\U00002795 Create:',
+               command=self.on_create).grid(0, 0)
+        Label(self, content='\U0001F50D Search:').grid(0, 1)
+        self.search = Entry(self, content=' ').grid(0, 2).style(
+            border=[0]).weight(col=3)
         self.header = Listbox(
             self, data=['ID', 'Name', 'Email'],
             orientation='horizontal').grid(1).span(col=3)
         self.body = Listbox(
-            self, command=self.on_body).grid(3).span(col=2).weight(11)
+            self, command=self.on_body).grid(3).span(col=3).weight(11)
         self.listen('click', self.on_backdrop_click, True)
 
     async def load(self) -> None:
@@ -27,7 +31,16 @@ class UsersScreen(Frame):
             data=users, fields=['id', 'name', 'email'], limit=10).connect()
 
     async def on_body(self, event: Event) -> None:
-        item = event.target.parent.item
+        item = getattr(event.target.parent, 'item', None)
+        if item:
+            self.modal = UserDetailsModal(
+                self, injector=self.injector, item=item,
+                done_command=self.on_modal_done,
+                proportion={'height': 0.90, 'width': 0.90}).launch()
+
+    async def on_create(self, event: Event) -> None:
+        item = {
+            'name': ' ', 'username': ' ', 'email': ' ', 'attributes': '{}'}
         self.modal = UserDetailsModal(
             self, injector=self.injector, item=item,
             done_command=self.on_modal_done,
@@ -69,10 +82,18 @@ class UserDetailsModal(Modal):
         self.email = Entry(frame, content=self.item['email']).style(
             border=[0]).grid(2, 1).weight(col=2)
         Label(frame, content='Password:').grid(3, 0)
-        self.password = Entry(frame).style(border=[0]).grid(3, 1).weight(col=2)
+        self.password = Entry(frame, content=' ').style(
+            border=[0]).grid(3, 1).weight(col=2)
         Label(frame, content='Attributes:').grid(4, 0)
+
+        attributes = {}
+        try:
+            attributes = json.loads(self.item['attributes'])
+        except json.JSONDecodeError:
+            pass
+
         self.attributes = Entry(
-            frame, content=str(self.item['attributes'])).style(
+            frame, content=json.dumps(attributes, indent=4)).style(
             border=[0]).grid(4, 1).weight(4, 2)
 
         actions = Frame(
@@ -90,8 +111,8 @@ class UserDetailsModal(Modal):
             'email': self.email.text,
             'attributes': self.attributes.text
         }
-        if self.password.text:
-            user['password'] = self.password.text
+        if self.password.text.strip():
+            user['password'] = self.password.text.strip()
         self.item.update(user)
         await self.auth_manager.update([self.item])
         await self.done({'result': 'saved'})
