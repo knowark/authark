@@ -1,3 +1,4 @@
+import json
 import logging
 from argparse import ArgumentParser, Namespace
 from injectark import Injectark
@@ -25,10 +26,10 @@ class Shell:
         subparsers = self.parser.add_subparsers()
 
         # Provision
-        # provision_parser = subparsers.add_parser(
-        #     'provision', help='Provision new tenants.')
-        # provision_parser.add_argument('name')
-        # provision_parser.set_defaults(func=self.provision)
+        provision_parser = subparsers.add_parser(
+            'provision', help='Provision new tenants.')
+        provision_parser.add_argument('data', help='JSON encoded tenant.')
+        provision_parser.set_defaults(func=self.provision)
 
         # Serve
         serve_parser = subparsers.add_parser(
@@ -59,12 +60,13 @@ class Shell:
 
         return self.parser.parse_args(argv)
 
-    # async def provision(self, options_dict: Dict[str, str]) -> None:
-    #     logger.info('PROVISION')
-    #     tenant_supplier = self.injector['TenantSupplier']
-    #     tenant_dict = {'name': options_dict['name']}
-    #     tenant_supplier.create_tenant(tenant_dict)
-    #     logger.info('END PROVISION')
+    async def provision(self, options_dict: Dict[str, str]) -> None:
+        logger.info('PROVISION')
+        tenant_supplier = self.injector['TenantSupplier']
+        tenant_dict = json.loads(options_dict['data'])
+        logger.info("Creating tenant:", tenant_dict)
+        tenant_supplier.create_tenant(tenant_dict)
+        logger.info('END PROVISION')
 
     async def serve(self, options_dict: Dict[str, str]) -> None:
         logger.info('SERVE')

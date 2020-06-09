@@ -13,7 +13,7 @@ class UsersScreen(Frame):
         self.style(Color.SUCCESS())
         self.modal = None
         Label(self, content='\U0001F50D Search:').grid(0, 0)
-        self.search = Entry(self).grid(0, 1).style(border=[0])
+        self.search = Entry(self, content=' ').grid(0, 1).style(border=[0])
         self.header = Listbox(
             self, data=['ID', 'Name', 'Email'],
             orientation='horizontal').grid(1).span(col=3)
@@ -22,7 +22,7 @@ class UsersScreen(Frame):
         self.listen('click', self.on_backdrop_click, True)
 
     async def load(self) -> None:
-        users = (await self.authark_informer.search('user'))
+        users = await self.authark_informer.search('user')
         self.body.setup(
             data=users, fields=['id', 'name', 'email'], limit=10).connect()
 

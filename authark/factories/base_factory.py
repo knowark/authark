@@ -1,4 +1,3 @@
-from tests.application.informers.conftest import ranking_repository
 from injectark import Factory
 from ..application.domain.common import (
     QueryParser, TenantProvider, StandardTenantProvider,
@@ -22,7 +21,8 @@ from ..application.managers import (
 from ..application.informers import (
     StandardAutharkInformer, StandardComposingInformer)
 from ..core.common import Config
-from ..core.suppliers.tenancy import TenantSupplier, MemoryTenantSupplier
+from ..core.suppliers import (
+    TenantSupplier, MemoryTenantSupplier, MemorySetupSupplier)
 
 
 class BaseFactory(Factory):
@@ -63,13 +63,13 @@ class BaseFactory(Factory):
             tenant_provider: TenantProvider
     ) -> MemoryRoleRepository:
         return MemoryRoleRepository(query_parser, tenant_provider)
-    
+
     def memory_rule_repository(
             self, query_parser: QueryParser,
             tenant_provider: TenantProvider
     ) -> MemoryRuleRepository:
         return MemoryRuleRepository(query_parser, tenant_provider)
-    
+
     def memory_policy_repository(
             self, query_parser: QueryParser,
             tenant_provider: TenantProvider
@@ -154,8 +154,6 @@ class BaseFactory(Factory):
             ranking_repository, role_repository,
             dominion_repository,
             token_service, tenant_provider)
-    
-   
 
     # Reporters
 
@@ -182,5 +180,10 @@ class BaseFactory(Factory):
         return StandardComposingInformer(
             dominion_repository, role_repository, ranking_repository)
 
+    # Suppliers
+
     def memory_tenant_supplier(self) -> TenantSupplier:
         return MemoryTenantSupplier()
+
+    def memory_setup_supplier(self) -> MemorySetupSupplier:
+        return MemorySetupSupplier()

@@ -41,6 +41,9 @@ json = {
     "TenantSupplier": {
         "method": "json_tenant_supplier"
     },
+    "SetupSupplier": {
+        "method": "json_setup_supplier"
+    },
     "JwtSupplier": {
         "method":  "jwt_supplier"
     }

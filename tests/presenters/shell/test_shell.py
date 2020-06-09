@@ -1,4 +1,5 @@
 
+import json
 from typing import List
 from pytest import raises
 from authark.presenters.shell import shell as shell_module
@@ -68,6 +69,37 @@ async def test_shell_serve(shell, monkeypatch):
 
     assert called and called
     assert custom_port == 9201
+
+
+async def test_shell_provision(shell):
+    options_dict = {
+        'data': json.dumps({
+            'name': 'Knowark'
+        })
+    }
+
+    result = await shell.provision(options_dict)
+
+    assert result is None
+
+
+async def test_shell_console(shell, monkeypatch):
+    called = False
+
+    class MockConsoleApplication:
+        def __init__(self, config, injector):
+            pass
+
+        async def run(self):
+            nonlocal called
+            called = True
+
+    monkeypatch.setattr(
+        shell_module, 'ConsoleApplication', MockConsoleApplication)
+
+    await shell.console({})
+
+    assert called and called
 
 
 async def test_shell_load(shell, monkeypatch):

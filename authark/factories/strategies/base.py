@@ -73,5 +73,8 @@ base = {
     # --- SUPPLIERS ---
     "TenantSupplier": {
         "method": "memory_tenant_supplier"
+    },
+    "SetupSupplier": {
+        "method": "memory_setup_supplier"
     }
 }

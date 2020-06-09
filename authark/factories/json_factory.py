@@ -5,7 +5,8 @@ from ..core.data import (
     JsonUserRepository, JsonRankingRepository, JsonImportService,
     JsonRuleRepository, JsonPolicyRepository)
 from ..core.common import Config
-from ..core.suppliers.tenancy import TenantSupplier, JsonTenantSupplier
+from ..core.suppliers import (
+    TenantSupplier, JsonTenantSupplier, JsonSetupSupplier)
 from .crypto_factory import CryptoFactory
 
 
@@ -74,3 +75,8 @@ class JsonFactory(CryptoFactory):
         zones = {key: value['data'] for key, value in
                  self.config['zones'].items()}
         return JsonTenantSupplier(catalog_path, zones)
+
+    def json_setup_supplier(self) -> JsonSetupSupplier:
+        zones = {key: value['data'] for key, value in
+                 self.config['zones'].items()}
+        return JsonSetupSupplier(zones)

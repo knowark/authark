@@ -1,6 +1,6 @@
 from aiohttp import web
 from aiohttp_jinja2 import render_template
-from ..... import __version__
+from .... import __version__
 
 
 class RootResource:
