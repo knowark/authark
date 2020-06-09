@@ -22,7 +22,7 @@ class UsersScreen(Frame):
             self, data=['ID', 'Name', 'Email'],
             orientation='horizontal').grid(1).span(col=3)
         self.body = Listbox(
-            self, command=self.on_body).grid(3).span(col=3).weight(11)
+            self, command=self.on_body).grid(3).span(col=3).weight(9)
         self.listen('click', self.on_backdrop_click, True)
 
     async def load(self) -> None:
@@ -98,11 +98,13 @@ class UserDetailsModal(Modal):
 
         actions = Frame(
             self, title='Actions').grid(1).title_style(Color.DANGER())
-        Spacer(actions).weight(col=2)
+        Button(actions, content='Delete', command=self.on_delete
+               ).style(Color.DANGER()).grid(0, 1)
+        Spacer(actions).grid(0, 2).weight(col=2)
         Button(actions, content='Save', command=self.on_save
-               ).style(Color.SUCCESS()).grid(0, 1)
+               ).style(Color.SUCCESS()).grid(0, 3)
         Button(actions, content='Cancel', command=self.on_cancel
-               ).style(Color.DANGER()).grid(0, 2)
+               ).style(Color.WARNING()).grid(0, 4)
 
     async def on_save(self, event: Event) -> None:
         user = {
@@ -119,3 +121,7 @@ class UserDetailsModal(Modal):
 
     async def on_cancel(self, event: Event) -> None:
         await self.done({'result': 'cancelled'})
+
+    async def on_delete(self, event: Event) -> None:
+        await self.auth_manager.deregister([self.item['id']])
+        await self.done({'result': 'deleted'})
