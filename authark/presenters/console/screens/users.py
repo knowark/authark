@@ -97,7 +97,7 @@ class UserDetailsModal(Modal):
             border=[0]).grid(4, 1).weight(4, 2)
 
         actions = Frame(
-            self, title='Actions').grid(1).title_style(Color.DANGER())
+            self, title='Actions').grid(1).title_style(Color.WARNING())
         Button(actions, content='Delete', command=self.on_delete
                ).style(Color.DANGER()).grid(0, 1)
         Spacer(actions).grid(0, 2).weight(col=2)
