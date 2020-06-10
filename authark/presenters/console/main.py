@@ -30,7 +30,8 @@ class ConsoleApplication(Application):
             pass
 
     async def on_tenant_switch(self, event: Event) -> None:
-        self._set_tenant(event.details)
+        if event.details.get('name'):
+            self._set_tenant(event.details)
         self.connect()
 
     def _set_tenant(self, tenant_dict: Dict[str, Any]) -> None:
