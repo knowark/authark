@@ -13,10 +13,6 @@
 - name: Update PIP to Latest Version
   command: pip3 install -U pip
 
-- name: Install Python Psycopg2
-  apt:
-    name: python3-psycopg2
-
 - name: Install Python Virtualenvwrapper
   apt:
     name: virtualenvwrapper
