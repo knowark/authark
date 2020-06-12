@@ -9,6 +9,9 @@
 - name: Install Python PIP
   apt:
     name: python3-pip
+  
+- name: Update PIP to Latest Version
+  command: pip3 install -U pip
 
 - name: Install Python Psycopg2
   apt:
