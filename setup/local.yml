@@ -1,0 +1,8 @@
+---
+- name: Deploy Authark Server
+  hosts: all
+  vars:
+    app_user: authark
+  roles:
+    - system
+    - app

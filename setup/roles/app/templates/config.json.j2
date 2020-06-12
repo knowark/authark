@@ -1,0 +1,24 @@
+{
+    "database": {
+        "type": "json",
+        "url": "/var/opt/authark/data/authark_data.json"
+    },
+    "tokens": {
+            "tenant": {
+                "algorithm": "HS256",
+                "secret": "",
+                "lifetime": 86400
+            },
+            "access": {
+                "algorithm": "HS256",
+                "secret": "",
+                "lifetime": 86400
+            },
+            "refresh": {
+                "algorithm": "HS256",
+                "secret": "",
+                "lifetime": 604800,
+                "threshold": 86400
+            }
+        }
+}
