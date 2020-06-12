@@ -63,3 +63,6 @@ update:
 	git reset --hard
 	git checkout master
 	git pull --all
+
+deploy:
+	./setup/deploy.sh
