@@ -1,6 +1,6 @@
-- name: Update Ubuntu
-  apt:
-    update_cache: yes
+# - name: Update Ubuntu
+#   apt:
+#     update_cache: yes
 
 - name: Install Git
   apt:
