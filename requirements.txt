@@ -43,7 +43,6 @@ livereload==2.6.1
 MarkupSafe==1.1.1
 marshmallow==3.2.2
 mccabe==0.6.1
-migrark==0.4.1
 mock==3.0.5
 more-itertools==7.2.0
 multidict==4.7.5
