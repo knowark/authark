@@ -1,6 +1,6 @@
 from typing import Dict, Any
 from widark import Application, Event, Frame, Color, Listbox, Spacer
-from .screens import UsersScreen, StatusScreen
+from .screens import StatusScreen, UsersScreen, DominionsScreen
 
 
 class ConsoleApplication(Application):
@@ -22,13 +22,13 @@ class ConsoleApplication(Application):
             Color.SUCCESS()).style(border=[]).grid(1, 1).weight(9, 5)
 
     async def on_menu_click(self, event: Event) -> None:
-        option = event.target
-        if option.content == '\U0001F6B9 Users':
+        item = event.target.parent.item
+        if item['tag'] == 'users':
             self.content.clear()
             UsersScreen(self.content, injector=self.injector).connect()
-        elif option.row.pos == 1:
-            # print('Dominions')
-            pass
+        elif item['tag'] == 'dominions':
+            self.content.clear()
+            DominionsScreen(self.content, injector=self.injector).connect()
 
     async def on_tenant_switch(self, event: Event) -> None:
         if event.details.get('name'):
@@ -47,6 +47,8 @@ class ConsoleApplication(Application):
     def _build_menu(self) -> None:
         self.menu = Frame(self, title='Menu').title_style(
             Color.PRIMARY()).style(border=[0]).span(2)
-        Listbox(self.menu, data=['\U0001F6B9 Users', '\U0001F3DA Dominions'],
-                command=self.on_menu_click)
+        Listbox(self.menu, data=[
+            {'label': '\U0001F6B9 Users', 'tag': 'users'},
+            {'label': '\U0001F3DA Dominions', 'tag': 'dominions'},
+        ], command=self.on_menu_click, fields=['label'])
         Spacer(self.menu).grid(1).weight(2)
