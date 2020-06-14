@@ -1,38 +1,25 @@
 
 clean:
 	find . -name '__pycache__' -exec rm -fr {} +
-	rm -rf ./.cache
-	rm -f .coverage
-	rm -rf .mypy_cache
+	rm -rf ./.cache .mypy_cache ./schema/.mypy_cache .coverage
 
 test:
 	pytest
 
-COVFILE ?= .coverage
-PWD = $(shell pwd)
 PROJECT = authark
+COVFILE ?= .coverage
+TESTS ?= tests/
 
 coverage-application:
-	mypy $(PROJECT)/application
-	export COVERAGE_FILE=$(COVFILE); pytest -x \
-	--cov=$(PWD)/$(PROJECT)/application $(PWD)/tests/application/ \
-	--cov-report term-missing -s -vv \
-	-o cache_dir=/tmp/pytest/cache
+	export COVERAGE_FILE=$(COVFILE); pytest --cov-branch \
+	--cov=$(PROJECT)/application tests/application/ --cov-report \
+	term-missing -x -s -W ignore::DeprecationWarning \
+	-o cache_dir=/tmp/authark/cache
 
-coverage-infrastructure:
-	mypy $(PROJECT)/infrastructure
-	export COVERAGE_FILE=$(COVFILE); pytest -x \
-	--cov=$(PWD)/$(PROJECT)/infrastructure $(PWD)/tests/infrastructure/ \
-	--cov-report term-missing -s -vv \
-	-o cache_dir=/tmp/pytest/cache
-
-coverage: 
-	mypy $(PROJECT)
-	export COVERAGE_FILE=$(COVFILE); pytest -x \
-	--cov=$(PWD)/$(PROJECT) $(PWD)/tests/ \
-	--cov-report term-missing -s -vv \
-	-o cache_dir=/tmp/pytest/cache \
-	-p no:warnings
+coverage:
+	mypy authark && export COVERAGE_FILE=$(COVFILE); pytest --cov-branch \
+	--cov=$(PROJECT) $(TESTS) --cov-report term-missing -x -s \
+	-vv -W ignore::DeprecationWarning -o cache_dir=/tmp/authark/cache
 
 update-requirements:
 	pip-review --auto
@@ -41,8 +28,8 @@ update-requirements:
 serve:
 	python -m $(PROJECT) serve
 
-terminal:
-	python -m $(PROJECT) terminal
+console:
+	python -m $(PROJECT) console
 
 PART ?= patch
 
