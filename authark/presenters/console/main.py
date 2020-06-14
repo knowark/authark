@@ -11,8 +11,9 @@ class ConsoleApplication(Application):
 
     async def prepare(self) -> None:
         tenancy_supplier = self.injector['TenantSupplier']
-        first_tenant = next(iter(tenancy_supplier.search_tenants([])))
-        self._set_tenant(first_tenant)
+        tenants = tenancy_supplier.search_tenants([])
+        tenant_dict = next(iter(tenants), {'name': 'None'})
+        self._set_tenant(tenant_dict)
 
     def build(self) -> None:
         self._build_menu()
