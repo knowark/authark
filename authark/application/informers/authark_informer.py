@@ -41,17 +41,17 @@ class StandardAutharkInformer(AutharkInformer):
         self.ranking_repository = ranking_repository
 
     async def search(self,
-                     model: str,
+                     collection: str,
                      domain: QueryDomain = None,
                      limit: int = 10000,
                      offset: int = 0) -> RecordList:
-        repository = getattr(self, f'{model}_repository')
+        repository = getattr(self, f'{collection}_repository')
         return [vars(entity) for entity in
                 await repository.search(
                 domain or [], limit=limit, offset=offset)]
 
     async def count(self,
-                    model: str,
+                    collection: str,
                     domain: QueryDomain = None) -> int:
-        repository = getattr(self, f'{model}_repository')
+        repository = getattr(self, f'{collection}_repository')
         return await repository.count(domain or [])

@@ -7,7 +7,8 @@ def credential():
     return Credential(
         id='1',
         user_id='af1209fade',
-        value='e9cee71ab932fde863338d08be4de9dfe39ea049bdafb342ce659ec5450b69ae',
+        value=('e9cee71ab932fde863338d08be4de9df'
+               'e39ea049bdafb342ce659ec5450b69ae'),
         client='ANDROID_LG_0987'
     )
 
@@ -19,5 +20,6 @@ def test_credential_instantiation(credential):
 def test_credential_attributes(credential):
     assert credential.user_id == 'af1209fade'
     assert credential.type == 'password'
-    assert credential.value == 'e9cee71ab932fde863338d08be4de9dfe39ea049bdafb342ce659ec5450b69ae'
+    assert credential.value == (
+        'e9cee71ab932fde863338d08be4de9dfe39ea049bdafb342ce659ec5450b69ae')
     assert credential.client == 'ANDROID_LG_0987'

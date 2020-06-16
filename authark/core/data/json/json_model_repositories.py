@@ -12,9 +12,9 @@ class JsonCredentialRepository(JsonRepository, CredentialRepository):
 
     def __init__(self, data_path: str, parser: QueryParser,
                  tenant_provider: TenantProvider,
-                 collection_name: str = 'credentials') -> None:
+                 collection: str = 'credentials') -> None:
         super().__init__(data_path, parser, tenant_provider,
-                         collection_name, Credential)
+                         collection, Credential)
 
 
 class JsonDominionRepository(JsonRepository, DominionRepository):
@@ -22,9 +22,9 @@ class JsonDominionRepository(JsonRepository, DominionRepository):
 
     def __init__(self, data_path: str, parser: QueryParser,
                  tenant_provider: TenantProvider,
-                 collection_name: str = 'dominions') -> None:
+                 collection: str = 'dominions') -> None:
         super().__init__(data_path, parser, tenant_provider,
-                         collection_name, Dominion)
+                         collection, Dominion)
 
 
 class JsonRankingRepository(JsonRepository, RankingRepository):
@@ -32,9 +32,9 @@ class JsonRankingRepository(JsonRepository, RankingRepository):
 
     def __init__(self, data_path: str, parser: QueryParser,
                  tenant_provider: TenantProvider,
-                 collection_name: str = 'rankings') -> None:
+                 collection: str = 'rankings') -> None:
         super().__init__(data_path, parser, tenant_provider,
-                         collection_name, Ranking)
+                         collection, Ranking)
 
 
 class JsonRoleRepository(JsonRepository, RoleRepository):
@@ -42,9 +42,9 @@ class JsonRoleRepository(JsonRepository, RoleRepository):
 
     def __init__(self, data_path: str, parser: QueryParser,
                  tenant_provider: TenantProvider,
-                 collection_name: str = 'roles') -> None:
+                 collection: str = 'roles') -> None:
         super().__init__(data_path, parser, tenant_provider,
-                         collection_name, Role)
+                         collection, Role)
 
 
 class JsonRuleRepository(JsonRepository, RuleRepository):
@@ -52,9 +52,9 @@ class JsonRuleRepository(JsonRepository, RuleRepository):
 
     def __init__(self, data_path: str, parser: QueryParser,
                  tenant_provider: TenantProvider,
-                 collection_name: str = 'rules') -> None:
+                 collection: str = 'rules') -> None:
         super().__init__(data_path, parser, tenant_provider,
-                         collection_name, Rule)
+                         collection, Rule)
 
 
 class JsonPolicyRepository(JsonRepository, PolicyRepository):
@@ -62,9 +62,9 @@ class JsonPolicyRepository(JsonRepository, PolicyRepository):
 
     def __init__(self, data_path: str, parser: QueryParser,
                  tenant_provider: TenantProvider,
-                 collection_name: str = 'policies') -> None:
+                 collection: str = 'policies') -> None:
         super().__init__(data_path, parser, tenant_provider,
-                         collection_name, Policy)
+                         collection, Policy)
 
 
 class JsonUserRepository(JsonRepository, UserRepository):
@@ -72,6 +72,6 @@ class JsonUserRepository(JsonRepository, UserRepository):
 
     def __init__(self, data_path: str, parser: QueryParser,
                  tenant_provider: TenantProvider,
-                 collection_name: str = 'users') -> None:
+                 collection: str = 'users') -> None:
         super().__init__(data_path, parser, tenant_provider,
-                         collection_name, User)
+                         collection, User)

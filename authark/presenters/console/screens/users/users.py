@@ -2,6 +2,7 @@ import json
 from widark import (
     Frame, Listbox, Label, Entry, Event, Modal, Button, Spacer, Color)
 from .rankings import RankingsModal
+from .credentials import CredentialsModal
 
 
 class UsersScreen(Frame):
@@ -55,6 +56,11 @@ class UsersScreen(Frame):
                 self, injector=self.injector,
                 user=self.user,
                 done_command=self.on_modal_done).launch().connect()
+        elif event.details['result'] == 'credentials':
+            self.modal = CredentialsModal(
+                self, injector=self.injector,
+                user=self.user,
+                done_command=self.on_modal_done).launch().connect()
         else:
             await self.load()
         self.render()
@@ -104,7 +110,9 @@ class UserDetailsModal(Modal):
 
         menu = Frame(self, title='Menu').grid(col=1)
         Button(menu, content='Roles', command=self.on_roles).style(border=[0])
-        Spacer(menu).grid(1).weight(2)
+        Button(menu, content='Credentials',
+               command=self.on_credentials).style(border=[0]).grid(1)
+        Spacer(menu).grid(2).weight(2)
 
         actions = Frame(self, title='Actions').title_style(
             Color.WARNING()).grid(1).span(col=2)
@@ -138,3 +146,6 @@ class UserDetailsModal(Modal):
 
     async def on_roles(self, event: Event) -> None:
         await self.done({'result': 'roles'})
+
+    async def on_credentials(self, event: Event) -> None:
+        await self.done({'result': 'credentials'})
