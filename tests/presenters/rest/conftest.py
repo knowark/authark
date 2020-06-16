@@ -15,9 +15,9 @@ def app(loop, aiohttp_client):
 
     injector = Injectark(strategy, factory)
 
-    app = RestApplication(config, injector)
+    rest = RestApplication(config, injector)
 
-    return loop.run_until_complete(aiohttp_client(app))
+    return loop.run_until_complete(aiohttp_client(rest.app))
 
 
 @fixture

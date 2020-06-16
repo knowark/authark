@@ -19,7 +19,7 @@ coverage-application:
 coverage:
 	mypy authark && export COVERAGE_FILE=$(COVFILE); pytest --cov-branch \
 	--cov=$(PROJECT) $(TESTS) --cov-report term-missing -x -s \
-	-vv -W ignore::DeprecationWarning -o cache_dir=/tmp/authark/cache
+	-vv -o cache_dir=/tmp/authark/cache
 
 update-requirements:
 	pip-review --auto

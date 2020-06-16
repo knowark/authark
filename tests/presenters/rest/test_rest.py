@@ -6,6 +6,7 @@ from authark.presenters.rest import rest as rest_module
 
 async def test_rest_application_run(monkeypatch):
     called = False
+    app_called = False
 
     class web:
         @staticmethod
@@ -13,11 +14,22 @@ async def test_rest_application_run(monkeypatch):
             nonlocal called
             called = True
 
-    monkeypatch.setattr(rest_module, 'web', web)
+    class MockRestApplication(RestApplication):
+        def __init__(self) -> None:
+            pass
 
-    await RestApplication.run(None)
+        @property
+        def app(self):
+            nonlocal app_called
+            app_called = True
+
+    monkeypatch.setattr(rest_module, 'web', web)
+    rest = MockRestApplication()
+
+    await RestApplication.run(rest)
 
     assert called is True
+    assert app_called is True
 
 
 async def test_root(app) -> None:

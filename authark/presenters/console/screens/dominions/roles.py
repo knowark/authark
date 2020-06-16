@@ -13,6 +13,7 @@ class RolesModal(Modal):
 
     def build(self) -> None:
         super().build()
+        self.modal = None
         frame = Frame(
             self, title='Roles').title_style(Color.WARNING()).weight(4, 2)
 

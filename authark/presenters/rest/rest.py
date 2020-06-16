@@ -11,25 +11,26 @@ from .doc import create_spec
 from .resources import (
     RootResource, UserResource, TokenResource,
     RuleResource, PolicyResource, RankingResource)
- 
 
-class RestApplication(web.Application):
+
+class RestApplication:
     def __init__(self, config: Config, injector: Injectark) -> None:
-        super().__init__(middlewares=middlewares(injector))
+        super().__init__()
+        self.app = web.Application(middlewares=middlewares(injector))
         self.config = config
         self.injector = injector
         self._setup()
 
     @staticmethod
-    async def run(app: web.Application, port: int = 4321):
-        await web._run_app(app, port=port)
+    async def run(rest: 'RestApplication', port: int = 4321):
+        await web._run_app(rest.app, port=port)
 
     def _setup(self) -> None:
         templates = str(Path(__file__).parent / 'templates')
-        aiohttp_jinja2.setup(self, loader=FileSystemLoader(templates))
+        aiohttp_jinja2.setup(self.app, loader=FileSystemLoader(templates))
 
-        self.cleanup_ctx.append(self._http_client)
-        cors = aiohttp_cors.setup(self, defaults={
+        self.app.cleanup_ctx.append(self._http_client)
+        cors = aiohttp_cors.setup(self.app, defaults={
             "*": aiohttp_cors.ResourceOptions(
                 allow_credentials=True, expose_headers="*",
                 allow_headers="*")})
@@ -37,7 +38,7 @@ class RestApplication(web.Application):
         # API endpoints creation
         self._create_api()
 
-        for route in list(self.router.routes()):
+        for route in list(self.app.router.routes()):
             cors.add(route)
 
     @staticmethod
@@ -55,8 +56,8 @@ class RestApplication(web.Application):
             if not handler:
                 continue
             if method in identified_methods:
-                self.router.add_route(method, path + "/{id}", handler)
-            self.router.add_route(method, path, handler)
+                self.app.router.add_route(method, path + "/{id}", handler)
+            self.app.router.add_route(method, path, handler)
 
     def _create_api(self) -> None:
         # Restful API

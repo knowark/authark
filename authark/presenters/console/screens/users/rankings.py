@@ -12,6 +12,7 @@ class RankingsModal(Modal):
 
     def build(self) -> None:
         super().build()
+        self.modal = None
         frame = Frame(self, title='Rankings').title_style(
             Color.WARNING()).weight(4, 2)
         Button(frame, content='\U00002795 Assign',

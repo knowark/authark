@@ -82,7 +82,7 @@ async def test_memory_repository_add_update(memory_repository) -> None:
     created_entity = DummyEntity(id="1", field_1="value_1")
     created_entity, *_ = await memory_repository.add(created_entity)
 
-    sleep(1)
+    await sleep(1)
 
     updated_entity = DummyEntity(id="1", field_1="New Value")
     updated_entity, *_ = await memory_repository.add(updated_entity)
