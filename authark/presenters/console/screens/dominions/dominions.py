@@ -52,13 +52,13 @@ class DominionsScreen(Frame):
 
     async def on_modal_done(self, event: Event) -> None:
         self.remove(self.modal)
+        self.modal = None
         if event.details['result'] == 'roles':
             self.modal = RolesModal(
                 self, injector=self.injector,
                 dominion=self.dominion,
                 done_command=self.on_modal_done).launch().connect()
         else:
-            self.modal = None
             await self.load()
         self.render()
 
