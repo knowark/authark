@@ -207,11 +207,12 @@ async def test_memory_repository_search_offset(filled_memory_repository):
 async def test_memory_repository_search_join_one_to_many(
         filled_memory_repository, filled_child_memory_repository):
 
-    children = await filled_memory_repository.search(
-        [('id', '=', '1')], join=filled_child_memory_repository)
+    for parent, children in await filled_memory_repository.search(
+            [('id', '=', '1')], join=filled_child_memory_repository):
 
-    assert all(isinstance(child, Child) for child in children)
-    assert len(children) == 2
+        assert isinstance(parent, Dummy)
+        assert all(isinstance(child, Child) for child in children)
+        assert len(children) == 2
 
 
 async def test_memory_repository_remove_true(filled_memory_repository):

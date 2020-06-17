@@ -1,7 +1,7 @@
 import time
 from uuid import uuid4
 from collections import defaultdict
-from typing import List, Dict, Generic, Union, Any, overload
+from typing import List, Tuple, Dict, Generic, Union, Any, overload
 from ..models import T, R, L
 from ..common import QueryParser, QueryDomain, TenantProvider
 from .repository import Repository
@@ -59,9 +59,10 @@ class MemoryRepository(Repository, Generic[T]):
     async def search(self, domain: QueryDomain,
                      limit: int = None, offset: int = None,
                      *,
-                     join: 'Repository[R]' = None,
+                     join: 'Repository[R]',
                      link: 'Repository[L]' = None,
-                     target: str = None, source: str = None) -> List[R]:
+                     target: str = None,
+                     source: str = None) -> List[Tuple[T, List[R]]]:
         """Joining search method"""
 
     async def search(
@@ -71,20 +72,14 @@ class MemoryRepository(Repository, Generic[T]):
             *,
             join: 'Repository[R]' = None,
             link: 'Repository[L]' = None,
-            target: str = None, source: str = None) -> Union[List[T], List[R]]:
+            target: str = None,
+            source: str = None) -> Union[List[T], List[Tuple[T, List[R]]]]:
 
-        items: Any = []
+        items: List[T] = []
         filter_function = self.parser.parse(domain)
         for item in list(self.data[self._location].values()):
             if filter_function(item):
                 items.append(item)
-
-        if join:
-            linker = link or join
-            target = f'{self.model.__name__.lower()}_id'
-            result = await join.search(
-                [(target, 'in', [item.id for item in items])])
-            items = result
 
         if offset is not None:
             items = items[offset:]
@@ -92,7 +87,17 @@ class MemoryRepository(Repository, Generic[T]):
         if limit is not None:
             items = items[:min(limit, self.max_items)]
 
-        return items
+        if not join:
+            return items
+
+        linker = link or join
+        target = target or f'{self.model.__name__.lower()}_id'
+        relation_map = defaultdict(list)
+        for related in await join.search(
+                [(target, 'in', [item.id for item in items])]):
+            relation_map[getattr(related, target)].append(related)
+
+        return [(item, relation_map.get(item.id, [])) for item in items]
 
     def load(self, data: Dict[str, Dict[str, T]]) -> None:
         self.data = data
