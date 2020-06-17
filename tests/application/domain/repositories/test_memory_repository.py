@@ -13,7 +13,7 @@ class Alpha(Entity):
         self.field_1 = attributes.get('field_1', "")
 
 
-class Child(Entity):
+class Beta(Entity):
     def __init__(self, **attributes) -> None:
         super().__init__(**attributes)
         self.alpha_id = attributes.get('alpha_id', "")
@@ -52,31 +52,31 @@ def filled_memory_repository(memory_repository) -> MemoryRepository[Alpha]:
 
 
 @fixture
-def child_memory_repository() -> MemoryRepository[Child]:
+def beta_memory_repository() -> MemoryRepository[Beta]:
     tenant_provider = StandardTenantProvider()
     tenant_provider.setup(Tenant(id='001', name="Default"))
     parser = QueryParser()
 
-    class ChildMemoryRepository(MemoryRepository[Child]):
-        model = Child
+    class BetaMemoryRepository(MemoryRepository[Beta]):
+        model = Beta
 
-    repository = ChildMemoryRepository(parser, tenant_provider)
+    repository = BetaMemoryRepository(parser, tenant_provider)
     repository.load({"default": {}})
     return repository
 
 
 @fixture
-def filled_child_memory_repository(
-        child_memory_repository) -> MemoryRepository[Child]:
+def filled_beta_memory_repository(
+        beta_memory_repository) -> MemoryRepository[Beta]:
     data_dict = {
         "default": {
-            "1": Child(id='1', alpha_id='1'),
-            "2": Child(id='2', alpha_id='1'),
-            "3": Child(id='3', alpha_id='2')
+            "1": Beta(id='1', alpha_id='1'),
+            "2": Beta(id='2', alpha_id='1'),
+            "3": Beta(id='3', alpha_id='2')
         }
     }
-    child_memory_repository.load(data_dict)
-    return child_memory_repository
+    beta_memory_repository.load(data_dict)
+    return beta_memory_repository
 
 
 def test_memory_repository_model(memory_repository) -> None:
@@ -205,24 +205,24 @@ async def test_memory_repository_search_offset(filled_memory_repository):
 
 
 async def test_memory_repository_search_join_one_to_many(
-        filled_memory_repository, filled_child_memory_repository):
+        filled_memory_repository, filled_beta_memory_repository):
 
-    for parent, children in await filled_memory_repository.search(
-            [('id', '=', '1')], join=filled_child_memory_repository):
+    for parent, betaren in await filled_memory_repository.search(
+            [('id', '=', '1')], join=filled_beta_memory_repository):
 
         assert isinstance(parent, Alpha)
-        assert all(isinstance(child, Child) for child in children)
-        assert len(children) == 2
+        assert all(isinstance(beta, Beta) for beta in betaren)
+        assert len(betaren) == 2
 
 
 async def test_memory_repository_search_join_many_to_one(
-        filled_memory_repository, filled_child_memory_repository):
+        filled_memory_repository, filled_beta_memory_repository):
 
-    for element, siblings in await filled_child_memory_repository.search(
+    for element, siblings in await filled_beta_memory_repository.search(
             [('id', '=', '1')], join=filled_memory_repository,
             link=filled_memory_repository):
 
-        assert isinstance(element, Child)
+        assert isinstance(element, Beta)
         assert len(siblings) == 1
         assert isinstance(next(iter(siblings)), Alpha)
 
