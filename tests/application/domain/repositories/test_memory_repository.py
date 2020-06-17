@@ -7,7 +7,7 @@ from authark.application.domain.repositories import (
     Repository, MemoryRepository)
 
 
-class Dummy(Entity):
+class Alpha(Entity):
     def __init__(self, **attributes) -> None:
         super().__init__(**attributes)
         self.field_1 = attributes.get('field_1', "")
@@ -16,7 +16,7 @@ class Dummy(Entity):
 class Child(Entity):
     def __init__(self, **attributes) -> None:
         super().__init__(**attributes)
-        self.dummy_id = attributes.get('dummy_id', "")
+        self.alpha_id = attributes.get('alpha_id', "")
 
 
 def test_memory_repository_implementation() -> None:
@@ -24,27 +24,27 @@ def test_memory_repository_implementation() -> None:
 
 
 @fixture
-def memory_repository() -> MemoryRepository[Dummy]:
+def memory_repository() -> MemoryRepository[Alpha]:
     tenant_provider = StandardTenantProvider()
     tenant_provider.setup(Tenant(id='001', name="Default"))
     parser = QueryParser()
 
-    class DummyMemoryRepository(MemoryRepository[Dummy]):
-        model = Dummy
+    class AlphaMemoryRepository(MemoryRepository[Alpha]):
+        model = Alpha
 
-    repository = DummyMemoryRepository(parser, tenant_provider)
+    repository = AlphaMemoryRepository(parser, tenant_provider)
 
     repository.load({"default": {}})
     return repository
 
 
 @fixture
-def filled_memory_repository(memory_repository) -> MemoryRepository[Dummy]:
+def filled_memory_repository(memory_repository) -> MemoryRepository[Alpha]:
     data_dict = {
         "default": {
-            "1": Dummy(id='1', field_1='value_1'),
-            "2": Dummy(id='2', field_1='value_2'),
-            "3": Dummy(id='3', field_1='value_3')
+            "1": Alpha(id='1', field_1='value_1'),
+            "2": Alpha(id='2', field_1='value_2'),
+            "3": Alpha(id='3', field_1='value_3')
         }
     }
     memory_repository.load(data_dict)
@@ -70,9 +70,9 @@ def filled_child_memory_repository(
         child_memory_repository) -> MemoryRepository[Child]:
     data_dict = {
         "default": {
-            "1": Child(id='1', dummy_id='1'),
-            "2": Child(id='2', dummy_id='1'),
-            "3": Child(id='3', dummy_id='2')
+            "1": Child(id='1', alpha_id='1'),
+            "2": Child(id='2', alpha_id='1'),
+            "3": Child(id='3', alpha_id='2')
         }
     }
     child_memory_repository.load(data_dict)
@@ -80,7 +80,7 @@ def filled_child_memory_repository(
 
 
 def test_memory_repository_model(memory_repository) -> None:
-    assert memory_repository.model is Dummy
+    assert memory_repository.model is Alpha
 
 
 def test_memory_repository_not_implemented_model(memory_repository) -> None:
@@ -115,7 +115,7 @@ async def test_memory_repository_search_offset(filled_memory_repository):
 
 
 async def test_memory_repository_add(memory_repository) -> None:
-    item = Dummy(id="1", field_1="value_1")
+    item = Alpha(id="1", field_1="value_1")
 
     is_saved = await memory_repository.add(item)
 
@@ -126,12 +126,12 @@ async def test_memory_repository_add(memory_repository) -> None:
 
 
 async def test_memory_repository_add_update(memory_repository) -> None:
-    created_entity = Dummy(id="1", field_1="value_1")
+    created_entity = Alpha(id="1", field_1="value_1")
     created_entity, *_ = await memory_repository.add(created_entity)
 
     await sleep(1)
 
-    updated_entity = Dummy(id="1", field_1="New Value")
+    updated_entity = Alpha(id="1", field_1="New Value")
     updated_entity, *_ = await memory_repository.add(updated_entity)
 
     assert created_entity.created_at == updated_entity.created_at
@@ -144,7 +144,7 @@ async def test_memory_repository_add_update(memory_repository) -> None:
 
 
 async def test_memory_repository_add_no_id(memory_repository) -> None:
-    item = Dummy(field_1="value_1")
+    item = Alpha(field_1="value_1")
 
     is_saved = await memory_repository.add(item)
 
@@ -157,8 +157,8 @@ async def test_memory_repository_add_no_id(memory_repository) -> None:
 
 async def test_memory_repository_add_multiple(memory_repository):
     items = [
-        Dummy(field_1="value_1"),
-        Dummy(field_1="value_2")
+        Alpha(field_1="value_1"),
+        Alpha(field_1="value_2")
     ]
 
     returned_items = await memory_repository.add(items)
@@ -210,7 +210,7 @@ async def test_memory_repository_search_join_one_to_many(
     for parent, children in await filled_memory_repository.search(
             [('id', '=', '1')], join=filled_child_memory_repository):
 
-        assert isinstance(parent, Dummy)
+        assert isinstance(parent, Alpha)
         assert all(isinstance(child, Child) for child in children)
         assert len(children) == 2
 
@@ -224,7 +224,7 @@ async def test_memory_repository_search_join_many_to_one(
 
         assert isinstance(element, Child)
         assert len(siblings) == 1
-        assert isinstance(next(iter(siblings)), Dummy)
+        assert isinstance(next(iter(siblings)), Alpha)
 
 
 async def test_memory_repository_remove_true(filled_memory_repository):
@@ -238,7 +238,7 @@ async def test_memory_repository_remove_true(filled_memory_repository):
 
 
 async def test_memory_repository_remove_false(filled_memory_repository):
-    item = Dummy(**{'id': '6', 'field_1': 'MISSING'})
+    item = Alpha(**{'id': '6', 'field_1': 'MISSING'})
     deleted = await filled_memory_repository.remove(item)
 
     items = filled_memory_repository.data['default']
@@ -248,7 +248,7 @@ async def test_memory_repository_remove_false(filled_memory_repository):
 
 async def test_memory_repository_remove_idempotent(filled_memory_repository):
     existing_item = item = filled_memory_repository.data['default']["2"]
-    missing_item = Dummy(**{'id': '6', 'field_1': 'MISSING'})
+    missing_item = Alpha(**{'id': '6', 'field_1': 'MISSING'})
 
     items = filled_memory_repository.data['default']
 
