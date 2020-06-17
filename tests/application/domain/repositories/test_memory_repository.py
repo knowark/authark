@@ -24,21 +24,6 @@ def test_memory_repository_implementation() -> None:
 
 
 @fixture
-def memory_repository() -> MemoryRepository[Alpha]:
-    tenant_provider = StandardTenantProvider()
-    tenant_provider.setup(Tenant(id='001', name="Default"))
-    parser = QueryParser()
-
-    class AlphaMemoryRepository(MemoryRepository[Alpha]):
-        model = Alpha
-
-    repository = AlphaMemoryRepository(parser, tenant_provider)
-
-    repository.load({"default": {}})
-    return repository
-
-
-@fixture
 def alpha_memory_repository() -> MemoryRepository[Alpha]:
     tenant_provider = StandardTenantProvider()
     tenant_provider.setup(Tenant(id='001', name="Default"))
@@ -78,11 +63,11 @@ def beta_memory_repository() -> MemoryRepository[Beta]:
     return repository
 
 
-def test_memory_repository_model(memory_repository) -> None:
-    assert memory_repository.model is Alpha
+def test_memory_repository_model(alpha_memory_repository) -> None:
+    assert alpha_memory_repository.model is Alpha
 
 
-def test_memory_repository_not_implemented_model(memory_repository) -> None:
+def test_memory_repository_not_implemented_model() -> None:
     tenant_provider = StandardTenantProvider()
     tenant_provider.setup(Tenant(id='001', name="Default"))
     parser = QueryParser()
@@ -113,56 +98,54 @@ async def test_memory_repository_search_offset(alpha_memory_repository):
     assert len(items) == 1
 
 
-async def test_memory_repository_add(memory_repository) -> None:
-    item = Alpha(id="1", field_1="value_1")
+async def test_memory_repository_add(alpha_memory_repository) -> None:
+    item = Alpha(id="4", field_1="value_1")
 
-    is_saved = await memory_repository.add(item)
+    await alpha_memory_repository.add(item)
 
-    assert len(memory_repository.data['default']) == 1
-    assert is_saved
-    assert "1" in memory_repository.data['default'].keys()
-    assert item in memory_repository.data['default'].values()
+    assert len(alpha_memory_repository.data['default']) == 4
+    assert "4" in alpha_memory_repository.data['default'].keys()
+    assert item in alpha_memory_repository.data['default'].values()
 
 
-async def test_memory_repository_add_update(memory_repository) -> None:
+async def test_memory_repository_add_update(alpha_memory_repository) -> None:
     created_entity = Alpha(id="1", field_1="value_1")
-    created_entity, *_ = await memory_repository.add(created_entity)
+    created_entity, *_ = await alpha_memory_repository.add(created_entity)
 
     await sleep(1)
 
     updated_entity = Alpha(id="1", field_1="New Value")
-    updated_entity, *_ = await memory_repository.add(updated_entity)
+    updated_entity, *_ = await alpha_memory_repository.add(updated_entity)
 
     assert created_entity.created_at == updated_entity.created_at
 
-    items = memory_repository.data['default']
-    assert len(items) == 1
+    items = alpha_memory_repository.data['default']
+    assert len(items) == 3
     assert "1" in items.keys()
     assert updated_entity in items.values()
     assert "New Value" in items['1'].field_1
 
 
-async def test_memory_repository_add_no_id(memory_repository) -> None:
+async def test_memory_repository_add_no_id(alpha_memory_repository) -> None:
     item = Alpha(field_1="value_1")
 
-    is_saved = await memory_repository.add(item)
+    await alpha_memory_repository.add(item)
 
-    items = memory_repository.data['default']
-    assert len(items) == 1
-    assert is_saved
+    items = alpha_memory_repository.data['default']
+    assert len(items) == 4
     assert len(list(items.keys())[0]) > 0
     assert item in items.values()
 
 
-async def test_memory_repository_add_multiple(memory_repository):
+async def test_memory_repository_add_multiple(alpha_memory_repository):
     items = [
         Alpha(field_1="value_1"),
         Alpha(field_1="value_2")
     ]
 
-    returned_items = await memory_repository.add(items)
+    returned_items = await alpha_memory_repository.add(items)
 
-    items = memory_repository.data['default']
+    items = alpha_memory_repository.data['default']
     assert len(returned_items) == 2
     assert returned_items[0].field_1 == 'value_1'
     assert returned_items[1].field_1 == 'value_2'
