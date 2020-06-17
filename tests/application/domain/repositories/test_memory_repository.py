@@ -39,16 +39,23 @@ def memory_repository() -> MemoryRepository[Alpha]:
 
 
 @fixture
-def filled_memory_repository(memory_repository) -> MemoryRepository[Alpha]:
-    data_dict = {
+def alpha_memory_repository() -> MemoryRepository[Alpha]:
+    tenant_provider = StandardTenantProvider()
+    tenant_provider.setup(Tenant(id='001', name="Default"))
+    parser = QueryParser()
+
+    class AlphaMemoryRepository(MemoryRepository[Alpha]):
+        model = Alpha
+
+    repository = AlphaMemoryRepository(parser, tenant_provider)
+    repository.load({
         "default": {
             "1": Alpha(id='1', field_1='value_1'),
             "2": Alpha(id='2', field_1='value_2'),
             "3": Alpha(id='3', field_1='value_3')
         }
-    }
-    memory_repository.load(data_dict)
-    return memory_repository
+    })
+    return repository
 
 
 @fixture
@@ -61,22 +68,14 @@ def beta_memory_repository() -> MemoryRepository[Beta]:
         model = Beta
 
     repository = BetaMemoryRepository(parser, tenant_provider)
-    repository.load({"default": {}})
-    return repository
-
-
-@fixture
-def filled_beta_memory_repository(
-        beta_memory_repository) -> MemoryRepository[Beta]:
-    data_dict = {
+    repository.load({
         "default": {
             "1": Beta(id='1', alpha_id='1'),
             "2": Beta(id='2', alpha_id='1'),
             "3": Beta(id='3', alpha_id='2')
         }
-    }
-    beta_memory_repository.load(data_dict)
-    return beta_memory_repository
+    })
+    return repository
 
 
 def test_memory_repository_model(memory_repository) -> None:
@@ -92,24 +91,24 @@ def test_memory_repository_not_implemented_model(memory_repository) -> None:
         repository.model
 
 
-def test_memory_repository_tenant_provider(filled_memory_repository) -> None:
-    assert filled_memory_repository.tenant_provider is not None
+def test_memory_repository_tenant_provider(alpha_memory_repository) -> None:
+    assert alpha_memory_repository.tenant_provider is not None
 
 
-async def test_memory_repository_search_limit(filled_memory_repository):
-    items = await filled_memory_repository.search([], limit=2)
+async def test_memory_repository_search_limit(alpha_memory_repository):
+    items = await alpha_memory_repository.search([], limit=2)
 
     assert len(items) == 2
 
 
-async def test_memory_repository_search_limit_none(filled_memory_repository):
-    items = await filled_memory_repository.search([], limit=None, offset=None)
+async def test_memory_repository_search_limit_none(alpha_memory_repository):
+    items = await alpha_memory_repository.search([], limit=None, offset=None)
 
     assert len(items) == 3
 
 
-async def test_memory_repository_search_offset(filled_memory_repository):
-    items = await filled_memory_repository.search([], offset=2)
+async def test_memory_repository_search_offset(alpha_memory_repository):
+    items = await alpha_memory_repository.search([], offset=2)
 
     assert len(items) == 1
 
@@ -169,10 +168,10 @@ async def test_memory_repository_add_multiple(memory_repository):
     assert returned_items[1].field_1 == 'value_2'
 
 
-async def test_memory_repository_search(filled_memory_repository):
+async def test_memory_repository_search(alpha_memory_repository):
     domain = [('field_1', '=', "value_3")]
 
-    items = await filled_memory_repository.search(domain)
+    items = await alpha_memory_repository.search(domain)
 
     assert len(items) == 1
     for item in items:
@@ -180,35 +179,35 @@ async def test_memory_repository_search(filled_memory_repository):
         assert item.field_1 == "value_3"
 
 
-async def test_memory_repository_search_all(filled_memory_repository):
-    items = await filled_memory_repository.search([])
+async def test_memory_repository_search_all(alpha_memory_repository):
+    items = await alpha_memory_repository.search([])
 
     assert len(items) == 3
 
 
-async def test_memory_repository_search_limit(filled_memory_repository):
-    items = await filled_memory_repository.search([], limit=2)
+async def test_memory_repository_search_limit(alpha_memory_repository):
+    items = await alpha_memory_repository.search([], limit=2)
 
     assert len(items) == 2
 
 
-async def test_memory_repository_search_limit_zero(filled_memory_repository):
-    items = await filled_memory_repository.search([], limit=0)
+async def test_memory_repository_search_limit_zero(alpha_memory_repository):
+    items = await alpha_memory_repository.search([], limit=0)
 
     assert len(items) == 0
 
 
-async def test_memory_repository_search_offset(filled_memory_repository):
-    items = await filled_memory_repository.search([], offset=2)
+async def test_memory_repository_search_offset(alpha_memory_repository):
+    items = await alpha_memory_repository.search([], offset=2)
 
     assert len(items) == 1
 
 
 async def test_memory_repository_search_join_one_to_many(
-        filled_memory_repository, filled_beta_memory_repository):
+        alpha_memory_repository, beta_memory_repository):
 
-    for parent, betaren in await filled_memory_repository.search(
-            [('id', '=', '1')], join=filled_beta_memory_repository):
+    for parent, betaren in await alpha_memory_repository.search(
+            [('id', '=', '1')], join=beta_memory_repository):
 
         assert isinstance(parent, Alpha)
         assert all(isinstance(beta, Beta) for beta in betaren)
@@ -216,63 +215,63 @@ async def test_memory_repository_search_join_one_to_many(
 
 
 async def test_memory_repository_search_join_many_to_one(
-        filled_memory_repository, filled_beta_memory_repository):
+        alpha_memory_repository, beta_memory_repository):
 
-    for element, siblings in await filled_beta_memory_repository.search(
-            [('id', '=', '1')], join=filled_memory_repository,
-            link=filled_memory_repository):
+    for element, siblings in await beta_memory_repository.search(
+            [('id', '=', '1')], join=alpha_memory_repository,
+            link=alpha_memory_repository):
 
         assert isinstance(element, Beta)
         assert len(siblings) == 1
         assert isinstance(next(iter(siblings)), Alpha)
 
 
-async def test_memory_repository_remove_true(filled_memory_repository):
-    item = filled_memory_repository.data['default']["2"]
-    deleted = await filled_memory_repository.remove(item)
+async def test_memory_repository_remove_true(alpha_memory_repository):
+    item = alpha_memory_repository.data['default']["2"]
+    deleted = await alpha_memory_repository.remove(item)
 
-    items = filled_memory_repository.data['default']
+    items = alpha_memory_repository.data['default']
     assert deleted is True
     assert len(items) == 2
     assert "2" not in items
 
 
-async def test_memory_repository_remove_false(filled_memory_repository):
+async def test_memory_repository_remove_false(alpha_memory_repository):
     item = Alpha(**{'id': '6', 'field_1': 'MISSING'})
-    deleted = await filled_memory_repository.remove(item)
+    deleted = await alpha_memory_repository.remove(item)
 
-    items = filled_memory_repository.data['default']
+    items = alpha_memory_repository.data['default']
     assert deleted is False
     assert len(items) == 3
 
 
-async def test_memory_repository_remove_idempotent(filled_memory_repository):
-    existing_item = item = filled_memory_repository.data['default']["2"]
+async def test_memory_repository_remove_idempotent(alpha_memory_repository):
+    existing_item = item = alpha_memory_repository.data['default']["2"]
     missing_item = Alpha(**{'id': '6', 'field_1': 'MISSING'})
 
-    items = filled_memory_repository.data['default']
+    items = alpha_memory_repository.data['default']
 
-    deleted = await filled_memory_repository.remove(
+    deleted = await alpha_memory_repository.remove(
         [existing_item, missing_item])
 
     assert deleted is True
     assert len(items) == 2
 
-    deleted = await filled_memory_repository.remove(
+    deleted = await alpha_memory_repository.remove(
         [existing_item, missing_item])
 
     assert deleted is False
     assert len(items) == 2
 
 
-async def test_memory_repository_count(filled_memory_repository):
-    count = await filled_memory_repository.count()
+async def test_memory_repository_count(alpha_memory_repository):
+    count = await alpha_memory_repository.count()
 
     assert count == 3
 
 
-async def test_memory_repository_count_domain(filled_memory_repository):
+async def test_memory_repository_count_domain(alpha_memory_repository):
     domain = [('field_1', '=', "value_3")]
-    count = await filled_memory_repository.count(domain)
+    count = await alpha_memory_repository.count(domain)
 
     assert count == 1
