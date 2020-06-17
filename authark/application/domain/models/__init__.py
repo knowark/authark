@@ -1,4 +1,4 @@
-from .entity import Entity, T
+from .entity import Entity, T, R, L
 from .credential import Credential
 from .dominion import Dominion
 from .user import User

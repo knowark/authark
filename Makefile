@@ -11,9 +11,9 @@ COVFILE ?= .coverage
 TESTS ?= tests/
 
 coverage-application:
-	export COVERAGE_FILE=$(COVFILE); pytest --cov-branch \
-	--cov=$(PROJECT)/application tests/application/ --cov-report \
-	term-missing -x -s -W ignore::DeprecationWarning \
+	mypy authark/application && export COVERAGE_FILE=$(COVFILE); \
+	pytest --cov-branch --cov=$(PROJECT)/application tests/application/ \
+	--cov-report term-missing -x -s -W ignore::DeprecationWarning \
 	-o cache_dir=/tmp/authark/cache
 
 coverage:

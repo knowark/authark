@@ -1,13 +1,14 @@
 import time
 from uuid import uuid4
 from collections import defaultdict
-from typing import List, Dict, Generic, Union
-from ..models import T
+from typing import List, Dict, Generic, Union, Any, overload
+from ..models import T, R, L
 from ..common import QueryParser, QueryDomain, TenantProvider
 from .repository import Repository
 
 
 class MemoryRepository(Repository, Generic[T]):
+
     def __init__(self,  parser: QueryParser,
                  tenant_provider: TenantProvider) -> None:
         self.data: Dict[str, Dict[str, T]] = defaultdict(dict)
@@ -29,22 +30,6 @@ class MemoryRepository(Repository, Generic[T]):
             self.data[self._location][item.id] = item
         return items
 
-    async def search(self, domain: QueryDomain,
-                     limit=10000, offset=0) -> List[T]:
-        items = []
-        filter_function = self.parser.parse(domain)
-        for item in list(self.data[self._location].values()):
-            if filter_function(item):
-                items.append(item)
-
-        if offset is not None:
-            items = items[offset:]
-
-        if limit is not None:
-            items = items[:min(limit, self.max_items)]
-
-        return items
-
     async def remove(self, item: Union[T, List[T]]) -> bool:
         items = item if isinstance(item, list) else [item]
         deleted = False
@@ -64,6 +49,50 @@ class MemoryRepository(Repository, Generic[T]):
             if filter_function(item):
                 count += 1
         return count
+
+    @overload
+    async def search(self, domain: QueryDomain,
+                     limit: int = None, offset: int = None) -> List[T]:
+        """Standard search method"""
+
+    @overload
+    async def search(self, domain: QueryDomain,
+                     limit: int = None, offset: int = None,
+                     *,
+                     join: 'Repository[R]' = None,
+                     link: 'Repository[L]' = None,
+                     target: str = None, source: str = None) -> List[R]:
+        """Joining search method"""
+
+    async def search(
+            self, domain: QueryDomain,
+            limit: int = None,
+            offset: int = None,
+            *,
+            join: 'Repository[R]' = None,
+            link: 'Repository[L]' = None,
+            target: str = None, source: str = None) -> Union[List[T], List[R]]:
+
+        items: Any = []
+        filter_function = self.parser.parse(domain)
+        for item in list(self.data[self._location].values()):
+            if filter_function(item):
+                items.append(item)
+
+        if join:
+            linker = link or join
+            target = f'{self.model.__name__.lower()}_id'
+            result = await join.search(
+                [(target, 'in', [item.id for item in items])])
+            items = result
+
+        if offset is not None:
+            items = items[offset:]
+
+        if limit is not None:
+            items = items[:min(limit, self.max_items)]
+
+        return items
 
     def load(self, data: Dict[str, Dict[str, T]]) -> None:
         self.data = data

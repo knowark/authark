@@ -10,4 +10,6 @@ class Entity:
         self.updated_by = attributes.get('updated_by', self.created_by)
 
 
-T = TypeVar('T', bound=Entity)
+T = TypeVar('T', bound=Entity, covariant=True)
+R = TypeVar('R', bound=Entity, covariant=True)
+L = TypeVar('L', bound=Entity, covariant=True)

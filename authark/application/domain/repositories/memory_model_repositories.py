@@ -4,7 +4,7 @@ from .memory_repository import MemoryRepository
 
 
 class CredentialRepository(Repository[Credential]):
-    """Credential Repository"""
+    model = Credential
 
 
 class MemoryCredentialRepository(
@@ -13,7 +13,7 @@ class MemoryCredentialRepository(
 
 
 class DominionRepository(Repository[Dominion]):
-    """Dominion Repository"""
+    model = Dominion
 
 
 class MemoryDominionRepository(
@@ -22,7 +22,7 @@ class MemoryDominionRepository(
 
 
 class RankingRepository(Repository[Ranking]):
-    """Ranking Repository"""
+    model = Ranking
 
 
 class MemoryRankingRepository(
@@ -31,7 +31,7 @@ class MemoryRankingRepository(
 
 
 class RoleRepository(Repository[Role]):
-    """Role Repository"""
+    model = Role
 
 
 class MemoryRoleRepository(
@@ -40,7 +40,7 @@ class MemoryRoleRepository(
 
 
 class RuleRepository(Repository[Rule]):
-    """Rule Repository"""
+    model = Rule
 
 
 class MemoryRuleRepository(
@@ -49,7 +49,7 @@ class MemoryRuleRepository(
 
 
 class PolicyRepository(Repository[Policy]):
-    """Policy Repository"""
+    model = Policy
 
 
 class MemoryPolicyRepository(
@@ -58,7 +58,7 @@ class MemoryPolicyRepository(
 
 
 class UserRepository(Repository[User]):
-    """User Repository"""
+    model = User
 
 
 class MemoryUserRepository(
