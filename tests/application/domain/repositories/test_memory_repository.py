@@ -215,6 +215,18 @@ async def test_memory_repository_search_join_one_to_many(
         assert len(children) == 2
 
 
+async def test_memory_repository_search_join_many_to_one(
+        filled_memory_repository, filled_child_memory_repository):
+
+    for element, siblings in await filled_child_memory_repository.search(
+            [('id', '=', '1')], join=filled_memory_repository,
+            link=filled_memory_repository):
+
+        assert isinstance(element, Child)
+        assert len(siblings) == 1
+        assert isinstance(next(iter(siblings)), Dummy)
+
+
 async def test_memory_repository_remove_true(filled_memory_repository):
     item = filled_memory_repository.data['default']["2"]
     deleted = await filled_memory_repository.remove(item)

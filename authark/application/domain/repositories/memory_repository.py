@@ -90,14 +90,21 @@ class MemoryRepository(Repository, Generic[T]):
         if not join:
             return items
 
-        linker = link or join
-        target = target or f'{self.model.__name__.lower()}_id'
-        relation_map = defaultdict(list)
-        for related in await join.search(
-                [(target, 'in', [item.id for item in items])]):
-            relation_map[getattr(related, target)].append(related)
+        reference = link or self
 
-        return [(item, relation_map.get(item.id, [])) for item in items]
+        target = target or f'{reference.model.__name__.lower()}_id'
+
+        field, key = target, 'id'
+        if reference is join:
+            field, key = key, target
+
+        condition = [(field, 'in', [getattr(item, key) for item in items])]
+
+        relation_map = defaultdict(list)
+        for related in await join.search(condition):
+            relation_map[getattr(related, field)].append(related)
+
+        return [(item, relation_map[getattr(item, key)]) for item in items]
 
     def load(self, data: Dict[str, Dict[str, T]]) -> None:
         self.data = data
