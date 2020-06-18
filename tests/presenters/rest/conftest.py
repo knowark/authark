@@ -1,5 +1,4 @@
 from pytest import fixture
-from aiohttp import web
 from injectark import Injectark
 from authark.core import DEVELOPMENT_CONFIG
 from authark.factories import strategy_builder, factory_builder
@@ -14,6 +13,10 @@ def app(loop, aiohttp_client):
     factory = factory_builder.build(config)
 
     injector = Injectark(strategy, factory)
+
+    tenant_supplier = injector['TenantSupplier']
+
+    print(tenant_supplier.arranger.cataloguer.catalog, '<<<<<TENANT')
 
     rest = RestApplication(config, injector)
 
