@@ -1,3 +1,4 @@
+from authark.application.domain.models import dominion
 from typing import Dict
 from widark import (Frame, Listbox, Event, Modal, Label, Button, Color)
 
@@ -35,23 +36,14 @@ class RankingsModal(Modal):
         self.render()
 
     async def load(self) -> None:
-        rankings = await self.authark_informer.search(
-            'ranking', [('user_id', '=', self.user['id'])])
-        roles_map = {
-            role['id']: role for role
-            in await self.authark_informer.search(
-                'role', [('id', 'in', [
-                    ranking['role_id'] for ranking in rankings])])}
-        dominions_map = {
-            dominion['id']: dominion for dominion
-            in await self.authark_informer.search(
-                'dominion', [('id', 'in', [
-                    role['dominion_id'] for role in roles_map.values()])])}
-        for ranking in rankings:
-            role = roles_map[ranking['role_id']]
+        rankings = []
+        for ranking, [role] in await self.authark_informer.search('ranking', [(
+                'user_id', '=', self.user['id'])], join='role', link='ranking'):
+            [dominion] = await self.authark_informer.search(
+                'dominion', [('id', '=', role['dominion_id'])])
             ranking['role_name'] = role['name']
-            ranking['dominion_name'] = dominions_map[
-                role['dominion_id']]['name']
+            ranking['dominion_name'] = dominion['name']
+            rankings.append(ranking)
 
         self.body.setup(data=rankings, fields=[
             'id', 'role_name', 'dominion_name'], limit=10).connect()

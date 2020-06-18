@@ -97,7 +97,7 @@ class StandardAutharkInformer(AutharkInformer):
         result = []
         for item in items:
             if not isinstance(item, (tuple, list)):
-                result.append(item)
+                result.append(vars(item))
                 continue
             result.append((vars(item[0]), [vars(i) for i in item[1]]))
 
