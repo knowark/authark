@@ -44,8 +44,8 @@ def alpha_json_repository(tmp_path) -> JsonRepository[Alpha]:
     }
 
     tenant_directory = tmp_path / "origin"
-    tenant_directory.mkdir(parents=True)
-    collection = 'dummies'
+    tenant_directory.mkdir(parents=True, exist_ok=True)
+    collection = 'alphas'
 
     file_path = str(tenant_directory / f'{collection}.json')
 
@@ -57,12 +57,121 @@ def alpha_json_repository(tmp_path) -> JsonRepository[Alpha]:
     tenant_provider = StandardTenantProvider()
     tenant_provider.setup(Tenant(name="Origin"))
 
-    json_repository = JsonRepository(
+    class AlphaJsonRepository(JsonRepository[Alpha]):
+        model = Alpha
+
+    json_repository = AlphaJsonRepository(
         data_path=str(tmp_path),
         parser=parser,
         tenant_provider=tenant_provider,
         collection=collection,
         item_class=Alpha)
+
+    return json_repository
+
+
+@fixture
+def beta_json_repository(tmp_path) -> JsonRepository[Beta]:
+    item_dict = {
+        "1": vars(Beta(id='1', alpha_id='1')),
+        "2": vars(Beta(id='2', alpha_id='1')),
+        "3": vars(Beta(id='3', alpha_id='2'))
+    }
+
+    tenant_directory = tmp_path / "origin"
+    tenant_directory.mkdir(parents=True, exist_ok=True)
+    collection = 'betas'
+
+    file_path = str(tenant_directory / f'{collection}.json')
+
+    with open(file_path, 'w') as f:
+        data = dumps({collection: item_dict})
+        f.write(data)
+
+    parser = QueryParser()
+    tenant_provider = StandardTenantProvider()
+    tenant_provider.setup(Tenant(name="Origin"))
+
+    class BetaJsonRepository(JsonRepository[Beta]):
+        model = Beta
+
+    json_repository = BetaJsonRepository(
+        data_path=str(tmp_path),
+        parser=parser,
+        tenant_provider=tenant_provider,
+        collection=collection,
+        item_class=Beta)
+
+    return json_repository
+
+
+@fixture
+def gamma_json_repository(tmp_path) -> JsonRepository[Gamma]:
+    item_dict = {
+        "1": vars(Gamma(id='1')),
+        "2": vars(Gamma(id='2')),
+        "3": vars(Gamma(id='3'))
+    }
+
+    tenant_directory = tmp_path / "origin"
+    tenant_directory.mkdir(parents=True, exist_ok=True)
+    collection = 'gammas'
+
+    file_path = str(tenant_directory / f'{collection}.json')
+
+    with open(file_path, 'w') as f:
+        data = dumps({collection: item_dict})
+        f.write(data)
+
+    parser = QueryParser()
+    tenant_provider = StandardTenantProvider()
+    tenant_provider.setup(Tenant(name="Origin"))
+
+    class GammaJsonRepository(JsonRepository[Gamma]):
+        model = Gamma
+
+    json_repository = GammaJsonRepository(
+        data_path=str(tmp_path),
+        parser=parser,
+        tenant_provider=tenant_provider,
+        collection=collection,
+        item_class=Gamma)
+
+    return json_repository
+
+
+@fixture
+def delta_json_repository(tmp_path) -> JsonRepository[Delta]:
+    item_dict = {
+        "1": vars(Delta(id='1', alpha_id='1', gamma_id='1')),
+        "2": vars(Delta(id='2', alpha_id='1', gamma_id='2')),
+        "3": vars(Delta(id='3', alpha_id='2', gamma_id='3')),
+        "4": vars(Delta(id='3', alpha_id='3', gamma_id='3'))
+    }
+
+    tenant_directory = tmp_path / "origin"
+    tenant_directory.mkdir(parents=True, exist_ok=True)
+    collection = 'deltas'
+
+    file_path = str(tenant_directory / f'{collection}.json')
+
+    with open(file_path, 'w') as f:
+        data = dumps({collection: item_dict})
+        f.write(data)
+
+    parser = QueryParser()
+    tenant_provider = StandardTenantProvider()
+    tenant_provider.setup(Tenant(name="Origin"))
+
+    class DeltaJsonRepository(JsonRepository[Delta]):
+        model = Delta
+
+    json_repository = DeltaJsonRepository(
+        data_path=str(tmp_path),
+        parser=parser,
+        tenant_provider=tenant_provider,
+        collection=collection,
+        item_class=Delta)
 
     return json_repository
 
@@ -75,7 +184,7 @@ async def test_json_repository_add(alpha_json_repository):
     file_path = alpha_json_repository.file_path
     with open(file_path) as f:
         data = loads(f.read())
-        items = data.get("dummies")
+        items = data.get("alphas")
 
         item_dict = items.get('5')
 
@@ -89,7 +198,7 @@ async def test_json_repository_add_no_id(alpha_json_repository) -> None:
     file_path = alpha_json_repository.file_path
     with open(file_path) as f:
         data = loads(f.read())
-        items = data.get("dummies")
+        items = data.get("alphas")
         for key in items:
             assert len(key) > 0
 
@@ -102,7 +211,7 @@ async def test_json_repository_add_update(alpha_json_repository) -> None:
     file_path = alpha_json_repository.file_path
     with open(file_path) as f:
         data = loads(f.read())
-        items = data.get("dummies")
+        items = data.get("alphas")
 
         assert len(items) == 3
         assert "New Value" in items['1']['field_1']
@@ -162,12 +271,49 @@ async def test_json_repository_search_non_existent_file(
     assert len(items) == 0
 
 
+async def test_json_repository_search_join_one_to_many(
+        alpha_json_repository, beta_json_repository):
+
+    for parent, children in await alpha_json_repository.search(
+            [('id', '=', '1')], join=beta_json_repository):
+
+        assert isinstance(parent, Alpha)
+        assert all(isinstance(beta, Beta) for beta in children)
+        assert len(children) == 2
+
+
+async def test_json_repository_search_join_many_to_one(
+        alpha_json_repository, beta_json_repository):
+
+    for element, siblings in await beta_json_repository.search(
+            [('id', '=', '1')], join=alpha_json_repository,
+            link=beta_json_repository):
+
+        assert isinstance(element, Beta)
+        assert len(siblings) == 1
+        assert isinstance(next(iter(siblings)), Alpha)
+
+
+async def test_json_repository_search_join_many_to_many(
+        alpha_json_repository, gamma_json_repository,
+        delta_json_repository):
+
+    for alpha, gammas in await alpha_json_repository.search(
+            [('id', '=', '1')], join=gamma_json_repository,
+            link=delta_json_repository):
+
+        assert isinstance(alpha, Alpha)
+        assert len(gammas) == 2
+        assert gammas[0].id == '1'
+        assert gammas[1].id == '2'
+
+
 async def test_json_repository_remove(alpha_json_repository):
     file_path = alpha_json_repository.file_path
 
     with open(file_path) as f:
         data = loads(f.read())
-        items_dict = data.get("dummies")
+        items_dict = data.get("alphas")
         item_dict = items_dict.get('2')
 
     assert len(items_dict) == 3
@@ -177,7 +323,7 @@ async def test_json_repository_remove(alpha_json_repository):
 
     with open(file_path) as f:
         data = loads(f.read())
-        items_dict = data.get("dummies")
+        items_dict = data.get("alphas")
 
     assert deleted is True
     assert len(items_dict) == 2
@@ -192,7 +338,7 @@ async def test_json_repository_remove_false(alpha_json_repository):
 
     with open(file_path) as f:
         data = loads(f.read())
-        items_dict = data.get("dummies")
+        items_dict = data.get("alphas")
 
     assert deleted is False
     assert len(items_dict) == 3
