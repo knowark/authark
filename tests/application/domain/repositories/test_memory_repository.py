@@ -19,6 +19,18 @@ class Beta(Entity):
         self.alpha_id = attributes.get('alpha_id', "")
 
 
+class Gamma(Entity):
+    def __init__(self, **attributes) -> None:
+        super().__init__(**attributes)
+
+
+class Delta(Entity):
+    def __init__(self, **attributes) -> None:
+        super().__init__(**attributes)
+        self.alpha_id = attributes.get('alpha_id', "")
+        self.gamma_id = attributes.get('gamma_id', "")
+
+
 def test_memory_repository_implementation() -> None:
     assert issubclass(MemoryRepository, Repository)
 
@@ -58,6 +70,47 @@ def beta_memory_repository() -> MemoryRepository[Beta]:
             "1": Beta(id='1', alpha_id='1'),
             "2": Beta(id='2', alpha_id='1'),
             "3": Beta(id='3', alpha_id='2')
+        }
+    })
+    return repository
+
+
+@fixture
+def gamma_memory_repository() -> MemoryRepository[Gamma]:
+    tenant_provider = StandardTenantProvider()
+    tenant_provider.setup(Tenant(id='001', name="Default"))
+    parser = QueryParser()
+
+    class GammaMemoryRepository(MemoryRepository[Gamma]):
+        model = Gamma
+
+    repository = GammaMemoryRepository(parser, tenant_provider)
+    repository.load({
+        "default": {
+            "1": Gamma(id='1'),
+            "2": Gamma(id='2'),
+            "3": Gamma(id='3')
+        }
+    })
+    return repository
+
+
+@fixture
+def delta_memory_repository() -> MemoryRepository[Delta]:
+    tenant_provider = StandardTenantProvider()
+    tenant_provider.setup(Tenant(id='001', name="Default"))
+    parser = QueryParser()
+
+    class DeltaMemoryRepository(MemoryRepository[Delta]):
+        model = Delta
+
+    repository = DeltaMemoryRepository(parser, tenant_provider)
+    repository.load({
+        "default": {
+            "1": Delta(id='1', alpha_id='1', gamma_id='1'),
+            "2": Delta(id='2', alpha_id='1', gamma_id='2'),
+            "3": Delta(id='3', alpha_id='2', gamma_id='3'),
+            "4": Delta(id='3', alpha_id='3', gamma_id='3')
         }
     })
     return repository
@@ -189,12 +242,12 @@ async def test_memory_repository_search_offset(alpha_memory_repository):
 async def test_memory_repository_search_join_one_to_many(
         alpha_memory_repository, beta_memory_repository):
 
-    for parent, betaren in await alpha_memory_repository.search(
+    for parent, children in await alpha_memory_repository.search(
             [('id', '=', '1')], join=beta_memory_repository):
 
         assert isinstance(parent, Alpha)
-        assert all(isinstance(beta, Beta) for beta in betaren)
-        assert len(betaren) == 2
+        assert all(isinstance(beta, Beta) for beta in children)
+        assert len(children) == 2
 
 
 async def test_memory_repository_search_join_many_to_one(
@@ -202,7 +255,7 @@ async def test_memory_repository_search_join_many_to_one(
 
     for element, siblings in await beta_memory_repository.search(
             [('id', '=', '1')], join=alpha_memory_repository,
-            link=alpha_memory_repository):
+            link=beta_memory_repository):
 
         assert isinstance(element, Beta)
         assert len(siblings) == 1

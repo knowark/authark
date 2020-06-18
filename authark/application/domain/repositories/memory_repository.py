@@ -61,8 +61,8 @@ class MemoryRepository(Repository, Generic[T]):
                      *,
                      join: 'Repository[R]',
                      link: 'Repository[L]' = None,
-                     target: str = None,
-                     source: str = None) -> List[Tuple[T, List[R]]]:
+                     source: str = None,
+                     target: str = None) -> List[Tuple[T, List[R]]]:
         """Joining search method"""
 
     async def search(
@@ -72,8 +72,8 @@ class MemoryRepository(Repository, Generic[T]):
             *,
             join: 'Repository[R]' = None,
             link: 'Repository[L]' = None,
-            target: str = None,
-            source: str = None) -> Union[List[T], List[Tuple[T, List[R]]]]:
+            source: str = None,
+            target: str = None) -> Union[List[T], List[Tuple[T, List[R]]]]:
 
         items: List[T] = []
         filter_function = self.parser.parse(domain)
@@ -90,13 +90,12 @@ class MemoryRepository(Repository, Generic[T]):
         if not join:
             return items
 
-        reference = link or self
+        reference = (link == self) and join or self
+        source = source or f'{reference.model.__name__.lower()}_id'
 
-        target = target or f'{reference.model.__name__.lower()}_id'
-
-        field, key = target, 'id'
+        field, key = source, 'id'
         if reference is join:
-            field, key = key, target
+            field, key = key, source
 
         condition = [(field, 'in', [getattr(item, key) for item in items])]
 
@@ -104,7 +103,9 @@ class MemoryRepository(Repository, Generic[T]):
         for related in await join.search(condition):
             relation_map[getattr(related, field)].append(related)
 
-        return [(item, relation_map[getattr(item, key)]) for item in items]
+        records = [(item, relation_map[getattr(item, key)]) for item in items]
+
+        return records
 
     def load(self, data: Dict[str, Dict[str, T]]) -> None:
         self.data = data

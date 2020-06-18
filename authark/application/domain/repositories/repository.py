@@ -32,8 +32,8 @@ class Repository(ABC, Generic[T]):
                      *,
                      join: 'Repository[R]',
                      link: 'Optional[Repository[L]]' = None,
-                     target: Optional[str] = None,
-                     source: Optional[str] = None) -> List[Tuple[T, List[R]]]:
+                     source: Optional[str] = None,
+                     target: Optional[str] = None) -> List[Tuple[T, List[R]]]:
         """Joining search method"""
 
     @abstractmethod
@@ -43,6 +43,6 @@ class Repository(ABC, Generic[T]):
             *,
             join: 'Repository[R]' = None,
             link: 'Repository[L]' = None,
-            target: str = None,
-            source: str = None) -> Union[List[T], List[Tuple[T, List[R]]]]:
+            source: str = None,
+            target: str = None) -> Union[List[T], List[Tuple[T, List[R]]]]:
         """Search items matching a query domain"""
