@@ -3,8 +3,8 @@ from pathlib import Path
 from collections import defaultdict
 from json import loads, load, dump
 from uuid import uuid4
-from typing import Dict, List, Any, Callable, Generic, Union
-from ....application.domain.models import T
+from typing import Dict, List, Tuple, Any, Callable, Generic, Union, overload
+from ....application.domain.models import T, R, L
 from ....application.domain.repositories import Repository
 from ....application.domain.common import (
     QueryDomain, TenantProvider, QueryParser)
@@ -45,31 +45,6 @@ class JsonRepository(Repository, Generic[T]):
 
         return items
 
-    async def search(self, domain: QueryDomain,
-                     limit=10_000, offset=0) -> List[T]:
-
-        if not self.file_path.exists():
-            return []
-
-        with self.file_path.open('r') as f:
-            data = load(f)
-            items_dict = data.get(self.collection, {})
-
-        items = []
-        filter_function = self.parser.parse(domain)
-        for item_dict in items_dict.values():
-            item = self.item_class(**item_dict)
-
-            if filter_function(item):
-                items.append(item)
-
-        if offset is not None:
-            items = items[offset:]
-        if limit is not None:
-            items = items[:limit]
-
-        return items
-
     async def remove(self, item: Union[T, List[T]]) -> bool:
 
         items = item if isinstance(item, list) else [item]
@@ -106,6 +81,54 @@ class JsonRepository(Repository, Generic[T]):
             if filter_function(item):
                 count += 1
         return count
+
+    @overload
+    async def search(self, domain: QueryDomain,
+                     limit: int = None, offset: int = None) -> List[T]:
+        """Standard search method"""
+
+    @overload
+    async def search(self, domain: QueryDomain,
+                     limit: int = None, offset: int = None,
+                     *,
+                     join: 'Repository[R]',
+                     link: 'Repository[L]' = None,
+                     source: str = None,
+                     target: str = None) -> List[Tuple[T, List[R]]]:
+        """Joining search method"""
+
+    async def search(
+            self, domain: QueryDomain,
+            limit: int = None,
+            offset: int = None,
+            *,
+            join: 'Repository[R]' = None,
+            link: 'Repository[L]' = None,
+            source: str = None,
+            target: str = None) -> Union[List[T], List[Tuple[T, List[R]]]]:
+
+        items: List[T] = []
+        if not self.file_path.exists():
+            return items
+
+        with self.file_path.open('r') as f:
+            data = load(f)
+            items_dict = data.get(self.collection, {})
+
+        filter_function = self.parser.parse(domain)
+        for item_dict in items_dict.values():
+            item = self.item_class(**item_dict)
+
+            if filter_function(item):
+                items.append(item)
+
+        if offset is not None:
+            items = items[offset:]
+        if limit is not None:
+            items = items[:limit]
+
+        if not join:
+            return items
 
     @property
     def file_path(self) -> Path:
