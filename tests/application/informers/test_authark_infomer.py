@@ -40,3 +40,13 @@ async def test_authark_informer_count_users(
         authark_informer: AutharkInformer) -> None:
     users_count = await authark_informer.count('user')
     assert users_count == 3
+
+
+async def test_authark_informer_search_users_and_roles(
+        authark_informer: AutharkInformer) -> None:
+    domain: QueryDomain = []
+    items = await authark_informer.search(
+        'user', domain, join='role', link='ranking')
+    assert len(items) == 3
+    assert items[0][0]['id'] == '1'
+    assert items[0][1][0]['name'] == 'admin'

@@ -31,9 +31,9 @@ class Repository(ABC, Generic[T]):
                      limit: int = None, offset: int = None,
                      *,
                      join: 'Repository[R]',
-                     link: 'Optional[Repository[L]]' = None,
-                     source: Optional[str] = None,
-                     target: Optional[str] = None) -> List[Tuple[T, List[R]]]:
+                     link: 'Repository[L]' = None,
+                     source: str = None,
+                     target: str = None) -> List[Tuple[T, List[R]]]:
         """Joining search method"""
 
     @abstractmethod
