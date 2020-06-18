@@ -262,6 +262,20 @@ async def test_memory_repository_search_join_many_to_one(
         assert isinstance(next(iter(siblings)), Alpha)
 
 
+async def test_memory_repository_search_join_many_to_many(
+        alpha_memory_repository, gamma_memory_repository,
+        delta_memory_repository):
+
+    for alpha, gammas in await alpha_memory_repository.search(
+            [('id', '=', '1')], join=gamma_memory_repository,
+            link=delta_memory_repository):
+
+        assert isinstance(alpha, Alpha)
+        assert len(gammas) == 2
+        assert gammas[0].id == '1'
+        assert gammas[1].id == '2'
+
+
 async def test_memory_repository_remove_true(alpha_memory_repository):
     item = alpha_memory_repository.data['default']["2"]
     deleted = await alpha_memory_repository.remove(item)
