@@ -1,5 +1,5 @@
 from widark import (
-    Frame, Listbox, Listitem, Label, Entry,
+    Frame, Listbox, Label, Entry,
     Event, Modal, Button, Spacer, Color)
 
 
@@ -40,7 +40,7 @@ class RolesModal(Modal):
     async def on_create(self, event: Event) -> None:
         role = {'name': '', 'url': '', 'dominion_id': self.dominion['id']}
         self.modal = RoleDetailsModal(
-            self, injector=self.injector, item=role,
+            self, injector=self.injector, role=role,
             done_command=self.on_modal_done,
             proportion={'height': 0.70, 'width': 0.70}).launch()
 
@@ -49,7 +49,7 @@ class RoleDetailsModal(Modal):
     def setup(self, **context) -> 'RoleDetailsModal':
         self.injector = context['injector']
         self.management_manager = self.injector['ManagementManager']
-        self.item = context['item']
+        self.role = context['role']
         return super().setup(**context) and self
 
     def build(self) -> None:
@@ -59,10 +59,10 @@ class RoleDetailsModal(Modal):
         frame = Frame(
             self, title='Role').title_style(Color.SUCCESS()).weight(3, 2)
         Label(frame, content='Name:').grid(0, 0)
-        self.name = Entry(frame, content=self.item['name']).style(
+        self.name = Entry(frame, content=self.role['name']).style(
             border=[0]).grid(0, 1).weight(col=2)
         Label(frame, content='Description:').grid(1, 0)
-        self.description = Entry(frame, content=self.item['url']).style(
+        self.description = Entry(frame, content=self.role['url']).style(
             border=[0]).grid(1, 1).weight(col=2)
 
         actions = Frame(
@@ -81,15 +81,15 @@ class RoleDetailsModal(Modal):
             'name': self.name.text,
             'description': self.description.text
         }
-        self.item.update(role)
-        await self.management_manager.create_role([self.item])
+        self.role.update(role)
+        await self.management_manager.create_role([self.role])
         await self.done({'result': 'saved'})
 
     async def on_cancel(self, event: Event) -> None:
         await self.done({'result': 'cancelled'})
 
     async def on_delete(self, event: Event) -> None:
-        await self.management_manager.remove_role([self.item['id']])
+        await self.management_manager.remove_role([self.role['id']])
         await self.done({'result': 'deleted'})
 
     async def on_roles(self, event: Event) -> None:

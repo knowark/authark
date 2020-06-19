@@ -39,14 +39,14 @@ class DominionsScreen(Frame):
         self.dominion = getattr(event.target.parent, 'item', None)
         if self.dominion:
             self.modal = DominionDetailsModal(
-                self, injector=self.injector, item=self.dominion,
+                self, injector=self.injector, dominion=self.dominion,
                 done_command=self.on_modal_done,
                 proportion={'height': 0.50, 'width': 0.70}).launch()
 
     async def on_create(self, event: Event) -> None:
         dominion = {'name': '', 'url': ''}
         self.modal = DominionDetailsModal(
-            self, injector=self.injector, item=dominion,
+            self, injector=self.injector, dominion=dominion,
             done_command=self.on_modal_done,
             proportion={'height': 0.50, 'width': 0.50}).launch()
 
@@ -75,7 +75,7 @@ class DominionDetailsModal(Modal):
     def setup(self, **context) -> 'DominionDetailsModal':
         self.injector = context['injector']
         self.management_manager = self.injector['ManagementManager']
-        self.item = context['item']
+        self.dominion = context['dominion']
         return super().setup(**context) and self
 
     def build(self) -> None:
@@ -85,10 +85,10 @@ class DominionDetailsModal(Modal):
         frame = Frame(
             self, title='Dominion').title_style(Color.SUCCESS()).weight(4, 2)
         Label(frame, content='Name:').grid(0, 0)
-        self.name = Entry(frame, content=self.item['name']).style(
+        self.name = Entry(frame, content=self.dominion['name']).style(
             border=[0]).grid(0, 1).weight(col=2)
         Label(frame, content='URL:').grid(1, 0)
-        self.url = Entry(frame, content=self.item['url']).style(
+        self.url = Entry(frame, content=self.dominion['url']).style(
             border=[0]).grid(1, 1).weight(col=2)
 
         menu = Frame(self, title='Menu').grid(col=1)
@@ -111,15 +111,15 @@ class DominionDetailsModal(Modal):
             'name': self.name.text,
             'url': self.url.text
         }
-        self.item.update(dominion)
-        await self.management_manager.create_dominion([self.item])
+        self.dominion.update(dominion)
+        await self.management_manager.create_dominion([self.dominion])
         await self.done({'result': 'saved'})
 
     async def on_cancel(self, event: Event) -> None:
         await self.done({'result': 'cancelled'})
 
     async def on_delete(self, event: Event) -> None:
-        await self.management_manager.remove_dominion([self.item['id']])
+        await self.management_manager.remove_dominion([self.dominion['id']])
         await self.done({'result': 'deleted'})
 
     async def on_roles(self, event: Event) -> None:
