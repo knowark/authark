@@ -43,11 +43,10 @@ class StatusScreen(Frame):
             proportion={'height': 0.40, 'width': 0.60}).launch().connect()
 
     async def on_modal_done(self, event: Event) -> None:
-        if self.modal:
-            self.root.remove(self.modal)
-            self.modal = None
-            await self.dispatch(Event(
-                'Custom', 'tenant_switch', details=event.details))
+        self.root.remove(self.modal)
+        self.modal = None
+        await self.dispatch(Event(
+            'Custom', 'tenant_switch', details=event.details))
 
     async def on_backdrop_click(self, event: Event) -> None:
         if self.modal and not self.modal.hit(event):
