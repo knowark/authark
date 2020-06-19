@@ -10,16 +10,22 @@ PROJECT = authark
 COVFILE ?= .coverage
 TESTS ?= tests/
 
+mypy:
+	mypy $(PROJECT)
+
+mypy-application:
+	mypy $(PROJECT)/application
+
 coverage-application:
-	mypy authark/application && export COVERAGE_FILE=$(COVFILE); \
+	export COVERAGE_FILE=$(COVFILE); \
 	pytest --cov-branch --cov=$(PROJECT)/application tests/application/ \
 	--cov-report term-missing -x -s -W ignore::DeprecationWarning \
-	-o cache_dir=/tmp/authark/cache
+	-o cache_dir=/tmp/$(PROJECT)/cache
 
 coverage:
-	mypy authark && export COVERAGE_FILE=$(COVFILE); pytest --cov-branch \
+	export COVERAGE_FILE=$(COVFILE); pytest --cov-branch \
 	--cov=$(PROJECT) $(TESTS) --cov-report term-missing -x -s \
-	-vv -o cache_dir=/tmp/authark/cache
+	-vv -o cache_dir=/tmp/$(PROJECT)/cache
 
 update-requirements:
 	pip-review --auto

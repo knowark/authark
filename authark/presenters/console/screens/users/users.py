@@ -37,14 +37,14 @@ class UsersScreen(Frame):
         self.user = getattr(event.target.parent, 'item', None)
         if self.user:
             self.modal = UserDetailsModal(
-                self, injector=self.injector, item=self.user,
+                self, injector=self.injector, user=self.user,
                 done_command=self.on_modal_done,
                 proportion={'height': 0.90, 'width': 0.90}).launch()
 
     async def on_create(self, event: Event) -> None:
-        item = {'name': '', 'username': '', 'email': '', 'attributes': '{}'}
+        user = {'name': '', 'username': '', 'email': '', 'attributes': '{}'}
         self.modal = UserDetailsModal(
-            self, injector=self.injector, item=item,
+            self, injector=self.injector, user=user,
             done_command=self.on_modal_done,
             proportion={'height': 0.90, 'width': 0.90}).launch()
 
@@ -77,7 +77,7 @@ class UsersScreen(Frame):
 class UserDetailsModal(Modal):
     def setup(self, **context) -> 'UserDetailsModal':
         self.auth_manager = context['injector']['AuthManager']
-        self.item = context['item']
+        self.user = context['user']
         return super().setup(**context) and self
 
     def build(self) -> None:
@@ -85,13 +85,13 @@ class UserDetailsModal(Modal):
         frame = Frame(
             self, title='User').title_style(Color.SUCCESS()).weight(6, 3)
         Label(frame, content='Name:').grid(0, 0)
-        self.name = Entry(frame, content=self.item['name']).style(
+        self.name = Entry(frame, content=self.user['name']).style(
             border=[0]).grid(0, 1).weight(col=2)
         Label(frame, content='Username:').grid(1, 0)
-        self.username = Entry(frame, content=self.item['username']).style(
+        self.username = Entry(frame, content=self.user['username']).style(
             border=[0]).grid(1, 1).weight(col=2)
         Label(frame, content='Email:').grid(2, 0)
-        self.email = Entry(frame, content=self.item['email']).style(
+        self.email = Entry(frame, content=self.user['email']).style(
             border=[0]).grid(2, 1).weight(col=2)
         Label(frame, content='Password:').grid(3, 0)
         self.password = Entry(frame, content=' ').style(
@@ -100,7 +100,7 @@ class UserDetailsModal(Modal):
 
         attributes = {}
         try:
-            attributes = json.loads(self.item['attributes'])
+            attributes = json.loads(self.user['attributes'])
         except json.JSONDecodeError:
             pass
 
@@ -133,15 +133,15 @@ class UserDetailsModal(Modal):
         }
         if self.password.text.strip():
             user['password'] = self.password.text.strip()
-        self.item.update(user)
-        await self.auth_manager.update([self.item])
+        self.user.update(user)
+        await self.auth_manager.update([self.user])
         await self.done({'result': 'saved'})
 
     async def on_cancel(self, event: Event) -> None:
         await self.done({'result': 'cancelled'})
 
     async def on_delete(self, event: Event) -> None:
-        await self.auth_manager.deregister([self.item['id']])
+        await self.auth_manager.deregister([self.user['id']])
         await self.done({'result': 'deleted'})
 
     async def on_roles(self, event: Event) -> None:

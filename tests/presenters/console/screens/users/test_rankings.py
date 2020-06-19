@@ -31,7 +31,7 @@ async def test_rankings_load(rankings_modal):
     assert len(rankings_modal.body.data) == 1
 
 
-async def test_rankings_on_modal_load(rankings_modal):
+async def test_rankings_on_modal_done(rankings_modal):
     role = {'id': '1', 'name': 'admin'}
     event = Event('Custom', 'done', details={'result': 'roles', 'role': role})
     assigned_role = None
@@ -43,7 +43,6 @@ async def test_rankings_on_modal_load(rankings_modal):
     rankings_modal.management_manager.assign_role = MethodType(
         mock_assign_role, rankings_modal)
     await rankings_modal.on_modal_done(event)
-    await asyncio.sleep(1 / 15)
 
     assert assigned_role == [{'role_id': '1', 'user_id': '1'}]
     assert rankings_modal.modal is None
@@ -83,7 +82,6 @@ async def test_rankings_on_body(rankings_modal):
     event.target = target(None)
 
     await rankings_modal.on_body(event)
-    await asyncio.sleep(1 / 15)
     assert deassigned_role is None
 
     event.target = target({'id': '1',  'user_id': '1', 'role_id': '1'})
@@ -120,7 +118,6 @@ async def test_role_selection_modal_on_body(role_selection_modal):
     event.target = target(None)
 
     await role_selection_modal.on_body(event)
-    await asyncio.sleep(1 / 15)
     assert given_details is None
 
     event.target = target({'id': '1', 'name': 'admin'})
