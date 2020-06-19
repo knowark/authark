@@ -1,27 +1,10 @@
 import curses
 from pytest import fixture
 from widark.widget import Widget
-
 from injectark import Injectark
 from authark.core import DEVELOPMENT_CONFIG
 from authark.factories import strategy_builder, factory_builder
 from authark.presenters.console import ConsoleApplication
-
-
-# @fixture
-# def app():
-#     config = DEVELOPMENT_CONFIG
-#     strategy = strategy_builder.build(config['strategies'])
-#     factory = factory_builder.build(config)
-
-#     injector = Injectark(strategy, factory)
-
-#     return ConsoleApplication(config=config, injector=injector)
-
-
-import curses
-from pytest import fixture
-from widark.widget import Widget
 
 
 @fixture
@@ -48,8 +31,12 @@ def root(stdscr):
 
 
 @fixture
-def injector():
-    config = DEVELOPMENT_CONFIG
+def config():
+    return DEVELOPMENT_CONFIG
+
+
+@fixture
+def injector(config):
     strategy = strategy_builder.build(config['strategies'])
     factory = factory_builder.build(config)
 
