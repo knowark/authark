@@ -55,7 +55,8 @@ update:
 	git clean -xdf
 	git reset --hard
 	git checkout master
-	git pull --all
+	git pull --depth=1
+	git checkout `git describe --tags`
 
 deploy:
 	./setup/deploy.sh
