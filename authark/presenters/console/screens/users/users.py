@@ -98,14 +98,9 @@ class UserDetailsModal(Modal):
             border=[0]).grid(3, 1).weight(col=2)
         Label(frame, content='Attributes:').grid(4, 0)
 
-        attributes = {}
-        try:
-            attributes = json.loads(self.user['attributes'])
-        except json.JSONDecodeError:
-            pass
-
         self.attributes = Entry(
-            frame, content=json.dumps(attributes, indent=4)).style(
+            frame, content=json.dumps(
+                self.user['attributes'], indent=4)).style(
             border=[0]).grid(4, 1).weight(4, 2)
 
         menu = Frame(self, title='Menu').grid(col=1)
