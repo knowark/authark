@@ -20,6 +20,6 @@ async def test_credentials_instantiation_defaults(credentials_modal):
 async def test_credentials_load(credentials_modal):
     await credentials_modal.load()
 
-    await asyncio.sleep(1 / 15)
+    await asyncio.sleep(0)
 
     assert len(credentials_modal.body.data) == 2

@@ -27,7 +27,7 @@ async def test_users_screen_instantiation_defaults(users_screen):
 
 async def test_users_screen_load(users_screen):
     await users_screen.load()
-    await asyncio.sleep(1 / 15)
+    await asyncio.sleep(0)
 
     assert len(users_screen.body.data) == 2
 
@@ -50,7 +50,7 @@ async def test_users_screen_on_body(users_screen):
          'email': '', 'attributes': ''})
 
     await users_screen.on_body(event)
-    await asyncio.sleep(1 / 15)
+    await asyncio.sleep(0)
 
     assert users_screen.modal is not None
 
@@ -58,7 +58,7 @@ async def test_users_screen_on_body(users_screen):
 async def test_users_screen_on_create(users_screen):
     event = Event('Mouse', 'click')
     await users_screen.on_create(event)
-    await asyncio.sleep(1 / 15)
+    await asyncio.sleep(0)
     assert users_screen.modal.user == {'name': '', 'username': '',
                                        'email': '', 'attributes': '{}'}
 
@@ -76,7 +76,7 @@ async def test_users_screen_on_modal_done(users_screen):
 
     event = Event('Custom', 'done', details={'result': 'other'})
     await users_screen.on_modal_done(event)
-    await asyncio.sleep(1 / 15)
+    await asyncio.sleep(0)
 
     assert len(users_screen.body.data) == 2
 
@@ -103,7 +103,7 @@ async def test_users_screen_on_backdrop_click(users_screen):
     users_screen.modal = mock_modal
 
     await users_screen.on_backdrop_click(event)
-    await asyncio.sleep(1 / 15)
+    await asyncio.sleep(0)
 
     assert users_screen.modal is None
     assert removed is mock_modal
@@ -131,7 +131,7 @@ async def test_users_details_modal_on_save(user_details_modal):
 
     user_details_modal.password = MockPassword()
     await user_details_modal.on_save(event)
-    await asyncio.sleep(1 / 15)
+    await asyncio.sleep(0)
 
     assert given_users == [{'id': '1', 'attributes': '{}', 'email': '',
                             'name': 'John Doe', 'username': 'doe',
@@ -158,5 +158,5 @@ async def test_users_details_modal_on_buttons(user_details_modal):
     assert given_result == {'result': 'roles'}
 
     await user_details_modal.on_credentials(event)
-    await asyncio.sleep(1 / 15)
+    await asyncio.sleep(0)
     assert given_result == {'result': 'credentials'}

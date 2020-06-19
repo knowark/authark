@@ -26,7 +26,7 @@ async def test_rankings_instantiation_defaults(rankings_modal):
 
 async def test_rankings_load(rankings_modal):
     await rankings_modal.load()
-    await asyncio.sleep(1 / 15)
+    await asyncio.sleep(0)
 
     assert len(rankings_modal.body.data) == 1
 
@@ -49,7 +49,7 @@ async def test_rankings_on_modal_done(rankings_modal):
 
     event = Event('Custom', 'done', details={'result': 'default'})
     await rankings_modal.on_modal_done(event)
-    await asyncio.sleep(1 / 15)
+    await asyncio.sleep(0)
 
     assert len(rankings_modal.body.data) == 1
 
@@ -57,7 +57,7 @@ async def test_rankings_on_modal_done(rankings_modal):
 async def test_rankings_on_assign(rankings_modal):
     event = Event('Mouse', 'click')
     await rankings_modal.on_assign(event)
-    await asyncio.sleep(1 / 15)
+    await asyncio.sleep(0)
 
     assert rankings_modal.modal is not None
 
@@ -87,14 +87,14 @@ async def test_rankings_on_body(rankings_modal):
     event.target = target({'id': '1',  'user_id': '1', 'role_id': '1'})
 
     await rankings_modal.on_body(event)
-    await asyncio.sleep(1 / 15)
+    await asyncio.sleep(0)
 
     assert deassigned_role == ['1']
 
 
 async def test_role_selection_modal_load(role_selection_modal):
     await role_selection_modal.load()
-    await asyncio.sleep(1 / 15)
+    await asyncio.sleep(0)
 
     assert len(role_selection_modal.body.data) == 1
 
@@ -123,7 +123,7 @@ async def test_role_selection_modal_on_body(role_selection_modal):
     event.target = target({'id': '1', 'name': 'admin'})
 
     await role_selection_modal.on_body(event)
-    await asyncio.sleep(1 / 15)
+    await asyncio.sleep(0)
 
     assert given_details == {
         'result': 'roles', 'role': {'id': '1', 'name': 'admin'}}
