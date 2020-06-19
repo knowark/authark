@@ -16,14 +16,10 @@ class CredentialsModal(Modal):
             Color.WARNING()).weight(4, 2)
         Listbox(frame, data=['ID', 'Type', 'Client', 'Value'],
                 orientation='horizontal').grid(1).span(col=3)
-        self.body = Listbox(frame, command=self.on_body).grid(
-            3).span(col=3).weight(9)
+        self.body = Listbox(frame).grid(3).span(col=3).weight(9)
 
     async def load(self) -> None:
         credentials = await self.authark_informer.search(
             'credential', [('user_id', '=', self.user['id'])])
         self.body.setup(data=credentials, fields=[
             'id', 'type', 'client', 'value'], limit=10).connect()
-
-    async def on_body(self, event: Event) -> None:
-        credential = getattr(event.target.parent, 'item', None)

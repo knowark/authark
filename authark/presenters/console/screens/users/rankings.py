@@ -26,15 +26,6 @@ class RankingsModal(Modal):
         self.body = Listbox(frame, command=self.on_body).grid(
             3).span(col=3).weight(9)
 
-    async def on_modal_done(self, event: Event) -> None:
-        self.remove(self.modal)
-        self.modal = None
-        if event.details['result'] == 'roles':
-            await self.assign_role(event.details['role'])
-        else:
-            await self.load()
-        self.render()
-
     async def load(self) -> None:
         rankings = []
         for ranking, [role] in await self.authark_informer.search('ranking', [(
@@ -47,6 +38,15 @@ class RankingsModal(Modal):
 
         self.body.setup(data=rankings, fields=[
             'id', 'role_name', 'dominion_name'], limit=10).connect()
+
+    async def on_modal_done(self, event: Event) -> None:
+        self.remove(self.modal)
+        self.modal = None
+        if event.details['result'] == 'roles':
+            await self.assign_role(event.details['role'])
+        else:
+            await self.load()
+        self.render()
 
     async def on_assign(self, event: Event) -> None:
         self.modal = RoleSelectionModal(

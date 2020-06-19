@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Union, List, Tuple, overload
+from typing import Union, List, Tuple, Any, overload
 from ..domain.repositories import (
     UserRepository, CredentialRepository,
     DominionRepository, RoleRepository,
@@ -94,7 +94,7 @@ class StandardAutharkInformer(AutharkInformer):
             domain or [], limit=limit, offset=offset,
             join=reference, link=pivot, source=source, target=target)
 
-        result = []
+        result: Any = []
         for item in items:
             if not isinstance(item, (tuple, list)):
                 result.append(vars(item))

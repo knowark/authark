@@ -14,10 +14,6 @@ def app(loop, aiohttp_client):
 
     injector = Injectark(strategy, factory)
 
-    tenant_supplier = injector['TenantSupplier']
-
-    print(tenant_supplier.arranger.cataloguer.catalog, '<<<<<TENANT')
-
     rest = RestApplication(config, injector)
 
     return loop.run_until_complete(aiohttp_client(rest.app))

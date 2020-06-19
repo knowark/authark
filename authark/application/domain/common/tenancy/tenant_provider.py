@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
-from aiocontextvars import ContextVar
+from typing import Optional
+from contextvars import ContextVar
 from .tenant import Tenant
 
 
@@ -16,7 +17,7 @@ class TenantProvider(ABC):
         """Get the current tenant"""
 
 
-tenant_var = ContextVar('tenant', default=None)
+tenant_var: ContextVar[Optional[Tenant]] = ContextVar('tenant', default=None)
 
 
 class StandardTenantProvider(TenantProvider):
@@ -26,6 +27,7 @@ class StandardTenantProvider(TenantProvider):
 
     @property
     def tenant(self) -> Tenant:
-        if not tenant_var.get():
+        tenant = tenant_var.get()
+        if not tenant:
             raise ValueError('No tenant has been set.')
-        return tenant_var.get()
+        return tenant

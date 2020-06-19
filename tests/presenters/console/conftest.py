@@ -1,53 +1,56 @@
-# from pytest import fixture
-# from injectark import Injectark
-# from authark.application.models import (
-#     User, Dominion, Role, Ranking)
-# from authark.application.services import Tenant
-# from authark.infrastructure.terminal.main import Main
-# from authark.infrastructure.core import TrialConfig, build_factory
-# from authark.infrastructure.terminal.framework import Context
+import curses
+from pytest import fixture
+from widark.widget import Widget
+
+from injectark import Injectark
+from authark.core import DEVELOPMENT_CONFIG
+from authark.factories import strategy_builder, factory_builder
+from authark.presenters.console import ConsoleApplication
 
 
 # @fixture
-# def context():
-#     config = TrialConfig()
-#     factory = build_factory(config)
-#     strategy = config['strategy']
+# def app():
+#     config = DEVELOPMENT_CONFIG
+#     strategy = strategy_builder.build(config['strategies'])
+#     factory = factory_builder.build(config)
 
-#     resolver = Injectark(strategy=strategy, factory=factory)
+#     injector = Injectark(strategy, factory)
 
-#     tenant = Tenant(id='1', name='Knowark')
-#     resolver['TenantSupplier'].arranger.cataloguer.catalog = {
-#         "1": tenant
-#     }
-#     resolver['AutharkReporter'].user_repository.load({
-#         "knowark": {
-#             "1": User(id='1', username='eecheverry',
-#                       email='eecheverry@example.com')
-#         }
-#     })
-#     resolver['AutharkReporter'].dominion_repository.load({
-#         "knowark": {
-#             "1": Dominion(id='1', name='Data Server',
-#                           url='https://dataserver.nubark.cloud')
-#         }
-#     })
-#     resolver['AutharkReporter'].role_repository.load({
-#         "knowark": {
-#             "1": Role(id='1', name='manager', dominion_id='1',
-#                       description='Production Manager')
-#         }
-#     })
-#     resolver['ComposingReporter'].ranking_repository.load({
-#         "knowark": {
-#             "1": Ranking(id='1', user_id='1', role_id='1')
-#         }
-#     })
-#     resolver['SessionCoordinator'].tenant_provider.setup(tenant)
-
-#     return Context(config, resolver)
+#     return ConsoleApplication(config=config, injector=injector)
 
 
-# @fixture
-# def main(context):
-#     return Main(context)
+import curses
+from pytest import fixture
+from widark.widget import Widget
+
+
+@fixture
+def stdscr():
+    stdscr = curses.initscr()
+    curses.start_color()
+
+    yield stdscr
+
+    try:
+        curses.endwin()
+    except curses.error:
+        pass
+
+
+@fixture
+def root(stdscr):
+    root = Widget(None)
+    # Run all tests with a resolution
+    # of 18 rows and 90 cols
+    stdscr.resize(18, 90)
+    root.window = stdscr
+    return
+
+
+@fixture
+def injector():
+    config = DEVELOPMENT_CONFIG
+    strategy = strategy_builder.build(config['strategies'])
+    factory = factory_builder.build(config)
+
+    return Injectark(strategy, factory)
