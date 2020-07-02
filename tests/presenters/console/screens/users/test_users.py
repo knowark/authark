@@ -123,7 +123,7 @@ async def test_users_details_modal_on_save(user_details_modal):
 
     await user_details_modal.on_save(event)
 
-    assert given_users == [{'id': '1', 'attributes': '{}', 'email': '',
+    assert given_users == [{'id': '1', 'attributes': '"{}"', 'email': '',
                             'name': 'John Doe', 'username': 'doe'}]
 
     class MockPassword:
@@ -133,7 +133,7 @@ async def test_users_details_modal_on_save(user_details_modal):
     await user_details_modal.on_save(event)
     await asyncio.sleep(0)
 
-    assert given_users == [{'id': '1', 'attributes': '{}', 'email': '',
+    assert given_users == [{'id': '1', 'attributes': '"{}"', 'email': '',
                             'name': 'John Doe', 'username': 'doe',
                             'password': 'SECRET'}]
 
