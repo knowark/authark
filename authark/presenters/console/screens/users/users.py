@@ -108,7 +108,7 @@ class UserDetailsModal(Modal):
         self.email = Entry(frame, content=self.user['email']).style(
             border=[0]).grid(2, 1).weight(col=2)
         Label(frame, content='Password:').grid(3, 0)
-        self.password = Entry(frame, content=' ').style(
+        self.password = Entry(frame).style(
             border=[0]).grid(3, 1).weight(col=2)
         Label(frame, content='Attributes:').grid(4, 0)
 
