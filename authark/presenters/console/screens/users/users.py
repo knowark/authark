@@ -31,7 +31,7 @@ class UsersScreen(Frame):
     async def load(self) -> None:
         users = await self.authark_informer.search('user')
         self.body.setup(
-            data=users, fields=['id', 'name', 'email'], limit=10).connect()
+            data=users, fields=['id', 'name', 'email'], limit=20).connect()
 
     async def on_body(self, event: Event) -> None:
         self.user = getattr(event.target.parent, 'item', None)
@@ -64,6 +64,7 @@ class UsersScreen(Frame):
         else:
             await self.load()
         self.render()
+        self.body.focus()
 
     async def on_backdrop_click(self, event: Event) -> None:
         if self.modal and not self.modal.hit(event):
@@ -72,6 +73,7 @@ class UsersScreen(Frame):
             self.modal = None
             await self.load()
             self.render()
+            self.body.focus()
 
 
 class UserDetailsModal(Modal):
