@@ -10,6 +10,7 @@ class UsersScreen(Frame):
         self.injector = context['injector']
         self.authark_informer = self.injector['AutharkInformer']
         self.user = None
+        self.domain = []
         return super().setup(**context) and self
 
     def build(self) -> None:
@@ -19,7 +20,7 @@ class UsersScreen(Frame):
         Button(self, content='\U00002795 Create',
                command=self.on_create).grid(0, 0)
         Label(self, content='\U0001F50D Search:').grid(0, 1)
-        self.search = Entry(self, content=' ').grid(0, 2).style(
+        self.search = Entry(self).grid(0, 2).style(
             border=[0]).weight(col=3)
         self.header = Listbox(
             self, data=['ID', 'Name', 'Email'],
@@ -27,9 +28,10 @@ class UsersScreen(Frame):
         self.body = Listbox(
             self, command=self.on_body).grid(3).span(col=3).weight(9)
         self.listen('click', self.on_backdrop_click, True)
+        self.search.listen('keydown', self.on_search, True)
 
     async def load(self) -> None:
-        users = await self.authark_informer.search('user')
+        users = await self.authark_informer.search('user', self.domain)
         self.body.setup(
             data=users, fields=['id', 'name', 'email'], limit=20).connect()
 
@@ -40,6 +42,16 @@ class UsersScreen(Frame):
                 self, injector=self.injector, user=self.user,
                 done_command=self.on_modal_done,
                 proportion={'height': 0.90, 'width': 0.90}).launch()
+
+    async def on_search(self, event: Event) -> None:
+        if event.key == '\n':
+            event.stop = True
+            text = self.search.text.strip()
+            self.domain = [] if not text else [
+                '|',  ('name', 'ilike', f'%{text}%'),
+                ('email', 'ilike', f'%{text}%')]
+            await self.load()
+            self.search.focus()
 
     async def on_create(self, event: Event) -> None:
         user = {'name': '', 'username': '', 'email': '', 'attributes': {}}
