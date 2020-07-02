@@ -17,7 +17,7 @@ def users_screen(root, injector):
 @fixture
 def user_details_modal(root, injector):
     user = {'id': '1', 'name': 'John Doe', 'username': 'doe',
-            'email': '', 'attributes': '{}'}
+            'email': '', 'attributes': {}}
     return UserDetailsModal(root, injector=injector, user=user)
 
 
@@ -47,7 +47,7 @@ async def test_users_screen_on_body(users_screen):
 
     event.target = target(
         {'id': '1',  'name': '', 'username': '',
-         'email': '', 'attributes': ''})
+         'email': '', 'attributes': {}})
 
     await users_screen.on_body(event)
     await asyncio.sleep(0)
@@ -60,7 +60,7 @@ async def test_users_screen_on_create(users_screen):
     await users_screen.on_create(event)
     await asyncio.sleep(0)
     assert users_screen.modal.user == {'name': '', 'username': '',
-                                       'email': '', 'attributes': '{}'}
+                                       'email': '', 'attributes': {}}
 
 
 async def test_users_screen_on_modal_done(users_screen):
@@ -123,7 +123,7 @@ async def test_users_details_modal_on_save(user_details_modal):
 
     await user_details_modal.on_save(event)
 
-    assert given_users == [{'id': '1', 'attributes': '"{}"', 'email': '',
+    assert given_users == [{'id': '1', 'attributes': {}, 'email': '',
                             'name': 'John Doe', 'username': 'doe'}]
 
     class MockPassword:
@@ -133,7 +133,7 @@ async def test_users_details_modal_on_save(user_details_modal):
     await user_details_modal.on_save(event)
     await asyncio.sleep(0)
 
-    assert given_users == [{'id': '1', 'attributes': '"{}"', 'email': '',
+    assert given_users == [{'id': '1', 'attributes': {}, 'email': '',
                             'name': 'John Doe', 'username': 'doe',
                             'password': 'SECRET'}]
 

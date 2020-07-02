@@ -42,7 +42,7 @@ class UsersScreen(Frame):
                 proportion={'height': 0.90, 'width': 0.90}).launch()
 
     async def on_create(self, event: Event) -> None:
-        user = {'name': '', 'username': '', 'email': '', 'attributes': '{}'}
+        user = {'name': '', 'username': '', 'email': '', 'attributes': {}}
         self.modal = UserDetailsModal(
             self, injector=self.injector, user=user,
             done_command=self.on_modal_done,
@@ -124,7 +124,7 @@ class UserDetailsModal(Modal):
             'name': self.name.text,
             'username': self.username.text,
             'email': self.email.text,
-            'attributes': self.attributes.text
+            'attributes': json.loads(self.attributes.text)
         }
         if self.password.text.strip():
             user['password'] = self.password.text.strip()
