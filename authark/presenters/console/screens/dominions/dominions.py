@@ -57,6 +57,7 @@ class DominionsScreen(Frame):
             self.modal = RolesModal(
                 self, injector=self.injector,
                 dominion=self.dominion,
+                proportion={'height': 0.95, 'width': 0.95},
                 done_command=self.on_modal_done).launch().connect()
         else:
             await self.load()

@@ -1,6 +1,7 @@
 from widark import (
     Frame, Listbox, Label, Entry,
     Event, Modal, Button, Spacer, Color)
+from .policies import PoliciesModal
 
 
 class RolesModal(Modal):
@@ -9,6 +10,7 @@ class RolesModal(Modal):
         self.authark_informer = self.injector['AutharkInformer']
         self.management_manager = self.injector['ManagementManager']
         self.dominion = context['dominion']
+        self.role = None
         return super().setup(**context) and self
 
     def build(self) -> None:
@@ -19,16 +21,23 @@ class RolesModal(Modal):
 
         Button(frame, content='\U00002795 Create',
                command=self.on_create).grid(0, 0)
-        self.header = Listbox(
-            frame, data=['ID', 'Name', 'Description'],
-            orientation='horizontal').grid(1).span(col=3)
+        Listbox(frame, data=['ID', 'Name', 'Description'],
+                orientation='horizontal').grid(1).span(col=3)
 
-        self.body = Listbox(frame).grid(3).span(col=3).weight(9)
+        self.body = Listbox(
+            frame, command=self.on_body).grid(3).span(col=3).weight(9)
 
     async def on_modal_done(self, event: Event) -> None:
         self.remove(self.modal)
         self.modal = None
-        await self.load()
+        if event.details['result'] == 'policies':
+            self.modal = PoliciesModal(
+                self, injector=self.injector,
+                role=self.role,
+                proportion={'height': 0.90, 'width': 0.95},
+                done_command=self.on_modal_done).launch().connect()
+        else:
+            await self.load()
         self.render()
 
     async def load(self) -> None:
@@ -37,8 +46,17 @@ class RolesModal(Modal):
         self.body.setup(data=roles, fields=['id', 'name', 'description'],
                         limit=10).connect()
 
+    async def on_body(self, event: Event) -> None:
+        self.role = getattr(event.target.parent, 'item', None)
+        if self.dominion:
+            self.modal = RoleDetailsModal(
+                self, injector=self.injector, role=self.role,
+                done_command=self.on_modal_done,
+                proportion={'height': 0.50, 'width': 0.70}).launch()
+
     async def on_create(self, event: Event) -> None:
-        role = {'name': '', 'url': '', 'dominion_id': self.dominion['id']}
+        role = {'name': '', 'dominion_id': self.dominion['id'],
+                'description': ''}
         self.modal = RoleDetailsModal(
             self, injector=self.injector, role=role,
             done_command=self.on_modal_done,
@@ -62,8 +80,13 @@ class RoleDetailsModal(Modal):
         self.name = Entry(frame, content=self.role['name']).style(
             border=[0]).grid(0, 1).weight(col=2)
         Label(frame, content='Description:').grid(1, 0)
-        self.description = Entry(frame, content=self.role['url']).style(
+        self.description = Entry(frame, content=self.role['description']).style(
             border=[0]).grid(1, 1).weight(col=2)
+
+        menu = Frame(self, title='Menu').grid(col=1)
+        Button(menu, content='Policies',
+               command=self.on_policies).style(border=[0])
+        Spacer(menu).grid(1)
 
         actions = Frame(
             self, title='Actions').title_style(
@@ -92,5 +115,5 @@ class RoleDetailsModal(Modal):
         await self.management_manager.remove_role([self.role['id']])
         await self.done({'result': 'deleted'})
 
-    async def on_roles(self, event: Event) -> None:
-        await self.done({'result': 'roles'})
+    async def on_policies(self, event: Event) -> None:
+        await self.done({'result': 'policies'})

@@ -17,7 +17,7 @@ def roles_modal(root, injector):
 
 @fixture
 def role_details_modal(root, injector):
-    role = {'id': '1', 'name': 'admin', 'dominion_id': '1', 'url': ''}
+    role = {'id': '1', 'name': 'admin', 'dominion_id': '1', 'description': ''}
     return RoleDetailsModal(root, injector=injector, role=role)
 
 
@@ -46,7 +46,7 @@ async def test_roles_modal_on_create(roles_modal):
     await roles_modal.on_create(event)
     await asyncio.sleep(0)
     assert roles_modal.modal.role == {
-        'name': '', 'url': '', 'dominion_id': '1'}
+        'name': '', 'description': '', 'dominion_id': '1'}
 
 
 async def test_role_details_modal_on_buttons(role_details_modal):
@@ -65,8 +65,8 @@ async def test_role_details_modal_on_buttons(role_details_modal):
     await role_details_modal.on_delete(event)
     assert given_result == {'result': 'deleted'}
 
-    await role_details_modal.on_roles(event)
-    assert given_result == {'result': 'roles'}
+    await role_details_modal.on_policies(event)
+    assert given_result == {'result': 'policies'}
 
 
 async def test_role_details_modal_on_save(role_details_modal):
@@ -85,4 +85,4 @@ async def test_role_details_modal_on_save(role_details_modal):
     await asyncio.sleep(0)
 
     assert given_roles == [{'description': '', 'dominion_id': '1',
-                            'id': '1', 'name': 'admin', 'url': ''}]
+                            'id': '1', 'name': 'admin'}]
