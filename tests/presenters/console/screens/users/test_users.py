@@ -63,6 +63,27 @@ async def test_users_screen_on_create(users_screen):
                                        'email': '', 'attributes': {}}
 
 
+async def test_users_screen_on_search(users_screen):
+    focus_called = False
+
+    class MockSearch:
+        text = 'value'
+
+        def focus(self):
+            nonlocal focus_called
+            focus_called = True
+
+    users_screen.search = MockSearch()
+
+    await users_screen.on_search(Event('Keyboard', 'keydown', key='A'))
+    await users_screen.on_search(Event('Keyboard', 'keydown', key='\n'))
+
+    await asyncio.sleep(0)
+    assert focus_called is True
+    assert users_screen.domain == [
+        '|', ('name', 'ilike', '%value%'), ('email', 'ilike', '%value%')]
+
+
 async def test_users_screen_on_modal_done(users_screen):
     event = Event('Custom', 'done', details={'result': 'roles'})
     await users_screen.on_modal_done(event)
