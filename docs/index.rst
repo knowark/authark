@@ -17,6 +17,7 @@ Authentication and authorization server.
    architecture/index.rst
    roadmap.rst
    about.rst
+   issues/index.rst
 
 Design
 ------
