@@ -75,7 +75,9 @@ async def test_users_screen_on_search(users_screen):
 
     users_screen.search = MockSearch()
 
-    await users_screen.on_search(Event('Keyboard', 'keydown', key='A'))
+    await users_screen.on_search(Event('Keyboard', 'keydown', key='value'))
+    assert users_screen.domain == []
+
     await users_screen.on_search(Event('Keyboard', 'keydown', key='\n'))
 
     await asyncio.sleep(0)
