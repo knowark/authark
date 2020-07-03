@@ -57,11 +57,19 @@ core, and so are the **Dominion** and **Role**.
     <tr><td port="id">id</td></tr>
     </table>>];
 
+    Policy [label=<
+    <table border="0" cellborder="1" cellspacing="0">
+    <tr><td><i>Policy</i></td></tr>
+    <tr><td port="id">id</td></tr>
+    <tr><td port="role_id">dominion_id</td></tr>
+    </table>>];
+
     Ranking:user_id -> User:id;
     Ranking:role_id -> Role:id;
     Credential:dominion_id ->  Dominion:id;
     Credential:user_id -> User:id;
     Role:dominion_id -> Dominion:id;
+    Policy:role_id ->  Role:id;
     }
 
 
@@ -82,3 +90,8 @@ authentication transaction initiated by a Client application. This **Token**
 will be used independently and in a stateless manner to concede access to
 protected applications and resources using **Authark** as their authentication
 and authorization server.
+
+Security wise, **Policies** can be linked to **Roles** to grant them privileges
+over specific dominion resources (identified by their name). These privileges
+might be any combination of the characters: 'C' (Create), 'R' (Read),
+'U' (Update) or 'D' (Delete).
