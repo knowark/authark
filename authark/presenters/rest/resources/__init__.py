@@ -4,7 +4,7 @@ from .... import __version__
 from .token import TokenResource
 from .resource import Resource
 from .user import UserResource
-from .rule import RuleResource
+from .restriction import RestrictionResource
 from .policy import PolicyResource
 from .ranking import RankingResource
 

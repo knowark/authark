@@ -1,9 +1,9 @@
 from ....application.domain.common import TenantProvider, QueryParser
 from ....application.domain.models import (
-    Credential, Dominion, Ranking, Role, User, Rule, Policy)
+    Credential, Dominion, Ranking, Role, User, Restriction, Policy)
 from ....application.domain.repositories import (
     CredentialRepository, DominionRepository, RankingRepository,
-    RoleRepository, UserRepository, RuleRepository, PolicyRepository)
+    RoleRepository, UserRepository, RestrictionRepository, PolicyRepository)
 from .json_repository import JsonRepository
 
 
@@ -47,14 +47,14 @@ class JsonRoleRepository(JsonRepository, RoleRepository):
                          collection, Role)
 
 
-class JsonRuleRepository(JsonRepository, RuleRepository):
-    """Json Rule Repository"""
+class JsonRestrictionRepository(JsonRepository, RestrictionRepository):
+    """Json Restriction Repository"""
 
     def __init__(self, data_path: str, parser: QueryParser,
                  tenant_provider: TenantProvider,
-                 collection: str = 'rules') -> None:
+                 collection: str = 'restrictions') -> None:
         super().__init__(data_path, parser, tenant_provider,
-                         collection, Rule)
+                         collection, Restriction)
 
 
 class JsonPolicyRepository(JsonRepository, PolicyRepository):

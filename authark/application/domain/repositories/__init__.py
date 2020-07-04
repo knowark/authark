@@ -7,5 +7,5 @@ from .memory_model_repositories import (
     RankingRepository, MemoryRankingRepository,
     RoleRepository, MemoryRoleRepository,
     UserRepository, MemoryUserRepository,
-    RuleRepository, MemoryRuleRepository,
+    RestrictionRepository, MemoryRestrictionRepository,
     PolicyRepository, MemoryPolicyRepository,)

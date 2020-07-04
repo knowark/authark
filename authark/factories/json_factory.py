@@ -3,7 +3,7 @@ from ..application.domain.services import HashService
 from ..core.data import (
     JsonCredentialRepository, JsonDominionRepository, JsonRoleRepository,
     JsonUserRepository, JsonRankingRepository, JsonImportService,
-    JsonRuleRepository, JsonPolicyRepository)
+    JsonRestrictionRepository, JsonPolicyRepository)
 from ..core.common import Config
 from ..core.suppliers import (
     TenantSupplier, JsonTenantSupplier, JsonSetupSupplier)
@@ -45,12 +45,12 @@ class JsonFactory(CryptoFactory):
         return JsonRoleRepository(self.data_path, query_parser,
                                   tenant_provider)
 
-    def json_rule_repository(
+    def json_restriction_repository(
             self, query_parser: QueryParser,
             tenant_provider: TenantProvider
-    ) -> JsonRuleRepository:
-        return JsonRuleRepository(self.data_path, query_parser,
-                                  tenant_provider)
+    ) -> JsonRestrictionRepository:
+        return JsonRestrictionRepository(self.data_path, query_parser,
+                                         tenant_provider)
 
     def json_policy_repository(
             self, query_parser: QueryParser,

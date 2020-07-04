@@ -1,7 +1,7 @@
 from pytest import fixture
 from authark.application.domain.models import (
     User, Credential, Dominion, Role, Ranking,
-    Rule, Policy)
+    Restriction, Policy)
 from authark.application.domain.common import (
     QueryParser, Tenant, StandardTenantProvider)
 from authark.application.domain.repositories import (
@@ -10,7 +10,7 @@ from authark.application.domain.repositories import (
     DominionRepository, MemoryDominionRepository,
     RoleRepository, MemoryRoleRepository,
     RankingRepository, MemoryRankingRepository,
-    RuleRepository, MemoryRuleRepository,
+    RestrictionRepository, MemoryRestrictionRepository,
     PolicyRepository, MemoryPolicyRepository)
 from authark.application.informers import (
     AutharkInformer, StandardAutharkInformer,
@@ -83,15 +83,17 @@ def role_repository(tenant_provider, parser) -> RoleRepository:
 
 
 @fixture
-def rule_repository(tenant_provider, parser) -> RuleRepository:
-    rule_repository = MemoryRuleRepository(parser, tenant_provider)
-    rule_repository.load({
+def restriction_repository(tenant_provider, parser) -> RestrictionRepository:
+    restriction_repository = MemoryRestrictionRepository(
+        parser, tenant_provider)
+    restriction_repository.load({
         "default": {
-            "1": Rule(id='1', group='group name', name='group name',
-                      sequence="1", target='target name', domain="domain name")
+            "1": Restriction(id='1', group='group name', name='group name',
+                             sequence="1", target='target name', domain="domain name")
         }
     })
-    return rule_repository
+    return restriction_repository
+
 
 @fixture
 def policy_repository(tenant_provider, parser) -> PolicyRepository:
@@ -99,10 +101,11 @@ def policy_repository(tenant_provider, parser) -> PolicyRepository:
     policy_repository.load({
         "default": {
             "1": Policy(id='1', resource='resource name', privilege='privilege name',
-                      role="role name", rule='rule name')
+                        role="role name", restriction='restriction name')
         }
     })
     return policy_repository
+
 
 @fixture
 def ranking_repository(tenant_provider, parser) -> RankingRepository:
@@ -121,7 +124,7 @@ def authark_informer(user_repository: UserRepository,
                      credential_repository: CredentialRepository,
                      dominion_repository: DominionRepository,
                      role_repository: RoleRepository,
-                     rule_repository: RuleRepository,
+                     restriction_repository: RestrictionRepository,
                      policy_repository: PolicyRepository,
                      ranking_repository: RankingRepository
 
@@ -131,7 +134,7 @@ def authark_informer(user_repository: UserRepository,
         credential_repository,
         dominion_repository,
         role_repository,
-        rule_repository,
+        restriction_repository,
         policy_repository,
         ranking_repository)
 

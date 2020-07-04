@@ -3,7 +3,7 @@ from typing import Union, List, Tuple, Any, overload
 from ..domain.repositories import (
     UserRepository, CredentialRepository,
     DominionRepository, RoleRepository,
-    RuleRepository, PolicyRepository, RankingRepository)
+    RestrictionRepository, PolicyRepository, RankingRepository)
 from ..domain.common import QueryDomain, DataDict, RecordList
 
 
@@ -46,14 +46,14 @@ class StandardAutharkInformer(AutharkInformer):
                  credential_repository: CredentialRepository,
                  dominion_repository: DominionRepository,
                  role_repository: RoleRepository,
-                 rule_repository: RuleRepository,
+                 restriction_repository: RestrictionRepository,
                  policy_repository: PolicyRepository,
                  ranking_repository: RankingRepository) -> None:
         self.user_repository = user_repository
         self.credential_repository = credential_repository
         self.dominion_repository = dominion_repository
         self.role_repository = role_repository
-        self.rule_repository = rule_repository
+        self.restriction_repository = restriction_repository
         self.policy_repository = policy_repository
         self.ranking_repository = ranking_repository
 

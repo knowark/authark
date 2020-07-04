@@ -2,7 +2,7 @@ from apispec import APISpec
 from apispec.ext.marshmallow import MarshmallowPlugin
 from .schemas import (
     UserSchema, TokenRequestSchema, TokenSchema,
-    RuleSchema, PolicySchema, RankingSchema)
+    RestrictionSchema, PolicySchema, RankingSchema)
 
 
 def create_spec() -> APISpec:
@@ -28,7 +28,7 @@ def _register_schemas(spec):
     spec.components.schema("User", schema=UserSchema)
     spec.components.schema("Token", schema=TokenSchema)
     spec.components.schema("TokenRequest", schema=TokenRequestSchema)
-    spec.components.schema("Rule", schema=RuleSchema)
+    spec.components.schema("Restriction", schema=RestrictionSchema)
     spec.components.schema("Policy", schema=PolicySchema)
     spec.components.schema("Ranking", schema=RankingSchema)
 
@@ -51,19 +51,19 @@ def _register_paths(spec):
             }
         }
     ).path(
-        path="/rules",
+        path="/restrictions",
         operations={
             'get': {
-                'tags': ['Rules'],
-                'responses': _respond("Get all rules", 'Rules')
+                'tags': ['Restrictions'],
+                'responses': _respond("Get all restrictions", 'Restrictions')
             },
             'put': {
-                'tags': ['Rules'],
-                'responses': _respond("Modify rules", 'Rules')
+                'tags': ['Restrictions'],
+                'responses': _respond("Modify restrictions", 'Restrictions')
             },
             'delete': {
-                'tags': ['Rules'],
-                'responses': _respond("Delete rules", 'Rules')
+                'tags': ['Restrictions'],
+                'responses': _respond("Delete restrictions", 'Restrictions')
             }
         }
     ).path(

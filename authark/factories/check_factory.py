@@ -5,12 +5,12 @@ from ..application.domain.common import (
     QueryParser, TenantProvider, StandardTenantProvider, Tenant,
     AuthProvider, StandardAuthProvider, User as CUser)
 from ..application.domain.models import (
-    User, Credential, Ranking, Role, Dominion, Rule, Policy)
+    User, Credential, Ranking, Role, Dominion, Restriction, Policy)
 from ..application.domain.repositories import (
     MemoryUserRepository, MemoryCredentialRepository,
     RankingRepository, MemoryRankingRepository,
     RoleRepository, MemoryRoleRepository,
-    RuleRepository, MemoryRuleRepository,
+    RestrictionRepository, MemoryRestrictionRepository,
     PolicyRepository, MemoryPolicyRepository,
     DominionRepository, MemoryDominionRepository)
 from ..application.domain.services import (
@@ -103,19 +103,19 @@ class CheckFactory(CryptoFactory):
                          description="Service's Administrator")
         }})
         return ranking_repository
-    
-    def memory_rule_repository(
+
+    def memory_restriction_repository(
             self, query_parser: QueryParser,
             tenant_provider: TenantProvider
-    ) -> MemoryRuleRepository:
-        rule_repository = super().memory_rule_repository(
+    ) -> MemoryRestrictionRepository:
+        restriction_repository = super().memory_restriction_repository(
             query_parser, tenant_provider)
-        rule_repository.load({'default': {
-            "1": Rule(id='1', group='group', sequence='1',
-                         name="name group", target="target name",
-                         domain="domain")
+        restriction_repository.load({'default': {
+            "1": Restriction(id='1', group='group', sequence='1',
+                             name="name group", target="target name",
+                             domain="domain")
         }})
-        return rule_repository
+        return restriction_repository
 
     def memory_policy_repository(
             self, query_parser: QueryParser,
@@ -125,7 +125,7 @@ class CheckFactory(CryptoFactory):
             query_parser, tenant_provider)
         policy_repository.load({'default': {
             "1": Policy(id='1', resource='resource', privilege='privilege',
-                         role="name role", rule="name rule")
+                        role="name role", restriction="name restriction")
         }})
         return policy_repository
 

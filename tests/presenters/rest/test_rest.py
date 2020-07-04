@@ -146,11 +146,11 @@ async def test_users_delete(app, headers) -> None:
     assert len(data_dict) == 1
 
 
-async def test_rules_delete(app, headers) -> None:
-    response = await app.delete('/rules/1', headers=headers)
+async def test_restrictions_delete(app, headers) -> None:
+    response = await app.delete('/restrictions/1', headers=headers)
     assert response.status == 204
 
-    response = await app.get('/rules', headers=headers)
+    response = await app.get('/restrictions', headers=headers)
     data_dict = loads(await response.text())
 
     assert len(data_dict) == 0

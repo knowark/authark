@@ -22,8 +22,8 @@ base = {
     "RoleRepository": {
         "method": "memory_role_repository"
     },
-    "RuleRepository": {
-        "method": "memory_rule_repository"
+    "RestrictionRepository": {
+        "method": "memory_restriction_repository"
     },
     "PolicyRepository": {
         "method": "memory_policy_repository"

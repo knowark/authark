@@ -8,4 +8,4 @@ class Policy(Entity):
         self.resource = attributes.get('resource', '')
         self.privilege = attributes.get('privilege', '')
         self.role_id = attributes.get('role_id', '')
-        self.rule = attributes.get('rule', '')
+        self.restriction = attributes.get('restriction', '')

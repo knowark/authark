@@ -8,7 +8,7 @@ from ..application.domain.repositories import (
     DominionRepository, MemoryDominionRepository,
     RoleRepository, MemoryRoleRepository,
     RankingRepository, MemoryRankingRepository,
-    RuleRepository, MemoryRuleRepository,
+    RestrictionRepository, MemoryRestrictionRepository,
     PolicyRepository, MemoryPolicyRepository)
 from ..application.domain.services import (
     HashService, MemoryHashService,
@@ -64,11 +64,11 @@ class BaseFactory(Factory):
     ) -> MemoryRoleRepository:
         return MemoryRoleRepository(query_parser, tenant_provider)
 
-    def memory_rule_repository(
+    def memory_restriction_repository(
             self, query_parser: QueryParser,
             tenant_provider: TenantProvider
-    ) -> MemoryRuleRepository:
-        return MemoryRuleRepository(query_parser, tenant_provider)
+    ) -> MemoryRestrictionRepository:
+        return MemoryRestrictionRepository(query_parser, tenant_provider)
 
     def memory_policy_repository(
             self, query_parser: QueryParser,
@@ -139,10 +139,10 @@ class BaseFactory(Factory):
         return SessionManager(tenant_provider, auth_provider)
 
     def security_manager(
-        self, rule_repository: RuleRepository,
+        self, restriction_repository: RestrictionRepository,
         policy_repository: PolicyRepository
     ) -> SecurityManager:
-        return SecurityManager(rule_repository, policy_repository)
+        return SecurityManager(restriction_repository, policy_repository)
 
     def access_service(
             self, ranking_repository: RankingRepository,
@@ -162,14 +162,14 @@ class BaseFactory(Factory):
         credential_repository: CredentialRepository,
         dominion_repository: DominionRepository,
         role_repository: RoleRepository,
-        rule_repository: RuleRepository,
+        restriction_repository: RestrictionRepository,
         policy_repository: PolicyRepository,
         ranking_repository: RankingRepository
     ) -> StandardAutharkInformer:
         return StandardAutharkInformer(
             user_repository, credential_repository,
             dominion_repository, role_repository,
-            rule_repository, policy_repository,
+            restriction_repository, policy_repository,
             ranking_repository)
 
     def standard_composing_informer(

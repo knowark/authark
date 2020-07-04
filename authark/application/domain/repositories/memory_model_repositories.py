@@ -1,4 +1,4 @@
-from ..models import Credential, Dominion, Ranking, Role, User, Rule, Policy
+from ..models import Credential, Dominion, Ranking, Role, User, Restriction, Policy
 from .repository import Repository
 from .memory_repository import MemoryRepository
 
@@ -39,13 +39,13 @@ class MemoryRoleRepository(
     """Memory Role Repository"""
 
 
-class RuleRepository(Repository[Rule]):
-    model = Rule
+class RestrictionRepository(Repository[Restriction]):
+    model = Restriction
 
 
-class MemoryRuleRepository(
-        MemoryRepository, RuleRepository):
-    """Memory Rule Repository"""
+class MemoryRestrictionRepository(
+        MemoryRepository, RestrictionRepository):
+    """Memory Restriction Repository"""
 
 
 class PolicyRepository(Repository[Policy]):

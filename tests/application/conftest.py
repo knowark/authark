@@ -1,7 +1,7 @@
 from pytest import fixture
 from authark.application.domain.models import (
     User, Credential, Dominion, Role, Ranking,
-    Rule, Policy)
+    Restriction, Policy)
 from authark.application.domain.common import (
     QueryParser, StandardTenantProvider, Tenant,
     StandardAuthProvider, User as CUser)
@@ -11,7 +11,7 @@ from authark.application.domain.repositories import (
     DominionRepository, MemoryDominionRepository,
     RoleRepository, MemoryRoleRepository,
     RankingRepository, MemoryRankingRepository,
-    RuleRepository, MemoryRuleRepository,
+    RestrictionRepository, MemoryRestrictionRepository,
     PolicyRepository, MemoryPolicyRepository)
 from authark.application.domain.services import (
     TokenService, MemoryTokenService, AccessService,
@@ -97,23 +97,23 @@ def mock_dominion_repository(
 
 
 @fixture
-def mock_rule_repository(
-        mock_tenant_provider, parser) -> RuleRepository:
-    mock_rule_repository = MemoryRuleRepository(
+def mock_restriction_repository(
+        mock_tenant_provider, parser) -> RestrictionRepository:
+    mock_restriction_repository = MemoryRestrictionRepository(
         parser, mock_tenant_provider)
-    mock_rule_repository.load({
+    mock_restriction_repository.load({
         "default": {
-            "1": Rule(
-                id_ = "1",
-                group = "Group name",
-                name = "Rule name",
-                sequence = "1",
-                target = "Target name",
-                domain = "domain"
+            "1": Restriction(
+                id_="1",
+                group="Group name",
+                name="Restriction name",
+                sequence="1",
+                target="Target name",
+                domain="domain"
             )
         }
     })
-    return mock_rule_repository
+    return mock_restriction_repository
 
 
 @fixture
@@ -124,11 +124,11 @@ def mock_policy_repository(
     mock_policy_repository.load({
         "default": {
             "1": Policy(
-                id_ = "1",
-                resource = "Resource name",
-                privilege = "Privilege name",
-                role = "Role name",
-                rule = "Rule name",
+                id_="1",
+                resource="Resource name",
+                privilege="Privilege name",
+                role="Role name",
+                restriction="Restriction name",
             )
         }
     })
@@ -264,11 +264,12 @@ def management_manager(
         mock_user_repository, mock_dominion_repository,
         mock_role_repository, mock_ranking_repository)
 
+
 @fixture
 def security_manager(
-        mock_rule_repository, mock_policy_repository):
+        mock_restriction_repository, mock_policy_repository):
     return SecurityManager(
-        mock_rule_repository, mock_policy_repository)
+        mock_restriction_repository, mock_policy_repository)
 
 
 @fixture

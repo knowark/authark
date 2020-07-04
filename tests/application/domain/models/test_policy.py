@@ -9,7 +9,7 @@ def policy():
         resource="Resource name",
         privilege="Privilege name",
         role_id="1",
-        rule="Rule name",
+        restriction="Restriction name",
     )
 
 
@@ -22,4 +22,4 @@ def test_policy_attributes(policy):
     assert policy.resource == "Resource name"
     assert policy.privilege == "Privilege name"
     assert policy.role_id == "1"
-    assert policy.rule == "Rule name"
+    assert policy.restriction == "Restriction name"

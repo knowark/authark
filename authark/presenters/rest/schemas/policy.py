@@ -11,4 +11,4 @@ class PolicySchema(EntitySchema):
     resource = fields.Str(required=True, example="Name resource")
     privilege = fields.Str(required=True, example="Name privilege")
     role = fields.Str(required=True, example="Name role")
-    rule = fields.Str(required=True, example="Name rule")
+    restriction = fields.Str(required=True, example="Name restriction")
