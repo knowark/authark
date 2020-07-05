@@ -1,3 +1,4 @@
+from tests.application.domain.models.test_dominion import dominion
 from widark import (
     Frame, Listbox, Label, Entry,
     Event, Modal, Button, Spacer, Color)
@@ -16,12 +17,14 @@ class RolesModal(Modal):
     def build(self) -> None:
         super().build()
         self.modal = None
-        frame = Frame(
-            self, title='Roles').title_style(Color.WARNING()).weight(4, 2)
+        frame = Frame(self, title=f'{self.dominion["name"]} Roles'
+                      ).title_style(Color.WARNING()).weight(4, 2)
 
         Button(frame, content='\U00002795 Create',
                command=self.on_create).grid(0, 0)
-        Listbox(frame, data=['ID', 'Name', 'Description'],
+        Button(frame, content='\U00002716 Cancel',
+               command=self.on_cancel).style(Color.WARNING()).grid(0, 1)
+        Listbox(frame, data=['Name', 'Description'],
                 orientation='horizontal').grid(1).span(col=3)
 
         self.body = Listbox(
@@ -43,24 +46,27 @@ class RolesModal(Modal):
     async def load(self) -> None:
         roles = await self.authark_informer.search(
             'role', [('dominion_id', '=', self.dominion['id'])])
-        self.body.setup(data=roles, fields=['id', 'name', 'description'],
+        self.body.setup(data=roles, fields=['name', 'description'],
                         limit=10).connect()
 
     async def on_body(self, event: Event) -> None:
         self.role = getattr(event.target.parent, 'item', None)
-        if self.dominion:
+        if self.role:
             self.modal = RoleDetailsModal(
                 self, injector=self.injector, role=self.role,
                 done_command=self.on_modal_done,
                 proportion={'height': 0.50, 'width': 0.70}).launch()
 
     async def on_create(self, event: Event) -> None:
-        role = {'name': '', 'dominion_id': self.dominion['id'],
+        role = {'id': '', 'name': '', 'dominion_id': self.dominion['id'],
                 'description': ''}
         self.modal = RoleDetailsModal(
             self, injector=self.injector, role=role,
             done_command=self.on_modal_done,
             proportion={'height': 0.70, 'width': 0.70}).launch()
+
+    async def on_cancel(self, event: Event) -> None:
+        await self.done({'result': 'cancelled'})
 
 
 class RoleDetailsModal(Modal):
@@ -82,6 +88,8 @@ class RoleDetailsModal(Modal):
         Label(frame, content='Description:').grid(1, 0)
         self.description = Entry(frame, content=self.role['description']).style(
             border=[0]).grid(1, 1).weight(col=2)
+        Label(frame, content='ID:').grid(2, 0)
+        Label(frame, content=f'{self.role["id"]}').grid(2, 1)
 
         menu = Frame(self, title='Menu').grid(col=1)
         Button(menu, content='Policies',

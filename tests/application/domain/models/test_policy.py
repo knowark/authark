@@ -20,6 +20,7 @@ def test_policy_creation(policy):
 def test_policy_attributes(policy):
     assert policy.id == "1"
     assert policy.resource == "Resource name"
+    assert policy.active is False
     assert policy.privilege == "Privilege name"
     assert policy.role_id == "1"
     assert policy.restriction == "Restriction name"

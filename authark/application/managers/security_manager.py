@@ -19,8 +19,8 @@ class SecurityManager:
         await self.restriction_repository.add(restrictions)
 
     async def create_policy(self, policy_dicts: RecordList) -> None:
-        policies: List[Policy] = ([Policy(**policy_dict)
-                                   for policy_dict in policy_dicts])
+        policies: List[Policy] = [Policy(**policy_dict)
+                                  for policy_dict in policy_dicts]
         await self.policy_repository.add(policies)
 
     async def remove_restriction(self, restriction_ids: List[str]) -> bool:
