@@ -41,12 +41,63 @@ async def test_roles_modal_on_modal_done(roles_modal):
     assert len(roles_modal.body.data) == 1
 
 
+async def test_roles_modal_on_body(roles_modal):
+    def target(item_):
+        class MockTarget:
+            class parent:
+                item = item_
+        return MockTarget()
+
+    event = Event('Mouse', 'click')
+    event.target = target(None)
+
+    await roles_modal.on_body(event)
+    assert roles_modal.modal is None
+
+    event.target = target({'id': '1', 'name': 'admin',
+                           'dominion_id': '1', 'description': ''})
+
+    await roles_modal.on_body(event)
+    await asyncio.sleep(0)
+
+    assert roles_modal.modal is not None
+
+
 async def test_roles_modal_on_create(roles_modal):
     event = Event('Mouse', 'click')
     await roles_modal.on_create(event)
     await asyncio.sleep(0)
     assert roles_modal.modal.role == {
-        'name': '', 'description': '', 'dominion_id': '1'}
+        'name': '', 'description': '', 'dominion_id': '1', 'id': ''}
+
+
+async def test_roles_modal_on_modal_done(roles_modal):
+    roles_modal.role = {'id': '1', 'name': 'admin',
+                        'dominion_id': '1', 'description': ''}
+    event = Event('Custom', 'done', details={'result': 'policies'})
+    await roles_modal.on_modal_done(event)
+
+    assert type(roles_modal.modal).__name__ == 'PoliciesModal'
+
+    event = Event('Custom', 'done', details={'result': 'other'})
+    await roles_modal.on_modal_done(event)
+    await asyncio.sleep(0)
+
+    assert len(roles_modal.body.data) == 1
+
+
+async def test_roles_modal_on_cancel(roles_modal):
+    event = Event('Mouse', 'click')
+    given_result = None
+
+    async def mock_done(self, result):
+        nonlocal given_result
+        given_result = result
+
+    roles_modal.done = MethodType(mock_done, roles_modal)
+
+    await roles_modal.on_cancel(event)
+    assert given_result == {'result': 'cancelled'}
 
 
 async def test_role_details_modal_on_buttons(role_details_modal):

@@ -125,7 +125,7 @@ class CheckFactory(CryptoFactory):
             query_parser, tenant_provider)
         policy_repository.load({'default': {
             "1": Policy(id='1', resource='resource', privilege='privilege',
-                        role="name role", restriction="name restriction")
+                        role_id="1")
         }})
         return policy_repository
 

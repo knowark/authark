@@ -8,8 +8,7 @@ def policy():
         id="1",
         resource="Resource name",
         privilege="Privilege name",
-        role_id="1",
-        restriction="Restriction name",
+        role_id="1"
     )
 
 
@@ -23,4 +22,3 @@ def test_policy_attributes(policy):
     assert policy.active is False
     assert policy.privilege == "Privilege name"
     assert policy.role_id == "1"
-    assert policy.restriction == "Restriction name"

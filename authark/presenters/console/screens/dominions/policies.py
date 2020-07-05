@@ -86,10 +86,6 @@ class PolicyDetailsModal(Modal):
         Label(frame, content='ID:').grid(3, 0)
         Label(frame, content=f'{self.policy["id"]}').grid(3, 1)
 
-    #     menu = Frame(self, title='Menu').grid(col=1)
-    #     Button(menu, content='Roles', command=self.on_roles).style(border=[0])
-    #     Spacer(menu).grid(1)
-
         actions = Frame(
             self, title='Actions').title_style(
                 Color.WARNING()).grid(1).span(col=2)
@@ -118,6 +114,3 @@ class PolicyDetailsModal(Modal):
     async def on_delete(self, event: Event) -> None:
         await self.security_manager.remove_policy([self.policy['id']])
         await self.done({'result': 'deleted'})
-
-    async def on_roles(self, event: Event) -> None:
-        await self.done({'result': 'roles'})

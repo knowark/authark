@@ -60,6 +60,7 @@ async def test_dominions_screen_on_create(dominions_screen):
 
 
 async def test_dominions_screen_on_modal_done(dominions_screen):
+    dominions_screen.dominion = {'id': '1', 'name': 'Proser', 'url': ''}
     event = Event('Custom', 'done', details={'result': 'roles'})
     await dominions_screen.on_modal_done(event)
 

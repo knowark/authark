@@ -1,4 +1,3 @@
-from tests.application.domain.models.test_dominion import dominion
 from widark import (
     Frame, Listbox, Label, Entry,
     Event, Modal, Button, Spacer, Color)
