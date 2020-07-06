@@ -4,3 +4,4 @@ from .user import UserSchema
 from .restriction import RestrictionSchema
 from .policy import PolicySchema
 from .ranking import RankingSchema
+from .role import RoleSchema

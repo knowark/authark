@@ -9,7 +9,7 @@ from ..rest import RestApplication
 from ..console import ConsoleApplication
 
 logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger()
+logger = logging.getLogger(__name__)
 
 
 class Shell:

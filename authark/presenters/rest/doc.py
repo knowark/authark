@@ -1,7 +1,7 @@
 from apispec import APISpec
 from apispec.ext.marshmallow import MarshmallowPlugin
 from .schemas import (
-    UserSchema, TokenRequestSchema, TokenSchema,
+    UserSchema, TokenRequestSchema, TokenSchema, RoleSchema,
     RestrictionSchema, PolicySchema, RankingSchema)
 
 
@@ -28,9 +28,10 @@ def _register_schemas(spec):
     spec.components.schema("User", schema=UserSchema)
     spec.components.schema("Token", schema=TokenSchema)
     spec.components.schema("TokenRequest", schema=TokenRequestSchema)
-    spec.components.schema("Restriction", schema=RestrictionSchema)
-    spec.components.schema("Policy", schema=PolicySchema)
+    spec.components.schema("Role", schema=RoleSchema)
     spec.components.schema("Ranking", schema=RankingSchema)
+    spec.components.schema("Policy", schema=PolicySchema)
+    spec.components.schema("Restriction", schema=RestrictionSchema)
 
 
 def _register_paths(spec):
@@ -48,6 +49,30 @@ def _register_paths(spec):
             'get': {
                 'tags': ['Users'],
                 'responses': _respond("Get all users", 'User')
+            },
+            'put': {
+                'tags': ['Users'],
+                'responses': _respond("Modify users", 'Users')
+            },
+            'delete': {
+                'tags': ['Users'],
+                'responses': _respond("Delete users", 'Users')
+            }
+        }
+    ).path(
+        path="/roles",
+        operations={
+            'get': {
+                'tags': ['Roles'],
+                'responses': _respond("Get all roles", 'Roles')
+            },
+            'put': {
+                'tags': ['Roles'],
+                'responses': _respond("Modify roles", 'Roles')
+            },
+            'delete': {
+                'tags': ['Roles'],
+                'responses': _respond("Delete roles", 'Roles')
             }
         }
     ).path(
