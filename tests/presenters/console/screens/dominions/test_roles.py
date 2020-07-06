@@ -4,7 +4,7 @@ from types import MethodType
 from pytest import fixture, mark
 from widark import Event
 from authark.presenters.console.screens.dominions.roles import (
-    RolesModal, RoleDetailsModal)
+    RolesModal, RoleDetailsModal, UsersSelectionModal)
 
 pytestmark = mark.asyncio
 
@@ -19,6 +19,12 @@ def roles_modal(root, injector):
 def role_details_modal(root, injector):
     role = {'id': '1', 'name': 'admin', 'dominion_id': '1', 'description': ''}
     return RoleDetailsModal(root, injector=injector, role=role)
+
+
+@fixture
+def users_selection_modal(root, injector):
+    role = {'id': '1', 'name': 'admin', 'dominion_id': '1', 'description': ''}
+    return UsersSelectionModal(root, injector=injector, role=role)
 
 
 async def test_roles_instantiation_defaults(roles_modal):
@@ -81,9 +87,14 @@ async def test_roles_modal_on_modal_done(roles_modal):
 
     event = Event('Custom', 'done', details={'result': 'other'})
     await roles_modal.on_modal_done(event)
-    await asyncio.sleep(0)
 
     assert len(roles_modal.body.data) == 1
+
+    event = Event('Custom', 'done', details={'result': 'users'})
+    await roles_modal.on_modal_done(event)
+    await asyncio.sleep(0)
+
+    assert type(roles_modal.modal).__name__ == 'UsersSelectionModal'
 
 
 async def test_roles_modal_on_cancel(roles_modal):
@@ -119,6 +130,9 @@ async def test_role_details_modal_on_buttons(role_details_modal):
     await role_details_modal.on_policies(event)
     assert given_result == {'result': 'policies'}
 
+    await role_details_modal.on_users(event)
+    assert given_result == {'result': 'users'}
+
 
 async def test_role_details_modal_on_save(role_details_modal):
     event = Event('Mouse', 'click')
@@ -137,3 +151,24 @@ async def test_role_details_modal_on_save(role_details_modal):
 
     assert given_roles == [{'description': '', 'dominion_id': '1',
                             'id': '1', 'name': 'admin'}]
+
+
+async def test_users_selection_modall_on_select(users_selection_modal):
+    def target(item_):
+        class MockTarget:
+            class parent:
+                item = item_
+        return MockTarget()
+
+    assert len(users_selection_modal.available.data) == 0
+    assert len(users_selection_modal.chosen.data) == 0
+
+    event = Event('Mouse', 'click')
+    event.target = target({'id': '1', 'name': 'admin',
+                           'dominion_id': '1', 'description': ''})
+
+    await users_selection_modal.on_select(event)
+    await asyncio.sleep(0)
+
+    assert len(users_selection_modal.available.data) == 0
+    assert len(users_selection_modal.chosen.data) == 1

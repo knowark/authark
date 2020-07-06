@@ -18,7 +18,7 @@ class RankingsModal(Modal):
             Color.WARNING()).weight(4, 2)
         Button(frame, content='\U00002795 Assign',
                command=self.on_assign).grid(0, 0)
-        Label(frame, content='"Shift + Click" to Delete').grid(0, 1)
+        Label(frame, content='"Middle click" to Delete').grid(0, 1)
         self.header = Listbox(
             frame, data=['ID', 'Role', 'Dominion'],
             orientation='horizontal').grid(1).span(col=3)
@@ -52,7 +52,7 @@ class RankingsModal(Modal):
         self.modal = RoleSelectionModal(
             self, injector=self.injector,
             done_command=self.on_modal_done,
-            proportion={'height': 0.70, 'width': 0.70}).launch().connect()
+            proportion={'height': 0.70, 'width': 0.70}).launch()
 
     async def assign_role(self, role_dict: Dict[str, str]) -> None:
         ranking_dict = {'user_id': self.user['id'], 'role_id': role_dict['id']}
@@ -61,7 +61,8 @@ class RankingsModal(Modal):
 
     async def on_body(self, event: Event) -> None:
         ranking = getattr(event.target.parent, 'item', None)
-        if ranking:
+        if ranking and event.button == 2:
+            event.stop = True
             await self.management_manager.deassign_role([ranking['id']])
             self.connect()
 

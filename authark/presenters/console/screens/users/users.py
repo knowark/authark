@@ -67,12 +67,12 @@ class UsersScreen(Frame):
             self.modal = RankingsModal(
                 self, injector=self.injector,
                 user=self.user,
-                done_command=self.on_modal_done).launch().connect()
+                done_command=self.on_modal_done).launch()
         elif event.details['result'] == 'credentials':
             self.modal = CredentialsModal(
                 self, injector=self.injector,
                 user=self.user,
-                done_command=self.on_modal_done).launch().connect()
+                done_command=self.on_modal_done).launch()
         else:
             await self.load()
         self.render()

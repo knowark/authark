@@ -58,7 +58,7 @@ class DominionsScreen(Frame):
                 self, injector=self.injector,
                 dominion=self.dominion,
                 proportion={'height': 1, 'width': 1},
-                done_command=self.on_modal_done).launch().connect()
+                done_command=self.on_modal_done).launch()
         else:
             await self.load()
         self.render()

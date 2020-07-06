@@ -34,13 +34,13 @@ class StatusScreen(Frame):
         self.modal = TenantsModal(
             self.root, injector=self.injector,
             done_command=self.on_modal_done,
-            proportion={'height': 0.60, 'width': 0.60}).launch().connect()
+            proportion={'height': 0.60, 'width': 0.60}).launch()
 
     async def on_provision(self, event: Event) -> None:
         self.modal = TenantProvisionModal(
             self.root, injector=self.injector,
             done_command=self.on_modal_done,
-            proportion={'height': 0.40, 'width': 0.60}).launch().connect()
+            proportion={'height': 0.40, 'width': 0.60}).launch()
 
     async def on_modal_done(self, event: Event) -> None:
         self.root.remove(self.modal)
