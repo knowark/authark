@@ -288,12 +288,12 @@ class UsersSelectionModal(Modal):
 
     def _switch(self, item: Optional[Dict[str, Any]],
                 source: Listbox, target: Listbox) -> None:
-        if item and item not in target.data:
-            target.data.append(item)
-            target.connect()
         if item and item in source.data:
             source.data.remove(item)
             source.connect()
+        if item and item not in target.data:
+            target.data.insert(0, item)
+            target.connect()
 
     async def on_save(self, event: Event) -> None:
         removing_ranking_ids = [
