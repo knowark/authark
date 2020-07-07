@@ -23,7 +23,6 @@ class StatusScreen(Frame):
             command=self.on_switch).style(Color.SUCCESS()).grid(0, 1)
         self.tenant_name = Label(self).grid(0, 2).weight(col=2)
         self.tenant_slug = Label(self).grid(0, 3).weight(col=2)
-        self.root.listen('click', self.on_backdrop_click, True)
 
     async def load(self) -> None:
         tenant = self.session_manager.get_tenant()
@@ -47,13 +46,6 @@ class StatusScreen(Frame):
         self.modal = None
         await self.dispatch(Event(
             'Custom', 'tenant_switch', details=event.details))
-
-    async def on_backdrop_click(self, event: Event) -> None:
-        if self.modal and not self.modal.hit(event):
-            event.stop = True
-            self.root.remove(self.modal)
-            self.modal = None
-            self.root.render()
 
 
 class TenantsModal(Modal):

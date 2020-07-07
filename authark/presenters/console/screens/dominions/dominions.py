@@ -25,8 +25,6 @@ class DominionsScreen(Frame):
             self, command=self.on_body,
         ).grid(3).span(col=3).weight(9)
 
-        self.listen('click', self.on_backdrop_click, True)
-
     async def load(self) -> None:
         dominions = await self.authark_informer.search('dominion')
         self.body.setup(
@@ -52,14 +50,6 @@ class DominionsScreen(Frame):
         self.modal = None
         await self.load()
         self.render()
-
-    async def on_backdrop_click(self, event: Event) -> None:
-        if self.modal and not self.modal.hit(event):
-            event.stop = True
-            self.remove(self.modal)
-            self.modal = None
-            await self.load()
-            self.render()
 
 
 class DominionDetailsModal(Modal):

@@ -68,34 +68,6 @@ async def test_dominions_screen_on_modal_done(dominions_screen):
     assert len(dominions_screen.body.data) == 1
 
 
-async def test_dominions_screen_on_backdrop_click(dominions_screen):
-    event = Event('Mouse', 'click')
-
-    await dominions_screen.on_backdrop_click(event)
-    assert dominions_screen.modal is None
-
-    removed = None
-
-    def mock_remove(self, widget):
-        nonlocal removed
-        removed = widget
-
-    dominions_screen.remove = MethodType(mock_remove, dominions_screen)
-
-    class MockModal:
-        def hit(self, event):
-            return False
-
-    mock_modal = MockModal()
-    dominions_screen.modal = mock_modal
-
-    await dominions_screen.on_backdrop_click(event)
-    await asyncio.sleep(0)
-
-    assert dominions_screen.modal is None
-    assert removed is mock_modal
-
-
 async def test_dominions_details_modal_on_save(dominion_details_modal):
     event = Event('Mouse', 'click')
 

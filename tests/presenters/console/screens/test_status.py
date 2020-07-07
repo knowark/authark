@@ -61,34 +61,6 @@ async def test_status_screen_on_switch(status_screen):
     assert type(status_screen.modal).__name__ == 'TenantsModal'
 
 
-async def test_statuss_screen_on_backdrop_click(status_screen):
-    event = Event('Mouse', 'click')
-
-    await status_screen.on_backdrop_click(event)
-    assert status_screen.modal is None
-
-    removed = None
-
-    def mock_remove(self, widget):
-        nonlocal removed
-        removed = widget
-
-    status_screen.remove = MethodType(mock_remove, status_screen)
-
-    class MockModal:
-        def hit(self, event):
-            return False
-
-    mock_modal = MockModal()
-    status_screen.modal = mock_modal
-
-    await status_screen.on_backdrop_click(event)
-    await asyncio.sleep(0)
-
-    assert status_screen.modal is None
-    assert removed is mock_modal
-
-
 async def test_tenants_modal_on_body(tenants_modal):
     given_details = None
 

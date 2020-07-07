@@ -27,7 +27,6 @@ class UsersScreen(Frame):
             orientation='horizontal').grid(1).span(col=3)
         self.body = Listbox(
             self, command=self.on_body).grid(3).span(col=3).weight(9)
-        self.listen('click', self.on_backdrop_click, True)
         self.search.listen('keydown', self.on_search, True)
 
     async def load(self) -> None:
@@ -77,15 +76,6 @@ class UsersScreen(Frame):
             await self.load()
         self.render()
         self.body.focus()
-
-    async def on_backdrop_click(self, event: Event) -> None:
-        if self.modal and not self.modal.hit(event):
-            event.stop = True
-            self.remove(self.modal)
-            self.modal = None
-            await self.load()
-            self.render()
-            self.body.focus()
 
 
 class UserDetailsModal(Modal):

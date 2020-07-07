@@ -104,34 +104,6 @@ async def test_users_screen_on_modal_done(users_screen):
     assert len(users_screen.body.data) == 2
 
 
-async def test_users_screen_on_backdrop_click(users_screen):
-    event = Event('Mouse', 'click')
-
-    await users_screen.on_backdrop_click(event)
-    assert users_screen.modal is None
-
-    removed = None
-
-    def mock_remove(self, widget):
-        nonlocal removed
-        removed = widget
-
-    users_screen.remove = MethodType(mock_remove, users_screen)
-
-    class MockModal:
-        def hit(self, event):
-            return False
-
-    mock_modal = MockModal()
-    users_screen.modal = mock_modal
-
-    await users_screen.on_backdrop_click(event)
-    await asyncio.sleep(0)
-
-    assert users_screen.modal is None
-    assert removed is mock_modal
-
-
 async def test_users_details_modal_on_save(user_details_modal):
     event = Event('Mouse', 'click')
 
