@@ -1,6 +1,6 @@
 from typing import Dict, Any
 from widark import Application, Event, Frame, Color, Listbox, Spacer
-from .screens import StatusScreen, UsersScreen, DominionsScreen
+from .screens import StatusScreen, UsersScreen, RolesScreen, DominionsScreen
 
 
 class ConsoleApplication(Application):
@@ -27,6 +27,9 @@ class ConsoleApplication(Application):
         if item['tag'] == 'users':
             self.body.clear()
             UsersScreen(self.body, injector=self.injector).connect()
+        if item['tag'] == 'roles':
+            self.body.clear()
+            RolesScreen(self.body, injector=self.injector).connect()
         elif item['tag'] == 'dominions':
             self.body.clear()
             DominionsScreen(self.body, injector=self.injector).connect()
@@ -46,6 +49,7 @@ class ConsoleApplication(Application):
             Color.PRIMARY()).style(border=[0]).span(2)
         Listbox(self.menu, data=[
             {'label': '\U0001F6B9 Users', 'tag': 'users'},
-            {'label': '\U0001F3DA Dominions', 'tag': 'dominions'},
+            {'label': '\U0001F510 Roles', 'tag': 'roles'},
+            {'label': '\U0000269B Dominions', 'tag': 'dominions'},
         ], command=self.on_menu_click, fields=['label'])
-        Spacer(self.menu).grid(1).weight(2)
+        Spacer(self.menu).grid(1).weight(1)

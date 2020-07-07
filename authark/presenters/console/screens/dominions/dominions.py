@@ -1,7 +1,6 @@
 from widark import (
-    Frame, Listbox, Listitem, Label, Entry,
+    Frame, Listbox, Label, Entry,
     Event, Modal, Button, Spacer, Color)
-from .roles import RolesModal
 
 
 class DominionsScreen(Frame):
@@ -17,9 +16,7 @@ class DominionsScreen(Frame):
         self.style(Color.SUCCESS())
         Button(self, content='\U00002795 Create',
                command=self.on_create).grid(0, 0)
-        Label(self, content='\U0001F50D Search:').grid(0, 1)
-        self.search = Entry(self, content=' ').grid(0, 2).style(
-            border=[0]).weight(col=3)
+        Spacer(self).grid(0, 1).weight(col=2)
         self.header = Listbox(
             self, data=['ID', 'Name', 'URL'],
             orientation='horizontal').grid(1).span(col=3)
@@ -41,26 +38,19 @@ class DominionsScreen(Frame):
             self.modal = DominionDetailsModal(
                 self, injector=self.injector, dominion=self.dominion,
                 done_command=self.on_modal_done,
-                proportion={'height': 0.50, 'width': 0.70}).launch()
+                proportion={'height': 0.67, 'width': 0.67}).launch()
 
     async def on_create(self, event: Event) -> None:
         dominion = {'name': '', 'url': ''}
         self.modal = DominionDetailsModal(
             self, injector=self.injector, dominion=dominion,
             done_command=self.on_modal_done,
-            proportion={'height': 0.50, 'width': 0.50}).launch()
+            proportion={'height': 0.67, 'width': 0.67}).launch()
 
     async def on_modal_done(self, event: Event) -> None:
         self.remove(self.modal)
         self.modal = None
-        if self.dominion and event.details['result'] == 'roles':
-            self.modal = RolesModal(
-                self, injector=self.injector,
-                dominion=self.dominion,
-                proportion={'height': 1, 'width': 1},
-                done_command=self.on_modal_done).launch()
-        else:
-            await self.load()
+        await self.load()
         self.render()
 
     async def on_backdrop_click(self, event: Event) -> None:
@@ -91,10 +81,7 @@ class DominionDetailsModal(Modal):
         Label(frame, content='URL:').grid(1, 0)
         self.url = Entry(frame, content=self.dominion['url']).style(
             border=[0]).grid(1, 1).weight(col=2)
-
-        menu = Frame(self, title='Menu').grid(col=1)
-        Button(menu, content='Roles', command=self.on_roles).style(border=[0])
-        Spacer(menu).grid(1)
+        Spacer(frame).grid(2).span(col=2)
 
         actions = Frame(
             self, title='Actions').title_style(

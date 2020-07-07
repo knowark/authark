@@ -4,30 +4,31 @@ from widark import (
 from .policies import PoliciesModal
 
 
-class RolesModal(Modal):
-    def setup(self, **context) -> 'RolesModal':
+class RolesScreen(Frame):
+    def setup(self, **context) -> 'RolesScreen':
         self.injector = context['injector']
         self.authark_informer = self.injector['AutharkInformer']
         self.management_manager = self.injector['ManagementManager']
-        self.dominion = context['dominion']
+        self.dominion = {}
         self.role = None
         return super().setup(**context) and self
 
     def build(self) -> None:
         super().build()
         self.modal = None
-        frame = Frame(self, title=f'{self.dominion["name"]} Roles'
-                      ).title_style(Color.WARNING()).weight(4, 2)
+        self.title = 'Roles'
 
-        Button(frame, content='\U00002795 Create',
+        Button(self, content='\U00002795 Create',
                command=self.on_create).grid(0, 0)
-        Button(frame, content='\U00002716 Cancel',
-               command=self.on_cancel).style(Color.WARNING()).grid(0, 1)
-        Listbox(frame, data=['Name', 'Description'],
+        Button(self, content='Dominion',
+               command=self.on_dominion).style(Color.SUCCESS()).grid(0, 1)
+        self.dominion_label = Label(
+            self, content=f'{self.dominion.get("name")}').grid(0, 2)
+        Listbox(self, data=['Name', 'Description'],
                 orientation='horizontal').grid(1).span(col=3)
 
         self.body = Listbox(
-            frame, command=self.on_body).grid(3).span(col=3).weight(9)
+            self, command=self.on_body).grid(2).span(col=3).weight(9)
 
     async def on_modal_done(self, event: Event) -> None:
         self.remove(self.modal)
@@ -49,10 +50,14 @@ class RolesModal(Modal):
         self.render()
 
     async def load(self) -> None:
+        self.dominion = self.dominion or next(iter(
+            await self.authark_informer.search('dominion')), {'id': 'None'})
         roles = await self.authark_informer.search(
-            'role', [('dominion_id', '=', self.dominion['id'])])
-        self.body.setup(data=roles, fields=['name', 'description'],
-                        limit=10).connect()
+            'role', [('dominion_id', '=', self.dominion.get('id'))])
+        self.body.setup(
+            data=roles, fields=['name', 'description'], limit=20).connect()
+        self.dominion_label.setup(
+            content=f'{self.dominion.get("name")}').render()
 
     async def on_body(self, event: Event) -> None:
         self.role = getattr(event.target.parent, 'item', None)
@@ -60,10 +65,21 @@ class RolesModal(Modal):
             self.modal = RoleDetailsModal(
                 self, injector=self.injector, role=self.role,
                 done_command=self.on_modal_done,
-                proportion={'height': 0.50, 'width': 0.70}).launch()
+                proportion={'height': 0.67, 'width': 0.80}).launch()
+
+    async def on_dominion(self, event: Event) -> None:
+        self.modal = DominionsModal(
+            self, injector=self.injector,
+            done_command=self.on_dominion_switch,
+            proportion={'height': 0.60, 'width': 0.80}
+        ).launch()
+
+    async def on_dominion_switch(self, event: Event) -> None:
+        self.dominion = event.details
+        self.connect()
 
     async def on_create(self, event: Event) -> None:
-        role = {'id': '', 'name': '', 'dominion_id': self.dominion['id'],
+        role = {'id': '', 'name': '', 'dominion_id': self.dominion.get('id'),
                 'description': ''}
         self.modal = RoleDetailsModal(
             self, injector=self.injector, role=role,
@@ -72,6 +88,26 @@ class RolesModal(Modal):
 
     async def on_cancel(self, event: Event) -> None:
         await self.done({'result': 'cancelled'})
+
+
+class DominionsModal(Modal):
+    def setup(self, **context) -> 'DominionsModal':
+        self.authark_informer = context['injector']['AutharkInformer']
+        return super().setup(**context) and self
+
+    def build(self) -> None:
+        super().build()
+        self.header = Listbox(self, data=['ID', 'Name'],
+                              orientation='horizontal')
+        self.body = Listbox(self, command=self.on_body).grid(1).weight(4)
+
+    async def load(self) -> None:
+        dominions = await self.authark_informer.search('dominion')
+        self.body.setup(data=dominions, fields=['id', 'name']).connect()
+
+    async def on_body(self, event: Event) -> None:
+        item = event.target.parent.item
+        await self.done(item)
 
 
 class RoleDetailsModal(Modal):

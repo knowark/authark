@@ -141,6 +141,7 @@ async def test_users_details_modal_on_save(user_details_modal):
         nonlocal given_users
         given_users = users
 
+    user_details_modal.build()
     user_details_modal.auth_manager.update = MethodType(
         mock_update, user_details_modal)
 

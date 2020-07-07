@@ -25,6 +25,7 @@ async def test_rankings_instantiation_defaults(rankings_modal):
 
 
 async def test_rankings_load(rankings_modal):
+    rankings_modal.build()
     await rankings_modal.load()
     await asyncio.sleep(0)
 
@@ -40,6 +41,7 @@ async def test_rankings_on_modal_done(rankings_modal):
         nonlocal assigned_role
         assigned_role = role_dict
 
+    rankings_modal.build()
     rankings_modal.management_manager.assign_role = MethodType(
         mock_assign_role, rankings_modal)
     await rankings_modal.on_modal_done(event)
@@ -67,6 +69,9 @@ async def test_rankings_on_body(rankings_modal):
         class MockTarget:
             class parent:
                 item = item_
+
+            def focus(self):
+                pass
         return MockTarget()
 
     deassigned_role = None
@@ -85,6 +90,7 @@ async def test_rankings_on_body(rankings_modal):
     assert deassigned_role is None
 
     event.target = target({'id': '1',  'user_id': '1', 'role_id': '1'})
+    event.button = 2
 
     await rankings_modal.on_body(event)
     await asyncio.sleep(0)
@@ -93,6 +99,7 @@ async def test_rankings_on_body(rankings_modal):
 
 
 async def test_role_selection_modal_load(role_selection_modal):
+    role_selection_modal.build()
     await role_selection_modal.load()
     await asyncio.sleep(0)
 

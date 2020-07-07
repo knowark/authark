@@ -18,6 +18,7 @@ async def test_credentials_instantiation_defaults(credentials_modal):
 
 
 async def test_credentials_load(credentials_modal):
+    credentials_modal.build()
     await credentials_modal.load()
 
     await asyncio.sleep(0)

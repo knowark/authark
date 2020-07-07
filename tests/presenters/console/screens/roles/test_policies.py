@@ -3,7 +3,7 @@ import asyncio
 from types import MethodType
 from pytest import fixture, mark
 from widark import Event
-from authark.presenters.console.screens.dominions.policies import (
+from authark.presenters.console.screens.roles.policies import (
     PoliciesModal, PolicyDetailsModal)
 
 pytestmark = mark.asyncio
@@ -27,6 +27,7 @@ async def test_policies_instantiation_defaults(policies_modal):
 
 
 async def test_policies_modal_load(policies_modal):
+    policies_modal.build()
     await policies_modal.load()
     await asyncio.sleep(0)
 
@@ -35,6 +36,7 @@ async def test_policies_modal_load(policies_modal):
 
 async def test_policies_modal_on_modal_done(policies_modal):
     event = Event('Custom', 'done', details={'result': 'default'})
+    policies_modal.build()
     await policies_modal.on_modal_done(event)
     await asyncio.sleep(0)
 
@@ -52,6 +54,7 @@ async def test_policies_screen_on_body(policies_modal):
     event = Event('Mouse', 'click')
     event.target = target(None)
 
+    policies_modal.build()
     await policies_modal.on_body(event)
     assert policies_modal.modal is None
 
@@ -113,6 +116,7 @@ async def test_policy_details_modal_on_save(policy_details_modal):
         nonlocal given_policies
         given_policies = policies
 
+    policy_details_modal.build()
     policy_details_modal.security_manager.create_policy = MethodType(
         create_policy, policy_details_modal)
 

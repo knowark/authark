@@ -61,11 +61,6 @@ async def test_dominions_screen_on_create(dominions_screen):
 
 async def test_dominions_screen_on_modal_done(dominions_screen):
     dominions_screen.dominion = {'id': '1', 'name': 'Proser', 'url': ''}
-    event = Event('Custom', 'done', details={'result': 'roles'})
-    await dominions_screen.on_modal_done(event)
-
-    assert type(dominions_screen.modal).__name__ == 'RolesModal'
-
     event = Event('Custom', 'done', details={'result': 'other'})
     await dominions_screen.on_modal_done(event)
     await asyncio.sleep(0)
@@ -110,6 +105,7 @@ async def test_dominions_details_modal_on_save(dominion_details_modal):
         nonlocal given_dominions
         given_dominions = dominions
 
+    dominion_details_modal.build()
     dominion_details_modal.management_manager.create_dominion = MethodType(
         mock_update, dominion_details_modal)
 

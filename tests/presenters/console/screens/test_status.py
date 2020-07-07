@@ -55,6 +55,12 @@ async def test_status_screen_on_modal_done(status_screen):
     assert status_screen.modal is None
 
 
+async def test_status_screen_on_switch(status_screen):
+    await status_screen.on_switch(Event('Mouse', 'click'))
+
+    assert type(status_screen.modal).__name__ == 'TenantsModal'
+
+
 async def test_statuss_screen_on_backdrop_click(status_screen):
     event = Event('Mouse', 'click')
 
@@ -90,6 +96,7 @@ async def test_tenants_modal_on_body(tenants_modal):
         nonlocal given_details
         given_details = details
 
+    tenants_modal.connect()
     tenants_modal.done = MethodType(mock_done, tenants_modal)
 
     def target(item_):
@@ -116,6 +123,7 @@ async def test_provision_modal_on_save(tenant_provision_modal):
         nonlocal given_tenants
         given_tenants = tenants
 
+    tenant_provision_modal.build()
     tenant_provision_modal.tenant_supplier.create_tenant = MethodType(
         mock_create_tenant, tenant_provision_modal)
 

@@ -50,18 +50,22 @@ async def test_application_on_menu_click(application):
 
     event.target = target({'tag': 'users'})
     await application.on_menu_click(event)
-    await asyncio.sleep(0)
 
     assert type(application.body.children[0]).__name__ == 'UsersScreen'
 
+    event.target = target({'tag': 'roles'})
+    await application.on_menu_click(event)
+
+    assert type(application.body.children[0]).__name__ == 'RolesScreen'
+
     event.target = target({'tag': 'dominions'})
     await application.on_menu_click(event)
-    await asyncio.sleep(1 / 15)
 
     assert type(application.body.children[0]).__name__ == 'DominionsScreen'
 
     event.target = target({'tag': 'other'})
     await application.on_menu_click(event)
+    await asyncio.sleep(0)
     assert type(application.body.children[0]).__name__ == 'DominionsScreen'
 
 
