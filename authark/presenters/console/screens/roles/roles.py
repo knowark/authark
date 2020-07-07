@@ -238,6 +238,7 @@ class UsersSelectionModal(Modal):
         if event.key == '\n':
             event.stop = True
             text = self.available_search.text.strip()
+            self.available.offset = 0
             self.available_domain = [] if not text else [
                 '|',  ('name', 'ilike', f'%{text}%'),
                 ('email', 'ilike', f'%{text}%')]
@@ -248,6 +249,7 @@ class UsersSelectionModal(Modal):
         if event.key == '\n':
             event.stop = True
             text = self.chosen_search.text.strip()
+            self.chosen.offset = 0
             self.chosen_domain = [] if not text else [
                 '|',  ('name', 'ilike', f'%{text}%'),
                 ('email', 'ilike', f'%{text}%')]
