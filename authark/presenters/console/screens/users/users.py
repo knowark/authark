@@ -45,6 +45,7 @@ class UsersScreen(Frame):
     async def on_search(self, event: Event) -> None:
         if event.key == '\n':
             event.stop = True
+            self.body.offset = 0
             text = self.search.text.strip()
             self.domain = [] if not text else [
                 '|',  ('name', 'ilike', f'%{text}%'),
