@@ -107,7 +107,7 @@ watchdog==0.9.0
 wcwidth==0.1.7
 webcolors==1.10
 Werkzeug==0.16.0
-widark==0.3.2
+widark==0.3.3
 wrapt==1.11.2
 yarl==1.4.2
 zipp==0.6.0
