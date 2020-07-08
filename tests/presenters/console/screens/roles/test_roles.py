@@ -291,7 +291,7 @@ async def test_users_selection_modal_on_choose_all(users_selection_modal):
     await asyncio.sleep(0)
 
     assert users_selection_modal.available.data == []
-    assert users_selection_modal.chosen.data == [item_2, item_1]
+    assert users_selection_modal.chosen.data == [item_1, item_2]
 
 
 async def test_users_selection_modal_on_clear(users_selection_modal):
@@ -321,7 +321,7 @@ async def test_users_selection_modal_on_clear_all(users_selection_modal):
     await asyncio.sleep(0)
 
     assert users_selection_modal.chosen.data == []
-    assert users_selection_modal.available.data == [item_2, item_1]
+    assert users_selection_modal.available.data == [item_1, item_2]
 
 
 async def test_users_selection_modal_on_cancel(users_selection_modal):
