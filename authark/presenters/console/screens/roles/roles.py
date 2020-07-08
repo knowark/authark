@@ -284,8 +284,10 @@ class UsersSelectionModal(Modal):
         self._update_totals()
 
     async def on_choose_all(self, event: Event) -> None:
-        for item in list(self.available.data):
-            self._switch(item, self.available, self.chosen)
+        self.chosen.data = list(self.available.data + self.chosen.data)
+        self.available.data = []
+        self.chosen.connect()
+        self.available.connect()
         self._update_totals()
 
     async def on_clear(self, event: Event) -> None:
@@ -293,8 +295,10 @@ class UsersSelectionModal(Modal):
         self._update_totals()
 
     async def on_clear_all(self, event: Event) -> None:
-        for item in list(self.chosen.data):
-            self._switch(item, self.chosen, self.available)
+        self.available.data = list(self.available.data + self.chosen.data)
+        self.chosen.data = []
+        self.available.connect()
+        self.chosen.connect()
         self._update_totals()
 
     def _update_totals(self) -> None:
