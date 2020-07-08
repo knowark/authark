@@ -194,9 +194,13 @@ class UsersSelectionModal(Modal):
             5, 4).grid(0, 0)
         self.available_search = Entry(
             available_frame, command=self.on_available_search).listen(
-                'keydown', self.on_available_search, True)
+                'keydown', self.on_available_search, True).weight(
+                    col=2).grid(0, 0)
+        self.available_total = Label(
+            available_frame, content='Total: 0').grid(0, 1)
         self.available = Listbox(
-            available_frame, command=self.on_select).weight(9).grid(1)
+            available_frame, command=self.on_select).weight(
+                9).span(col=2).grid(1)
 
         switchers = Frame(self).title_style(
             Color.SUCCESS()).style(border=[]).weight(5).grid(0, 1)
@@ -215,7 +219,9 @@ class UsersSelectionModal(Modal):
         chosen_frame = Frame(self, title='Chosen').weight(
             5, 4).grid(0, 2)
         self.chosen_search = Entry(chosen_frame).listen(
-            'keydown', self.on_chosen_search, True)
+            'keydown', self.on_chosen_search, True).weight(col=2).grid(0, 0)
+        self.chosen_total = Label(
+            chosen_frame, content='Total: 0').grid(0, 1)
         self.chosen = Listbox(
             chosen_frame, command=self.on_select).weight(9).grid(1)
 
@@ -271,20 +277,31 @@ class UsersSelectionModal(Modal):
         self.chosen.setup(data=chosen_users,
                           fields=['username', 'email'],
                           limit=20).connect()
+        self._update_totals()
 
     async def on_choose(self, event: Event) -> None:
         self._switch(self.focused, self.available, self.chosen)
+        self._update_totals()
 
     async def on_choose_all(self, event: Event) -> None:
         for item in list(self.available.data):
             self._switch(item, self.available, self.chosen)
+        self._update_totals()
 
     async def on_clear(self, event: Event) -> None:
         self._switch(self.focused, self.chosen, self.available)
+        self._update_totals()
 
     async def on_clear_all(self, event: Event) -> None:
         for item in list(self.chosen.data):
             self._switch(item, self.chosen, self.available)
+        self._update_totals()
+
+    def _update_totals(self) -> None:
+        self.available_total.setup(
+            content=f'Total: {len(self.available.data)}').render()
+        self.chosen_total.setup(
+            content=f'Total: {len(self.chosen.data)}').render()
 
     def _switch(self, item: Optional[Dict[str, Any]],
                 source: Listbox, target: Listbox) -> None:
