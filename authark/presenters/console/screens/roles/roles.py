@@ -223,7 +223,8 @@ class UsersSelectionModal(Modal):
         self.chosen_total = Label(
             chosen_frame, content='Total: 0').grid(0, 1)
         self.chosen = Listbox(
-            chosen_frame, command=self.on_select).weight(9).grid(1)
+            chosen_frame, command=self.on_select).weight(
+                9).span(col=2).grid(1)
 
         actions = Frame(
             self, title='Actions').title_style(
