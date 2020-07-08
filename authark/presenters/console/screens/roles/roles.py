@@ -206,15 +206,15 @@ class UsersSelectionModal(Modal):
             Color.SUCCESS()).style(border=[]).weight(5).grid(0, 1)
 
         Button(switchers, content='\U000025B6', command=self.on_choose).style(
-            Color.SUCCESS(), border=[]).grid(0)
+            Color.SUCCESS(), border=[], template='{}').grid(0)
         Button(switchers, content='\U000025C0', command=self.on_clear).style(
-            Color.SUCCESS(), border=[]).grid(1)
+            Color.SUCCESS(), border=[], template='{}').grid(1)
         Button(switchers, content='\U000023E9',
                command=self.on_choose_all).style(
-            Color.SUCCESS(), border=[]).grid(2)
+            Color.SUCCESS(), border=[], template='{}').grid(2)
         Button(switchers, content='\U000023EA',
                command=self.on_clear_all).style(
-            Color.SUCCESS(), border=[]).grid(3)
+            Color.SUCCESS(), border=[], template='{}').grid(3)
 
         chosen_frame = Frame(self, title='Chosen').weight(
             5, 4).grid(0, 2)
