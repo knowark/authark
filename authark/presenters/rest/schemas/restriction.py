@@ -6,8 +6,9 @@ class RestrictionSchema(EntitySchema):
     class Meta:
         unknown = EXCLUDE
 
-    group = fields.Str(required=True, example="Name Group")
+    policy_id = fields.Str(data_key='policyId', required=True,
+                           example="e6d17f7c-a2a2-4670-ba0d-ff66d4acd4a4")
     sequence = fields.Str(required=True, example="1")
-    target = fields.Str(required=True, example="Name Target")
-    domain = fields.Str(required=True, example="domain")
-    name = fields.Str(required=True, example="name restriction")
+    name = fields.Str(required=True, example="Restriction name")
+    target = fields.Str(required=True, example="Name resource")
+    domain = fields.Str(required=True, example="[['user_id', '=', '123']]")
