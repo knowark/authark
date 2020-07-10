@@ -6,7 +6,7 @@ class Restriction(Entity):
         super().__init__(**attributes)
         self.id = attributes.get('id', '')
         self.policy_id = attributes.get('policy_id', '')
-        self.sequence = attributes.get('sequence', '')
+        self.sequence = attributes.get('sequence', 0)
         self.name = attributes.get('name', '')
         self.target = attributes.get('target', '')
         self.domain = attributes.get('domain', '')

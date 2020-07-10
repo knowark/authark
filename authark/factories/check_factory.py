@@ -111,9 +111,9 @@ class CheckFactory(CryptoFactory):
         restriction_repository = super().memory_restriction_repository(
             query_parser, tenant_provider)
         restriction_repository.load({'default': {
-            "1": Restriction(id='1', group='group', sequence='1',
-                             name="name group", target="target name",
-                             domain="domain")
+            "1": Restriction(id='1', sequence='1',
+                             name="name group", policy_id='1',
+                             target="target name", domain="domain")
         }})
         return restriction_repository
 

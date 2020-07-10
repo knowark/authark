@@ -1,6 +1,7 @@
 from widark import (
     Frame, Listbox, Label, Entry,
     Event, Modal, Button, Spacer, Color)
+from .restrictions import RestrictionsModal
 
 
 class PoliciesModal(Modal):
@@ -32,7 +33,14 @@ class PoliciesModal(Modal):
     async def on_modal_done(self, event: Event) -> None:
         self.remove(self.modal)
         self.modal = None
-        await self.load()
+        if event.details['result'] == 'restrictions':
+            self.modal = RestrictionsModal(
+                self, injector=self.injector,
+                policy=self.policy,
+                proportion={'height': 0.90, 'width': 0.95},
+                done_command=self.on_modal_done).launch()
+        else:
+            await self.load()
         self.render()
 
     async def load(self) -> None:
@@ -86,6 +94,11 @@ class PolicyDetailsModal(Modal):
         Label(frame, content='ID:').grid(3, 0)
         Label(frame, content=f'{self.policy["id"]}').grid(3, 1)
 
+        menu = Frame(self, title='Menu').grid(col=1)
+        Button(menu, content='Restrictions',
+               command=self.on_restrictions).style(border=[0])
+        Spacer(menu).grid(1)
+
         actions = Frame(
             self, title='Actions').title_style(
                 Color.WARNING()).grid(1).span(col=2)
@@ -114,3 +127,6 @@ class PolicyDetailsModal(Modal):
     async def on_delete(self, event: Event) -> None:
         await self.security_manager.remove_policy([self.policy['id']])
         await self.done({'result': 'deleted'})
+
+    async def on_restrictions(self, event: Event) -> None:
+        await self.done({'result': 'restrictions'})

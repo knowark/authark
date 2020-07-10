@@ -1,5 +1,5 @@
 from typing import List
-from ..domain.models import Restriction, Policy, Dominion
+from ..domain.models import Restriction, Policy
 from ..domain.repositories import (
     RestrictionRepository, PolicyRepository)
 from ..domain.common import RecordList
@@ -10,12 +10,14 @@ class SecurityManager:
     def __init__(self, restriction_repository: RestrictionRepository,
                  policy_repository: PolicyRepository,
                  ) -> None:
-        self.restriction_repository: RestrictionRepository = restriction_repository
+        self.restriction_repository: RestrictionRepository = (
+            restriction_repository)
         self.policy_repository: PolicyRepository = policy_repository
 
     async def create_restriction(self, restriction_dicts: RecordList) -> None:
-        restrictions: List[Restriction] = ([Restriction(**restriction_dict)
-                                            for restriction_dict in restriction_dicts])
+        restrictions: List[Restriction] = (
+            [Restriction(**restriction_dict)
+             for restriction_dict in restriction_dicts])
         await self.restriction_repository.add(restrictions)
 
     async def create_policy(self, policy_dicts: RecordList) -> None:

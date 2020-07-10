@@ -35,13 +35,18 @@ async def test_policies_modal_load(policies_modal):
 
 
 async def test_policies_modal_on_modal_done(policies_modal):
-    event = Event('Custom', 'done', details={'result': 'default'})
     policies_modal.build()
+
+    event = Event('Custom', 'done', details={'result': 'default'})
+    await policies_modal.on_modal_done(event)
+    assert policies_modal.modal is None
+    assert len(policies_modal.body.data) == 1
+
+    event = Event('Custom', 'done', details={'result': 'restrictions'})
     await policies_modal.on_modal_done(event)
     await asyncio.sleep(0)
 
-    assert policies_modal.modal is None
-    assert len(policies_modal.body.data) == 1
+    assert type(policies_modal.modal).__name__ == 'RestrictionsModal'
 
 
 async def test_policies_screen_on_body(policies_modal):
@@ -105,6 +110,9 @@ async def test_policy_details_modal_on_buttons(policy_details_modal):
 
     await policy_details_modal.on_delete(event)
     assert given_result == {'result': 'deleted'}
+
+    await policy_details_modal.on_restrictions(event)
+    assert given_result == {'result': 'restrictions'}
 
 
 async def test_policy_details_modal_on_save(policy_details_modal):
