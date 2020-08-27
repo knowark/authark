@@ -1,4 +1,4 @@
-from .entity import Entity
+from modelark import Entity
 
 
 class Role(Entity):

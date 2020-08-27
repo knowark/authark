@@ -16,6 +16,14 @@ class TenantProvider(ABC):
     def tenant(self) -> Tenant:
         """Get the current tenant"""
 
+    @property
+    def location(self) -> str:
+        return self.tenant.slug
+
+    @property
+    def zone(self) -> str:
+        return self.tenant.zone
+
 
 tenant_var: ContextVar[Optional[Tenant]] = ContextVar('tenant', default=None)
 

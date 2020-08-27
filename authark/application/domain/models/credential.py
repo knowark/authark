@@ -1,5 +1,5 @@
 from typing_extensions import Literal
-from .entity import Entity
+from modelark import Entity
 
 
 class Credential(Entity):

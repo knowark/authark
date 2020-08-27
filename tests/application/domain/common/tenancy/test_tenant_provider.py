@@ -17,6 +17,8 @@ def test_standard_tenant_provider_setup(tenant_provider):
     tenant_provider.setup(None)
     tenant_provider.setup(tenant)
     assert tenant_provider.tenant == tenant
+    assert tenant_provider.location == 'alpina'
+    assert tenant_provider.zone == ''
 
 
 def test_standard_tenant_provider_get_tenant_not_set(tenant_provider):

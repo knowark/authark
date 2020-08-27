@@ -1,6 +1,6 @@
-from ..models import Credential, Dominion, Ranking, Role, User, Restriction, Policy
-from .repository import Repository
-from .memory_repository import MemoryRepository
+from modelark import Repository, MemoryRepository
+from ..models import (
+    Credential, Dominion, Ranking, Role, User, Restriction, Policy)
 
 
 class CredentialRepository(Repository[Credential]):

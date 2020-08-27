@@ -1,10 +1,10 @@
+from modelark import JsonRepository
 from ....application.domain.common import TenantProvider, QueryParser
 from ....application.domain.models import (
     Credential, Dominion, Ranking, Role, User, Restriction, Policy)
 from ....application.domain.repositories import (
     CredentialRepository, DominionRepository, RankingRepository,
     RoleRepository, UserRepository, RestrictionRepository, PolicyRepository)
-from .json_repository import JsonRepository
 
 
 class JsonCredentialRepository(JsonRepository, CredentialRepository):
@@ -14,7 +14,7 @@ class JsonCredentialRepository(JsonRepository, CredentialRepository):
                  tenant_provider: TenantProvider,
                  collection: str = 'credentials') -> None:
         super().__init__(data_path, parser, tenant_provider,
-                         collection, Credential)
+                         collection, Credential, )
 
 
 class JsonDominionRepository(JsonRepository, DominionRepository):
@@ -23,8 +23,8 @@ class JsonDominionRepository(JsonRepository, DominionRepository):
     def __init__(self, data_path: str, parser: QueryParser,
                  tenant_provider: TenantProvider,
                  collection: str = 'dominions') -> None:
-        super().__init__(data_path, parser, tenant_provider,
-                         collection, Dominion)
+        super().__init__(data_path, collection, Dominion,
+                         parser, tenant_provider)
 
 
 class JsonRankingRepository(JsonRepository, RankingRepository):
@@ -33,8 +33,8 @@ class JsonRankingRepository(JsonRepository, RankingRepository):
     def __init__(self, data_path: str, parser: QueryParser,
                  tenant_provider: TenantProvider,
                  collection: str = 'rankings') -> None:
-        super().__init__(data_path, parser, tenant_provider,
-                         collection, Ranking)
+        super().__init__(data_path, collection, Ranking,
+                         parser, tenant_provider)
 
 
 class JsonRoleRepository(JsonRepository, RoleRepository):
@@ -43,8 +43,8 @@ class JsonRoleRepository(JsonRepository, RoleRepository):
     def __init__(self, data_path: str, parser: QueryParser,
                  tenant_provider: TenantProvider,
                  collection: str = 'roles') -> None:
-        super().__init__(data_path, parser, tenant_provider,
-                         collection, Role)
+        super().__init__(data_path, collection, Role,
+                         parser, tenant_provider)
 
 
 class JsonRestrictionRepository(JsonRepository, RestrictionRepository):
@@ -53,8 +53,8 @@ class JsonRestrictionRepository(JsonRepository, RestrictionRepository):
     def __init__(self, data_path: str, parser: QueryParser,
                  tenant_provider: TenantProvider,
                  collection: str = 'restrictions') -> None:
-        super().__init__(data_path, parser, tenant_provider,
-                         collection, Restriction)
+        super().__init__(data_path, collection, Restriction,
+                         parser, tenant_provider)
 
 
 class JsonPolicyRepository(JsonRepository, PolicyRepository):
@@ -63,8 +63,8 @@ class JsonPolicyRepository(JsonRepository, PolicyRepository):
     def __init__(self, data_path: str, parser: QueryParser,
                  tenant_provider: TenantProvider,
                  collection: str = 'policies') -> None:
-        super().__init__(data_path, parser, tenant_provider,
-                         collection, Policy)
+        super().__init__(data_path, collection, Policy,
+                         parser, tenant_provider)
 
 
 class JsonUserRepository(JsonRepository, UserRepository):
@@ -73,5 +73,5 @@ class JsonUserRepository(JsonRepository, UserRepository):
     def __init__(self, data_path: str, parser: QueryParser,
                  tenant_provider: TenantProvider,
                  collection: str = 'users') -> None:
-        super().__init__(data_path, parser, tenant_provider,
-                         collection, User)
+        super().__init__(data_path, collection, User,
+                         parser, tenant_provider)

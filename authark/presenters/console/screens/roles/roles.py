@@ -1,5 +1,4 @@
-from authark.application.domain.models.entity import Entity
-from typing import Dict, Optional, Any
+from typing import List, Dict, Optional, Any
 from widark import (
     Frame, Listbox, Label, Entry,
     Event, Modal, Button, Spacer, Color)
@@ -11,7 +10,7 @@ class RolesScreen(Frame):
         self.injector = context['injector']
         self.authark_informer = self.injector['AutharkInformer']
         self.management_manager = self.injector['ManagementManager']
-        self.dominion = {}
+        self.dominion: Dict = {}
         self.role = None
         return super().setup(**context) and self
 
@@ -129,7 +128,8 @@ class RoleDetailsModal(Modal):
         self.name = Entry(frame, content=self.role['name']).style(
             border=[0]).grid(0, 1).weight(col=2)
         Label(frame, content='Description:').grid(1, 0)
-        self.description = Entry(frame, content=self.role['description']).style(
+        self.description = Entry(
+            frame, content=self.role['description']).style(
             border=[0]).grid(1, 1).weight(col=2)
         Label(frame, content='ID:').grid(2, 0)
         Label(frame, content=f'{self.role["id"]}').grid(2, 1)
@@ -181,9 +181,9 @@ class UsersSelectionModal(Modal):
         self.authark_informer = self.injector['AutharkInformer']
         self.management_manager = self.injector['ManagementManager']
         self.role = context['role']
-        self.focused = {}
-        self.available_domain = []
-        self.chosen_domain = []
+        self.focused: Dict = {}
+        self.available_domain: List = []
+        self.chosen_domain: List = []
         return super().setup(**context) and self
 
     def build(self) -> None:
@@ -239,7 +239,7 @@ class UsersSelectionModal(Modal):
     async def on_select(self, event: Event) -> None:
         item = getattr(event.target.parent, 'item', None)
         event.target.focus()
-        self.focused = item if isinstance(item, dict) else None
+        self.focused = item if isinstance(item, dict) else {}
 
     async def on_available_search(self, event: Event) -> None:
         if event.key == '\n':

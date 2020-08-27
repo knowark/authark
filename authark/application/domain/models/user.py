@@ -1,5 +1,5 @@
 from typing import Dict, Union
-from .entity import Entity
+from modelark import Entity
 
 
 Attributes = Dict[str, Union[int, str, float]]
