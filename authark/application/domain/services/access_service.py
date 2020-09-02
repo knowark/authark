@@ -36,6 +36,7 @@ class AccessService:
         return {
             'tid': tenant.id,
             'uid': user.id,
+            'tenant': tenant.name,
             'name': user.name,
             'email': user.email,
             'attributes': user.attributes,
