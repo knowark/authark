@@ -2,7 +2,7 @@ import curses
 from pytest import fixture
 from widark.widget import Widget
 from injectark import Injectark
-from authark.core import DEVELOPMENT_CONFIG
+from authark.core import config as global_config
 from authark.factories import strategy_builder, factory_builder
 from authark.presenters.console import ConsoleApplication
 
@@ -32,11 +32,17 @@ def root(stdscr):
 
 @fixture
 def config():
-    return DEVELOPMENT_CONFIG
+    config = dict(global_config)
+    config['factory'] = 'CheckFactory'
+    config['strategies'] = ['base', 'check']
+    return config
 
 
 @fixture
 def injector(config):
+    config['factory'] = 'CheckFactory'
+    config['strategies'] = ['base', 'check']
+
     strategy = strategy_builder.build(config['strategies'])
     factory = factory_builder.build(config)
 

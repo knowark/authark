@@ -1,3 +1,4 @@
+import os
 from typing import Dict, Any
 from pathlib import Path
 
@@ -5,12 +6,14 @@ from pathlib import Path
 Config = Dict[str, Any]
 
 
-BASE: Config = {
-    "mode": "BASE",
+config = {
+    "port": int(os.environ.get('AUTHARK_PORT', 6291)),
+    "factory": os.environ.get('AUTHARK_FACTORY', 'JsonFactory'),
+    "strategies": os.environ.get(
+        'AUTHARK_STRATEGIES', 'base,crypto,json').split(','),
     "environment": {
         "home": "/opt/authark"
     },
-    "port": 6291,
     "tokens": {
         "tenant": {
             "algorithm": "HS256",
@@ -29,36 +32,37 @@ BASE: Config = {
             "threshold": 86400
         }
     },
-    "strategies": ["base"],
-    "strategy": {},
     "tenancy": {
-        "json": Path.home() / "tenants.json",
+        "json": os.environ.get('AUTHARK_TENANCY_JSON',
+                               str(Path.home() / "tenants.json"))
     },
     "zones": {
         "default": {
-            "data": str(Path.home() / "data")
+            "data": os.environ.get('AUTHARK_ZONES_DEFAULT_DATA',
+                                   str(Path.home() / "data"))
         }
     },
     "export": {
         "type": "json",
-        "dir": Path.home() / "export"
-    },
+        "dir": os.environ.get('AUTHARK_EXPORT_DIR',
+                              str(Path.home() / "export"))
+    }
 }
 
-DEVELOPMENT_CONFIG: Config = {**BASE, **{
-    "mode": "DEV",
-    "factory": "CheckFactory",
-    "strategies": ["base", "check"]
-}}
+# DEVELOPMENT_CONFIG: Config = {**BASE, **{
+# "mode": "DEV",
+# "factory": "CheckFactory",
+# "strategies": ["base", "check"]
+# }}
 
 
-PRODUCTION_CONFIG: Config = {**BASE, **{
-    "mode": "PROD",
-    "factory": "JsonFactory",
-    "strategies": ["base", "crypto", "json"],
-    "zones": {
-        "default": {
-            "data": str(Path.home() / "data")
-        }
-    }
-}}
+# PRODUCTION_CONFIG: Config = {**BASE, **{
+# "mode": "PROD",
+# "factory": "JsonFactory",
+# "strategies": ["base", "crypto", "json"],
+# "zones": {
+# "default": {
+# "data": str(Path.home() / "data")
+# }
+# }
+# }}

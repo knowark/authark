@@ -1,14 +1,14 @@
 from pytest import fixture
 from injectark import Injectark
-from authark.core import DEVELOPMENT_CONFIG
+from authark.core import config
 from authark.factories import strategy_builder, factory_builder
 from authark.presenters.rest import RestApplication
 
 
 @fixture
 def app(loop, aiohttp_client):
-    """Create app testing client"""
-    config = DEVELOPMENT_CONFIG
+    config['factory'] = 'CheckFactory'
+    config['strategies'] = ['base', 'check']
     strategy = strategy_builder.build(config['strategies'])
     factory = factory_builder.build(config)
 

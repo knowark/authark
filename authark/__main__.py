@@ -9,9 +9,9 @@ import uvloop
 from json import loads
 from pathlib import Path
 from injectark import Injectark
-from .core import Config, PRODUCTION_CONFIG
 from .factories import factory_builder, strategy_builder
 from .presenters.shell import Shell
+from .core import config
 
 
 logging.basicConfig(level=logging.INFO)
@@ -19,10 +19,10 @@ logger = logging.getLogger(__name__)
 
 
 async def main(args=None):
-    config_path = Path(os.environ.get('AUTHARK_CONFIG', 'config.json'))
-    logger.info(f'Configuration: {config_path}')
-    config = loads(config_path.read_text()) if config_path.is_file() else {}
-    config: Config = {**PRODUCTION_CONFIG, **config}
+    # config_path = Path(os.environ.get('AUTHARK_CONFIG', 'config.json'))
+    # logger.info(f'Configuration: {config_path}')
+    # config = loads(config_path.read_text()) if config_path.is_file() else {}
+    # config: Config = {**PRODUCTION_CONFIG, **config}
 
     strategy = strategy_builder.build(config['strategies'])
     factory = factory_builder.build(config)
@@ -35,6 +35,7 @@ async def main(args=None):
 
 if __name__ == '__main__':
     uvloop.install()
-    loop = asyncio.get_event_loop()
-    loop.run_until_complete(main(sys.argv[1:]))
-    loop.close()
+    asyncio.run(main(sys.argv[1:]))
+    # loop = asyncio.get_event_loop()
+    # loop.run_until_complete(main(sys.argv[1:]))
+    # loop.close()
