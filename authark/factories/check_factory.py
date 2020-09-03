@@ -37,18 +37,17 @@ class CheckFactory(CryptoFactory):
         tenant_supplier = MemoryTenantSupplier()
         tenant_supplier.create_tenant({
             'id': '001',
-            'name': 'Default',
-            'zone': 'default'
+            'name': 'Default'
         })
         return tenant_supplier
 
     def memory_user_repository(
             self, query_parser: QueryParser,
-            tenant_provider: TenantProvider
-            # auth_provider: AuthProvider
+            tenant_provider: TenantProvider,
+            auth_provider: AuthProvider
     ) -> MemoryUserRepository:
         user_repository = super().memory_user_repository(
-            query_parser, tenant_provider)
+            query_parser, tenant_provider, auth_provider)
         user_repository.load({'default': {
             '1': User(
                 id="1",
@@ -63,11 +62,11 @@ class CheckFactory(CryptoFactory):
 
     def memory_credential_repository(
             self, query_parser: QueryParser,
-            tenant_provider: TenantProvider
-            # auth_provider: AuthProvider
+            tenant_provider: TenantProvider,
+            auth_provider: AuthProvider
     ) -> MemoryCredentialRepository:
         credential_repository = super().memory_credential_repository(
-            query_parser, tenant_provider)
+            query_parser, tenant_provider, auth_provider)
         refresh_token = jwt.encode(
             {'user': "pepe"}, 'REFRESHSECRET').decode('utf-8')
         credential_repository.load({'default': {
@@ -80,11 +79,11 @@ class CheckFactory(CryptoFactory):
 
     def memory_role_repository(
         self, query_parser: QueryParser,
-        tenant_provider: TenantProvider
-        # auth_provider: AuthProvider
+        tenant_provider: TenantProvider,
+        auth_provider: AuthProvider
     ) -> MemoryRoleRepository:
         role_repository = super().memory_role_repository(
-            query_parser, tenant_provider)
+            query_parser, tenant_provider, auth_provider)
         role_repository.load({'default': {
             "1": Role(id='1', name='admin', dominion_id='1',
                       description="Service's Administrator")
@@ -93,11 +92,11 @@ class CheckFactory(CryptoFactory):
 
     def memory_ranking_repository(
             self, query_parser: QueryParser,
-            tenant_provider: TenantProvider
-            # auth_provider: AuthProvider
+            tenant_provider: TenantProvider,
+            auth_provider: AuthProvider
     ) -> MemoryRankingRepository:
         ranking_repository = super().memory_ranking_repository(
-            query_parser, tenant_provider)
+            query_parser, tenant_provider, auth_provider)
         ranking_repository.load({'default': {
             "1": Ranking(id='1', user_id='1', role_id='1',
                          description="Service's Administrator")
@@ -106,10 +105,11 @@ class CheckFactory(CryptoFactory):
 
     def memory_restriction_repository(
             self, query_parser: QueryParser,
-            tenant_provider: TenantProvider
+            tenant_provider: TenantProvider,
+            auth_provider: AuthProvider
     ) -> MemoryRestrictionRepository:
         restriction_repository = super().memory_restriction_repository(
-            query_parser, tenant_provider)
+            query_parser, tenant_provider, auth_provider)
         restriction_repository.load({'default': {
             "1": Restriction(id='1', sequence='1',
                              name="name group", policy_id='1',
@@ -119,10 +119,11 @@ class CheckFactory(CryptoFactory):
 
     def memory_policy_repository(
             self, query_parser: QueryParser,
-            tenant_provider: TenantProvider
+            tenant_provider: TenantProvider,
+            auth_provider: AuthProvider
     ) -> MemoryPolicyRepository:
         policy_repository = super().memory_policy_repository(
-            query_parser, tenant_provider)
+            query_parser, tenant_provider, auth_provider)
         policy_repository.load({'default': {
             "1": Policy(id='1', resource='resource', privilege='privilege',
                         role_id="1")
@@ -131,11 +132,11 @@ class CheckFactory(CryptoFactory):
 
     def memory_dominion_repository(
             self, query_parser: QueryParser,
-            tenant_provider: TenantProvider
-            # auth_provider: AuthProvider
+            tenant_provider: TenantProvider,
+            auth_provider: AuthProvider
     ) -> MemoryDominionRepository:
         dominion_repository = super().memory_dominion_repository(
-            query_parser, tenant_provider)
+            query_parser, tenant_provider, auth_provider)
         dominion_repository.load({'default': {
             "1": Dominion(id='1', name='Data Server',
                           url="https://dataserver.nubark.com")

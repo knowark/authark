@@ -29,6 +29,10 @@ class AuthProvider(ABC):
     def validate_roles(self, required_roles: List[str] = None):
         """Check if a user is authenticated"""
 
+    @property
+    def reference(self) -> str:
+        return self.user.id
+
 
 user_var: ContextVar[Optional[User]] = ContextVar('user', default=None)
 

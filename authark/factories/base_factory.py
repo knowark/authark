@@ -42,45 +42,59 @@ class BaseFactory(Factory):
 
     def memory_user_repository(
             self, query_parser: QueryParser,
-            tenant_provider: TenantProvider
+            tenant_provider: TenantProvider,
+            auth_provider: AuthProvider
     ) -> MemoryUserRepository:
-        return MemoryUserRepository(query_parser, tenant_provider)
+        return MemoryUserRepository(
+            query_parser, tenant_provider, auth_provider)
 
     def memory_credential_repository(
             self, query_parser: QueryParser,
-            tenant_provider: TenantProvider
+            tenant_provider: TenantProvider,
+            auth_provider: AuthProvider
     ) -> MemoryCredentialRepository:
-        return MemoryCredentialRepository(query_parser, tenant_provider)
+        return MemoryCredentialRepository(
+            query_parser, tenant_provider, auth_provider)
 
     def memory_dominion_repository(
             self, query_parser: QueryParser,
-            tenant_provider: TenantProvider
+            tenant_provider: TenantProvider,
+            auth_provider: AuthProvider
     ) -> MemoryDominionRepository:
-        return MemoryDominionRepository(query_parser, tenant_provider)
+        return MemoryDominionRepository(
+            query_parser, tenant_provider, auth_provider)
 
     def memory_role_repository(
             self, query_parser: QueryParser,
-            tenant_provider: TenantProvider
+            tenant_provider: TenantProvider,
+            auth_provider: AuthProvider
     ) -> MemoryRoleRepository:
-        return MemoryRoleRepository(query_parser, tenant_provider)
+        return MemoryRoleRepository(
+            query_parser, tenant_provider, auth_provider)
 
     def memory_restriction_repository(
             self, query_parser: QueryParser,
-            tenant_provider: TenantProvider
+            tenant_provider: TenantProvider,
+            auth_provider: AuthProvider
     ) -> MemoryRestrictionRepository:
-        return MemoryRestrictionRepository(query_parser, tenant_provider)
+        return MemoryRestrictionRepository(
+            query_parser, tenant_provider, auth_provider)
 
     def memory_policy_repository(
             self, query_parser: QueryParser,
-            tenant_provider: TenantProvider
+            tenant_provider: TenantProvider,
+            auth_provider: AuthProvider
     ) -> MemoryPolicyRepository:
-        return MemoryPolicyRepository(query_parser, tenant_provider)
+        return MemoryPolicyRepository(
+            query_parser, tenant_provider, auth_provider)
 
     def memory_ranking_repository(
             self, query_parser: QueryParser,
-            tenant_provider: TenantProvider
+            tenant_provider: TenantProvider,
+            auth_provider: AuthProvider
     ) -> MemoryRankingRepository:
-        return MemoryRankingRepository(query_parser, tenant_provider)
+        return MemoryRankingRepository(
+            query_parser, tenant_provider, auth_provider)
 
     # Services
 
