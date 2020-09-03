@@ -35,92 +35,36 @@ def _register_schemas(spec):
 
 
 def _register_paths(spec):
+    resources = [
+        ('tokens', 'Token'),
+        ('users', 'User'),
+        ('roles', 'Role'),
+        ('restrictions', 'Restriction'),
+        ('policies', 'Policy'),
+        ('rankings', 'Ranking'),
+        ('sites', 'Site'),
+        ('traces', 'Trace'),
+        ('users', 'User'),
+    ]
+    for resource in resources:
+        _append_path(spec, *resource)
+
+
+def _append_path(spec, endpoint, schema):
     spec.path(
-        path="/tokens",
-        operations={
-            'put': {
-                'tags': ['Tokens'],
-                'responses': _respond("Get all tokens", 'Token')
-            }
-        }
-    ).path(
-        path="/users",
+        path=f'/{endpoint}',
         operations={
             'get': {
-                'tags': ['Users'],
-                'responses': _respond("Get all users", 'User')
+                'tags': [schema],
+                'responses': _respond(f"Get all {endpoint}", schema)
             },
             'put': {
-                'tags': ['Users'],
-                'responses': _respond("Modify users", 'Users')
+                'tags': [schema],
+                'responses': _respond(f"Modify {endpoint}", schema)
             },
             'delete': {
-                'tags': ['Users'],
-                'responses': _respond("Delete users", 'Users')
-            }
-        }
-    ).path(
-        path="/roles",
-        operations={
-            'get': {
-                'tags': ['Roles'],
-                'responses': _respond("Get all roles", 'Roles')
-            },
-            'put': {
-                'tags': ['Roles'],
-                'responses': _respond("Modify roles", 'Roles')
-            },
-            'delete': {
-                'tags': ['Roles'],
-                'responses': _respond("Delete roles", 'Roles')
-            }
-        }
-    ).path(
-        path="/restrictions",
-        operations={
-            'get': {
-                'tags': ['Restrictions'],
-                'responses': _respond("Get all restrictions", 'Restrictions')
-            },
-            'put': {
-                'tags': ['Restrictions'],
-                'responses': _respond("Modify restrictions", 'Restrictions')
-            },
-            'delete': {
-                'tags': ['Restrictions'],
-                'responses': _respond("Delete restrictions", 'Restrictions')
-            }
-        }
-    ).path(
-        path="/policies",
-        operations={
-            'get': {
-                'tags': ['Policies'],
-                'responses': _respond("Get all policies", 'Policies')
-            },
-            'put': {
-                'tags': ['Policies'],
-                'responses': _respond("Modify policies", 'Policies')
-            },
-            'delete': {
-                'tags': ['Policies'],
-                'responses': _respond("Delete policies", 'Policies')
-            }
-        }
-    ).path(
-        path="/rankings",
-        operations={
-            'get': {
-                'tags': ['Rankings'],
-                'responses': _respond("Get all rankings", 'Rankings')
-            },
-            'put': {
-                'tags': ['Rankings'],
-                'responses': _respond("Modify rankings", 'Rankings')
-            },
-            'delete': {
-                'tags': ['Rankings'],
-                'responses': _respond("Delete rankings", 'Rankings')
+                'tags': [schema],
+                'responses': _respond(f"Delete {endpoint}", schema)
             }
         }
     )

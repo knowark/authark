@@ -4,7 +4,6 @@ from .memory_setup_supplier import MemorySetupSupplier
 
 
 class JsonSetupSupplier(MemorySetupSupplier):
-
     def __init__(self, zones: Dict[str, Any]) -> None:
         self.zones = zones
 
