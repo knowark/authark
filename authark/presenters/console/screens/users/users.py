@@ -1,4 +1,5 @@
 import json
+from typing import List, Any
 from widark import (
     Frame, Listbox, Label, Entry, Event, Modal, Button, Spacer, Color)
 from .rankings import RankingsModal
@@ -10,7 +11,7 @@ class UsersScreen(Frame):
         self.injector = context['injector']
         self.authark_informer = self.injector['AutharkInformer']
         self.user = None
-        self.domain = []
+        self.domain: List[Any] = []
         return super().setup(**context) and self
 
     def build(self) -> None:
