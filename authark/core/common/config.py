@@ -18,17 +18,17 @@ config = {
     "tokens": {
         "tenant": {
             "algorithm": "HS256",
-            "secret": "DEVSECRET123",
+            "secret": os.environ.get('AUTHARK_TOKENS_SECRET', "DEVSECRET123"),
             "lifetime": 86400
         },
         "access": {
             "algorithm": "HS256",
-            "secret": "DEVSECRET123",
+            "secret": os.environ.get('AUTHARK_TOKENS_SECRET', "DEVSECRET123"),
             "lifetime": 86400
         },
         "refresh": {
             "algorithm": "HS256",
-            "secret": "DEVSECRET123",
+            "secret": os.environ.get('AUTHARK_TOKENS_SECRET', "DEVSECRET123"),
             "lifetime": 604800,
             "threshold": 86400
         }
