@@ -59,4 +59,7 @@ update:
 	git checkout `git describe --tags`
 
 deploy:
-	./setup/deploy.sh
+	ansible-playbook -c local -i localhost, setup/deploy.yml
+
+local:
+	./setup/local.sh

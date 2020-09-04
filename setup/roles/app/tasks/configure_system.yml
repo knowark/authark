@@ -37,10 +37,23 @@
     group: "{{ app_user }}"
     mode: 0775
 
+- name: Change Repository Permissions
+  file:
+    path: "/var/git/{{ app_user }}"
+    state: directory
+    owner: "{{ app_user }}"
+    group: "{{ app_user }}"
+    recurse: yes
+    mode: 0775
+
 - name: "Symlink {{ app_user }} Repository"
+  become: yes
+  become_user: "{{ app_user }}"
   file:
     src: "/var/git/{{ app_user }}"
     dest: "{{ app_repository }}"
+    owner: "{{ app_user }}"
+    group: "{{ app_user }}"
     state: link
 
 - name: "Create {{ app_user }} Virtualenv and Install Packages"
@@ -52,7 +65,7 @@
     virtualenv_python: "python3"
 
 - name:  "Create Cron Job {{ app_user }}"
-  cron: 
+  cron:
     name: "{{ app_user }} deploy updates with Cron Job"
     user: "root"
     hour: "*"
