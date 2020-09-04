@@ -11,6 +11,7 @@ class ConsoleApplication(Application):
         return super().setup(**context) and self
 
     async def prepare(self) -> None:
+        self.session_manager.set_user({'id': '1', 'name': 'system'})
         tenancy_supplier = self.injector['TenantSupplier']
         tenants = tenancy_supplier.search_tenants([])
         tenant_dict = next(iter(tenants), {'name': 'None'})
