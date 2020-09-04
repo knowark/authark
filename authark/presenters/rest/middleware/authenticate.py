@@ -12,6 +12,7 @@ def authenticate_middleware_factory(injector: Injectark) -> Callable:
     @web.middleware
     async def middleware(request: web.Request, handler: Callable):
         if request.path in ['/', '/tokens']:
+            session_coordinator.set_user({'id': '1', 'name': 'system'})
             return await handler(request)
 
         try:

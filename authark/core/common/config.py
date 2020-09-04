@@ -11,6 +11,7 @@ config = {
     "factory": os.environ.get('AUTHARK_FACTORY', 'JsonFactory'),
     "strategies": os.environ.get(
         'AUTHARK_STRATEGIES', 'base,crypto,json').split(','),
+
     "environment": {
         "home": "/opt/authark"
     },
