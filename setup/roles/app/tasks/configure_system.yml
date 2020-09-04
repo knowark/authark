@@ -87,6 +87,6 @@
 
 - name: "Create {{ app_user }} Sign File"
   template:
-    src: sign.j2
+    src: sign.txt.j2
     dest: "{{ app_home }}/sign.txt"
     mode: 0755
