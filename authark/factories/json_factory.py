@@ -1,4 +1,5 @@
-from ..application.domain.common import QueryParser, TenantProvider
+from ..application.domain.common import (
+    QueryParser, TenantProvider, AuthProvider)
 from ..application.domain.services import HashService
 from ..core.data import (
     JsonCredentialRepository, JsonDominionRepository, JsonRoleRepository,
@@ -19,52 +20,59 @@ class JsonFactory(CryptoFactory):
 
     def json_user_repository(
             self, query_parser: QueryParser,
-            tenant_provider: TenantProvider
+            tenant_provider: TenantProvider,
+            auth_provider: AuthProvider
     ) -> JsonUserRepository:
         return JsonUserRepository(self.data_path, query_parser,
-                                  tenant_provider)
+                                  tenant_provider, auth_provider)
 
     def json_credential_repository(
             self, query_parser: QueryParser,
-            tenant_provider: TenantProvider
+            tenant_provider: TenantProvider,
+            auth_provider: AuthProvider
     ) -> JsonCredentialRepository:
         return JsonCredentialRepository(self.data_path, query_parser,
-                                        tenant_provider)
+                                        tenant_provider, auth_provider)
 
     def json_dominion_repository(
             self, query_parser: QueryParser,
-            tenant_provider: TenantProvider
+            tenant_provider: TenantProvider,
+            auth_provider: AuthProvider
     ) -> JsonDominionRepository:
         return JsonDominionRepository(self.data_path, query_parser,
-                                      tenant_provider)
+                                      tenant_provider, auth_provider)
 
     def json_role_repository(
             self, query_parser: QueryParser,
-            tenant_provider: TenantProvider
+            tenant_provider: TenantProvider,
+            auth_provider: AuthProvider
     ) -> JsonRoleRepository:
         return JsonRoleRepository(self.data_path, query_parser,
-                                  tenant_provider)
+                                  tenant_provider, auth_provider)
 
     def json_restriction_repository(
             self, query_parser: QueryParser,
-            tenant_provider: TenantProvider
+            tenant_provider: TenantProvider,
+            auth_provider: AuthProvider
     ) -> JsonRestrictionRepository:
         return JsonRestrictionRepository(self.data_path, query_parser,
-                                         tenant_provider)
+                                         tenant_provider, auth_provider)
 
     def json_policy_repository(
             self, query_parser: QueryParser,
-            tenant_provider: TenantProvider
+            tenant_provider: TenantProvider,
+            auth_provider: AuthProvider
     ) -> JsonPolicyRepository:
         return JsonPolicyRepository(self.data_path, query_parser,
-                                    tenant_provider)
+                                    tenant_provider, auth_provider)
 
     def json_ranking_repository(
             self, query_parser: QueryParser,
-            tenant_provider: TenantProvider
+            tenant_provider: TenantProvider,
+            auth_provider: AuthProvider
     ) -> JsonRankingRepository:
         return JsonRankingRepository(self.data_path, query_parser,
-                                     tenant_provider)
+                                     tenant_provider, auth_provider)
 
     def json_import_service(
             self, hash_service: HashService) -> JsonImportService:
