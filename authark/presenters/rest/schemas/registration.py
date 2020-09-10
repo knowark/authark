@@ -10,6 +10,6 @@ class RegistrationSchema(EntitySchema):
     email = fields.Str(required=True, example="jarango@ops.servagro.com.co")
     username = fields.Str(required=True, example="jarango")
     password = fields.Str(required=True, example="secret")
-    name = fields.Str(example="Jaime Arango")
+    name = fields.Str(required=True, example="Jaime Arango")
     zone = fields.Str(example="default")
     attributes = fields.Mapping()

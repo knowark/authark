@@ -1,3 +1,4 @@
+import logging
 from traceback import format_tb
 from typing import Callable
 from aiohttp import web
@@ -18,6 +19,8 @@ def errors_middleware_factory(
             status = getattr(error, 'status', 500)
             message = str(error)
             traceback = format_tb(error.__traceback__)
+
+            logging.exception('Service Error')
 
             return web.json_response({"error": {
                 "type": type_,
