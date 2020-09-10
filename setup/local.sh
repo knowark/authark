@@ -1,24 +1,24 @@
 #!/bin/bash
-
 CONTAINER="authark"
+PLAYBOOK="setup/deploy.yml"
 REPOSITORY="https://github.com/knowark/authark.git"
-PLAYBOOK="setup/local.yml"
+REPOSITORY_PATH=$PWD
 
 echo "Deploying LXD container..."
 
-lxc launch ubuntu:focal $CONTAINER
-lxc config device add $CONTAINER home disk source=$HOME path=/mnt/home
+lxc launch ubuntu:20.04 $CONTAINER
+lxc config device add $CONTAINER home disk source=$HOME path=/mnt/$HOME
 
-echo "Install Git and Ansible..."
+echo "Install Ansible..."
 
 sleep 5  # Wait for container network connectivity.
 lxc exec $CONTAINER -- apt update -y
-lxc exec $CONTAINER -- apt install git software-properties-common -y
-lxc exec $CONTAINER -- apt-add-repository --yes --update ppa:ansible/ansible
 lxc exec $CONTAINER -- apt install ansible -y
 lxc exec $CONTAINER -- apt autoremove -y
 
-echo "Deploy with Ansible Pull..."
+echo "Deploy with Ansible..."
 
-lxc exec $CONTAINER -- bash -c "ansible-pull --connection=local -i 127.0.0.1, \
-    -U $REPOSITORY -d /var/git/$CONTAINER $PLAYBOOK 2>&1 | tee deploy.log"
+lxc exec $CONTAINER -- mkdir /var/git
+lxc exec $CONTAINER -- ln -s /mnt/$REPOSITORY_PATH /var/git/$CONTAINER
+lxc exec $CONTAINER -- bash -c "ansible-playbook -c local -i localhost, \
+    /var/git/$CONTAINER/$PLAYBOOK 2>&1 | tee deploy.log"
