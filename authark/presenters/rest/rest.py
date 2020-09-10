@@ -16,7 +16,7 @@ from .resources import (
 class RestApplication:
     def __init__(self, config: Config, injector: Injectark) -> None:
         super().__init__()
-        self.app = web.Application(middlewares=middlewares(injector))
+        self.app = web.Application(middlewares=middlewares(config, injector))
         self.config = config
         self.injector = injector
         self._setup()

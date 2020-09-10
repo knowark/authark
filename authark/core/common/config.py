@@ -11,9 +11,20 @@ config = {
     "factory": os.environ.get('AUTHARK_FACTORY', 'JsonFactory'),
     "strategies": os.environ.get(
         'AUTHARK_STRATEGIES', 'base,crypto,json').split(','),
-
     "environment": {
         "home": "/opt/authark"
+    },
+    "system": {
+        "id": os.environ.get(
+            'AUTHARK_SYSTEM_ID', "3180ba1e-db99-499f-82c0-a881f55fd636"),
+        "username": os.environ.get(
+            'AUTHARK_SYSTEM_USERNAME', "system"),
+        "name": os.environ.get(
+            'AUTHARK_SYSTEM_NAME', "System User"),
+        "email": os.environ.get(
+            'AUTHARK_SYSTEM_EMAIL', ""),
+        "password": os.environ.get(
+            'AUTHARK_SYSTEM_PASSWORD', "")
     },
     "tokens": {
         "tenant": {

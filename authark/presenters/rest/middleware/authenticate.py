@@ -2,17 +2,18 @@ from typing import Callable, Dict, Any
 from aiohttp import web
 from injectark import Injectark
 from ....application.managers import SessionManager
-from ....core import TenantSupplier
+from ....core import Config, TenantSupplier
 
 
-def authenticate_middleware_factory(injector: Injectark) -> Callable:
+def authenticate_middleware_factory(
+        config: Config, injector: Injectark) -> Callable:
     session_coordinator: SessionManager = injector['SessionManager']
     tenant_supplier: TenantSupplier = injector['TenantSupplier']
 
     @web.middleware
     async def middleware(request: web.Request, handler: Callable):
         if request.path in ['/', '/tokens']:
-            session_coordinator.set_user({'id': '1', 'name': 'system'})
+            session_coordinator.set_user(config['system'])
             return await handler(request)
 
         try:

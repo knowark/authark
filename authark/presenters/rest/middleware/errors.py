@@ -3,9 +3,11 @@ from typing import Callable
 from aiohttp import web
 from json import dumps
 from injectark import Injectark
+from ....core import Config
 
 
-def errors_middleware_factory(injector: Injectark) -> Callable:
+def errors_middleware_factory(
+        config: Config, injector: Injectark) -> Callable:
 
     @web.middleware
     async def middleware(request: web.Request, handler: Callable):
