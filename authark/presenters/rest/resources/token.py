@@ -1,5 +1,3 @@
-from ..schemas import TokenRequestSchema, TokenSchema
-
 from aiohttp import web
 from injectark import Injectark
 from ..schemas import TokenRequestSchema, TokenSchema

@@ -7,6 +7,7 @@ from .user import UserResource
 from .restriction import RestrictionResource
 from .policy import PolicyResource
 from .ranking import RankingResource
+from .registration import RegistrationResource
 from .role import RoleResource
 
 

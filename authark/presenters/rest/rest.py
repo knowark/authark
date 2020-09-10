@@ -10,7 +10,7 @@ from .middleware import middlewares
 from .doc import create_spec
 from .resources import (
     RootResource, UserResource, TokenResource, RoleResource,
-    RestrictionResource, PolicyResource, RankingResource)
+    RestrictionResource, PolicyResource, RankingResource, RegistrationResource)
 
 
 class RestApplication:
@@ -71,3 +71,5 @@ class RestApplication:
         self._bind_routes('/policies', PolicyResource(self.injector))
         self._bind_routes('/roles', RoleResource(self.injector))
         self._bind_routes('/rankings', RankingResource(self.injector))
+        self._bind_routes(
+            '/registrations', RegistrationResource(self.injector))
