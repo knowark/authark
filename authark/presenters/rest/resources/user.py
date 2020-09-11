@@ -13,5 +13,5 @@ class UserResource(Resource):
             UserSchema,
             partial(informer.count, 'user'),
             partial(informer.search, 'user'),
-            manager.register,
+            manager.update,
             manager.deregister)

@@ -116,9 +116,6 @@ class AuthManager:
     async def update(self, user_dicts: RecordList) -> None:
         users = ([User(**user_dict) for user_dict in user_dicts])
 
-        # self._validate_usernames(users)
-        # await self._validate_duplicates(users)
-
         users = await self.user_repository.add([
             User(**user_dict) for user_dict in user_dicts])
 
