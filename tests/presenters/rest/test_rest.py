@@ -209,3 +209,19 @@ async def test_users_get_route_filter(app, headers) -> None:
     content = await response.text()
     data_dict = loads(content)
     assert len(data_dict) == 0
+
+
+async def test_dominions_not_implemented_put(app, headers) -> None:
+    response = await app.put(
+        '/dominions',
+        data=dumps(dict(
+            name="cloudapp"
+        )), headers=headers)
+    content = await response.text()
+    assert response.status == 500
+
+
+async def test_dominions_not_implemented_delete(app, headers) -> None:
+    response = await app.delete('/dominions/platform', headers=headers)
+    content = await response.text()
+    assert response.status == 500

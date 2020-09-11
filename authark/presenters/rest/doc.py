@@ -1,8 +1,8 @@
 from apispec import APISpec
 from apispec.ext.marshmallow import MarshmallowPlugin
 from .schemas import (
-    UserSchema, TokenRequestSchema, TokenSchema, RoleSchema,
-    RestrictionSchema, PolicySchema, RankingSchema)
+    UserSchema, TokenRequestSchema, TokenSchema, DominionSchema,
+    RoleSchema, RestrictionSchema, PolicySchema, RankingSchema)
 
 
 def create_spec() -> APISpec:
@@ -28,6 +28,7 @@ def _register_schemas(spec):
     spec.components.schema("User", schema=UserSchema)
     spec.components.schema("Token", schema=TokenSchema)
     spec.components.schema("TokenRequest", schema=TokenRequestSchema)
+    spec.components.schema("Dominion", schema=DominionSchema)
     spec.components.schema("Role", schema=RoleSchema)
     spec.components.schema("Ranking", schema=RankingSchema)
     spec.components.schema("Policy", schema=PolicySchema)
@@ -38,6 +39,7 @@ def _register_paths(spec):
     resources = [
         ('tokens', 'Token'),
         ('users', 'User'),
+        ('dominions', 'Dominion'),
         ('roles', 'Role'),
         ('restrictions', 'Restriction'),
         ('policies', 'Policy'),

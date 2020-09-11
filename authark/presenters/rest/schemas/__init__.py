@@ -1,4 +1,5 @@
 from .auth import DominionAuthorizationSchema
+from .dominion import DominionSchema
 from .token import TokenSchema, TokenRequestSchema
 from .user import UserSchema
 from .restriction import RestrictionSchema

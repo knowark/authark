@@ -1,4 +1,4 @@
-from typing import Tuple, List
+from typing import Tuple, List, Any
 from json import loads
 from aiohttp import web
 from .format import parse_domain
@@ -25,3 +25,7 @@ async def get_request_ids(request: web.Request) -> List[str]:
         ids.extend(loads(await request.text()))
 
     return ids
+
+
+async def missing(value: Any) -> None:
+    raise ValueError('Not implemented endpoint.')
