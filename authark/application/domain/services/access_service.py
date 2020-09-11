@@ -29,7 +29,8 @@ class AccessService:
     async def _build_payload(self, tenant: Tenant, user: User,
                              dominion: Dominion) -> Dict[str, Any]:
         payload = self._build_basic_info(tenant, user)
-        payload['roles'] = await self._build_roles(user, dominion)
+        if dominion:
+            payload['roles'] = await self._build_roles(user, dominion)
         return payload
 
     def _build_basic_info(self, tenant: Tenant, user: User) -> Dict[str, Any]:

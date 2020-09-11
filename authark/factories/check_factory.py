@@ -138,8 +138,7 @@ class CheckFactory(CryptoFactory):
         dominion_repository = super().memory_dominion_repository(
             query_parser, tenant_provider, auth_provider)
         dominion_repository.load({'default': {
-            "1": Dominion(id='1', name='Data Server',
-                          url="https://dataserver.nubark.com")
+            "1": Dominion(id='1', name='default')
         }})
         return dominion_repository
 

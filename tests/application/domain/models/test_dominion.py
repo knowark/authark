@@ -4,11 +4,7 @@ from authark.application.domain.models import Dominion
 
 @fixture
 def dominion():
-    return Dominion(
-        id='af1209fade',
-        name='Data Server',
-        url='https://dataserver.nubark.com'
-    )
+    return Dominion(name='superapp')
 
 
 def test_dominion_instation(dominion):
@@ -16,5 +12,4 @@ def test_dominion_instation(dominion):
 
 
 def test_dominion_attributes(dominion):
-    assert dominion.name == 'Data Server'
-    assert dominion.url == 'https://dataserver.nubark.com'
+    assert dominion.name == 'superapp'

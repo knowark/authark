@@ -18,7 +18,7 @@ class DominionsScreen(Frame):
                command=self.on_create).grid(0, 0)
         Spacer(self).grid(0, 1).weight(col=2)
         self.header = Listbox(
-            self, data=['ID', 'Name', 'URL'],
+            self, data=['ID', 'Name'],
             orientation='horizontal').grid(1).span(col=3)
 
         self.body = Listbox(
@@ -28,7 +28,7 @@ class DominionsScreen(Frame):
     async def load(self) -> None:
         dominions = await self.authark_informer.search('dominion')
         self.body.setup(
-            data=dominions, fields=['id', 'name', 'url'], limit=10).connect()
+            data=dominions, fields=['id', 'name'], limit=10).connect()
 
     async def on_body(self, event: Event) -> None:
         self.dominion = getattr(event.target.parent, 'item', None)
@@ -39,7 +39,7 @@ class DominionsScreen(Frame):
                 proportion={'height': 0.67, 'width': 0.67}).launch()
 
     async def on_create(self, event: Event) -> None:
-        dominion = {'name': '', 'url': ''}
+        dominion = {'name': ''}
         self.modal = DominionDetailsModal(
             self, injector=self.injector, dominion=dominion,
             done_command=self.on_modal_done,
@@ -68,9 +68,6 @@ class DominionDetailsModal(Modal):
         Label(frame, content='Name:').grid(0, 0)
         self.name = Entry(frame, content=self.dominion['name']).style(
             border=[0]).grid(0, 1).weight(col=2)
-        Label(frame, content='URL:').grid(1, 0)
-        self.url = Entry(frame, content=self.dominion['url']).style(
-            border=[0]).grid(1, 1).weight(col=2)
         Spacer(frame).grid(2).span(col=2)
 
         actions = Frame(
@@ -86,8 +83,7 @@ class DominionDetailsModal(Modal):
 
     async def on_save(self, event: Event) -> None:
         dominion = {
-            'name': self.name.text,
-            'url': self.url.text
+            'name': self.name.text
         }
         self.dominion.update(dominion)
         await self.management_manager.create_dominion([self.dominion])

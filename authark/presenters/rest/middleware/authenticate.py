@@ -12,7 +12,7 @@ def authenticate_middleware_factory(
 
     @web.middleware
     async def middleware(request: web.Request, handler: Callable):
-        if request.path in ['/', '/tokens', '/registrations']:
+        if request.path in ['/', '/registrations', '/tokens']:
             session_coordinator.set_user(config['system'])
             return await handler(request)
 

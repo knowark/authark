@@ -89,8 +89,7 @@ def mock_dominion_repository(
         parser, mock_tenant_provider)
     mock_dominion_repository.load({
         "default": {
-            "1": Dominion(id='1', name='Data Server',
-                          url="https://dataserver.nubark.com")
+            "1": Dominion(id='1', name='Data Server')
         }
     })
     return mock_dominion_repository

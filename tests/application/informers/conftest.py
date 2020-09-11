@@ -63,8 +63,7 @@ def dominion_repository(tenant_provider, parser) -> DominionRepository:
     dominion_repository = MemoryDominionRepository(parser, tenant_provider)
     dominion_repository.load({
         "default": {
-            "1": Dominion(id='1', name='Data Server',
-                          url="https://dataserver.nubark.com")
+            "1": Dominion(id='1', name='Data Server')
         }
     })
     return dominion_repository
@@ -89,7 +88,8 @@ def restriction_repository(tenant_provider, parser) -> RestrictionRepository:
     restriction_repository.load({
         "default": {
             "1": Restriction(id='1', group='group name', name='group name',
-                             sequence="1", target='target name', domain="domain name")
+                             sequence="1", target='target name',
+                             domain="domain name")
         }
     })
     return restriction_repository
@@ -100,7 +100,8 @@ def policy_repository(tenant_provider, parser) -> PolicyRepository:
     policy_repository = MemoryPolicyRepository(parser, tenant_provider)
     policy_repository.load({
         "default": {
-            "1": Policy(id='1', resource='resource name', privilege='privilege name',
+            "1": Policy(id='1', resource='resource name',
+                        privilege='privilege name',
                         role="role name", restriction='restriction name')
         }
     })

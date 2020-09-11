@@ -4,8 +4,7 @@ from authark.application.domain.services import Tenant
 
 async def test_access_service_generate_token(access_service) -> None:
     user = User(id='1', username='johndoe', email='johndoe')
-    dominion = Dominion(id='1', name='Data Server',
-                        url="https://dataserver.nubark.com")
+    dominion = Dominion(id='1', name='Data Server')
 
     token = await access_service.generate_token(user, dominion)
 
@@ -15,8 +14,7 @@ async def test_access_service_generate_token(access_service) -> None:
 async def test_access_service_build_payload(access_service) -> None:
     tenant = Tenant(name='Default')
     user = User(id='1', username='johndoe', email='johndoe')
-    dominion = Dominion(id='1', name='Data Server',
-                        url="https://dataserver.nubark.com")
+    dominion = Dominion(id='1', name='Data Server')
     payload = await access_service._build_payload(tenant, user, dominion)
 
     assert isinstance(payload, dict)
@@ -45,8 +43,7 @@ def test_access_service_build_basic_info(access_service) -> None:
 
 async def test_access_service_build_roles(access_service) -> None:
     user = User(id='1', username='johndoe', email='johndoe')
-    dominion = Dominion(id='1', name='Data Server',
-                        url="https://dataserver.nubark.com")
+    dominion = Dominion(id='1', name='Data Server')
 
     roles = await access_service._build_roles(user, dominion)
     assert isinstance(roles, list)

@@ -16,7 +16,7 @@ def dominions_screen(root, injector):
 
 @fixture
 def dominion_details_modal(root, injector):
-    dominion = {'id': '1', 'name': 'Proser', 'url': ''}
+    dominion = {'id': '1', 'name': 'Proser'}
     return DominionDetailsModal(root, injector=injector, dominion=dominion)
 
 
@@ -44,7 +44,7 @@ async def test_dominions_screen_on_body(dominions_screen):
     await dominions_screen.on_body(event)
     assert dominions_screen.modal is None
 
-    event.target = target({'name': '', 'url': ''})
+    event.target = target({'name': ''})
 
     await dominions_screen.on_body(event)
     await asyncio.sleep(0)
@@ -56,11 +56,11 @@ async def test_dominions_screen_on_create(dominions_screen):
     event = Event('Mouse', 'click')
     await dominions_screen.on_create(event)
     await asyncio.sleep(0)
-    assert dominions_screen.modal.dominion == {'name': '', 'url': ''}
+    assert dominions_screen.modal.dominion == {'name': ''}
 
 
 async def test_dominions_screen_on_modal_done(dominions_screen):
-    dominions_screen.dominion = {'id': '1', 'name': 'Proser', 'url': ''}
+    dominions_screen.dominion = {'id': '1', 'name': 'Proser'}
     event = Event('Custom', 'done', details={'result': 'other'})
     await dominions_screen.on_modal_done(event)
     await asyncio.sleep(0)
@@ -84,7 +84,7 @@ async def test_dominions_details_modal_on_save(dominion_details_modal):
     await dominion_details_modal.on_save(event)
     await asyncio.sleep(0)
 
-    assert given_dominions == [{'id': '1', 'name': 'Proser', 'url': ''}]
+    assert given_dominions == [{'id': '1', 'name': 'Proser'}]
 
 
 async def test_dominions_details_modal_on_buttons(dominion_details_modal):

@@ -8,8 +8,7 @@ def test_management_manager_instantiation(management_manager):
 async def test_management_manager_create_dominion(management_manager):
     dominion_dicts: RecordList = [{
         "id": 'abc001',
-        "name": 'HR Server',
-        "url": 'https://hr.example.com'
+        "name": 'HR Server'
     }]
     await management_manager.create_dominion(dominion_dicts)
     assert len(

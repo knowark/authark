@@ -113,9 +113,10 @@ async def test_tokens_put_route_with_password(app):
     response = await app.put(
         '/tokens',
         data=dumps(dict(
+            dominion="default",
             tenant="default",
             username="eecheverry",
-            password="ABC1234",
+            password="ABC1234"
         )))
     data = await response.text()
     assert response.status == 200
@@ -128,6 +129,7 @@ async def test_tokens_put_route_with_refresh_token(app):
     response = await app.put(
         '/tokens',
         data=dumps(dict(
+            dominion="default",
             tenant="default",
             refreshToken=token
         )))
