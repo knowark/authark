@@ -138,6 +138,20 @@ async def test_tokens_put_route_with_refresh_token(app):
     assert len(data) > 0
 
 
+async def test_registrations_put_route(app):
+    response = await app.put(
+        '/registrations',
+        data=dumps(dict(
+            tenant="Platform XYZ",
+            username="eecheverry",
+            email="eecheverry@knowark.com",
+            password="ABC1234",
+            name="Esteban Echeverry"
+        )))
+    data = await response.text()
+    assert response.status == 200
+
+
 async def test_users_delete(app, headers) -> None:
     response = await app.delete('/users/1', headers=headers)
     assert response.status == 204
