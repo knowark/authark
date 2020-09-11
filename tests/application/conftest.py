@@ -89,7 +89,7 @@ def mock_dominion_repository(
         parser, mock_tenant_provider)
     mock_dominion_repository.load({
         "default": {
-            "1": Dominion(id='1', name='Data Server')
+            "1": Dominion(id='1', name='default')
         }
     })
     return mock_dominion_repository
@@ -219,8 +219,8 @@ def mock_import_service() -> ImportService:  # duda
                   )
     credential_1 = Credential(value="HASHED: PASS1")
     credential_2 = Credential(value="HASHED: PASS2")
-    dominion_1 = Dominion(name="Data Server")
-    dominion_2 = Dominion(name="User Data")
+    dominion_1 = Dominion(name="default")
+    dominion_2 = Dominion(name="platformxyz")
     role_1 = [[Role(name="admin"), dominion_1],
               [Role(name="user"), dominion_2]]
     users_list = [

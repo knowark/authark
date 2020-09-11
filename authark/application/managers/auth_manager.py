@@ -24,8 +24,8 @@ class AuthManager:
         self.refresh_token_service = refresh_token_service
 
     async def authenticate(self, request_dict: Dict[str, str]) -> TokensDict:
+        dominion = request_dict['dominion']
         refresh_token = request_dict.get('refresh_token', '')
-        dominion = request_dict.get('dominion', '')
         username = request_dict.get('username', '')
         password = request_dict.get('password', '')
         client = request_dict.get('client', '')
@@ -39,9 +39,20 @@ class AuthManager:
 
         return result
 
+    async def register(self, user_dicts: RecordList) -> None:
+        users = ([User(**user_dict) for user_dict in user_dicts])
+
+        self._validate_usernames(users)
+        await self._validate_duplicates(users)
+
+        users = await self.user_repository.add([
+            User(**user_dict) for user_dict in user_dicts])
+
+        await self._make_password_credentials(users, user_dicts)
+
     async def _password_authenticate(
             self, username: str, password: str,
-            client: str, dominion_name: str = None) -> TokensDict:
+            client: str, dominion_name: str) -> TokensDict:
         user = await self._find_user(username)
         credentials = await self.credential_repository.search([
             ('user_id', '=', user.id), ('type', '=', 'password')])
@@ -53,10 +64,7 @@ class AuthManager:
         if not self.hash_service.verify_password(password, user_password):
             raise AuthError("Authentication Error: Password mismatch.")
 
-        dominion_domain = [
-            ('name', '=', dominion_name)] if dominion_name else []
-        dominion: Dominion = next(
-            iter(await self.dominion_repository.search(dominion_domain)))
+        dominion = await self._ensure_dominion(dominion_name)
 
         access_token = await self.access_service.generate_token(user, dominion)
 
@@ -70,7 +78,7 @@ class AuthManager:
         }
 
     async def _refresh_authenticate(self, refresh_token: TokenString,
-                                    dominion_name: str = None) -> TokensDict:
+                                    dominion_name: str) -> TokensDict:
         credentials = await self.credential_repository.search([
             ('value', '=', refresh_token), ('type', '=', 'refresh_token')])
         if not credentials:
@@ -88,10 +96,7 @@ class AuthManager:
         user = await self.user_repository.search(
             [('id', '=', credential.user_id)])
 
-        dominion_domain = [
-            ('name', '=', dominion_name)] if dominion_name else []
-        dominion: Dominion = next(
-            iter(await self.dominion_repository.search(dominion_domain)))
+        dominion = await self._ensure_dominion(dominion_name)
 
         access_token = await self.access_service.generate_token(
             user[0], dominion)
@@ -99,16 +104,14 @@ class AuthManager:
 
         return tokens_dict
 
-    async def register(self, user_dicts: RecordList) -> None:
-        users = ([User(**user_dict) for user_dict in user_dicts])
-
-        self._validate_usernames(users)
-        await self._validate_duplicates(users)
-
-        users = await self.user_repository.add([
-            User(**user_dict) for user_dict in user_dicts])
-
-        await self._make_password_credentials(users, user_dicts)
+    async def _ensure_dominion(self, dominion_name: str) -> Dominion:
+        dominions = await self.dominion_repository.search(
+            [('name', '=', dominion_name)])
+        if not dominions:
+            dominions = await self.dominion_repository.add(
+               Dominion(name=dominion_name))
+        [dominion] = dominions
+        return dominion
 
     async def update(self, user_dicts: RecordList) -> None:
         users = ([User(**user_dict) for user_dict in user_dicts])

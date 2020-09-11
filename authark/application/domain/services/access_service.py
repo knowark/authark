@@ -29,8 +29,7 @@ class AccessService:
     async def _build_payload(self, tenant: Tenant, user: User,
                              dominion: Dominion) -> Dict[str, Any]:
         payload = self._build_basic_info(tenant, user)
-        if dominion:
-            payload['roles'] = await self._build_roles(user, dominion)
+        payload['roles'] = await self._build_roles(user, dominion)
         return payload
 
     def _build_basic_info(self, tenant: Tenant, user: User) -> Dict[str, Any]:
@@ -48,8 +47,8 @@ class AccessService:
         dominion_roles = await self.role_repository.search(
             [('dominion_id', '=', dominion.id)])
         ranking_role_ids = [
-            ranking.role_id for ranking in await self.ranking_repository.search(
-                [('user_id', '=', user.id)])]
+            ranking.role_id for ranking in
+            await self.ranking_repository.search([('user_id', '=', user.id)])]
         roles = [role.name for role in dominion_roles
                  if role.id in ranking_role_ids]
         return roles

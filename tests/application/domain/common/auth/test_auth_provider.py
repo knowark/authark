@@ -17,15 +17,7 @@ def test_auth_provider_repository_methods():
 def auth_provider() -> StandardAuthProvider:
     # Given a memory auth_provider has been created
     auth_provider = StandardAuthProvider()
-    auth_provider.setup(User(name="eecheverry"))
-    return auth_provider
-
-
-@fixture
-def loaded_auth_provider(auth_provider) -> StandardAuthProvider:
-    auth_provider.load({
-        ("easb123")
-    })
+    auth_provider.setup(User(id='001', name="eecheverry"))
     return auth_provider
 
 
@@ -36,11 +28,12 @@ def test_standard_auth_provider(auth_provider):
 
 def test_standard_auth_provider_verify(auth_provider):
     # Given a user
-    user = User(name="asb123")
+    user = User(id='001', name="asb123")
     # When a user is given
     auth_provider.setup(user)
     # Then the user will be set
-    assert auth_provider.user is not None
+    assert auth_provider.user.name == 'asb123'
+    assert auth_provider.reference == '001'
 
 
 def test_standard_auth_get_user(auth_provider):
