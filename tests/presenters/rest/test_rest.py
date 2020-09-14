@@ -211,6 +211,17 @@ async def test_users_get_route_filter(app, headers) -> None:
     assert len(data_dict) == 0
 
 
+async def test_dominions_get(app, headers) -> None:
+    response = await app.get('/dominions', headers=headers)
+    content = await response.text()
+    assert response.status == 200
+
+    data_dict = loads(content)
+
+    assert len(data_dict) == 1
+    assert data_dict[0]['name'] == 'default'
+
+
 async def test_dominions_not_implemented_put(app, headers) -> None:
     response = await app.put(
         '/dominions',
