@@ -152,6 +152,21 @@ async def test_registrations_put_route(app):
     assert response.status == 200
 
 
+async def test_registrations_enroll_put_route(app):
+    response = await app.put(
+        '/registrations',
+        data=dumps(dict(
+            tenant="Default",
+            username="masolano",
+            email="masolano@knowark.com",
+            password="XYZ1234",
+            name="Miguel Alexis Solano",
+            enroll=True
+        )))
+    data = await response.text()
+    assert response.status == 200
+
+
 async def test_users_delete(app, headers) -> None:
     response = await app.delete('/users/1', headers=headers)
     assert response.status == 204

@@ -6,6 +6,7 @@ class RegistrationSchema(EntitySchema):
     class Meta:
         unknown = EXCLUDE
 
+    enroll = fields.Boolean(default=False, missing=False)
     tenant = fields.Str(required=True, example="knowark")
     email = fields.Str(required=True, example="jarango@ops.servagro.com.co")
     username = fields.Str(required=True, example="jarango")
