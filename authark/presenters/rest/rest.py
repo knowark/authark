@@ -31,6 +31,7 @@ class RestApplication:
         self.app.cleanup_ctx.append(self._http_client)
 
         # API endpoints creation
+
         self._create_api()
 
     @staticmethod
