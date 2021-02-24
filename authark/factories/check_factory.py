@@ -7,33 +7,35 @@ from ..application.domain.common import (
 from ..application.domain.models import (
     User, Credential, Ranking, Role, Dominion, Restriction, Policy)
 from ..application.domain.repositories import (
-    MemoryUserRepository, MemoryCredentialRepository,
+    UserRepository, MemoryUserRepository,
+    CredentialRepository, MemoryCredentialRepository,
     RankingRepository, MemoryRankingRepository,
     RoleRepository, MemoryRoleRepository,
     RestrictionRepository, MemoryRestrictionRepository,
     PolicyRepository, MemoryPolicyRepository,
     DominionRepository, MemoryDominionRepository)
 from ..application.domain.services import (
+    HashService, MemoryHashService,
     AccessService, AccessTokenService)
 from ..core import (
-    MemoryTenantSupplier, PyJWTAccessTokenService)
+    TenantSupplier, MemoryTenantSupplier, PyJWTAccessTokenService)
 
 
 class CheckFactory(CryptoFactory):
     def __init__(self, config: Config) -> None:
         super().__init__(config)
 
-    def check_tenant_provider(self) -> StandardTenantProvider:
+    def tenant_provider(self) -> TenantProvider:
         tenant_provider = StandardTenantProvider()
         tenant_provider.setup(Tenant(id='001', name="Default"))
         return tenant_provider
 
-    def check_auth_provider(self) -> StandardAuthProvider:
+    def auth_provider(self) -> AuthProvider:
         auth_provider = StandardAuthProvider()
         auth_provider.setup(CUser(id='001', name='johndoe'))
         return auth_provider
 
-    def check_tenant_supplier(self) -> MemoryTenantSupplier:
+    def tenant_supplier(self) -> TenantSupplier:
         tenant_supplier = MemoryTenantSupplier()
         tenant_supplier.create_tenant({
             'id': '001',
@@ -41,11 +43,14 @@ class CheckFactory(CryptoFactory):
         })
         return tenant_supplier
 
+    def hash_service(self) -> HashService:
+        return MemoryHashService()
+
     def user_repository(
             self, query_parser: QueryParser,
             tenant_provider: TenantProvider,
             auth_provider: AuthProvider
-    ) -> MemoryUserRepository:
+    ) -> UserRepository:
         user_repository = super().user_repository(
             query_parser, tenant_provider, auth_provider)
         user_repository.load({'default': {
@@ -64,7 +69,7 @@ class CheckFactory(CryptoFactory):
             self, query_parser: QueryParser,
             tenant_provider: TenantProvider,
             auth_provider: AuthProvider
-    ) -> MemoryCredentialRepository:
+    ) -> CredentialRepository:
         credential_repository = super().credential_repository(
             query_parser, tenant_provider, auth_provider)
         refresh_token = jwt.encode(
@@ -81,7 +86,7 @@ class CheckFactory(CryptoFactory):
         self, query_parser: QueryParser,
         tenant_provider: TenantProvider,
         auth_provider: AuthProvider
-    ) -> MemoryRoleRepository:
+    ) -> RoleRepository:
         role_repository = super().role_repository(
             query_parser, tenant_provider, auth_provider)
         role_repository.load({'default': {
@@ -94,7 +99,7 @@ class CheckFactory(CryptoFactory):
             self, query_parser: QueryParser,
             tenant_provider: TenantProvider,
             auth_provider: AuthProvider
-    ) -> MemoryRankingRepository:
+    ) -> RankingRepository:
         ranking_repository = super().ranking_repository(
             query_parser, tenant_provider, auth_provider)
         ranking_repository.load({'default': {
@@ -107,7 +112,7 @@ class CheckFactory(CryptoFactory):
             self, query_parser: QueryParser,
             tenant_provider: TenantProvider,
             auth_provider: AuthProvider
-    ) -> MemoryRestrictionRepository:
+    ) -> RestrictionRepository:
         restriction_repository = super().restriction_repository(
             query_parser, tenant_provider, auth_provider)
         restriction_repository.load({'default': {
@@ -121,7 +126,7 @@ class CheckFactory(CryptoFactory):
             self, query_parser: QueryParser,
             tenant_provider: TenantProvider,
             auth_provider: AuthProvider
-    ) -> MemoryPolicyRepository:
+    ) -> PolicyRepository:
         policy_repository = super().policy_repository(
             query_parser, tenant_provider, auth_provider)
         policy_repository.load({'default': {
@@ -134,7 +139,7 @@ class CheckFactory(CryptoFactory):
             self, query_parser: QueryParser,
             tenant_provider: TenantProvider,
             auth_provider: AuthProvider
-    ) -> MemoryDominionRepository:
+    ) -> DominionRepository:
         dominion_repository = super().dominion_repository(
             query_parser, tenant_provider, auth_provider)
         dominion_repository.load({'default': {
@@ -142,7 +147,7 @@ class CheckFactory(CryptoFactory):
         }})
         return dominion_repository
 
-    def pyjwt_access_token_service(self) -> PyJWTAccessTokenService:
+    def access_token_service(self) -> AccessTokenService:
         access_token_service = PyJWTAccessTokenService(
             'TESTSECRET', 'HS256', 3600)
         return access_token_service

@@ -1,3 +1,6 @@
+from ..application.domain.services import (
+    HashService, AccessTokenService,
+    RefreshTokenService, TokenService)
 from ..core.suppliers.crypto import (
     PasslibHashService, PyJWTTokenService, JwtSupplier,
     PyJWTAccessTokenService, PyJWTRefreshTokenService)
@@ -15,22 +18,22 @@ class CryptoFactory(BaseFactory):
 
     # Services
 
-    def passlib_hash_service(self) -> PasslibHashService:
+    def hash_service(self) -> HashService:
         return PasslibHashService()
 
-    def pyjwt_token_service(self) -> PyJWTTokenService:
+    def token_service(self) -> TokenService:
         return PyJWTTokenService(
             self.tenant_config['secret'],
             self.tenant_config['algorithm'],
             self.tenant_config['lifetime'])
 
-    def pyjwt_access_token_service(self) -> PyJWTAccessTokenService:
+    def access_token_service(self) -> AccessTokenService:
         return PyJWTAccessTokenService(
             self.access_config['secret'],
             self.access_config['algorithm'],
             self.access_config['lifetime'])
 
-    def pyjwt_refresh_token_service(self) -> PyJWTRefreshTokenService:
+    def refresh_token_service(self) -> RefreshTokenService:
         return PyJWTRefreshTokenService(
             self.refresh_config['secret'],
             self.refresh_config['algorithm'],

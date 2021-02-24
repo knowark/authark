@@ -19,10 +19,12 @@ from ..application.managers import (
     AuthManager, ManagementManager,
     ImportManager, SessionManager, SecurityManager)
 from ..application.informers import (
-    StandardAutharkInformer, StandardComposingInformer)
+    AutharkInformer, StandardAutharkInformer,
+    ComposingInformer, StandardComposingInformer)
 from ..core.common import Config
 from ..core.suppliers import (
-    TenantSupplier, MemoryTenantSupplier, MemorySetupSupplier)
+    TenantSupplier, MemoryTenantSupplier,
+    SetupSupplier, MemorySetupSupplier)
 
 
 class BaseFactory(Factory):
@@ -34,17 +36,17 @@ class BaseFactory(Factory):
     def query_parser(self) -> QueryParser:
         return QueryParser()
 
-    def auth_provider(self) -> StandardAuthProvider:
+    def auth_provider(self) -> AuthProvider:
         return StandardAuthProvider()
 
-    def tenant_provider(self) -> StandardTenantProvider:
+    def tenant_provider(self) -> TenantProvider:
         return StandardTenantProvider()
 
     def user_repository(
             self, query_parser: QueryParser,
             tenant_provider: TenantProvider,
             auth_provider: AuthProvider
-    ) -> MemoryUserRepository:
+    ) -> UserRepository:
         return MemoryUserRepository(
             query_parser, tenant_provider, auth_provider)
 
@@ -52,7 +54,7 @@ class BaseFactory(Factory):
             self, query_parser: QueryParser,
             tenant_provider: TenantProvider,
             auth_provider: AuthProvider
-    ) -> MemoryCredentialRepository:
+    ) -> CredentialRepository:
         return MemoryCredentialRepository(
             query_parser, tenant_provider, auth_provider)
 
@@ -60,7 +62,7 @@ class BaseFactory(Factory):
             self, query_parser: QueryParser,
             tenant_provider: TenantProvider,
             auth_provider: AuthProvider
-    ) -> MemoryDominionRepository:
+    ) -> DominionRepository:
         return MemoryDominionRepository(
             query_parser, tenant_provider, auth_provider)
 
@@ -68,7 +70,7 @@ class BaseFactory(Factory):
             self, query_parser: QueryParser,
             tenant_provider: TenantProvider,
             auth_provider: AuthProvider
-    ) -> MemoryRoleRepository:
+    ) -> RoleRepository:
         return MemoryRoleRepository(
             query_parser, tenant_provider, auth_provider)
 
@@ -76,7 +78,7 @@ class BaseFactory(Factory):
             self, query_parser: QueryParser,
             tenant_provider: TenantProvider,
             auth_provider: AuthProvider
-    ) -> MemoryRestrictionRepository:
+    ) -> RestrictionRepository:
         return MemoryRestrictionRepository(
             query_parser, tenant_provider, auth_provider)
 
@@ -84,7 +86,7 @@ class BaseFactory(Factory):
             self, query_parser: QueryParser,
             tenant_provider: TenantProvider,
             auth_provider: AuthProvider
-    ) -> MemoryPolicyRepository:
+    ) -> PolicyRepository:
         return MemoryPolicyRepository(
             query_parser, tenant_provider, auth_provider)
 
@@ -92,22 +94,22 @@ class BaseFactory(Factory):
             self, query_parser: QueryParser,
             tenant_provider: TenantProvider,
             auth_provider: AuthProvider
-    ) -> MemoryRankingRepository:
+    ) -> RankingRepository:
         return MemoryRankingRepository(
             query_parser, tenant_provider, auth_provider)
 
     # Services
 
-    def memory_hash_service(self) -> MemoryHashService:
+    def hash_service(self) -> HashService:
         return MemoryHashService()
 
-    def memory_access_token_service(self) -> MemoryAccessTokenService:
+    def access_token_service(self) -> AccessTokenService:
         return MemoryAccessTokenService()
 
-    def memory_refresh_token_service(self) -> MemoryRefreshTokenService:
+    def refresh_token_service(self) -> RefreshTokenService:
         return MemoryRefreshTokenService()
 
-    def memory_import_service(self) -> MemoryImportService:
+    def import_service(self, hash_service: HashService) -> ImportService:
         return MemoryImportService()
 
     # Managers
@@ -171,33 +173,31 @@ class BaseFactory(Factory):
 
     # Reporters
 
-    def standard_authark_informer(
+    def authark_informer(
         self, user_repository: UserRepository,
         credential_repository: CredentialRepository,
         dominion_repository: DominionRepository,
         role_repository: RoleRepository,
         restriction_repository: RestrictionRepository,
         policy_repository: PolicyRepository,
-        ranking_repository: RankingRepository
-    ) -> StandardAutharkInformer:
+        ranking_repository: RankingRepository) -> AutharkInformer:
         return StandardAutharkInformer(
             user_repository, credential_repository,
             dominion_repository, role_repository,
             restriction_repository, policy_repository,
             ranking_repository)
 
-    def standard_composing_informer(
+    def composing_informer(
         self, dominion_repository: DominionRepository,
         role_repository: RoleRepository,
-        ranking_repository: RankingRepository
-    ) -> StandardComposingInformer:
+        ranking_repository: RankingRepository) -> ComposingInformer:
         return StandardComposingInformer(
             dominion_repository, role_repository, ranking_repository)
 
     # Suppliers
 
-    def memory_tenant_supplier(self) -> TenantSupplier:
+    def tenant_supplier(self) -> TenantSupplier:
         return MemoryTenantSupplier()
 
-    def memory_setup_supplier(self) -> MemorySetupSupplier:
+    def setup_supplier(self) -> SetupSupplier:
         return MemorySetupSupplier()

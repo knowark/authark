@@ -61,6 +61,8 @@ class AuthManager:
             raise AuthError("Authentication Error: No credentials found.")
 
         user_password = credentials[0].value
+        print('PASS::', password, "USER_PASS", user_password)
+        print('HServ', self.hash_service)
         if not self.hash_service.verify_password(password, user_password):
             raise AuthError("Authentication Error: Password mismatch.")
 
