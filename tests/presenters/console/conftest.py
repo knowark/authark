@@ -46,4 +46,4 @@ def injector(config):
     strategy = strategy_builder.build(config['strategies'])
     factory = factory_builder.build(config)
 
-    return Injectark(strategy, factory)
+    return Injectark(factory, strategy)

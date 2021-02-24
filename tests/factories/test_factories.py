@@ -17,7 +17,7 @@ def test_factories():
         factory = factory_builder.build(config, name=factory_name)
         strategy = strategy_builder.build(strategy_names)
 
-        injector = Injectark(strategy=strategy, factory=factory)
+        injector = Injectark(factory=factory, strategy=strategy)
 
         for resource in strategy.keys():
             result = injector.resolve(resource)

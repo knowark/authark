@@ -14,7 +14,7 @@ async def main(args=None):
     strategy = strategy_builder.build(config['strategies'])
     factory = factory_builder.build(config)
 
-    injector = Injectark(strategy, factory)
+    injector = Injectark(factory, strategy)
     injector['SetupSupplier'].setup()
 
     await Shell(config, injector).run(args or [])

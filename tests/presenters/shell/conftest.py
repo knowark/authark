@@ -12,6 +12,6 @@ def shell() -> Shell:
     strategy = strategy_builder.build(config['strategies'])
     factory = factory_builder.build(config)
 
-    injector = Injectark(strategy, factory)
+    injector = Injectark(factory, strategy)
 
     return Shell(config, injector)

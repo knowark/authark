@@ -12,7 +12,7 @@ def app(loop, aiohttp_client):
     strategy = strategy_builder.build(config['strategies'])
     factory = factory_builder.build(config)
 
-    injector = Injectark(strategy, factory)
+    injector = Injectark(factory, strategy)
 
     rest = RestApplication(config, injector)
 
