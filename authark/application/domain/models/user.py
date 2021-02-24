@@ -11,5 +11,6 @@ class User(Entity):
         self.username = attributes['username']
         self.email = attributes['email']
         self.name = attributes.get('name', '')
+        self.active = attributes.get('active', True)
         self.attributes: Attributes = attributes.get(
             'attributes', {})
