@@ -1,14 +1,14 @@
 base = {
     # --- PROVIDERS ---
-    "QueryParser": {
-        "method": "query_parser"
-    },
-    "AuthProvider": {
-        "method": "standard_auth_provider"
-    },
-    "TenantProvider": {
-        "method": "standard_tenant_provider"
-    },
+    # "QueryParser": {
+        # "method": "query_parser"
+    # },
+    # "AuthProvider": {
+        # "method": "standard_auth_provider"
+    # },
+    # "TenantProvider": {
+        # "method": "standard_tenant_provider"
+    # },
     # --- REPOSITORIES ---
     "CredentialRepository": {
         "method": "memory_credential_repository"

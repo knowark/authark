@@ -34,10 +34,10 @@ class BaseFactory(Factory):
     def query_parser(self) -> QueryParser:
         return QueryParser()
 
-    def standard_auth_provider(self) -> StandardAuthProvider:
+    def auth_provider(self) -> StandardAuthProvider:
         return StandardAuthProvider()
 
-    def standard_tenant_provider(self) -> StandardTenantProvider:
+    def tenant_provider(self) -> StandardTenantProvider:
         return StandardTenantProvider()
 
     def memory_user_repository(
