@@ -40,7 +40,7 @@ class BaseFactory(Factory):
     def tenant_provider(self) -> StandardTenantProvider:
         return StandardTenantProvider()
 
-    def memory_user_repository(
+    def user_repository(
             self, query_parser: QueryParser,
             tenant_provider: TenantProvider,
             auth_provider: AuthProvider
@@ -48,7 +48,7 @@ class BaseFactory(Factory):
         return MemoryUserRepository(
             query_parser, tenant_provider, auth_provider)
 
-    def memory_credential_repository(
+    def credential_repository(
             self, query_parser: QueryParser,
             tenant_provider: TenantProvider,
             auth_provider: AuthProvider
@@ -56,7 +56,7 @@ class BaseFactory(Factory):
         return MemoryCredentialRepository(
             query_parser, tenant_provider, auth_provider)
 
-    def memory_dominion_repository(
+    def dominion_repository(
             self, query_parser: QueryParser,
             tenant_provider: TenantProvider,
             auth_provider: AuthProvider
@@ -64,7 +64,7 @@ class BaseFactory(Factory):
         return MemoryDominionRepository(
             query_parser, tenant_provider, auth_provider)
 
-    def memory_role_repository(
+    def role_repository(
             self, query_parser: QueryParser,
             tenant_provider: TenantProvider,
             auth_provider: AuthProvider
@@ -72,7 +72,7 @@ class BaseFactory(Factory):
         return MemoryRoleRepository(
             query_parser, tenant_provider, auth_provider)
 
-    def memory_restriction_repository(
+    def restriction_repository(
             self, query_parser: QueryParser,
             tenant_provider: TenantProvider,
             auth_provider: AuthProvider
@@ -80,7 +80,7 @@ class BaseFactory(Factory):
         return MemoryRestrictionRepository(
             query_parser, tenant_provider, auth_provider)
 
-    def memory_policy_repository(
+    def policy_repository(
             self, query_parser: QueryParser,
             tenant_provider: TenantProvider,
             auth_provider: AuthProvider
@@ -88,7 +88,7 @@ class BaseFactory(Factory):
         return MemoryPolicyRepository(
             query_parser, tenant_provider, auth_provider)
 
-    def memory_ranking_repository(
+    def ranking_repository(
             self, query_parser: QueryParser,
             tenant_provider: TenantProvider,
             auth_provider: AuthProvider

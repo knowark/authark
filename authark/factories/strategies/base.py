@@ -10,27 +10,27 @@ base = {
         # "method": "standard_tenant_provider"
     # },
     # --- REPOSITORIES ---
-    "CredentialRepository": {
-        "method": "memory_credential_repository"
-    },
-    "DominionRepository": {
-        "method": "memory_dominion_repository"
-    },
-    "RankingRepository": {
-        "method": "memory_ranking_repository"
-    },
-    "RoleRepository": {
-        "method": "memory_role_repository"
-    },
-    "RestrictionRepository": {
-        "method": "memory_restriction_repository"
-    },
-    "PolicyRepository": {
-        "method": "memory_policy_repository"
-    },
-    "UserRepository": {
-        "method": "memory_user_repository"
-    },
+    # "CredentialRepository": {
+        # "method": "memory_credential_repository"
+    # },
+    # "DominionRepository": {
+        # "method": "memory_dominion_repository"
+    # },
+    # "RankingRepository": {
+        # "method": "memory_ranking_repository"
+    # },
+    # "RoleRepository": {
+        # "method": "memory_role_repository"
+    # },
+    # "RestrictionRepository": {
+        # "method": "memory_restriction_repository"
+    # },
+    # "PolicyRepository": {
+        # "method": "memory_policy_repository"
+    # },
+    # "UserRepository": {
+        # "method": "memory_user_repository"
+    # },
     # --- SERVICES ---
     "HashService": {
         "method": "memory_hash_service"
