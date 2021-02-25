@@ -15,14 +15,14 @@ def test_memory_token_service_implementation() -> None:
     assert issubclass(MemoryNotificationService, NotificationService)
 
 
-def test_memory_notification_service_notify() -> None:
+async def test_memory_notification_service_notify() -> None:
     content = {
         'to': "jdoe@mail.com",
         'subject': "Account activation",
         'message': 'Hello World!'}
 
     notification_service = MemoryNotificationService()
-    notification_service.notify(content)
+    await notification_service.notify(content)
 
     assert notification_service.content == content
 

@@ -184,6 +184,7 @@ async def test_auth_manager_fail_to_authenticate_missing_credentials(
 
 async def test_auth_manager_register(auth_manager):
     user_dicts: RecordList = [{
+        "name": "Miguel Vivas",
         "username": "mvp",
         "email": "mvp@gmail.com",
         "password": "PASS4"
@@ -191,9 +192,17 @@ async def test_auth_manager_register(auth_manager):
     await auth_manager.register(user_dicts)
     credential_repository = auth_manager.credential_repository
     user_repository = auth_manager.user_repository
+    notification_service = auth_manager.notification_service
 
     assert len(user_repository.data['default']) == 4
     assert len(credential_repository.data['default']) == 4
+    assert notification_service.content == {
+        'type': 'activation',
+        'subject': 'Account Activation',
+        'recipient': 'mvp@gmail.com',
+        'owner': 'Miguel Vivas',
+        'token': '<activation_jwt>'
+    }
 
 
 async def test_auth_manager_update(auth_manager):

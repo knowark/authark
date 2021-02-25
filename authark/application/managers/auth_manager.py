@@ -53,6 +53,15 @@ class AuthManager:
 
         await self._make_password_credentials(users, user_dicts)
 
+        for user in users:
+            await self.notification_service.notify({
+                'type': 'activation',
+                'subject': 'Account Activation',
+                'recipient': user.email,
+                'owner': user.name,
+                'token': '<activation_jwt>'
+            })
+
     async def _password_authenticate(
             self, username: str, password: str,
             client: str, dominion_name: str) -> TokensDict:
