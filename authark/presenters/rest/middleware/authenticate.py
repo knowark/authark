@@ -17,7 +17,7 @@ def authenticate_middleware_factory(
             return await handler(request)
 
         try:
-            user_dict = extract_user(request.headers)
+            user_dict = extract_user(dict(request.headers))
             session_coordinator.set_user(user_dict)
             tenant_id = request.headers['TenantId']
             tenant_dict = tenant_supplier.get_tenant(tenant_id)
