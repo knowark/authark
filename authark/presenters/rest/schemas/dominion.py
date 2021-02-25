@@ -6,4 +6,4 @@ class DominionSchema(EntitySchema):
     class Meta:
         unknown = EXCLUDE
 
-    name = fields.Str(required=True, example="cloudplatform")
+    name = fields.Str(required=True, metadata=dict(example="cloudplatform"))

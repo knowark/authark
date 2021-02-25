@@ -125,7 +125,7 @@ async def test_tokens_put_route_with_password(app):
 
 async def xtest_tokens_put_route_with_refresh_token(app):
     token = jwt.encode(
-        {'user': "pepe"}, 'REFRESHSECRET').decode('utf-8')
+        {'user': "pepe"}, 'REFRESHSECRET')
     response = await app.put(
         '/tokens',
         data=dumps(dict(

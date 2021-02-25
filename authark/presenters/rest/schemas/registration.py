@@ -7,10 +7,14 @@ class RegistrationSchema(EntitySchema):
         unknown = EXCLUDE
 
     enroll = fields.Boolean(default=False, missing=False)
-    tenant = fields.Str(required=True, example="knowark")
-    email = fields.Str(required=True, example="jarango@ops.servagro.com.co")
-    username = fields.Str(required=True, example="jarango")
-    password = fields.Str(required=True, example="secret")
-    name = fields.Str(required=True, example="Jaime Arango")
-    zone = fields.Str(example="default")
+    tenant = fields.Str(required=True, metadata=dict(example="knowark"))
+    email = fields.Str(
+        required=True, metadata=dict(example="jarango@ops.servagro.com.co"))
+    username = fields.Str(
+        required=True, metadata=dict(example="jarango"))
+    password = fields.Str(
+        required=True, metadata=dict(example="secret"))
+    name = fields.Str(
+        required=True, metadata=dict(example="Jaime Arango"))
+    zone = fields.Str(metadata=dict(example="default"))
     attributes = fields.Mapping()

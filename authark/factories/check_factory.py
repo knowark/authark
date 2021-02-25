@@ -73,7 +73,7 @@ class CheckFactory(CryptoFactory):
         credential_repository = super().credential_repository(
             query_parser, tenant_provider, auth_provider)
         refresh_token = jwt.encode(
-            {'user': "pepe"}, 'REFRESHSECRET').decode('utf-8')
+            {'user': "pepe"}, 'REFRESHSECRET')
         credential_repository.load({'default': {
             "1": Credential(id='1', user_id='1', value="HASHED: ABC1234"),
             "2": Credential(id='2', user_id='2', value="HASHED: XYZ098"),

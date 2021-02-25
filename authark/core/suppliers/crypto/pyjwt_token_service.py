@@ -19,7 +19,7 @@ class PyJWTTokenService(TokenService):
         payload = payload or {}
         payload['exp'] = int(time()) + int(self.lifetime)
         value = jwt.encode(payload, self.secret, algorithm=self.algorithm)
-        token = Token(str(value, 'utf-8'))
+        token = Token(value)
         return token
 
     def valid(self, token: Token) -> bool:
