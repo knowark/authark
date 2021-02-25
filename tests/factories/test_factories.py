@@ -5,21 +5,75 @@ from authark.factories import factory_builder, strategy_builder
 
 
 test_tuples = [
-    ('BaseFactory', ['base']),
-    ('CheckFactory', ['base', 'check']),
-    ('CryptoFactory', ['base', 'crypto']),
-    ('JsonFactory', ['base', 'crypto', 'json']),
+    ('BaseFactory', [
+        ('QueryParser', 'QueryParser'),
+        ('AuthProvider', 'StandardAuthProvider'),
+        ('TenantProvider', 'StandardTenantProvider'),
+        ('UserRepository', 'MemoryUserRepository'),
+        ('CredentialRepository', 'MemoryCredentialRepository'),
+        ('DominionRepository', 'MemoryDominionRepository'),
+        ('RoleRepository', 'MemoryRoleRepository'),
+        ('RestrictionRepository', 'MemoryRestrictionRepository'),
+        ('PolicyRepository', 'MemoryPolicyRepository'),
+        ('RankingRepository', 'MemoryRankingRepository'),
+        ('HashService', 'MemoryHashService'),
+        ('AccessTokenService', 'MemoryAccessTokenService'),
+        ('RefreshTokenService', 'MemoryRefreshTokenService'),
+        ('ImportService', 'MemoryImportService'),
+        ('AccessService', 'AccessService'),
+        ('AuthManager', 'AuthManager'),
+        ('ManagementManager', 'ManagementManager'),
+        ('ImportManager', 'ImportManager'),
+        ('SessionManager', 'SessionManager'),
+        ('SecurityManager', 'SecurityManager'),
+        ('AutharkInformer', 'StandardAutharkInformer'),
+        ('ComposingInformer', 'StandardComposingInformer'),
+        ('TenantSupplier', 'MemoryTenantSupplier'),
+        ('SetupSupplier', 'MemorySetupSupplier'),
+    ]),
+    ('CheckFactory', [
+        ('TenantProvider', 'StandardTenantProvider'),
+        ('AuthProvider', 'StandardAuthProvider'),
+        ('TenantSupplier', 'MemoryTenantSupplier'),
+        ('HashService', 'MemoryHashService'),
+        ('UserRepository', 'MemoryUserRepository'),
+        ('CredentialRepository', 'MemoryCredentialRepository'),
+        ('RoleRepository', 'MemoryRoleRepository'),
+        ('RankingRepository', 'MemoryRankingRepository'),
+        ('RestrictionRepository', 'MemoryRestrictionRepository'),
+        ('PolicyRepository', 'MemoryPolicyRepository'),
+        ('DominionRepository', 'MemoryDominionRepository'),
+        ('AccessTokenService', 'PyJWTAccessTokenService'),
+        ('AccessService', 'AccessService'),
+    ]),
+    ('CryptoFactory', [
+        ('HashService', 'PasslibHashService'),
+        ('TokenService', 'PyJWTTokenService'),
+        ('AccessTokenService', 'PyJWTAccessTokenService'),
+        ('RefreshTokenService', 'PyJWTRefreshTokenService'),
+        ('JwtSupplier', 'JwtSupplier'),
+    ]),
+    ('JsonFactory', [
+        ('UserRepository', 'JsonUserRepository'),
+        ('CredentialRepository', 'JsonCredentialRepository'),
+        ('DominionRepository', 'JsonDominionRepository'),
+        ('RoleRepository', 'JsonRoleRepository'),
+        ('RestrictionRepository', 'JsonRestrictionRepository'),
+        ('PolicyRepository', 'JsonPolicyRepository'),
+        ('RankingRepository', 'JsonRankingRepository'),
+        ('ImportService', 'JsonImportService'),
+        ('TenantSupplier', 'JsonTenantSupplier'),
+        ('SetupSupplier', 'JsonSetupSupplier'),
+    ]),
 ]
 
 
 def test_factories():
-    for factory_name, strategy_names in test_tuples:
+    for factory_name, dependencies in test_tuples:
         factory = factory_builder.build(config, name=factory_name)
-        strategy = strategy_builder.build(strategy_names)
 
-        injector = Injectark(factory=factory, strategy=strategy)
+        injector = Injectark(factory=factory)
 
-        for resource in strategy.keys():
-            result = injector.resolve(resource)
-            classes = inspect.getmro(type(result))
-            assert resource in [item.__name__ for item in classes]
+        for abstract, concrete in dependencies:
+            result = injector.resolve(abstract)
+            assert type(result).__name__ == concrete

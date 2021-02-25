@@ -28,7 +28,7 @@ class JsonFactory(CryptoFactory):
             tenant_provider: TenantProvider,
             auth_provider: AuthProvider
     ) -> UserRepository:
-        return UserRepository(self.data_path, query_parser,
+        return JsonUserRepository(self.data_path, query_parser,
                                   tenant_provider, auth_provider)
 
     def credential_repository(

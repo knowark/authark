@@ -112,6 +112,17 @@ class BaseFactory(Factory):
     def import_service(self, hash_service: HashService) -> ImportService:
         return MemoryImportService()
 
+    def access_service(
+            self, ranking_repository: RankingRepository,
+            role_repository: RoleRepository,
+            dominion_repository: DominionRepository,
+            token_service: AccessTokenService,
+            tenant_provider: TenantProvider) -> AccessService:
+        return AccessService(
+            ranking_repository, role_repository,
+            dominion_repository,
+            token_service, tenant_provider)
+
     # Managers
 
     def auth_manager(
@@ -159,17 +170,6 @@ class BaseFactory(Factory):
         policy_repository: PolicyRepository
     ) -> SecurityManager:
         return SecurityManager(restriction_repository, policy_repository)
-
-    def access_service(
-            self, ranking_repository: RankingRepository,
-            role_repository: RoleRepository,
-            dominion_repository: DominionRepository,
-            token_service: AccessTokenService,
-            tenant_provider: TenantProvider) -> AccessService:
-        return AccessService(
-            ranking_repository, role_repository,
-            dominion_repository,
-            token_service, tenant_provider)
 
     # Reporters
 
