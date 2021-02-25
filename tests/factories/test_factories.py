@@ -19,6 +19,7 @@ test_tuples = [
         ('HashService', 'MemoryHashService'),
         ('AccessTokenService', 'MemoryAccessTokenService'),
         ('RefreshTokenService', 'MemoryRefreshTokenService'),
+        ('VerificationTokenService', 'MemoryVerificationTokenService'),
         ('ImportService', 'MemoryImportService'),
         ('NotificationService', 'MemoryNotificationService'),
         ('AccessService', 'AccessService'),

@@ -14,6 +14,7 @@ from ..application.domain.services import (
     HashService, MemoryHashService,
     AccessTokenService, MemoryAccessTokenService,
     RefreshTokenService, MemoryRefreshTokenService,
+    VerificationTokenService, MemoryVerificationTokenService,
     NotificationService, MemoryNotificationService,
     ImportService, MemoryImportService, AccessService)
 from ..application.managers import (
@@ -109,6 +110,9 @@ class BaseFactory(Factory):
 
     def refresh_token_service(self) -> RefreshTokenService:
         return MemoryRefreshTokenService()
+
+    def verification_token_service(self) -> VerificationTokenService:
+        return MemoryVerificationTokenService()
 
     def import_service(self, hash_service: HashService) -> ImportService:
         return MemoryImportService()

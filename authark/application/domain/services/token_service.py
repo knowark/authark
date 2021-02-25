@@ -39,3 +39,12 @@ class RefreshTokenService(TokenService):
 
 class MemoryRefreshTokenService(MemoryTokenService, RefreshTokenService):
     """Memory Refresh Token Service"""
+
+
+class VerificationTokenService(TokenService):
+    """Verification Token Service"""
+
+
+class MemoryVerificationTokenService(
+        MemoryTokenService, VerificationTokenService):
+    """Memory Verification Token Service"""
