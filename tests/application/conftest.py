@@ -16,9 +16,11 @@ from authark.application.domain.repositories import (
 from authark.application.domain.services import (
     TokenService, MemoryTokenService, AccessService,
     ImportService, MemoryImportService,
+    NotificationService, MemoryNotificationService,
     HashService, MemoryHashService)
 from authark.application.managers import (
-    AuthManager, ManagementManager, ImportManager, SessionManager, SecurityManager)
+    AuthManager, ManagementManager, ImportManager,
+    SessionManager, SecurityManager)
 
 
 # # ###########
@@ -179,6 +181,11 @@ def mock_hash_service() -> HashService:
     mock_hash_service = MemoryHashService()
     return mock_hash_service
 
+@fixture
+def mock_notification_service() -> NotificationService:
+    mock_notification_service = MemoryNotificationService()
+    return mock_notification_service
+
 
 @fixture
 def mock_import_service() -> ImportService:  # duda
@@ -248,11 +255,13 @@ def access_service(mock_ranking_repository, mock_role_repository,
 @fixture
 def auth_manager(mock_user_repository, mock_credential_repository,
                  mock_dominion_repository, mock_hash_service,
-                 access_service, mock_refresh_token_service):
+                 access_service, mock_notification_service,
+                 mock_refresh_token_service):
     return AuthManager(
         mock_user_repository, mock_credential_repository,
         mock_dominion_repository, mock_hash_service,
-        access_service, mock_refresh_token_service)
+        access_service, mock_notification_service,
+        mock_refresh_token_service)
 
 
 @fixture

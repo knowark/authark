@@ -5,7 +5,8 @@ from ..domain.common import (
 from ..domain.models import Token, User, Credential, Dominion
 from ..domain.repositories import (
     UserRepository, CredentialRepository, DominionRepository)
-from ..domain.services import RefreshTokenService, HashService, AccessService
+from ..domain.services import (
+    RefreshTokenService, HashService, AccessService, NotificationService)
 
 
 class AuthManager:
@@ -15,12 +16,14 @@ class AuthManager:
                  dominion_repository: DominionRepository,
                  hash_service: HashService,
                  access_service: AccessService,
+                 notification_service: NotificationService,
                  refresh_token_service: RefreshTokenService) -> None:
         self.user_repository = user_repository
         self.credential_repository = credential_repository
         self.dominion_repository = dominion_repository
         self.hash_service = hash_service
         self.access_service = access_service
+        self.notification_service = notification_service
         self.refresh_token_service = refresh_token_service
 
     async def authenticate(self, request_dict: Dict[str, str]) -> TokensDict:
