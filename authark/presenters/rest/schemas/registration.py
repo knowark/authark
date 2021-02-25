@@ -6,8 +6,10 @@ class RegistrationSchema(EntitySchema):
     class Meta:
         unknown = EXCLUDE
 
-    enroll = fields.Boolean(default=False, missing=False)
-    tenant = fields.Str(required=True, metadata=dict(example="knowark"))
+    enroll = fields.Boolean(
+        default=False, missing=False)
+    organization = fields.Str(
+        required=True, metadata=dict(example="Servagro"))
     email = fields.Str(
         required=True, metadata=dict(example="jarango@ops.servagro.com.co"))
     username = fields.Str(
@@ -16,5 +18,6 @@ class RegistrationSchema(EntitySchema):
         required=True, metadata=dict(example="secret"))
     name = fields.Str(
         required=True, metadata=dict(example="Jaime Arango"))
-    zone = fields.Str(metadata=dict(example="default"))
+    zone = fields.Str(
+        metadata=dict(example="default"))
     attributes = fields.Mapping()

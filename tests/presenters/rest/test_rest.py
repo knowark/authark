@@ -142,7 +142,7 @@ async def test_registrations_put_route(app):
     response = await app.put(
         '/registrations',
         data=dumps(dict(
-            tenant="Platform XYZ",
+            organization="Knowark",
             username="eecheverry",
             email="eecheverry@knowark.com",
             password="ABC1234",
@@ -156,7 +156,7 @@ async def test_registrations_enroll_put_route(app):
     response = await app.put(
         '/registrations',
         data=dumps(dict(
-            tenant="Default",
+            organization="Default",
             username="masolano",
             email="masolano@knowark.com",
             password="XYZ1234",

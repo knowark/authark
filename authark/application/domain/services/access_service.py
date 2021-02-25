@@ -35,8 +35,10 @@ class AccessService:
     def _build_basic_info(self, tenant: Tenant, user: User) -> Dict[str, Any]:
         return {
             'tid': tenant.id,
+            'tenant': tenant.slug,
+            'organization': tenant.name,
             'uid': user.id,
-            'tenant': tenant.name,
+            'username': user.username,
             'name': user.name,
             'email': user.email,
             'attributes': user.attributes,

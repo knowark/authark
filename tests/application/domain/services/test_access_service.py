@@ -20,7 +20,9 @@ async def test_access_service_build_payload(access_service) -> None:
     assert isinstance(payload, dict)
     assert 'tid' in payload
     assert 'uid' in payload
+    assert 'organization' in payload
     assert 'tenant' in payload
+    assert 'username' in payload
     assert 'name' in payload
     assert 'email' in payload
     assert 'attributes' in payload
@@ -35,7 +37,9 @@ def test_access_service_build_basic_info(access_service) -> None:
     assert isinstance(info, dict)
     assert info['tid'] == tenant.id
     assert info['uid'] == user.id
-    assert info['tenant'] == tenant.name
+    assert info['organization'] == tenant.name
+    assert info['tenant'] == tenant.slug
+    assert info['username'] == user.username
     assert info['name'] == user.name
     assert info['email'] == user.email
     assert info['attributes'] == user.attributes

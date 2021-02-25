@@ -12,7 +12,7 @@ class RegistrationResource:
     async def put(self, request: web.Request) -> web.Response:
         registration_dict = RegistrationSchema().loads(await request.text())
         tenant_dict = {
-            'name': registration_dict.pop('tenant'),
+            'name': registration_dict.pop('organization'),
             'zone': registration_dict.pop('zone', ''),
             'email': registration_dict['email'],
             'attributes': registration_dict.get('attributes', {})
