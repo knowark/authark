@@ -14,6 +14,7 @@ from ..application.domain.services import (
     HashService, MemoryHashService,
     AccessTokenService, MemoryAccessTokenService,
     RefreshTokenService, MemoryRefreshTokenService,
+    NotificationService, MemoryNotificationService,
     ImportService, MemoryImportService, AccessService)
 from ..application.managers import (
     AuthManager, ManagementManager,
@@ -111,6 +112,9 @@ class BaseFactory(Factory):
 
     def import_service(self, hash_service: HashService) -> ImportService:
         return MemoryImportService()
+
+    def notification_service(self) -> NotificationService:
+        return MemoryNotificationService()
 
     def access_service(
             self, ranking_repository: RankingRepository,
