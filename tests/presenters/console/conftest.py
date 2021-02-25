@@ -3,7 +3,7 @@ from pytest import fixture
 from widark.widget import Widget
 from injectark import Injectark
 from authark.core import config as global_config
-from authark.factories import strategy_builder, factory_builder
+from authark.factories import factory_builder
 from authark.presenters.console import ConsoleApplication
 
 
@@ -41,9 +41,6 @@ def config():
 @fixture
 def injector(config):
     config['factory'] = 'CheckFactory'
-    config['strategies'] = ['base', 'check']
-
-    strategy = strategy_builder.build(config['strategies'])
     factory = factory_builder.build(config)
 
-    return Injectark(factory, strategy)
+    return Injectark(factory)

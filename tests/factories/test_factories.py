@@ -1,7 +1,7 @@
 import inspect
 from injectark import Injectark
 from authark.core.common import config
-from authark.factories import factory_builder, strategy_builder
+from authark.factories import factory_builder
 
 
 test_tuples = [
