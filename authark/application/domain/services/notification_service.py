@@ -1,4 +1,3 @@
-import json
 from typing import Dict, Any
 from abc import ABC, abstractmethod
 from ..models import Token
