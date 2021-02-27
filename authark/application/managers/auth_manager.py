@@ -10,7 +10,6 @@ from ..domain.services import (
 
 
 class AuthManager:
-
     def __init__(self, user_repository: UserRepository,
                  credential_repository: CredentialRepository,
                  dominion_repository: DominionRepository,

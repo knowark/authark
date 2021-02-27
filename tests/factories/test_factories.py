@@ -67,6 +67,9 @@ test_tuples = [
         ('TenantSupplier', 'JsonTenantSupplier'),
         ('SetupSupplier', 'JsonSetupSupplier'),
     ]),
+    ('WebFactory', [
+        ('NotificationService', 'MailNotificationService'),
+    ]),
 ]
 
 

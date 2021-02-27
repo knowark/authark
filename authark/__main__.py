@@ -7,7 +7,10 @@ import uvloop
 from injectark import Injectark
 from .presenters.shell import Shell
 from .factories import factory_builder
-from .core import config
+from .core import config, sanitize
+
+
+config = sanitize(config)
 
 
 async def main(args=None):
