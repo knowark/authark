@@ -20,7 +20,7 @@ async def test_mail_notification_service_notify(
 
     send_content = {}
 
-    async def mock_send(message, hostname, port, username, password):
+    async def mock_send(message, hostname, port, username, password, use_tls):
         nonlocal send_content
         send_content['message'] = message
         send_content['hostname'] = hostname
