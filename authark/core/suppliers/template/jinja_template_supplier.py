@@ -1,0 +1,3 @@
+
+class JinjaTemplateSupplier:
+    pass
