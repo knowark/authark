@@ -118,7 +118,8 @@ class BaseFactory(Factory):
     def import_service(self, hash_service: HashService) -> ImportService:
         return MemoryImportService()
 
-    def notification_service(self) -> NotificationService:
+    def notification_service(
+        self, template_supplier: TemplateSupplier) -> NotificationService:
         return MemoryNotificationService()
 
     def access_service(

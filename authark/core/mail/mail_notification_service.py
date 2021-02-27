@@ -3,17 +3,18 @@ from email.message import EmailMessage
 from aiosmtplib import send
 from ...application.domain.common import NotificationError
 from ...application.domain.services import NotificationService
+from ..suppliers import TemplateSupplier
 
 
 
 class MailNotificationService(NotificationService):
-    def __init__(self, sender: str, host: str, port: int,
-                 username: str, password: str) -> None:
-        self.sender = sender
-        self.host = host
-        self.port = port
-        self.username = username
-        self.password = password
+    def __init__(self, config: Dict[str, Any],
+                 template_supplier: TemplateSupplier) -> None:
+        self.sender = config['sender']
+        self.host = config['host']
+        self.port = config['port']
+        self.username = config['username']
+        self.password = config['password']
 
     async def notify(self, notification: Dict[str, Any]) -> None:
         await super().notify(notification)

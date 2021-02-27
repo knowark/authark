@@ -1,4 +1,5 @@
 from ..application.domain.services import NotificationService
+from ..core.suppliers import TemplateSupplier
 from ..core.common import Config
 from ..core.mail import MailNotificationService
 from .json_factory import JsonFactory
@@ -11,11 +12,7 @@ class WebFactory(JsonFactory):
 
     # Services
 
-    def notification_service(self) -> NotificationService:
+    def notification_service(
+        self, template_supplier: TemplateSupplier) -> NotificationService:
         return MailNotificationService(
-            self.mail_config['sender'],
-            self.mail_config['host'],
-            self.mail_config['port'],
-            self.mail_config['username'],
-            self.mail_config['password'])
-
+            self.mail_config, template_supplier)
