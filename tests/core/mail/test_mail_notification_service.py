@@ -1,14 +1,19 @@
 from pytest import fixture
 from email.message import EmailMessage
+from authark.core.suppliers import MemoryTemplateSupplier
 from authark.core.mail import MailNotificationService
 from authark.core.mail import (
     mail_notification_service as mail_notification_service_module)
 
 
+
 @fixture
 def mail_notification_service():
+    template_supplier = MemoryTemplateSupplier()
     return MailNotificationService(
-        'admin@mail.com', 'smtp.knowark.com', 587, 'infobot', 'pass123')
+        {'sender': 'admin@mail.com', 'host': 'smtp.knowark.com',
+         'port': 587, 'username': 'infobot', 'password': 'pass123'},
+        template_supplier)
 
 
 def test_mail_notification_service_instantiation(mail_notification_service):
