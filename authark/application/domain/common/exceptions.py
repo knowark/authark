@@ -48,6 +48,9 @@ class ServiceError(ApplicationError):
     """Services' base error class."""
 
 
+class NotificationError(ServiceError):
+    """Notification generation error class."""
+
 # Coordinators
 
 class UserCreationError(ApplicationError):

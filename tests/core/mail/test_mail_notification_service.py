@@ -34,7 +34,8 @@ async def test_mail_notification_service_notify(
         'type': 'activation',
         'subject': 'New Account Activation',
         'recipient': 'valenep@example.com',
-        'body': 'Welcome on board!'
+        'owner': 'Valentina',
+        'token': '<verification_token>'
     }
 
     await mail_notification_service.notify(content)
@@ -43,7 +44,8 @@ async def test_mail_notification_service_notify(
     assert send_content['message']['From'] == 'admin@mail.com'
     assert send_content['message']['To'] == 'valenep@example.com'
     assert send_content['message']['Subject'] == 'New Account Activation'
-    assert send_content['message'].get_content() == 'Welcome on board!\n'
+    assert send_content['message'].get_content() == (
+        'Valentina + <verification_token>\n')
     assert send_content['hostname'] == 'smtp.knowark.com'
     assert send_content['port'] == 587
     assert send_content['username'] == 'infobot'

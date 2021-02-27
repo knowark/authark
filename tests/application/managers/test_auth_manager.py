@@ -196,7 +196,7 @@ async def test_auth_manager_register(auth_manager):
 
     assert len(user_repository.data['default']) == 4
     assert len(credential_repository.data['default']) == 4
-    assert notification_service.content == {
+    assert notification_service.notification == {
         'type': 'activation',
         'subject': 'Account Activation',
         'recipient': 'mvp@gmail.com',
