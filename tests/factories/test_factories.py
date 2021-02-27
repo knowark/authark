@@ -32,6 +32,7 @@ test_tuples = [
         ('ComposingInformer', 'StandardComposingInformer'),
         ('TenantSupplier', 'MemoryTenantSupplier'),
         ('SetupSupplier', 'MemorySetupSupplier'),
+        ('TemplateSupplier', 'MemoryTemplateSupplier'),
     ]),
     ('CheckFactory', [
         ('TenantProvider', 'StandardTenantProvider'),

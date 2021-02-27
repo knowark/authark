@@ -1,3 +1,4 @@
 from .crypto import *
-from .tenancy import *
 from .setup import *
+from .template import *
+from .tenancy import *

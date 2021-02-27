@@ -26,7 +26,8 @@ from ..application.informers import (
 from ..core.common import Config
 from ..core.suppliers import (
     TenantSupplier, MemoryTenantSupplier,
-    SetupSupplier, MemorySetupSupplier)
+    SetupSupplier, MemorySetupSupplier,
+    TemplateSupplier, MemoryTemplateSupplier)
 
 
 class BaseFactory(Factory):
@@ -211,3 +212,6 @@ class BaseFactory(Factory):
 
     def setup_supplier(self) -> SetupSupplier:
         return MemorySetupSupplier()
+
+    def template_supplier(self) -> TemplateSupplier:
+        return MemoryTemplateSupplier()
