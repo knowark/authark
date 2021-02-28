@@ -12,7 +12,8 @@ def mail_notification_service():
     template_supplier = MemoryTemplateSupplier()
     return MailNotificationService(
         {'sender': 'admin@mail.com', 'host': 'smtp.knowark.com',
-         'port': 587, 'username': 'infobot', 'password': 'pass123'},
+         'port': 587, 'username': 'infobot', 'password': 'pass123',
+         'url': 'http://api.tempos.local/rest/auth'},
         template_supplier)
 
 
