@@ -119,7 +119,8 @@ class BaseFactory(Factory):
         return MemoryImportService()
 
     def notification_service(
-        self, template_supplier: TemplateSupplier) -> NotificationService:
+        self, template_supplier: TemplateSupplier
+    ) -> NotificationService:
         return MemoryNotificationService()
 
     def access_service(
@@ -194,7 +195,8 @@ class BaseFactory(Factory):
         role_repository: RoleRepository,
         restriction_repository: RestrictionRepository,
         policy_repository: PolicyRepository,
-        ranking_repository: RankingRepository) -> AutharkInformer:
+        ranking_repository: RankingRepository
+    ) -> AutharkInformer:
         return StandardAutharkInformer(
             user_repository, credential_repository,
             dominion_repository, role_repository,
@@ -204,7 +206,8 @@ class BaseFactory(Factory):
     def composing_informer(
         self, dominion_repository: DominionRepository,
         role_repository: RoleRepository,
-        ranking_repository: RankingRepository) -> ComposingInformer:
+        ranking_repository: RankingRepository
+    ) -> ComposingInformer:
         return StandardComposingInformer(
             dominion_repository, role_repository, ranking_repository)
 

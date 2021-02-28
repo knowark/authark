@@ -2,7 +2,8 @@ from typing import Dict
 from pytest import fixture
 from datetime import datetime
 from authark.core import (
-    JwtSupplier, PasslibHashService, PyJWTTokenService)
+    # JwtSupplier, 
+    PasslibHashService, PyJWTTokenService)
 
 
 @fixture
@@ -18,9 +19,9 @@ def payload_dict() -> Dict:
     }
 
 
-@fixture
-def jwt_supplier() -> JwtSupplier:
-    return JwtSupplier("knowark")
+# @fixture
+# def jwt_supplier() -> JwtSupplier:
+    # return JwtSupplier("knowark")
 
 
 @fixture
