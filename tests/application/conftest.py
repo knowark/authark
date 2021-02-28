@@ -22,7 +22,7 @@ from authark.application.domain.services import (
     HashService, MemoryHashService)
 from authark.application.managers import (
     AuthManager, ManagementManager, ImportManager,
-    SessionManager, SecurityManager)
+    SessionManager, SecurityManager, VerificationManager)
 
 
 # # ###########
@@ -300,3 +300,8 @@ def import_manager(
 @fixture
 def session_manager(mock_tenant_provider, mock_auth_provider):
     return SessionManager(mock_tenant_provider, mock_auth_provider)
+
+
+@fixture
+def verification_manager():
+    return VerificationManager()

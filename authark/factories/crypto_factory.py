@@ -2,7 +2,7 @@ from ..application.domain.services import (
     HashService, AccessTokenService, RefreshTokenService,
     VerificationTokenService, TokenService)
 from ..core.suppliers.crypto import (
-    PasslibHashService, PyJWTTokenService, JwtSupplier,
+    PasslibHashService, PyJWTTokenService,
     PyJWTVerificationTokenService, PyJWTAccessTokenService,
     PyJWTRefreshTokenService)
 from ..core.common import Config
@@ -48,7 +48,3 @@ class CryptoFactory(BaseFactory):
             self.refresh_config['algorithm'],
             self.refresh_config['lifetime'],
             self.refresh_config['threshold'])
-
-    def jwt_supplier(self) -> JwtSupplier:
-        secret = self.access_config['secret']
-        return JwtSupplier(secret)

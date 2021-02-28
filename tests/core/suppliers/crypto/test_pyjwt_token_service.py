@@ -19,3 +19,10 @@ def test_pyjwt_token_service_valid(pyjwt_service):
     payload = {'name': 'john', 'code': '5432'}
     token = pyjwt_service.generate_token(payload)
     assert pyjwt_service.valid(token) is True
+
+
+def test_pyjwt_token_service_decode(pyjwt_service):
+    payload = {'name': 'john', 'code': '5432'}
+    token = pyjwt_service.generate_token(payload)
+    decoded_payload = pyjwt_service.decode(token)
+    assert decoded_payload == decoded_payload

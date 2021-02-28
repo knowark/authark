@@ -20,8 +20,12 @@ class PyJWTTokenService(TokenService):
         payload = payload or {}
         payload['exp'] = int(time()) + int(self.lifetime)
         value = jwt.encode(payload, self.secret, algorithm=self.algorithm)
-        token = Token(value)
+        token = Token(str(value))
         return token
+
+    def decode(self, token: Token) -> Dict[str, Any]:
+        return jwt.decode(token.value, self.secret,
+                          algorithms=[self.algorithm])
 
     def valid(self, token: Token) -> bool:
         jwt.decode(token.value, self.secret,
