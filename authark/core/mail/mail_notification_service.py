@@ -15,6 +15,7 @@ class MailNotificationService(NotificationService):
         self.port = config['port']
         self.username = config['username']
         self.password = config['password']
+        self.url = config['url']
 
     async def notify(self, notification: Dict[str, Any]) -> None:
         await super().notify(notification)
