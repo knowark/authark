@@ -22,5 +22,5 @@ class TokenSchema(Schema):
         data_key='refreshToken',
         metadata=dict(example="eyJhbG.eyJzdWIiOiIx.MjM5MadQssw5c"))
     access_token = fields.Str(
-        data_key='accessToken', 
+        data_key='accessToken',
         metadata=dict(example="eyJhbG.kpvaG4gRMyfQ.SflKxwssw5cdfs"))

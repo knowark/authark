@@ -9,6 +9,7 @@ from .restriction import RestrictionResource
 from .policy import PolicyResource
 from .ranking import RankingResource
 from .registration import RegistrationResource
+from .verification import VerificationResource
 from .role import RoleResource
 
 

@@ -9,7 +9,8 @@ from .middleware import middlewares
 from .doc import create_spec
 from .resources import (
     RootResource, UserResource, TokenResource, DominionResource, RoleResource,
-    RestrictionResource, PolicyResource, RankingResource, RegistrationResource)
+    RestrictionResource, PolicyResource, RankingResource, RegistrationResource,
+    VerificationResource)
 
 
 class RestApplication:
@@ -49,7 +50,9 @@ class RestApplication:
             if not handler:
                 continue
             if method in identified_methods:
-                self.app.router.add_route(method, path + "/{id}", handler)
+                identifier = getattr(method, 'identifier', 'id')
+                self.app.router.add_route(
+                    method, path + f"/{{identifier}}", handler)
             self.app.router.add_route(method, path, handler)
 
     def _create_api(self) -> None:
@@ -67,3 +70,5 @@ class RestApplication:
         self._bind_routes('/restrictions', RestrictionResource(self.injector))
         self._bind_routes(
             '/registrations', RegistrationResource(self.injector))
+        self._bind_routes(
+            '/verifications', VerificationResource(self.injector))

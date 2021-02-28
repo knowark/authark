@@ -6,7 +6,6 @@ from ...application.domain.services import NotificationService
 from ..suppliers import TemplateSupplier
 
 
-
 class MailNotificationService(NotificationService):
     def __init__(self, config: Dict[str, Any],
                  template_supplier: TemplateSupplier) -> None:
