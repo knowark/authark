@@ -52,6 +52,12 @@ config = {
                 'AUTHARK_TOKENS_SECRET', "DEVSECRET123"),
             "lifetime": 86400
         },
+        "verification": {
+            "algorithm": "HS256",
+            "secret": os.environ.get(
+                'AUTHARK_TOKENS_SECRET', "DEVSECRET123"),
+            "lifetime": 86400
+        },
         "refresh": {
             "algorithm": "HS256",
             "secret": os.environ.get(

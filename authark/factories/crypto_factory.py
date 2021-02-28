@@ -1,9 +1,10 @@
 from ..application.domain.services import (
-    HashService, AccessTokenService,
-    RefreshTokenService, TokenService)
+    HashService, AccessTokenService, RefreshTokenService,
+    VerificationTokenService, TokenService)
 from ..core.suppliers.crypto import (
     PasslibHashService, PyJWTTokenService, JwtSupplier,
-    PyJWTAccessTokenService, PyJWTRefreshTokenService)
+    PyJWTVerificationTokenService, PyJWTAccessTokenService,
+    PyJWTRefreshTokenService)
 from ..core.common import Config
 from .base_factory import BaseFactory
 
@@ -15,6 +16,8 @@ class CryptoFactory(BaseFactory):
         self.tenant_config = self.config.get('tokens', {}).get('tenant')
         self.access_config = self.config.get('tokens', {}).get('access')
         self.refresh_config = self.config.get('tokens', {}).get('refresh')
+        self.verification_config = self.config.get(
+            'tokens', {}).get('verification')
 
     # Services
 
@@ -32,6 +35,12 @@ class CryptoFactory(BaseFactory):
             self.access_config['secret'],
             self.access_config['algorithm'],
             self.access_config['lifetime'])
+
+    def verification_token_service(self) -> VerificationTokenService:
+        return PyJWTVerificationTokenService(
+            self.verification_config['secret'],
+            self.verification_config['algorithm'],
+            self.verification_config['lifetime'])
 
     def refresh_token_service(self) -> RefreshTokenService:
         return PyJWTRefreshTokenService(

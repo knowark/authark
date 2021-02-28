@@ -3,7 +3,8 @@ from time import time
 from typing import Dict, Any
 from ....application.domain.models import Token
 from ....application.domain.services import (
-    TokenService, AccessTokenService, RefreshTokenService)
+    TokenService, AccessTokenService, RefreshTokenService,
+    VerificationTokenService)
 
 
 class PyJWTTokenService(TokenService):
@@ -34,3 +35,8 @@ class PyJWTAccessTokenService(PyJWTTokenService, AccessTokenService):
 
 class PyJWTRefreshTokenService(PyJWTTokenService, RefreshTokenService):
     """PyJWT Refresh Token Service"""
+
+
+class PyJWTVerificationTokenService(
+        PyJWTTokenService, VerificationTokenService):
+    """PyJWT Verification Token Service"""
