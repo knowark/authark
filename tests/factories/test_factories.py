@@ -54,6 +54,7 @@ test_tuples = [
         ('TokenService', 'PyJWTTokenService'),
         ('AccessTokenService', 'PyJWTAccessTokenService'),
         ('RefreshTokenService', 'PyJWTRefreshTokenService'),
+        ('VerificationTokenService', 'PyJWTVerificationTokenService'),
         ('JwtSupplier', 'JwtSupplier'),
     ]),
     ('JsonFactory', [
