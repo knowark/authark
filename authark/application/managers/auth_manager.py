@@ -6,7 +6,8 @@ from ..domain.models import Token, User, Credential, Dominion
 from ..domain.repositories import (
     UserRepository, CredentialRepository, DominionRepository)
 from ..domain.services import (
-    RefreshTokenService, HashService, AccessService, NotificationService)
+    RefreshTokenService, VerificationTokenService, HashService,
+    AccessService, NotificationService)
 
 
 class AuthManager:
@@ -16,7 +17,9 @@ class AuthManager:
                  hash_service: HashService,
                  access_service: AccessService,
                  notification_service: NotificationService,
-                 refresh_token_service: RefreshTokenService) -> None:
+                 refresh_token_service: RefreshTokenService,
+                 verification_token_service: VerificationTokenService
+                 ) -> None:
         self.user_repository = user_repository
         self.credential_repository = credential_repository
         self.dominion_repository = dominion_repository
@@ -24,6 +27,7 @@ class AuthManager:
         self.access_service = access_service
         self.notification_service = notification_service
         self.refresh_token_service = refresh_token_service
+        self.verification_token_service = verification_token_service
 
     async def authenticate(self, request_dict: Dict[str, str]) -> TokensDict:
         dominion = request_dict['dominion']
@@ -58,7 +62,8 @@ class AuthManager:
                 'subject': 'Account Activation',
                 'recipient': user.email,
                 'owner': user.name,
-                'token': '<activation_jwt>'
+                'token': self.verification_token_service.generate_token(
+                    {'type': 'activation', 'user_id': user.id}).value
             })
 
     async def _password_authenticate(

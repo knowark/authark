@@ -142,12 +142,14 @@ class BaseFactory(Factory):
             hash_service: HashService,
             access_service: AccessService,
             notification_service: NotificationService,
-            refresh_token_service: RefreshTokenService) -> AuthManager:
+            refresh_token_service: RefreshTokenService,
+            verification_token_service: VerificationTokenService
+    ) -> AuthManager:
         return AuthManager(
             user_repository, credential_repository,
-            dominion_repository,
-            hash_service, access_service,
-            notification_service, refresh_token_service)
+            dominion_repository, hash_service, access_service,
+            notification_service, refresh_token_service,
+            verification_token_service)
 
     def management_manager(
         self, user_repository: UserRepository,

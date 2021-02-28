@@ -184,6 +184,7 @@ async def test_auth_manager_fail_to_authenticate_missing_credentials(
 
 async def test_auth_manager_register(auth_manager):
     user_dicts: RecordList = [{
+        "id": "007",
         "name": "Miguel Vivas",
         "username": "mvp",
         "email": "mvp@gmail.com",
@@ -201,7 +202,7 @@ async def test_auth_manager_register(auth_manager):
         'subject': 'Account Activation',
         'recipient': 'mvp@gmail.com',
         'owner': 'Miguel Vivas',
-        'token': '<activation_jwt>'
+        'token': '{"type": "activation", "user_id": "007"}'
     }
 
 
