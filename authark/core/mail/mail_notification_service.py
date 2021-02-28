@@ -16,6 +16,7 @@ class MailNotificationService(NotificationService):
         self.username = config['username']
         self.password = config['password']
         self.url = config['url']
+        self.template_supplier = template_supplier
 
     async def notify(self, notification: Dict[str, Any]) -> None:
         await super().notify(notification)
@@ -25,8 +26,9 @@ class MailNotificationService(NotificationService):
         message['To'] = notification['recipient']
         message['Subject'] = notification['subject']
 
-        message.set_content(
-            f"{notification['owner']} + {notification['token']}")
+        context = {'url': self.url, **notification}
+        content = self.template_supplier.render('activation.html', context)
+        message.set_content(content)
 
         await send(message, hostname=self.host, port=self.port,
                    username=self.username, password=self.password,
