@@ -47,13 +47,13 @@ class AuthManager:
         return result
 
     async def register(self, user_dicts: RecordList) -> None:
-        users = ([User(**user_dict) for user_dict in user_dicts])
+        users = [User(**user_dict) for user_dict in user_dicts]
 
         self._validate_usernames(users)
         await self._validate_duplicates(users)
 
         users = await self.user_repository.add([
-            User(**user_dict) for user_dict in user_dicts])
+            User(**user_dict, active=False) for user_dict in user_dicts])
 
         await self._make_password_credentials(users, user_dicts)
 
@@ -68,7 +68,7 @@ class AuthManager:
 
     async def verify(self, verification_dicts: RecordList) -> None:
         for record in verification_dicts:
-            await self.verification_service.verify(record)
+            await self.verification_service.verify(dict(record))
 
     async def _password_authenticate(
             self, username: str, password: str,

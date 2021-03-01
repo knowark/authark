@@ -196,6 +196,10 @@ async def test_auth_manager_register(auth_manager):
     notification_service = auth_manager.notification_service
 
     assert len(user_repository.data['default']) == 4
+    [new_user] = await user_repository.search([('id', '=', '007')])
+    assert new_user.username == 'mvp'
+    assert new_user.active is False
+
     assert len(credential_repository.data['default']) == 4
     assert notification_service.notification == {
         'type': 'activation',
