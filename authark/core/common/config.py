@@ -25,6 +25,10 @@ config = {
         "password": os.environ.get(
             'AUTHARK_SYSTEM_PASSWORD', "")
     },
+    "site": {
+        "url": os.environ.get(
+            'AUTHARK_SITE_URL', ""),
+    },
     "mail": {
         "sender": os.environ.get(
             'AUTHARK_MAIL_SENDER', ""),
@@ -35,9 +39,7 @@ config = {
         "username": os.environ.get(
             'AUTHARK_MAIL_USERNAME', ""),
         "password": os.environ.get(
-            'AUTHARK_MAIL_PASSWORD', ""),
-        "url": os.environ.get(
-            'AUTHARK_MAIL_URL', "")
+            'AUTHARK_MAIL_PASSWORD', "")
     },
     "tokens": {
         "tenant": {

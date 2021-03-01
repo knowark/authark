@@ -11,7 +11,7 @@ from ..domain.services import (
 
 
 class AuthManager:
-    def __init__(self, 
+    def __init__(self,
                  user_repository: UserRepository,
                  credential_repository: CredentialRepository,
                  dominion_repository: DominionRepository,
@@ -65,6 +65,10 @@ class AuthManager:
                 'owner': user.name,
                 'token': self.verification_service.generate_token(user).value
             })
+
+    async def verify(self, verification_dicts: RecordList) -> None:
+        for record in verification_dicts:
+            await self.verification_service.verify(record)
 
     async def _password_authenticate(
             self, username: str, password: str,

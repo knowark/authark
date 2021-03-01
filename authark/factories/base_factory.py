@@ -20,7 +20,7 @@ from ..application.domain.services import (
     AccessService, VerificationService)
 from ..application.managers import (
     AuthManager, ManagementManager, ImportManager,
-    SessionManager, SecurityManager, VerificationManager)
+    SessionManager, SecurityManager)
 from ..application.informers import (
     AutharkInformer, StandardAutharkInformer,
     ComposingInformer, StandardComposingInformer)
@@ -135,10 +135,12 @@ class BaseFactory(Factory):
             dominion_repository,
             token_service, tenant_provider)
 
-    def verification_service(self,
+    def verification_service(
+            self, user_repository: UserRepository,
             token_service: VerificationTokenService,
             tenant_provider: TenantProvider) -> VerificationService:
-        return VerificationService(token_service, tenant_provider)
+        return VerificationService(
+            user_repository, token_service, tenant_provider)
 
     # Managers
 
@@ -191,9 +193,6 @@ class BaseFactory(Factory):
         policy_repository: PolicyRepository
     ) -> SecurityManager:
         return SecurityManager(restriction_repository, policy_repository)
-
-    def verification_manager(self) -> VerificationManager:
-        return VerificationManager()
 
     # Reporters
 

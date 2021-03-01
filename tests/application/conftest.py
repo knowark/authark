@@ -22,7 +22,7 @@ from authark.application.domain.services import (
     MemoryNotificationService, HashService, MemoryHashService)
 from authark.application.managers import (
     AuthManager, ManagementManager, ImportManager,
-    SessionManager, SecurityManager, VerificationManager)
+    SessionManager, SecurityManager)
 
 
 # # ###########
@@ -59,7 +59,7 @@ def mock_user_repository(mock_tenant_provider, parser) -> UserRepository:
         "default": {
             "1": User(
                 id='1', username='valenep', email='valenep@gmail.com',
-                external_source='erp.users', external_id='1'),
+                external_source='erp.users', external_id='1', active=False),
             "2": User(
                 id='2', username='tebanep', email='tebanep@gmail.com',
                 external_source='erp.users'),
@@ -258,9 +258,11 @@ def access_service(mock_ranking_repository, mock_role_repository,
 
 @fixture
 def verification_service(
-        mock_verification_token_service, mock_tenant_provider):
+        mock_user_repository, mock_verification_token_service,
+        mock_tenant_provider):
     return VerificationService(
-        mock_verification_token_service, mock_tenant_provider)
+        mock_user_repository, mock_verification_token_service,
+        mock_tenant_provider)
 
 # # COORDINATORS
 
@@ -307,8 +309,3 @@ def import_manager(
 @fixture
 def session_manager(mock_tenant_provider, mock_auth_provider):
     return SessionManager(mock_tenant_provider, mock_auth_provider)
-
-
-@fixture
-def verification_manager():
-    return VerificationManager()
