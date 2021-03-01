@@ -13,7 +13,7 @@ class VerificationResource:
         verification_dict = VerificationSchema().loads(await request.text())
 
         tenant_dict = self.tenant_supplier.resolve_tenant(
-            verification_dict['organization'])
+            verification_dict['tenant'])
         self.session_manager.set_tenant(tenant_dict)
 
         await self.auth_manager.verify([verification_dict])
