@@ -152,6 +152,20 @@ async def test_registrations_put_route(app):
     assert response.status == 200
 
 
+async def test_verifications_put_route(app):
+    token = ("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0eXBlIjoiYWN0aXZhdG"
+             "lvbiIsInRlbmFudCI6ImRlZmF1bHQiLCJ1c2VyX2lkIjoiMSJ9.DDsMjlYV"
+             "I5U4AjTiAiSdQJPDEIH2y8R7HwvlO0oJuOs")
+    response = await app.put(
+        '/verifications',
+        data=dumps(dict(
+            tenant="default",
+            token=token,
+        )))
+    data = await response.text()
+    assert response.status == 200
+
+
 async def test_registrations_enroll_put_route(app):
     response = await app.put(
         '/registrations',

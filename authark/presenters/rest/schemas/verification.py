@@ -6,8 +6,8 @@ class VerificationSchema(EntitySchema):
     class Meta:
         unknown = EXCLUDE
 
-    organization = fields.Str(
-        required=True, metadata=dict(example="Servagro"))
+    tenant = fields.Str(
+        required=True, metadata=dict(example="servagro"))
     token = fields.Str(
         required=True, metadata=dict(
             example=("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM"
