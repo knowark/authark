@@ -207,6 +207,21 @@ async def test_auth_manager_register(auth_manager):
     }
 
 
+async def test_auth_manager_verify(auth_manager):
+    verification_dicts: RecordList = [{
+        "tenant": "default",
+        'token': '{"type": "activation", "tenant": "default", "user_id": "1"}'
+    }]
+
+    await auth_manager.verify(verification_dicts)
+
+    user_repository = auth_manager.user_repository
+
+    [user] = await user_repository.search([('id', '=', '1')])
+
+    assert user.active is True
+
+
 async def test_auth_manager_update(auth_manager):
     user_dicts: RecordList = [{
         "id": "1",
