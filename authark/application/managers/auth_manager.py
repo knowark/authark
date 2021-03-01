@@ -6,28 +6,29 @@ from ..domain.models import Token, User, Credential, Dominion
 from ..domain.repositories import (
     UserRepository, CredentialRepository, DominionRepository)
 from ..domain.services import (
-    RefreshTokenService, VerificationTokenService, HashService,
-    AccessService, NotificationService)
+    RefreshTokenService, HashService, AccessService,
+    VerificationService, NotificationService)
 
 
 class AuthManager:
-    def __init__(self, user_repository: UserRepository,
+    def __init__(self, 
+                 user_repository: UserRepository,
                  credential_repository: CredentialRepository,
                  dominion_repository: DominionRepository,
                  hash_service: HashService,
                  access_service: AccessService,
+                 verification_service: VerificationService,
                  notification_service: NotificationService,
-                 refresh_token_service: RefreshTokenService,
-                 verification_token_service: VerificationTokenService
+                 refresh_token_service: RefreshTokenService
                  ) -> None:
         self.user_repository = user_repository
         self.credential_repository = credential_repository
         self.dominion_repository = dominion_repository
         self.hash_service = hash_service
         self.access_service = access_service
+        self.verification_service = verification_service
         self.notification_service = notification_service
         self.refresh_token_service = refresh_token_service
-        self.verification_token_service = verification_token_service
 
     async def authenticate(self, request_dict: Dict[str, str]) -> TokensDict:
         dominion = request_dict['dominion']
@@ -62,8 +63,7 @@ class AuthManager:
                 'subject': 'Account Activation',
                 'recipient': user.email,
                 'owner': user.name,
-                'token': self.verification_token_service.generate_token(
-                    {'type': 'activation', 'user_id': user.id}).value
+                'token': self.verification_service.generate_token(user).value
             })
 
     async def _password_authenticate(

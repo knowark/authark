@@ -8,7 +8,6 @@ class VerificationResource:
         self.verification_manager = injector['VerificationManager']
         self.tenant_supplier = injector['TenantSupplier']
         self.session_manager = injector['SessionManager']
-        setattr(self.put, 'identifier', 'token')
 
     async def put(self, request: web.Request) -> web.Response:
         token = request.match_info['token']

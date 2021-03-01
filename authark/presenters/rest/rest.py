@@ -50,9 +50,7 @@ class RestApplication:
             if not handler:
                 continue
             if method in identified_methods:
-                identifier = getattr(method, 'identifier', 'id')
-                self.app.router.add_route(
-                    method, path + f"/{{identifier}}", handler)
+                self.app.router.add_route(method, path + "/{id}", handler)
             self.app.router.add_route(method, path, handler)
 
     def _create_api(self) -> None:
