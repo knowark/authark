@@ -17,9 +17,9 @@ from authark.application.domain.services import (
     TokenService, MemoryTokenService, MemoryRefreshTokenService,
     RefreshTokenService, AccessTokenService, VerificationTokenService,
     MemoryVerificationTokenService, MemoryAccessTokenService,
-    AccessService, ImportService, MemoryImportService,
-    NotificationService, MemoryNotificationService,
-    HashService, MemoryHashService)
+    AccessService, VerificationService, ImportService,
+    MemoryImportService, NotificationService,
+    MemoryNotificationService, HashService, MemoryHashService)
 from authark.application.managers import (
     AuthManager, ManagementManager, ImportManager,
     SessionManager, SecurityManager, VerificationManager)
@@ -255,19 +255,26 @@ def access_service(mock_ranking_repository, mock_role_repository,
         mock_token_service,
         mock_tenant_provider)
 
+
+@fixture
+def verification_service(
+        mock_verification_token_service, mock_tenant_provider):
+    return VerificationService(
+        mock_verification_token_service, mock_tenant_provider)
+
 # # COORDINATORS
 
 
 @fixture
 def auth_manager(mock_user_repository, mock_credential_repository,
                  mock_dominion_repository, mock_hash_service,
-                 access_service, mock_notification_service,
-                 mock_refresh_token_service, mock_verification_token_service):
+                 access_service, verification_service,
+                 mock_notification_service, mock_refresh_token_service):
     return AuthManager(
         mock_user_repository, mock_credential_repository,
         mock_dominion_repository, mock_hash_service,
-        access_service, mock_notification_service,
-        mock_refresh_token_service, mock_verification_token_service)
+        access_service, verification_service,
+        mock_notification_service, mock_refresh_token_service)
 
 
 @fixture

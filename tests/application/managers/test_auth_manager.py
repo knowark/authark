@@ -202,7 +202,8 @@ async def test_auth_manager_register(auth_manager):
         'subject': 'Account Activation',
         'recipient': 'mvp@gmail.com',
         'owner': 'Miguel Vivas',
-        'token': '{"type": "activation", "user_id": "007"}'
+        'token': (
+            '{"type": "activation", "tenant": "default", "user_id": "007"}')
     }
 
 

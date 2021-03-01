@@ -16,10 +16,11 @@ from ..application.domain.services import (
     RefreshTokenService, MemoryRefreshTokenService,
     VerificationTokenService, MemoryVerificationTokenService,
     NotificationService, MemoryNotificationService,
-    ImportService, MemoryImportService, AccessService)
+    ImportService, MemoryImportService,
+    AccessService, VerificationService)
 from ..application.managers import (
-    AuthManager, ManagementManager,
-    ImportManager, SessionManager, SecurityManager)
+    AuthManager, ManagementManager, ImportManager,
+    SessionManager, SecurityManager, VerificationManager)
 from ..application.informers import (
     AutharkInformer, StandardAutharkInformer,
     ComposingInformer, StandardComposingInformer)
@@ -134,6 +135,11 @@ class BaseFactory(Factory):
             dominion_repository,
             token_service, tenant_provider)
 
+    def verification_service(self,
+            token_service: VerificationTokenService,
+            tenant_provider: TenantProvider) -> VerificationService:
+        return VerificationService(token_service, tenant_provider)
+
     # Managers
 
     def auth_manager(
@@ -142,15 +148,15 @@ class BaseFactory(Factory):
             dominion_repository: DominionRepository,
             hash_service: HashService,
             access_service: AccessService,
+            verification_service: VerificationService,
             notification_service: NotificationService,
-            refresh_token_service: RefreshTokenService,
-            verification_token_service: VerificationTokenService
+            refresh_token_service: RefreshTokenService
     ) -> AuthManager:
         return AuthManager(
             user_repository, credential_repository,
             dominion_repository, hash_service, access_service,
-            notification_service, refresh_token_service,
-            verification_token_service)
+            verification_service, notification_service,
+            refresh_token_service)
 
     def management_manager(
         self, user_repository: UserRepository,
@@ -185,6 +191,9 @@ class BaseFactory(Factory):
         policy_repository: PolicyRepository
     ) -> SecurityManager:
         return SecurityManager(restriction_repository, policy_repository)
+
+    def verification_manager(self) -> VerificationManager:
+        return VerificationManager()
 
     # Reporters
 
