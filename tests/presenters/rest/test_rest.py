@@ -154,8 +154,8 @@ async def test_registrations_put_route(app):
 
 async def test_verifications_put_route(app):
     token = ("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0eXBlIjoiYWN0aXZhdG"
-             "lvbiIsInRlbmFudCI6ImRlZmF1bHQiLCJ1c2VyX2lkIjoiMSJ9.DDsMjlYV"
-             "I5U4AjTiAiSdQJPDEIH2y8R7HwvlO0oJuOs")
+             "lvbiIsInRlbmFudCI6ImRlZmF1bHQiLCJ1aWQiOiIxIn0.KcmGMRHDhIJMv"
+             "BdgIk18iMySbFw_JP_YhVtdLAJi8_s")
     response = await app.put(
         '/verifications',
         data=dumps(dict(

@@ -10,13 +10,13 @@ def test_verification_service_generate_token(
 
     assert isinstance(token, Token)
     assert token.value == (
-        '{"type": "activation", "tenant": "default", "user_id": "1"}')
+        '{"type": "activation", "tenant": "default", "uid": "1"}')
 
 
 async def test_verification_service_verify(verification_service) -> None:
     verification_dict = {
         'tenant': 'default',
-        'token': '{"type": "activation", "tenant": "default", "user_id": "1"}'
+        'token': '{"type": "activation", "tenant": "default", "uid": "1"}'
     }
 
     await verification_service.verify(verification_dict)
