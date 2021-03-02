@@ -9,6 +9,7 @@ Config = Dict[str, Any]
 config = {
     "port": int(os.environ.get('AUTHARK_PORT', 6291)),
     "factory": os.environ.get('AUTHARK_FACTORY', 'WebFactory'),
+    "templates": os.environ.get('AUTHARK_TEMPLATES', ".").split(','),
     "environment": {
         "home": "/opt/authark"
     },
