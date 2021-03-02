@@ -20,14 +20,15 @@ class MailNotificationService(NotificationService):
     async def notify(self, notification: Dict[str, Any]) -> None:
         await super().notify(notification)
 
+        context = {'url': self.url, **notification}
+        content = self.template_supplier.render('activation.html', context)
+
         message = EmailMessage()
         message['From'] = self.sender
         message['To'] = notification['recipient']
         message['Subject'] = notification['subject']
-
-        context = {'url': self.url, **notification}
-        content = self.template_supplier.render('activation.html', context)
-        message.set_content(content)
+        message.add_header('Content-Type', 'text/html')
+        message.set_payload(content)
 
         await send(message, hostname=self.host, port=self.port,
                    username=self.username, password=self.password,

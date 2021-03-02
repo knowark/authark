@@ -54,7 +54,7 @@ async def test_mail_notification_service_notify(
         "activation.html: {'url': 'http://api.tempos.local/rest/auth', "
         "'type': 'activation', 'subject': 'New Account Activation', "
         "'recipient': 'valenep@example.com', 'owner': 'Valentina', "
-        "'token': '<verification_token>'}\n"
+        "'token': '<verification_token>'}"
     )
     assert send_content['hostname'] == 'smtp.knowark.com'
     assert send_content['port'] == 587
