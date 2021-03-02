@@ -207,14 +207,14 @@ async def test_auth_manager_register(auth_manager):
         'recipient': 'mvp@gmail.com',
         'owner': 'Miguel Vivas',
         'token': (
-            '{"type": "activation", "tenant": "default", "user_id": "007"}')
+            '{"type": "activation", "tenant": "default", "uid": "007"}')
     }
 
 
 async def test_auth_manager_verify(auth_manager):
     verification_dicts: RecordList = [{
         "tenant": "default",
-        'token': '{"type": "activation", "tenant": "default", "user_id": "1"}'
+        'token': '{"type": "activation", "tenant": "default", "uid": "1"}'
     }]
 
     await auth_manager.verify(verification_dicts)

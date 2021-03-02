@@ -17,7 +17,7 @@ class VerificationService:
     def generate_token(self, user: User) -> Token:
         tenant = self.tenant_provider.tenant
         verification_token = self.token_service.generate_token(
-            {'type': 'activation', 'tenant': tenant.slug, 'user_id': user.id})
+            {'type': 'activation', 'tenant': tenant.slug, 'uid': user.id})
         return verification_token
 
     async def verify(self, verification_dict: Dict[str, Any]) -> None:
@@ -27,6 +27,6 @@ class VerificationService:
         token_dict = self.token_service.decode(token)
 
         [user] = await self.user_repository.search(
-            [('id', '=', token_dict['user_id'])])
+            [('id', '=', token_dict['uid'])])
         user.active = True
         await self.user_repository.add(user)
