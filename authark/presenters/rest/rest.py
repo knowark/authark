@@ -10,7 +10,7 @@ from .doc import create_spec
 from .resources import (
     RootResource, UserResource, TokenResource, DominionResource, RoleResource,
     RestrictionResource, PolicyResource, RankingResource, RegistrationResource,
-    VerificationResource)
+    VerificationResource, RequisitionResource)
 
 
 class RestApplication:
@@ -70,3 +70,5 @@ class RestApplication:
             '/registrations', RegistrationResource(self.injector))
         self._bind_routes(
             '/verifications', VerificationResource(self.injector))
+        self._bind_routes(
+            '/requisitions', RequisitionResource(self.injector))

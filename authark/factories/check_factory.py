@@ -57,7 +57,7 @@ class CheckFactory(CryptoFactory):
             '1': User(
                 id="1",
                 username="eecheverry",
-                email="eecheverry@nubark.com"),
+                email="eecheverry@knowark.com"),
             '2': User(
                 id="2",
                 username="mvivas",

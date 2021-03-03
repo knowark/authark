@@ -8,3 +8,4 @@ from .ranking import RankingSchema
 from .role import RoleSchema
 from .registration import RegistrationSchema
 from .verification import VerificationSchema
+from .requisition import RequisitionSchema

@@ -20,7 +20,7 @@ from ..application.domain.services import (
     AccessService, VerificationService)
 from ..application.managers import (
     AuthManager, ManagementManager, ImportManager,
-    SessionManager, SecurityManager)
+    SessionManager, SecurityManager, ProcedureManager)
 from ..application.informers import (
     AutharkInformer, StandardAutharkInformer,
     ComposingInformer, StandardComposingInformer)
@@ -193,6 +193,14 @@ class BaseFactory(Factory):
         policy_repository: PolicyRepository
     ) -> SecurityManager:
         return SecurityManager(restriction_repository, policy_repository)
+
+    def procedure_manager(
+            self, user_repository: UserRepository,
+            verification_service: VerificationService,
+            notification_service: NotificationService,
+    ) -> ProcedureManager:
+        return ProcedureManager(
+            user_repository, verification_service, notification_service)
 
     # Reporters
 

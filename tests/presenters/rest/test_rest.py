@@ -166,6 +166,18 @@ async def test_verifications_put_route(app):
     assert response.status == 200
 
 
+async def test_requisitions_put_route(app):
+    response = await app.put(
+        '/requisitions',
+        data=dumps(dict(
+            tenant="default",
+            type='reset',
+            data={'email': 'eecheverry@knowark.com'}
+        )))
+    data = await response.text()
+    assert response.status == 200
+
+
 async def test_registrations_enroll_put_route(app):
     response = await app.put(
         '/registrations',

@@ -6,7 +6,7 @@ def test_verification_service_generate_token(
     verification_service) -> None:
     user = User(id='1', username='johndoe', email='johndoe')
 
-    token = verification_service.generate_token(user)
+    token = verification_service.generate_token(user, 'activation')
 
     assert isinstance(token, Token)
     assert token.value == (
