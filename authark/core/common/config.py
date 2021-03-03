@@ -26,9 +26,8 @@ config = {
         "password": os.environ.get(
             'AUTHARK_SYSTEM_PASSWORD', "")
     },
-    "site": {
-        "url": os.environ.get(
-            'AUTHARK_SITE_URL', ""),
+    "verification": {
+        "url": os.environ.get('AUTHARK_VERIFICATION_URL', ""),
     },
     "mail": {
         "sender": os.environ.get(

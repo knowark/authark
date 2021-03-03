@@ -66,6 +66,27 @@ class AuthManager:
                 'token': self.verification_service.generate_token(user).value
             })
 
+    async def update(self, user_dicts: RecordList) -> None:
+        users = ([User(**user_dict) for user_dict in user_dicts])
+
+        users = await self.user_repository.add([
+            User(**user_dict) for user_dict in user_dicts])
+
+        await self._make_password_credentials(users, user_dicts)
+
+    async def deregister(self, user_ids: List[str]) -> bool:
+        users = await self.user_repository.search([('id', 'in', user_ids)])
+        if not users:
+            return False
+
+        credentials = await self.credential_repository.search(
+            [('user_id', 'in', [user.id for user in users])])
+
+        await self.credential_repository.remove(credentials)
+        await self.user_repository.remove(users)
+
+        return True
+
     async def verify(self, verification_dicts: RecordList) -> None:
         for record in verification_dicts:
             await self.verification_service.verify(dict(record))
@@ -132,27 +153,6 @@ class AuthManager:
                Dominion(name=dominion_name))
         [dominion] = dominions
         return dominion
-
-    async def update(self, user_dicts: RecordList) -> None:
-        users = ([User(**user_dict) for user_dict in user_dicts])
-
-        users = await self.user_repository.add([
-            User(**user_dict) for user_dict in user_dicts])
-
-        await self._make_password_credentials(users, user_dicts)
-
-    async def deregister(self, user_ids: List[str]) -> bool:
-        users = await self.user_repository.search([('id', 'in', user_ids)])
-        if not users:
-            return False
-
-        credentials = await self.credential_repository.search(
-            [('user_id', 'in', [user.id for user in users])])
-
-        await self.credential_repository.remove(credentials)
-        await self.user_repository.remove(users)
-
-        return True
 
     def _validate_usernames(self, users: List[User]) -> None:
         for user in users:
