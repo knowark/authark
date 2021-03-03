@@ -88,10 +88,6 @@ class AuthManager:
 
         return True
 
-    async def verify(self, verification_dicts: RecordList) -> None:
-        for record in verification_dicts:
-            await self.verification_service.verify(dict(record))
-
     async def _password_authenticate(
             self, username: str, password: str,
             client: str, dominion_name: str) -> TokensDict:

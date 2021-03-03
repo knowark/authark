@@ -38,3 +38,7 @@ class ProcedureManager:
                 'owner': user.name,
                 'token': token.value
             })
+
+    async def verify(self, verification_dicts: RecordList) -> None:
+        for record in verification_dicts:
+            await self.verification_service.verify(dict(record))
