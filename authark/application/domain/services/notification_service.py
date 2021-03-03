@@ -6,7 +6,7 @@ from ..models import Token
 
 class NotificationService(ABC):
 
-    types = {'activation'}
+    types = {'activation', 'reset'}
 
     @abstractmethod
     async def notify(self, notification: Dict[str, Any]) -> None:

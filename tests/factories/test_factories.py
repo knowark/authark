@@ -28,6 +28,7 @@ test_tuples = [
         ('ImportManager', 'ImportManager'),
         ('SessionManager', 'SessionManager'),
         ('SecurityManager', 'SecurityManager'),
+        ('ProcedureManager', 'ProcedureManager'),
         ('AutharkInformer', 'StandardAutharkInformer'),
         ('ComposingInformer', 'StandardComposingInformer'),
         ('TenantSupplier', 'MemoryTenantSupplier'),

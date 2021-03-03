@@ -22,7 +22,7 @@ from authark.application.domain.services import (
     MemoryNotificationService, HashService, MemoryHashService)
 from authark.application.managers import (
     AuthManager, ManagementManager, ImportManager,
-    SessionManager, SecurityManager)
+    SessionManager, SecurityManager, ProcedureManager)
 
 
 # # ###########
@@ -57,15 +57,14 @@ def mock_user_repository(mock_tenant_provider, parser) -> UserRepository:
     mock_user_repository = MemoryUserRepository(parser, mock_tenant_provider)
     mock_user_repository.load({
         "default": {
-            "1": User(
-                id='1', username='valenep', email='valenep@gmail.com',
-                external_source='erp.users', external_id='1', active=False),
-            "2": User(
-                id='2', username='tebanep', email='tebanep@gmail.com',
-                external_source='erp.users'),
-            "3": User(
-                id='3', username='gabeche', email='gabeche@gmail.com',
-                external_source='erp.users', external_id='3')
+            "1": User(id='1', name="Valentina", username='valenep',
+                      email='valenep@gmail.com', external_source='erp.users',
+                      external_id='1', active=False),
+            "2": User(id='2', name="Esteban", username='tebanep',
+                      email='tebanep@gmail.com', external_source='erp.users'),
+            "3": User(id='3', name="Gabriel", username='gabeche',
+                      email='gabeche@gmail.com', external_source='erp.users',
+                      external_id='3')
         }
     })
     return mock_user_repository
@@ -309,3 +308,10 @@ def import_manager(
 @fixture
 def session_manager(mock_tenant_provider, mock_auth_provider):
     return SessionManager(mock_tenant_provider, mock_auth_provider)
+
+
+@fixture
+def procedure_manager(mock_user_repository,
+                      verification_service, mock_notification_service):
+    return ProcedureManager(
+        mock_user_repository, verification_service, mock_notification_service)

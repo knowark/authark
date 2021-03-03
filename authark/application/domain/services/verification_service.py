@@ -14,10 +14,10 @@ class VerificationService:
         self.token_service = token_service
         self.tenant_provider = tenant_provider
 
-    def generate_token(self, user: User) -> Token:
+    def generate_token(self, user: User, type: str) -> Token:
         tenant = self.tenant_provider.tenant
         verification_token = self.token_service.generate_token(
-            {'type': 'activation', 'tenant': tenant.slug, 'uid': user.id})
+            {'type': type, 'tenant': tenant.slug, 'uid': user.id})
         return verification_token
 
     async def verify(self, verification_dict: Dict[str, Any]) -> None:

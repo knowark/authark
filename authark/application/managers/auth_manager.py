@@ -63,7 +63,8 @@ class AuthManager:
                 'subject': 'Account Activation',
                 'recipient': user.email,
                 'owner': user.name,
-                'token': self.verification_service.generate_token(user).value
+                'token': self.verification_service.generate_token(
+                    user, 'activation').value
             })
 
     async def update(self, user_dicts: RecordList) -> None:
