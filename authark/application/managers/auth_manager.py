@@ -46,26 +46,26 @@ class AuthManager:
 
         return result
 
-    async def register(self, user_dicts: RecordList) -> None:
-        users = [User(**user_dict) for user_dict in user_dicts]
+    # async def register(self, user_dicts: RecordList) -> None:
+        # users = [User(**user_dict) for user_dict in user_dicts]
 
-        self._validate_usernames(users)
-        await self._validate_duplicates(users)
+        # self._validate_usernames(users)
+        # await self._validate_duplicates(users)
 
-        users = await self.user_repository.add([
-            User(**user_dict, active=False) for user_dict in user_dicts])
+        # users = await self.user_repository.add([
+            # User(**user_dict, active=False) for user_dict in user_dicts])
 
-        await self._make_password_credentials(users, user_dicts)
+        # await self._make_password_credentials(users, user_dicts)
 
-        for user in users:
-            await self.notification_service.notify({
-                'type': 'activation',
-                'subject': 'Account Activation',
-                'recipient': user.email,
-                'owner': user.name,
-                'token': self.verification_service.generate_token(
-                    user, 'activation').value
-            })
+        # for user in users:
+            # await self.notification_service.notify({
+                # 'type': 'activation',
+                # 'subject': 'Account Activation',
+                # 'recipient': user.email,
+                # 'owner': user.name,
+                # 'token': self.verification_service.generate_token(
+                    # user, 'activation').value
+            # })
 
     async def update(self, user_dicts: RecordList) -> None:
         users = ([User(**user_dict) for user_dict in user_dicts])
