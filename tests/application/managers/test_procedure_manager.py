@@ -27,21 +27,6 @@ async def test_procedure_manager_fulfill(procedure_manager):
     }
 
 
-async def test_procedure_manager_verify(procedure_manager):
-    verification_dicts: RecordList = [{
-        "tenant": "default",
-        'token': '{"type": "activation", "tenant": "default", "uid": "1"}'
-    }]
-
-    await procedure_manager.verify(verification_dicts)
-
-    user_repository = procedure_manager.user_repository
-
-    [user] = await user_repository.search([('id', '=', '1')])
-
-    assert user.active is True
-
-
 async def test_procedure_manager_register(procedure_manager):
     user_dicts = [{
         "id": "007",
@@ -70,3 +55,38 @@ async def test_procedure_manager_register(procedure_manager):
         'token': (
             '{"type": "activation", "tenant": "default", "uid": "007"}')
     }
+
+
+async def test_procedure_manager_verify_activation(procedure_manager):
+    verification_dicts: RecordList = [{
+        "tenant": "default",
+        'token': '{"type": "activation", "tenant": "default", "uid": "1"}'
+    }]
+
+    user_repository = procedure_manager.user_repository
+
+    await procedure_manager.verify(verification_dicts)
+
+    [user] = await user_repository.search([('id', '=', '1')])
+
+    assert user.active is True
+
+
+async def test_procedure_manager_verify_reset(procedure_manager):
+    verification_dicts: RecordList = [{
+        "tenant": "default",
+        'token': '{"type": "reset", "tenant": "default", "uid": "1"}',
+        'data': {'password': 'NEW_PASSWORD'}
+    }]
+
+    await procedure_manager.verify(verification_dicts)
+
+    user_repository = procedure_manager.user_repository
+    credential_repository = (
+        procedure_manager.enrollment_service.credential_repository)
+
+    [user] = await user_repository.search([('id', '=', '1')])
+    [credential] = await credential_repository.search(
+        [('user_id', '=', user.id)])
+
+    assert credential.value == 'HASHED: NEW_PASSWORD'
