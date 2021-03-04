@@ -1,3 +1,5 @@
+from pytest import raises
+from authark.application.domain.common import UserCreationError
 from authark.application.domain.models import User, Credential, Token
 from authark.application.domain.services import Tenant
 
@@ -18,8 +20,8 @@ async def test_enrollment_service_register(enrollment_service) -> None:
     credential_repository = enrollment_service.credential_repository
     [new_credential] = await credential_repository.search(
         [('user_id', '=', '1')])
-    print('Cred val>>>>', new_credential.value)
     assert new_credential.value == 'HASHED: PLAIN_TEXT_PASSWORD'
+
 
 async def test_enrollment_service_set_credentials(enrollment_service) -> None:
     users = [User(id='1', username='johndoe', email='johndoe')]
@@ -37,3 +39,48 @@ async def test_enrollment_service_set_credentials(enrollment_service) -> None:
     assert len(new_credential.value)
     assert new_credential.value == 'HASHED: PLAIN_TEXT_PASSWORD'
 
+
+async def test_enrollment_service_username_special_characters_error(
+        enrollment_service):
+    with raises(UserCreationError):
+        user= User(**{
+            "username": "mvp@gmail.com",
+            "email": "mvp@gmail.com",
+            "password": "PASS4"
+        })
+        enrollment_service._validate_usernames([user])
+
+
+async def test_enrollment_servicer_register_duplicated_email_error(
+        enrollment_service):
+    user = User(**{
+        "username": "mvp",
+        "email": "mvp@gmail.com",
+    })
+
+    await enrollment_service.user_repository.add(user)
+
+    new_user = User(**{
+        "username": "mvp2",
+        "email": "mvp@gmail.com",
+    })
+
+    with raises(UserCreationError):
+        await enrollment_service._validate_duplicates([user])
+
+async def test_enrollment_servicer_register_duplicated_username_error(
+        enrollment_service):
+    user = User(**{
+        "username": "apv",
+        "email": "apv@gmail.com",
+    })
+
+    await enrollment_service.user_repository.add(user)
+
+    new_user = User(**{
+        "username": "apv",
+        "email": "other@gmail.com",
+    })
+
+    with raises(UserCreationError):
+        await enrollment_service._validate_duplicates([user])
