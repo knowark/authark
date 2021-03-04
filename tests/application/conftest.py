@@ -19,7 +19,9 @@ from authark.application.domain.services import (
     MemoryVerificationTokenService, MemoryAccessTokenService,
     AccessService, VerificationService, ImportService,
     MemoryImportService, NotificationService,
-    MemoryNotificationService, HashService, MemoryHashService)
+    MemoryNotificationService, HashService, MemoryHashService,
+    EnrollmentService
+)
 from authark.application.managers import (
     AuthManager, ManagementManager, ImportManager,
     SessionManager, SecurityManager, ProcedureManager)
@@ -263,6 +265,16 @@ def verification_service(
         mock_user_repository, mock_verification_token_service,
         mock_tenant_provider)
 
+
+@fixture
+def enrollment_service(
+        mock_user_repository, mock_credential_repository,
+        mock_hash_service, mock_tenant_provider) -> EnrollmentService:
+    return EnrollmentService(
+        mock_user_repository, mock_credential_repository,
+        mock_hash_service, mock_tenant_provider)
+
+
 # # COORDINATORS
 
 
@@ -311,7 +323,8 @@ def session_manager(mock_tenant_provider, mock_auth_provider):
 
 
 @fixture
-def procedure_manager(mock_user_repository,
+def procedure_manager(mock_user_repository, enrollment_service,
                       verification_service, mock_notification_service):
     return ProcedureManager(
-        mock_user_repository, verification_service, mock_notification_service)
+        mock_user_repository, enrollment_service,
+        verification_service, mock_notification_service)

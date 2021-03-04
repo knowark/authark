@@ -19,9 +19,8 @@ async def test_verification_service_verify(verification_service) -> None:
         'token': '{"type": "activation", "tenant": "default", "uid": "1"}'
     }
 
-    await verification_service.verify(verification_dict)
+    token = await verification_service.verify(verification_dict)
 
-    [user] = await verification_service.user_repository.search(
-        [('id', '=', '1')])
-
-    assert user.active is True
+    assert token == {
+        "type": "activation", "tenant": "default", "uid": "1"
+    }
