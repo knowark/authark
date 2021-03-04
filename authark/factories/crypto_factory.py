@@ -13,10 +13,13 @@ class CryptoFactory(BaseFactory):
     def __init__(self, config: Config) -> None:
         super().__init__(config)
         self.path = self.config.get('database', {}).get('url')
-        self.tenant_config = self.config.get('tokens', {}).get('tenant')
-        self.access_config = self.config.get('tokens', {}).get('access')
-        self.refresh_config = self.config.get('tokens', {}).get('refresh')
-        self.verification_config = self.config.get(
+        self.tokens_tenant_config = self.config.get(
+            'tokens', {}).get('tenant')
+        self.tokens_access_config = self.config.get(
+            'tokens', {}).get('access')
+        self.tokens_refresh_config = self.config.get(
+            'tokens', {}).get('refresh')
+        self.tokens_verification_config = self.config.get(
             'tokens', {}).get('verification')
 
     # Services
@@ -26,25 +29,25 @@ class CryptoFactory(BaseFactory):
 
     def token_service(self) -> TokenService:
         return PyJWTTokenService(
-            self.tenant_config['secret'],
-            self.tenant_config['algorithm'],
-            self.tenant_config['lifetime'])
+            self.tokens_tenant_config['secret'],
+            self.tokens_tenant_config['algorithm'],
+            self.tokens_tenant_config['lifetime'])
 
     def access_token_service(self) -> AccessTokenService:
         return PyJWTAccessTokenService(
-            self.access_config['secret'],
-            self.access_config['algorithm'],
-            self.access_config['lifetime'])
+            self.tokens_access_config['secret'],
+            self.tokens_access_config['algorithm'],
+            self.tokens_access_config['lifetime'])
 
     def verification_token_service(self) -> VerificationTokenService:
         return PyJWTVerificationTokenService(
-            self.verification_config['secret'],
-            self.verification_config['algorithm'],
-            self.verification_config['lifetime'])
+            self.tokens_verification_config['secret'],
+            self.tokens_verification_config['algorithm'],
+            self.tokens_verification_config['lifetime'])
 
     def refresh_token_service(self) -> RefreshTokenService:
         return PyJWTRefreshTokenService(
-            self.refresh_config['secret'],
-            self.refresh_config['algorithm'],
-            self.refresh_config['lifetime'],
-            self.refresh_config['threshold'])
+            self.tokens_refresh_config['secret'],
+            self.tokens_refresh_config['algorithm'],
+            self.tokens_refresh_config['lifetime'],
+            self.tokens_refresh_config['threshold'])
