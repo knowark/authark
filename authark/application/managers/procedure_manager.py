@@ -64,8 +64,12 @@ class ProcedureManager:
     async def verify(self, verification_dicts: RecordList) -> None:
         for record in verification_dicts:
             token_dict = await self.verification_service.verify(dict(record))
-
             [user] = await self.user_repository.search(
                 [('id', '=', token_dict['uid'])])
-            user.active = True
-            await self.user_repository.add(user)
+            if token_dict['type'] == 'activation':
+                user.active = True
+                await self.user_repository.add(user)
+            else:
+                credential = Credential(value=record['data']['password'])
+                await self.enrollment_service.set_credentials(
+                    [user], [credential])
