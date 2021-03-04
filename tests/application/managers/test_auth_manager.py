@@ -305,7 +305,6 @@ async def test_auth_manager_deregister(
 
 async def test_auth_manager_deregister_without_ids(
         auth_manager, mock_user_repository):
-
     user_ids = []
     unregistered = await auth_manager.deregister(user_ids)
     credential_repository = auth_manager.credential_repository
