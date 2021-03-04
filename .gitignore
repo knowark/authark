@@ -110,3 +110,6 @@ config.json
 
 # dolphin
 .directory
+
+# commit message
+.gitmessage
