@@ -90,3 +90,41 @@ async def test_procedure_manager_verify_reset(procedure_manager):
         [('user_id', '=', user.id)])
 
     assert credential.value == 'HASHED: NEW_PASSWORD'
+
+
+async def test_procedure_manager_update(procedure_manager) -> None:
+    user_dicts = [{
+        "id": "1",
+        "username": "valenep",
+        "email": "valenep@gmail.com",
+        "password": "NEW: PASS1"
+    }]
+
+    await procedure_manager.update(user_dicts)
+    credential_repository = (
+        procedure_manager.enrollment_service.credential_repository)
+    user_repository = procedure_manager.user_repository
+
+    assert len(user_repository.data['default']) == 3
+    assert len(credential_repository.data['default']) == 3
+    assert user_repository.data['default']['1'].username == "valenep"
+    assert "HASHED: NEW: PASS1" in [
+        credential.value for credential in
+        credential_repository.data['default'].values()]
+
+
+# async def test_auth_manager_update_without_password(auth_manager):
+    # user_dicts: RecordList = [{
+        # "id": "1",
+        # "username": "valenep",
+        # "email": "valenep@outlook.com",
+    # }]
+
+    # await auth_manager.update(user_dicts)
+    # credential_repository = auth_manager.credential_repository
+    # user_repository = auth_manager.user_repository
+
+    # assert len(user_repository.data['default']) == 3
+    # assert len(credential_repository.data['default']) == 3
+    # assert user_repository.data['default']['1'].username == "valenep"
+    # assert user_repository.data['default']['1'].email == "valenep@outlook.com"

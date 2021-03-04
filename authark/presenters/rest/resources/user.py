@@ -7,7 +7,7 @@ from .resource import Resource
 class UserResource(Resource):
     def __init__(self, injector: Injectark) -> None:
         informer = injector['AutharkInformer']
-        manager = injector['AuthManager']
+        manager = injector['ProcedureManager']
 
         super().__init__(
             UserSchema,

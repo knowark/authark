@@ -11,23 +11,19 @@ from ..domain.services import (
 
 
 class AuthManager:
-    def __init__(self,
-                 user_repository: UserRepository,
-                 credential_repository: CredentialRepository,
-                 dominion_repository: DominionRepository,
-                 hash_service: HashService,
-                 access_service: AccessService,
-                 verification_service: VerificationService,
-                 notification_service: NotificationService,
-                 refresh_token_service: RefreshTokenService
-                 ) -> None:
+    def __init__(
+        self, user_repository: UserRepository,
+        credential_repository: CredentialRepository,
+        dominion_repository: DominionRepository,
+        hash_service: HashService,
+        access_service: AccessService,
+        refresh_token_service: RefreshTokenService
+    ) -> None:
         self.user_repository = user_repository
         self.credential_repository = credential_repository
         self.dominion_repository = dominion_repository
         self.hash_service = hash_service
         self.access_service = access_service
-        self.verification_service = verification_service
-        self.notification_service = notification_service
         self.refresh_token_service = refresh_token_service
 
     async def authenticate(self, request_dict: Dict[str, str]) -> TokensDict:
@@ -45,27 +41,6 @@ class AuthManager:
                 username, password, client, dominion)
 
         return result
-
-    async def update(self, user_dicts: RecordList) -> None:
-        users = ([User(**user_dict) for user_dict in user_dicts])
-
-        users = await self.user_repository.add([
-            User(**user_dict) for user_dict in user_dicts])
-
-        await self._make_password_credentials(users, user_dicts)
-
-    async def deregister(self, user_ids: List[str]) -> bool:
-        users = await self.user_repository.search([('id', 'in', user_ids)])
-        if not users:
-            return False
-
-        credentials = await self.credential_repository.search(
-            [('user_id', 'in', [user.id for user in users])])
-
-        await self.credential_repository.remove(credentials)
-        await self.user_repository.remove(users)
-
-        return True
 
     async def _password_authenticate(
             self, username: str, password: str,
@@ -130,17 +105,6 @@ class AuthManager:
         [dominion] = dominions
         return dominion
 
-    async def _validate_duplicates(self, users: List[User]):
-        existing_users = await self.user_repository.search([
-            '|', ('username', 'in', [user.username for user in users]),
-            ('email', 'in',  [user.email for user in users])])
-
-        for existing_user in existing_users:
-            message = (
-                f"A user with email '{existing_user.email}' or "
-                f"username '{existing_user.name}' already exists.")
-            raise UserCreationError(message)
-
     async def _find_user(self, username: str):
         domain: QueryDomain = [('username', '=', username)]
         if '@' in username:
@@ -151,8 +115,8 @@ class AuthManager:
             raise AuthError("Authentication Error: User not found.")
         return users[0]
 
-    async def _generate_refresh_token(self, user_id: str, client: str
-                                      ) -> TokenString:
+    async def _generate_refresh_token(
+        self, user_id: str, client: str) -> TokenString:
         refresh_payload = {'type': 'refresh_token',
                            'client': client,
                            'sub': user_id}
@@ -172,24 +136,3 @@ class AuthManager:
         await self.credential_repository.add(credential)
 
         return refresh_token.value
-
-    async def _make_password_credentials(
-            self, users: List[User], user_dicts: RecordList) -> None:
-        updated_users = []
-        new_credentials = []
-        for user, user_dict in zip(users, user_dicts):
-            if not user_dict.get('password'):
-                continue
-            hashed_password = self.hash_service.generate_hash(
-                user_dict['password'])
-            credential = Credential(user_id=user.id, value=hashed_password)
-            updated_users.append(user)
-            new_credentials.append(credential)
-
-        old_credentials = await self.credential_repository.search([
-            ('user_id', 'in', [user.id for user in updated_users]),
-            ('type', '=', 'password')])
-
-        await self.credential_repository.remove(old_credentials)
-
-        await self.credential_repository.add(new_credentials)
