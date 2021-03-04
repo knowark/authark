@@ -130,12 +130,6 @@ class AuthManager:
         [dominion] = dominions
         return dominion
 
-    def _validate_usernames(self, users: List[User]) -> None:
-        for user in users:
-            if any((character in '@.+-_') for character in user.username):
-                raise UserCreationError(
-                    f"The username '{user.name}' has forbidden characters")
-
     async def _validate_duplicates(self, users: List[User]):
         existing_users = await self.user_repository.search([
             '|', ('username', 'in', [user.username for user in users]),
