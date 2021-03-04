@@ -1,5 +1,6 @@
 aiohttp==3.7.4
 aiohttp-jinja2==1.4.2
+aiosmtplib==1.1.4
 apispec==4.3.0
 appdirs==1.4.4
 async-timeout==3.0.1
