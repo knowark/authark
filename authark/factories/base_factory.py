@@ -16,7 +16,7 @@ from ..application.domain.services import (
     RefreshTokenService, MemoryRefreshTokenService,
     VerificationTokenService, MemoryVerificationTokenService,
     NotificationService, MemoryNotificationService,
-    ImportService, MemoryImportService,
+    ImportService, MemoryImportService, EnrollmentService,
     AccessService, VerificationService)
 from ..application.managers import (
     AuthManager, ManagementManager, ImportManager,
@@ -142,6 +142,15 @@ class BaseFactory(Factory):
         return VerificationService(
             user_repository, token_service, tenant_provider)
 
+    def enrollment_service(
+            self, user_repository: UserRepository,
+            credential_repository: CredentialRepository,
+            hash_service: HashService,
+            token_service: VerificationTokenService,
+            tenant_provider: TenantProvider) -> EnrollmentService:
+        return EnrollmentService(user_repository, credential_repository,
+                                 hash_service, tenant_provider)
+
     # Managers
 
     def auth_manager(
@@ -196,11 +205,13 @@ class BaseFactory(Factory):
 
     def procedure_manager(
             self, user_repository: UserRepository,
+            enrollment_service: EnrollmentService,
             verification_service: VerificationService,
             notification_service: NotificationService,
     ) -> ProcedureManager:
         return ProcedureManager(
-            user_repository, verification_service, notification_service)
+            user_repository, enrollment_service,
+            verification_service, notification_service)
 
     # Reporters
 

@@ -26,6 +26,7 @@ async def test_procedure_manager_fulfill(procedure_manager):
         'token': '{"type": "reset", "tenant": "default", "uid": "3"}'
     }
 
+
 async def test_procedure_manager_verify(procedure_manager):
     verification_dicts: RecordList = [{
         "tenant": "default",
@@ -39,3 +40,43 @@ async def test_procedure_manager_verify(procedure_manager):
     [user] = await user_repository.search([('id', '=', '1')])
 
     assert user.active is True
+
+
+async def test_auth_manager_register(auth_manager):
+    user_dicts: RecordList = [{
+        "id": "007",
+        "name": "Miguel Vivas",
+        "username": "mvp",
+        "email": "mvp@gmail.com",
+        "password": "PASS4"
+    }]
+    await auth_manager.register(user_dicts)
+    credential_repository = auth_manager.credential_repository
+    user_repository = auth_manager.user_repository
+    notification_service = auth_manager.notification_service
+
+    assert len(user_repository.data['default']) == 4
+    [new_user] = await user_repository.search([('id', '=', '007')])
+    assert new_user.username == 'mvp'
+    assert new_user.active is False
+
+    assert len(credential_repository.data['default']) == 4
+    assert notification_service.notification == {
+        'type': 'activation',
+        'subject': 'Account Activation',
+        'recipient': 'mvp@gmail.com',
+        'owner': 'Miguel Vivas',
+        'token': (
+            '{"type": "activation", "tenant": "default", "uid": "007"}')
+    }
+
+# async def test_procedure_manager_register_username_special_characters_error(
+        # procedure_manager):
+    # with raises(UserCreationError):
+        # user_dicts: RecordList = [{
+            # "username": "mvp@gmail.com",
+            # "email": "mvp@gmail.com",
+            # "password": "PASS4"
+        # }]
+        # await procedure_manager.register(user_dicts)
+

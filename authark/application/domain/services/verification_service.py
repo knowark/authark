@@ -6,7 +6,6 @@ from .token_service import VerificationTokenService
 
 
 class VerificationService:
-
     def __init__(self, user_repository: UserRepository,
                  token_service: VerificationTokenService,
                  tenant_provider: TenantProvider) -> None:
@@ -20,13 +19,15 @@ class VerificationService:
             {'type': type, 'tenant': tenant.slug, 'uid': user.id})
         return verification_token
 
-    async def verify(self, verification_dict: Dict[str, Any]) -> None:
+    async def verify(
+        self, verification_dict: Dict[str, Any]
+    ) -> Dict[str, Any]:
         tenant = verification_dict['tenant']
         token = Token(verification_dict['token'])
 
-        token_dict = self.token_service.decode(token)
+        return self.token_service.decode(token)
 
-        [user] = await self.user_repository.search(
-            [('id', '=', token_dict['uid'])])
-        user.active = True
-        await self.user_repository.add(user)
+        # [user] = await self.user_repository.search(
+            # [('id', '=', token_dict['uid'])])
+        # user.active = True
+        # await self.user_repository.add(user)
