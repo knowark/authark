@@ -5,7 +5,7 @@ from ..schemas import RegistrationSchema
 
 class RegistrationResource:
     def __init__(self, injector: Injectark) -> None:
-        self.auth_manager = injector['AuthManager']
+        self.procedure_manager = injector['ProcedureManager']
         self.tenant_supplier = injector['TenantSupplier']
         self.session_manager = injector['SessionManager']
 
@@ -23,6 +23,6 @@ class RegistrationResource:
         tenant_dict = self.tenant_supplier.resolve_tenant(tenant_dict['name'])
         self.session_manager.set_tenant(tenant_dict)
 
-        await self.auth_manager.register([registration_dict])
+        await self.procedure_manager.register([registration_dict])
 
         return web.Response(status=200)
