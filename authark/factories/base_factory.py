@@ -47,57 +47,57 @@ class BaseFactory(Factory):
         return StandardTenantProvider()
 
     def user_repository(
-            self, query_parser: QueryParser,
-            tenant_provider: TenantProvider,
-            auth_provider: AuthProvider
+        self, query_parser: QueryParser,
+        tenant_provider: TenantProvider,
+        auth_provider: AuthProvider
     ) -> UserRepository:
         return MemoryUserRepository(
             query_parser, tenant_provider, auth_provider)
 
     def credential_repository(
-            self, query_parser: QueryParser,
-            tenant_provider: TenantProvider,
-            auth_provider: AuthProvider
+        self, query_parser: QueryParser,
+        tenant_provider: TenantProvider,
+        auth_provider: AuthProvider
     ) -> CredentialRepository:
         return MemoryCredentialRepository(
             query_parser, tenant_provider, auth_provider)
 
     def dominion_repository(
-            self, query_parser: QueryParser,
-            tenant_provider: TenantProvider,
-            auth_provider: AuthProvider
+        self, query_parser: QueryParser,
+        tenant_provider: TenantProvider,
+        auth_provider: AuthProvider
     ) -> DominionRepository:
         return MemoryDominionRepository(
             query_parser, tenant_provider, auth_provider)
 
     def role_repository(
-            self, query_parser: QueryParser,
-            tenant_provider: TenantProvider,
-            auth_provider: AuthProvider
+        self, query_parser: QueryParser,
+        tenant_provider: TenantProvider,
+        auth_provider: AuthProvider
     ) -> RoleRepository:
         return MemoryRoleRepository(
             query_parser, tenant_provider, auth_provider)
 
     def restriction_repository(
-            self, query_parser: QueryParser,
-            tenant_provider: TenantProvider,
-            auth_provider: AuthProvider
+        self, query_parser: QueryParser,
+        tenant_provider: TenantProvider,
+        auth_provider: AuthProvider
     ) -> RestrictionRepository:
         return MemoryRestrictionRepository(
             query_parser, tenant_provider, auth_provider)
 
     def policy_repository(
-            self, query_parser: QueryParser,
-            tenant_provider: TenantProvider,
-            auth_provider: AuthProvider
+        self, query_parser: QueryParser,
+        tenant_provider: TenantProvider,
+        auth_provider: AuthProvider
     ) -> PolicyRepository:
         return MemoryPolicyRepository(
             query_parser, tenant_provider, auth_provider)
 
     def ranking_repository(
-            self, query_parser: QueryParser,
-            tenant_provider: TenantProvider,
-            auth_provider: AuthProvider
+        self, query_parser: QueryParser,
+        tenant_provider: TenantProvider,
+        auth_provider: AuthProvider
     ) -> RankingRepository:
         return MemoryRankingRepository(
             query_parser, tenant_provider, auth_provider)
@@ -125,48 +125,48 @@ class BaseFactory(Factory):
         return MemoryNotificationService()
 
     def access_service(
-            self, ranking_repository: RankingRepository,
-            role_repository: RoleRepository,
-            dominion_repository: DominionRepository,
-            token_service: AccessTokenService,
-            tenant_provider: TenantProvider) -> AccessService:
+        self, ranking_repository: RankingRepository,
+        role_repository: RoleRepository,
+        dominion_repository: DominionRepository,
+        token_service: AccessTokenService,
+        tenant_provider: TenantProvider
+    ) -> AccessService:
         return AccessService(
             ranking_repository, role_repository,
             dominion_repository,
             token_service, tenant_provider)
 
     def verification_service(
-            self, user_repository: UserRepository,
-            token_service: VerificationTokenService,
-            tenant_provider: TenantProvider) -> VerificationService:
+        self, user_repository: UserRepository,
+        token_service: VerificationTokenService,
+        tenant_provider: TenantProvider
+    ) -> VerificationService:
         return VerificationService(
             user_repository, token_service, tenant_provider)
 
     def enrollment_service(
-            self, user_repository: UserRepository,
-            credential_repository: CredentialRepository,
-            hash_service: HashService,
-            token_service: VerificationTokenService,
-            tenant_provider: TenantProvider) -> EnrollmentService:
+        self, user_repository: UserRepository,
+        credential_repository: CredentialRepository,
+        hash_service: HashService,
+        token_service: VerificationTokenService,
+        tenant_provider: TenantProvider
+    ) -> EnrollmentService:
         return EnrollmentService(user_repository, credential_repository,
                                  hash_service, tenant_provider)
 
     # Managers
 
     def auth_manager(
-            self, user_repository: UserRepository,
-            credential_repository: CredentialRepository,
-            dominion_repository: DominionRepository,
-            hash_service: HashService,
-            access_service: AccessService,
-            verification_service: VerificationService,
-            notification_service: NotificationService,
-            refresh_token_service: RefreshTokenService
+        self, user_repository: UserRepository,
+        credential_repository: CredentialRepository,
+        dominion_repository: DominionRepository,
+        hash_service: HashService,
+        access_service: AccessService,
+        refresh_token_service: RefreshTokenService
     ) -> AuthManager:
         return AuthManager(
             user_repository, credential_repository,
             dominion_repository, hash_service, access_service,
-            verification_service, notification_service,
             refresh_token_service)
 
     def management_manager(
@@ -179,14 +179,15 @@ class BaseFactory(Factory):
             user_repository, dominion_repository,
             role_repository, ranking_repository)
 
-    def import_manager(self,
-                       import_service: ImportService,
-                       user_repository: UserRepository,
-                       credential_repository: CredentialRepository,
-                       role_repository: RoleRepository,
-                       ranking_repository: RankingRepository,
-                       dominion_repository: DominionRepository,
-                       ) -> ImportManager:
+    def import_manager(
+        self,
+        import_service: ImportService,
+        user_repository: UserRepository,
+        credential_repository: CredentialRepository,
+        role_repository: RoleRepository,
+        ranking_repository: RankingRepository,
+        dominion_repository: DominionRepository,
+    ) -> ImportManager:
         return ImportManager(import_service, user_repository,
                              credential_repository, role_repository,
                              ranking_repository, dominion_repository)
@@ -204,10 +205,10 @@ class BaseFactory(Factory):
         return SecurityManager(restriction_repository, policy_repository)
 
     def procedure_manager(
-            self, user_repository: UserRepository,
-            enrollment_service: EnrollmentService,
-            verification_service: VerificationService,
-            notification_service: NotificationService,
+        self, user_repository: UserRepository,
+        enrollment_service: EnrollmentService,
+        verification_service: VerificationService,
+        notification_service: NotificationService,
     ) -> ProcedureManager:
         return ProcedureManager(
             user_repository, enrollment_service,

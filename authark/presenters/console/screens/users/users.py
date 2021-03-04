@@ -82,7 +82,7 @@ class UsersScreen(Frame):
 
 class UserDetailsModal(Modal):
     def setup(self, **context) -> 'UserDetailsModal':
-        self.auth_manager = context['injector']['AuthManager']
+        self.procedure_manager = context['injector']['ProcedureManager']
         self.user = context['user']
         return super().setup(**context) and self
 
@@ -135,14 +135,14 @@ class UserDetailsModal(Modal):
         if self.password.text.strip():
             user['password'] = self.password.text.strip()
         self.user.update(user)
-        await self.auth_manager.update([self.user])
+        await self.procedure_manager.update([self.user])
         await self.done({'result': 'saved'})
 
     async def on_cancel(self, event: Event) -> None:
         await self.done({'result': 'cancelled'})
 
     async def on_delete(self, event: Event) -> None:
-        await self.auth_manager.deregister([self.user['id']])
+        await self.procedure_manager.deregister([self.user['id']])
         await self.done({'result': 'deleted'})
 
     async def on_roles(self, event: Event) -> None:

@@ -22,7 +22,6 @@ class ProcedureManager:
         self.verification_service = verification_service
         self.notification_service = notification_service
 
-
     async def register(self, user_dicts: RecordList) -> None:
         registration_tuples = []
         for user_dict in user_dicts:
@@ -73,3 +72,15 @@ class ProcedureManager:
                 credential = Credential(value=record['data']['password'])
                 await self.enrollment_service.set_credentials(
                     [user], [credential])
+
+    async def update(self, user_dicts: RecordList) -> None:
+        credentials = [Credential(value=user_dict.pop('password', ''))
+                       for user_dict in user_dicts]
+        users = ([User(**user_dict) for user_dict in user_dicts])
+
+        users = await self.user_repository.add(users)
+        await self.enrollment_service.set_credentials(users, credentials)
+
+    async def deregister(self, user_ids: List[str]) -> bool:
+        users = await self.user_repository.search([('id', 'in', user_ids)])
+        return await self.enrollment_service.deregister(users)

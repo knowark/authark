@@ -84,3 +84,27 @@ async def test_enrollment_servicer_register_duplicated_username_error(
 
     with raises(UserCreationError):
         await enrollment_service._validate_duplicates([user])
+
+
+async def test_enrollment_service_deregister(enrollment_service):
+    users = await enrollment_service.user_repository.search(
+        [('id', '=', '2')])
+
+    unregistered = await enrollment_service.deregister(users)
+
+    credential_repository = enrollment_service.credential_repository
+    user_repository = enrollment_service.user_repository
+
+    assert unregistered is True
+    assert len(user_repository.data['default']) == 2
+    assert len(credential_repository.data['default']) == 2
+
+
+async def test_enrollment_service_deregister_without_users(enrollment_service):
+    unregistered = await enrollment_service.deregister([])
+    credential_repository = enrollment_service.credential_repository
+    user_repository = enrollment_service.user_repository
+
+    assert unregistered is False
+    assert len(user_repository.data['default']) == 3
+    assert len(credential_repository.data['default']) == 3

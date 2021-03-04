@@ -281,13 +281,11 @@ def enrollment_service(
 @fixture
 def auth_manager(mock_user_repository, mock_credential_repository,
                  mock_dominion_repository, mock_hash_service,
-                 access_service, verification_service,
-                 mock_notification_service, mock_refresh_token_service):
+                 access_service, mock_refresh_token_service):
     return AuthManager(
         mock_user_repository, mock_credential_repository,
         mock_dominion_repository, mock_hash_service,
-        access_service, verification_service,
-        mock_notification_service, mock_refresh_token_service)
+        access_service, mock_refresh_token_service)
 
 
 @fixture

@@ -47,6 +47,18 @@ class EnrollmentService:
         await self.credential_repository.remove(old_credentials)
         await self.credential_repository.add(new_credentials)
 
+    async def deregister(self, users: List[User]) -> bool:
+        if not users:
+            return False
+
+        credentials = await self.credential_repository.search(
+            [('user_id', 'in', [user.id for user in users])])
+
+        await self.credential_repository.remove(credentials)
+        await self.user_repository.remove(users)
+
+        return True
+
     def _validate_usernames(self, users: List[User]) -> None:
         for user in users:
             if any((character in '@.+-_') for character in user.username):
