@@ -42,18 +42,19 @@ async def test_procedure_manager_verify(procedure_manager):
     assert user.active is True
 
 
-async def test_auth_manager_register(auth_manager):
-    user_dicts: RecordList = [{
+async def test_procedure_manager_register(procedure_manager):
+    user_dicts = [{
         "id": "007",
         "name": "Miguel Vivas",
         "username": "mvp",
         "email": "mvp@gmail.com",
         "password": "PASS4"
     }]
-    await auth_manager.register(user_dicts)
-    credential_repository = auth_manager.credential_repository
-    user_repository = auth_manager.user_repository
-    notification_service = auth_manager.notification_service
+    await procedure_manager.register(user_dicts)
+    credential_repository = (
+        procedure_manager.enrollment_service.credential_repository)
+    user_repository = procedure_manager.user_repository
+    notification_service = procedure_manager.notification_service
 
     assert len(user_repository.data['default']) == 4
     [new_user] = await user_repository.search([('id', '=', '007')])
@@ -69,14 +70,3 @@ async def test_auth_manager_register(auth_manager):
         'token': (
             '{"type": "activation", "tenant": "default", "uid": "007"}')
     }
-
-# async def test_procedure_manager_register_username_special_characters_error(
-        # procedure_manager):
-    # with raises(UserCreationError):
-        # user_dicts: RecordList = [{
-            # "username": "mvp@gmail.com",
-            # "email": "mvp@gmail.com",
-            # "password": "PASS4"
-        # }]
-        # await procedure_manager.register(user_dicts)
-
