@@ -37,6 +37,9 @@ serve:
 console:
 	python -m $(PROJECT) console
 
+push:
+	git push origin HEAD && git push --tags
+
 PART ?= patch
 
 version:
