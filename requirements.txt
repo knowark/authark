@@ -56,7 +56,7 @@ termcolor==1.1.0
 toml==0.10.2
 typed-ast==1.4.2
 typing-extensions==3.7.4.3
-urllib3==1.26.3
+urllib3==1.26.4
 uvloop==0.15.2
 webencodings==0.5.1
 widark==0.3.3
