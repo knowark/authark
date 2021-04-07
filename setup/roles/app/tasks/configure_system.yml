@@ -83,10 +83,14 @@
   template:
     src: tenants.json.j2
     dest: "{{ app_home }}/tenants.json"
+    owner: "{{ app_user }}"
+    group: "{{ app_user }}"
     mode: 0755
 
 - name: "Create {{ app_user }} Sign File"
   template:
     src: sign.txt.j2
     dest: "{{ app_home }}/sign.txt"
+    owner: "{{ app_user }}"
+    group: "{{ app_user }}"
     mode: 0755
