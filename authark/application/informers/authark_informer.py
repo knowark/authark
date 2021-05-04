@@ -13,32 +13,20 @@ class AutharkInformer(ABC):
     async def count(self,
                     model: str,
                     domain: QueryDomain = None) -> int:
-        """Returns a the <<model>> records count"""
-
-    @overload
-    async def search(self, model: str, domain: QueryDomain,
-                     limit: int = None, offset: int = None) -> RecordList:
-        """Standard search method"""
-
-    @overload
-    async def search(
-            self, model: str, domain: QueryDomain,
-            limit: int = None, offset: int = None,
-            *,
-            join: str, link: str = None,
-            source: str = None, target: str = None) -> List[
-                Tuple[DataDict, RecordList]]:
-        """Joining search method"""
+        """Standard count method"""
 
     @abstractmethod
-    async def search(
-            self, model: str, domain: QueryDomain = None,
-            limit: int = None, offset: int = None,
-            *,
-            join: str = None, link: str = None,
-            source: str = None, target: str = None) -> Union[
-                RecordList, List[Tuple[DataDict, RecordList]]]:
-        """Returns a list of <<model>> dictionaries matching the domain"""
+    async def search(self, model: str, domain: QueryDomain,
+                     limit: int = None, offset: int = None,
+                     order: str = None) -> RecordList:
+        """Standard search method"""
+
+    @abstractmethod
+    async def join(self, model: str, domain: QueryDomain,
+                   join: str = None, link: str = None,
+                   source: str = None, target: str = None
+                   ) -> List[Tuple[DataDict, RecordList]]:
+        """Standard join method"""
 
 
 class StandardAutharkInformer(AutharkInformer):
@@ -63,42 +51,30 @@ class StandardAutharkInformer(AutharkInformer):
         repository = getattr(self, f'{collection}_repository')
         return await repository.count(domain or [])
 
-    @overload
-    async def search(self,  model: str, domain: QueryDomain,
-                     limit: int = None, offset: int = None) -> RecordList:
+    async def search(self,  model: str, domain: QueryDomain = None,
+                     limit: int = None, offset: int = None,
+                     order: str = None) -> RecordList:
         """Standard search method"""
 
-    @overload
-    async def search(
-            self, model: str, domain: QueryDomain,
-            limit: int = None, offset: int = None,
-            *,
-            join: str, link: str = None,
-            source: str = None, target: str = None) -> List[
-                Tuple[DataDict, RecordList]]:
-        """Joining search method"""
+        repository = getattr(self, f'{model}_repository')
 
-    async def search(
-            self, model: str, domain: QueryDomain = None,
-            limit: int = None, offset: int = None,
-            *,
-            join: str = None, link: str = None,
-            source: str = None, target: str = None) -> Union[
-                RecordList, List[Tuple[DataDict, RecordList]]]:
+        items = await repository.search(
+            domain or [], limit=limit, offset=offset, order=order)
+
+        return [vars(item) for item in items]
+
+    async def join(self, model: str, domain: QueryDomain = None,
+                   join: str = None, link: str = None,
+                   source: str = None, target: str = None
+                   ) -> List[Tuple[DataDict, RecordList]]:
 
         repository = getattr(self, f'{model}_repository')
         reference = getattr(self, f'{join}_repository', None)
         pivot = getattr(self, f'{link}_repository', None)
 
-        items = await repository.search(
-            domain or [], limit=limit, offset=offset,
-            join=reference, link=pivot, source=source, target=target)
+        items = await repository.join(
+            domain or [], join=reference, link=pivot,
+            source=source, target=target)
 
-        result: Any = []
-        for item in items:
-            if not isinstance(item, (tuple, list)):
-                result.append(vars(item))
-                continue
-            result.append((vars(item[0]), [vars(i) for i in item[1]]))
-
-        return result
+        return [(vars(item[0]), [vars(i) for i in item[1]])
+                for item in items]
