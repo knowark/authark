@@ -52,4 +52,4 @@ async def test_access_service_build_roles(access_service) -> None:
     roles = await access_service._build_roles(user, dominion)
     assert isinstance(roles, list)
 
-    assert 'admin' in roles
+    assert 'admin|1' in roles
