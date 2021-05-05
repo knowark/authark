@@ -11,6 +11,8 @@ def parse_domain(filter: str) -> List[Any]:
         return domain
 
     for condition in domain:
+        if isinstance(condition, str):
+            continue
         word = camel_to_snake(condition[0])
         condition[0] = word
 

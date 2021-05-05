@@ -12,8 +12,8 @@ def authenticate_middleware_factory(
 
     @web.middleware
     async def middleware(request: web.Request, handler: Callable):
-        public = ['/', '/registrations', '/verifications',
-                  '/requisitions', '/tokens']
+        public = ['/', '/tenants', '/registrations',
+                  '/verifications', '/requisitions', '/tokens']
         if request.path in public:
             session_coordinator.set_user(config['system'])
             return await handler(request)

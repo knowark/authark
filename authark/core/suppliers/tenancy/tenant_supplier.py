@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Dict, Any
+from typing import List, Dict, Any
 
 
 class TenantSupplier(ABC):
@@ -15,3 +15,7 @@ class TenantSupplier(ABC):
     @abstractmethod
     def resolve_tenant(self, name: str) -> Dict[str, Any]:
         """Resolve tenant method to be implemented."""
+
+    @abstractmethod
+    def search_tenants(self, domain: List[Any]) -> List[Dict[str, Any]]:
+        """Search tenant method to be implemented."""

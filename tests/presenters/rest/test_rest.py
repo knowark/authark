@@ -245,8 +245,8 @@ async def test_bad_filter_get_route_filter(app, headers) -> None:
 
 async def test_users_get_route_filter(app, headers) -> None:
     response = await app.get(
-        '/users?filter=[["createdAt", "=", 9999999999]]',
-        headers=headers)
+        ('/users?filter=["|", ["name", "=", "John"], '
+         '["createdAt", "=", 9999999999]]'), headers=headers)
     content = await response.text()
     data_dict = loads(content)
     assert len(data_dict) == 0
@@ -261,6 +261,17 @@ async def test_dominions_get(app, headers) -> None:
 
     assert len(data_dict) == 1
     assert data_dict[0]['name'] == 'default'
+
+
+async def test_tenants_get(app, headers) -> None:
+    response = await app.get('/tenants', headers=headers)
+    content = await response.text()
+    assert response.status == 200
+
+    data_dict = loads(content)
+
+    assert len(data_dict) == 1
+    assert data_dict[0]['slug'] == 'default'
 
 
 async def test_dominions_not_implemented_put(app, headers) -> None:
