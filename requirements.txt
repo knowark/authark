@@ -8,7 +8,7 @@ attrs==20.3.0
 bump2version==1.0.1
 CacheControl==0.12.6
 certifi==2020.12.5
-chardet==4.0.0
+chardet==3.0.4
 colorama==0.4.4
 contextlib2==0.6.0.post1
 coverage==5.5
@@ -16,7 +16,7 @@ distlib==0.3.1
 distro==1.5.0
 greenlet==1.0.0
 html5lib==1.1
-idna==3.1
+idna==2.10
 iniconfig==1.1.1
 injectark==0.6.0
 ipaddr==2.2.0
@@ -25,7 +25,7 @@ Jinja2==2.11.3
 lockfile==0.12.2
 MarkupSafe==1.1.1
 marshmallow==3.11.1
-modelark==0.3.2
+modelark==0.3.3
 more-itertools==8.7.0
 msgpack==1.0.2
 multidict==5.1.0
