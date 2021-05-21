@@ -35,7 +35,7 @@ serve:
 	python -m $(PROJECT) serve
 
 console:
-	set -a; source /etc/opt/authark/authark.env; set +a
+	export echo $$(cat /etc/opt/authark/authark.env | xargs) && \
 	python -m $(PROJECT) console
 
 push:
