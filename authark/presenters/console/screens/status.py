@@ -94,7 +94,7 @@ class TenantProvisionModal(Modal):
                ).style(Color.WARNING()).grid(0, 4)
 
     async def on_save(self, event: Event) -> None:
-        tenant = {'name': self.name.text}
+        tenant = {'name': self.name.text.strip()}
         if self.id.text.strip():
             tenant['id'] = self.id.text.strip()
 

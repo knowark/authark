@@ -28,8 +28,9 @@ class RankingsModal(Modal):
 
     async def load(self) -> None:
         rankings = []
-        for ranking, [role] in await self.authark_informer.search('ranking', [(
-                'user_id', '=', self.user['id'])], join='role', link='ranking'):
+        for ranking, [role] in await self.authark_informer.join(
+            'ranking', [('user_id', '=', self.user['id'])],
+                join='role', link='ranking'):
             [dominion] = await self.authark_informer.search(
                 'dominion', [('id', '=', role['dominion_id'])])
             ranking['role_name'] = role['name']

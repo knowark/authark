@@ -35,6 +35,7 @@ serve:
 	python -m $(PROJECT) serve
 
 console:
+	export echo $$(cat /etc/opt/authark/authark.env | xargs) && \
 	python -m $(PROJECT) console
 
 push:
@@ -71,3 +72,6 @@ gitmessage:
 	touch .gitmessage
 	echo "\n# commit message\n.gitmessage" >> .gitignore
 	git config commit.template .gitmessage
+
+activate:
+	echo "set -a; source /etc/opt/authark/authark.env; set +a"

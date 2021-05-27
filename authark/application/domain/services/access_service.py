@@ -51,6 +51,6 @@ class AccessService:
         ranking_role_ids = [
             ranking.role_id for ranking in
             await self.ranking_repository.search([('user_id', '=', user.id)])]
-        roles = [role.name for role in dominion_roles
+        roles = [f"{role.name}|{role.id}" for role in dominion_roles
                  if role.id in ranking_role_ids]
         return roles

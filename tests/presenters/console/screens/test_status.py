@@ -101,7 +101,7 @@ async def test_provision_modal_on_save(tenant_provision_modal):
 
     await tenant_provision_modal.on_save(event)
 
-    assert given_tenants == {'name': ' '}
+    assert given_tenants == {'name': ''}
 
     class MockId:
         text = '123'
@@ -110,7 +110,7 @@ async def test_provision_modal_on_save(tenant_provision_modal):
     await tenant_provision_modal.on_save(event)
     await asyncio.sleep(0)
 
-    assert given_tenants == {'id': '123', 'name': ' '}
+    assert given_tenants == {'id': '123', 'name': ''}
 
 
 async def test_tenant_provision_modal_on_buttons(tenant_provision_modal):
