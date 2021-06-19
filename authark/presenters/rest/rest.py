@@ -1,7 +1,6 @@
-import aiohttp_jinja2
 from typing import Any
 from pathlib import Path
-from jinja2 import FileSystemLoader
+from jinja2 import Environment, FileSystemLoader
 from aiohttp import web, ClientSession
 from injectark import Injectark
 from ...core import Config
@@ -27,12 +26,8 @@ class RestApplication:
 
     def _setup(self) -> None:
         templates = str(Path(__file__).parent / 'templates')
-        aiohttp_jinja2.setup(self.app, loader=FileSystemLoader(templates))
-
+        self.app['jinja'] = Environment(loader=FileSystemLoader(templates))
         self.app.cleanup_ctx.append(self._http_client)
-
-        # API endpoints creation
-
         self._create_api()
 
     @staticmethod
@@ -58,7 +53,7 @@ class RestApplication:
         spec = create_spec()
 
         # Resources
-        self._bind_routes('/', RootResource(spec))
+        self._bind_routes('/', RootResource(self.app, spec))
         self._bind_routes('/tokens', TokenResource(self.injector))
         self._bind_routes('/users', UserResource(self.injector))
         self._bind_routes('/rankings', RankingResource(self.injector))

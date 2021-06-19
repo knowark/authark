@@ -1,5 +1,4 @@
 from aiohttp import web
-from aiohttp_jinja2 import render_template
 from .... import __version__
 from .token import TokenResource
 from .resource import Resource
@@ -17,7 +16,8 @@ from .role import RoleResource
 
 class RootResource:
 
-    def __init__(self, spec) -> None:
+    def __init__(self, app, spec) -> None:
+        self.app = app
         self.spec = spec
 
     async def get(self, request: web.Request) -> web.Response:
@@ -25,8 +25,9 @@ class RootResource:
             return web.json_response(self.spec.to_dict())
 
         context = {'url': '/?api', 'version': __version__}
-        response = render_template(
-            'index.html', request, context)
+        template = self.app['jinja'].get_template('index.html')
+
+        response = web.Response(text=template.render(context))
         response.headers['Content-Type'] = 'text/html'
 
         return response
