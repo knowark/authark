@@ -13,7 +13,7 @@ class TokenResource:
         token_request = TokenRequestSchema().loads(await request.text())
         tenant = token_request['tenant']
         token_request['dominion'] = token_request.get(
-            'dominion', request.headers.get('Dominion'))
+            'dominion', request.headers.get('Dominion', ''))
         tenant_dict = self.tenant_supplier.resolve_tenant(tenant)
         self.session_manager.set_tenant(tenant_dict)
 
