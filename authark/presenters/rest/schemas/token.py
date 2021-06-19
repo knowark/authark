@@ -3,7 +3,7 @@ from marshmallow import Schema, fields
 
 class TokenRequestSchema(Schema):
     dominion = fields.Str(
-        required=True, metadata=dict(example="platform_xyz"))
+        metadata=dict(example="platform_xyz"))
     tenant = fields.Str(
         required=True, metadata=dict(example="knowark"))
     username = fields.Str(
