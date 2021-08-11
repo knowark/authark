@@ -5,7 +5,7 @@ from ..core.mail import MailNotificationService
 from .json_factory import JsonFactory
 
 
-class WebFactory(JsonFactory):
+class MailFactory(JsonFactory):
     def __init__(self, config: Config) -> None:
         super().__init__(config)
         self.mail_config = self.config.get('mail', {})
@@ -13,6 +13,7 @@ class WebFactory(JsonFactory):
 
     # Services
 
-    def template_supplier(self) -> TemplateSupplier:
-        templates = self.config.get('templates', [])
-        return JinjaTemplateSupplier(templates)
+    def notification_service(
+        self, template_supplier: TemplateSupplier) -> NotificationService:
+        config = {**self.verification_config, **self.mail_config}
+        return MailNotificationService(config, template_supplier)

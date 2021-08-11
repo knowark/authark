@@ -71,8 +71,10 @@ test_tuples = [
         ('SetupSupplier', 'JsonSetupSupplier'),
     ]),
     ('WebFactory', [
-        ('NotificationService', 'MailNotificationService'),
         ('TemplateSupplier', 'JinjaTemplateSupplier'),
+    ]),
+    ('MailFactory', [
+        ('NotificationService', 'MailNotificationService'),
     ]),
 ]
 
