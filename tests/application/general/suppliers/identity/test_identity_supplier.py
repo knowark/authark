@@ -16,5 +16,6 @@ def test_memory_identity_supplier_instantiation() -> None:
 async def test_memory_identity_supplier_identify() -> None:
     identity_supplier = MemoryIdentitySupplier()
 
-    user = await identity_supplier.identify('famunoz@knowark.com', 'secret1234')
-    assert isinstance(identity_supplier, IdentitySupplier)
+    user = await identity_supplier.identify(
+        'famunoz@knowark.com', 'secret1234')
+    assert user.email == 'famunoz@knowark.com'
