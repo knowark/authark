@@ -23,7 +23,7 @@ coverage-application:
 	-o cache_dir=/tmp/$(PROJECT)/cache
 
 coverage:
-	export COVERAGE_FILE=$(COVFILE); pytest --cov-branch \
+	export COVERAGE_FILE=$(COVFILE); pytest --testmon --cov-branch \
 	--cov=$(PROJECT) $(TESTS) --cov-report term-missing -x -s \
 	-vv -o cache_dir=/tmp/$(PROJECT)/cache
 
