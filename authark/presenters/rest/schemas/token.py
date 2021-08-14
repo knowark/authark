@@ -15,8 +15,6 @@ class TokenRequestSchema(Schema):
         metadata=dict(example="eyJhbG.eyJzdWIiOiIx.MjM5MadQssw5c"))
     client = fields.Str(
         metadata=dict(example="data_server"))
-    provider = fields.Str(
-        metadata=dict(example="data_server"))
 
 
 class TokenSchema(Schema):

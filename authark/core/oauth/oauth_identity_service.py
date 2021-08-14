@@ -1,4 +1,6 @@
 import asyncio
+import base64
+# import jwt
 from urllib.parse import urlencode
 from aiohttp import ClientSession
 from typing import Dict, Optional, Any
@@ -13,27 +15,30 @@ class OauthIdentityService(IdentityService):
 
     async def identify(self, provider: str, code: str) -> User:
         self.session = self.session or ClientSession()
-        parameters = { **PROVIDERS[provider]['tokenParameters'],
+        parameters = { **PROVIDERS[provider]['token_parameters'],
                       **self.config['providers'][provider] }
         parameters['code'] = code
 
-        print('Parameters>>>>', parameters)
-
-        endpoint = PROVIDERS[provider]['tokenEndpoint']
+        endpoint = PROVIDERS[provider]['token_endpoint']
         headers: dict = {
             'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
         }
         data = urlencode(parameters)
-
-        print('Data>>>', data)
         async with self.session.post(
             endpoint, headers=headers, data=data) as response:
-            result = await response.json()
+            access_token = (await response.json()).get('access_token')
+            if not access_token:
+                raise ValueError(f"Couldn't identify user through {provider}")
 
-            print('Result>>>', result)
+        info_endpoint = PROVIDERS[provider]['info_endpoint']
+        parameters = {**PROVIDERS[provider]['info_parameters'],
+                      'access_token': access_token}
 
-        user =  User(email='any')
-        return user
+        async with self.session.get(
+            info_endpoint, params=parameters) as response:
+            info = await response.json()
+
+        return  User(email=info['email'], name=info['name'])
 
     def __del__(self):
         self.session and asyncio.run(self.session.close())
@@ -41,22 +46,29 @@ class OauthIdentityService(IdentityService):
 
 PROVIDERS: Dict[str, Any] = {
     'google': {
-        'tokenEndpoint': 'https://oauth2.googleapis.com/token',
-        'identity_key': 'id_token',
-        'tokenParameters': {
+        'token_endpoint': (
+            'https://oauth2.googleapis.com/token'),
+        'token_parameters': {
             'client_id': '',
             'client_secret': '',
             'redirect_uri': '',
             'grant_type': 'authorization_code',
-        }
+        },
+        'info_endpoint': 'https://openidconnect.googleapis.com/v1/userinfo',
+        'info_parameters': {},
     },
     'facebook': {
-        'tokenEndpoint': 'https://graph.facebook.com/v11.0/oauth/access_token',
-        'tokenParameters': {
+        'token_endpoint': (
+            'https://graph.facebook.com/v11.0/oauth/access_token'),
+        'token_parameters': {
             'client_id': '',
             'client_secret': '',
             'redirect_uri': '',
             'grant_type': 'authorization_code',
-        }
+        },
+        'info_endpoint': 'https://graph.facebook.com/me',
+        'info_parameters': {
+            'fields': 'name,email'
+        },
     }
 }

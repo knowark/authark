@@ -86,6 +86,14 @@ config = {
                     'AUTHARK_GOOGLE_CLIENT_SECRET') or "",
                 "redirect_uri": os.environ.get(
                     'AUTHARK_GOOGLE_REDIRECT_URI') or "",
+            },
+            "facebook": {
+                "client_id": os.environ.get(
+                    'AUTHARK_FACEBOOK_CLIENT_ID') or "",
+                "client_secret": os.environ.get(
+                    'AUTHARK_FACEBOOK_CLIENT_SECRET') or "",
+                "redirect_uri": os.environ.get(
+                    'AUTHARK_FACEBOOK_REDIRECT_URI') or "",
             }
         }
     }

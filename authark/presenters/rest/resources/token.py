@@ -11,9 +11,6 @@ class TokenResource:
 
     async def put(self, request: web.Request) -> web.Response:
         token_request = TokenRequestSchema().loads(await request.text())
-
-        print('TokenRequest>>>', token_request)
-
         tenant = token_request['tenant']
         token_request['dominion'] = token_request.get(
             'dominion', request.headers.get('Dominion', ''))

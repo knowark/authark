@@ -78,10 +78,8 @@ class AuthManager:
     ) -> TokensDict:
         provider, code = username.replace(self.provider_pattern, ''), password
 
-
         user = await self.identity_service.identify(provider, code)
 
-        print('user>>', user.email, 'provider', provider, 'code', code)
         [user] = await self.user_repository.search(
             [('email', '=', user.email)])
 
