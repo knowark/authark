@@ -77,6 +77,9 @@ test_tuples = [
     ('MailFactory', [
         ('NotificationService', 'MailNotificationService'),
     ]),
+    ('OauthFactory', [
+        ('IdentityService', 'OauthIdentityService'),
+    ]),
 ]
 
 

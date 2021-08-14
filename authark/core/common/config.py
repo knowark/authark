@@ -8,7 +8,7 @@ Config = Dict[str, Any]
 
 config = {
     "port": int(os.environ.get('AUTHARK_PORT') or 6291),
-    "factory": os.environ.get('AUTHARK_FACTORY') or 'WebFactory',
+    "factory": os.environ.get('AUTHARK_FACTORY') or 'OauthFactory',
     "templates": (os.environ.get('AUTHARK_TEMPLATES') or ".").split(','),
     "environment": {
         "home": "/opt/authark"
@@ -76,6 +76,18 @@ config = {
         "type": "json",
         "dir": os.environ.get('AUTHARK_EXPORT_DIR') or str(
             Path.home() / "export")
+    },
+    "oauth": {
+        "providers": {
+            "google": {
+                "client_id": os.environ.get(
+                    'AUTHARK_GOOGLE_CLIENT_ID') or "",
+                "client_secret": os.environ.get(
+                    'AUTHARK_GOOGLE_CLIENT_SECRET') or "",
+                "redirect_uri": os.environ.get(
+                    'AUTHARK_GOOGLE_REDIRECT_URI') or "",
+            }
+        }
     }
 }
 

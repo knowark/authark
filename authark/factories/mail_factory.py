@@ -2,10 +2,10 @@ from ..application.domain.services import NotificationService
 from ..core.suppliers import TemplateSupplier, JinjaTemplateSupplier
 from ..core.common import Config
 from ..core.mail import MailNotificationService
-from .json_factory import JsonFactory
+from .web_factory import WebFactory
 
 
-class MailFactory(JsonFactory):
+class MailFactory(WebFactory):
     def __init__(self, config: Config) -> None:
         super().__init__(config)
         self.mail_config = self.config.get('mail', {})

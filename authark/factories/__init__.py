@@ -5,8 +5,9 @@ from .crypto_factory import CryptoFactory
 from .json_factory import JsonFactory
 from .web_factory import WebFactory
 from .mail_factory import MailFactory
+from .oauth_factory import OauthFactory
 
 
 factory_builder = FactoryBuilder([
     BaseFactory, CheckFactory, CryptoFactory,
-    JsonFactory, WebFactory, MailFactory])
+    JsonFactory, WebFactory, MailFactory, OauthFactory])
