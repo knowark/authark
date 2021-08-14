@@ -64,7 +64,7 @@ config = {
     },
     "tenancy": {
         "json": os.environ.get('AUTHARK_TENANCY_JSON') or str(
-            Path.home() / "tenants.json")
+            Path.home() / "data/tenants.json")
     },
     "zones": {
         "default": {

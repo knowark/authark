@@ -132,12 +132,12 @@ async def test_generate_refresh_token(auth_manager):
 
 
 async def test_auth_manager_provider_authenticate(auth_manager):
-    provider = 'google'
+    username = 'google@provider.oauth'
     password = 'AUTHORIZATION_CODE_1234'
 
     tokens = await auth_manager.authenticate({
         'dominion': 'default',
-        'provider': provider,
+        'username': username,
         'password': password})
 
     assert isinstance(tokens, dict)

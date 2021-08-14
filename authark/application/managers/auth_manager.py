@@ -27,6 +27,7 @@ class AuthManager:
         self.access_service = access_service
         self.refresh_token_service = refresh_token_service
         self.identity_service = identity_service
+        self.provider_pattern = '@provider.oauth'
 
     async def authenticate(self, request_dict: Dict[str, str]) -> TokensDict:
         dominion = request_dict['dominion']
@@ -34,14 +35,13 @@ class AuthManager:
         username = request_dict.get('username', '')
         password = request_dict.get('password', '')
         client = request_dict.get('client', '')
-        provider = request_dict.get('provider', '')
 
         if refresh_token:
             return await self._refresh_authenticate(
                 refresh_token, dominion)
-        elif provider:
+        elif username.endswith(self.provider_pattern):
             return await self._provider_authenticate(
-                provider, password, client, dominion)
+                username, password, client, dominion)
         return await self._password_authenticate(
                 username, password, client, dominion)
 
@@ -73,10 +73,15 @@ class AuthManager:
         }
 
     async def _provider_authenticate(
-        self, provider: str, code: str,
+        self, username: str, password: str,
         client: str, dominion_name: str
     ) -> TokensDict:
+        provider, code = username.replace(self.provider_pattern, ''), password
+
+
         user = await self.identity_service.identify(provider, code)
+
+        print('user>>', user.email, 'provider', provider, 'code', code)
         [user] = await self.user_repository.search(
             [('email', '=', user.email)])
 
