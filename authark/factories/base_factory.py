@@ -17,7 +17,8 @@ from ..application.domain.services import (
     VerificationTokenService, MemoryVerificationTokenService,
     NotificationService, MemoryNotificationService,
     ImportService, MemoryImportService, EnrollmentService,
-    AccessService, VerificationService)
+    AccessService, VerificationService, IdentityService,
+    MemoryIdentityService)
 from ..application.managers import (
     AuthManager, ManagementManager, ImportManager,
     SessionManager, SecurityManager, ProcedureManager)
@@ -119,6 +120,9 @@ class BaseFactory(Factory):
     def import_service(self, hash_service: HashService) -> ImportService:
         return MemoryImportService()
 
+    def identity_service(self) -> IdentityService:
+        return MemoryIdentityService()
+
     def notification_service(
         self, template_supplier: TemplateSupplier
     ) -> NotificationService:
@@ -162,12 +166,13 @@ class BaseFactory(Factory):
         dominion_repository: DominionRepository,
         hash_service: HashService,
         access_service: AccessService,
-        refresh_token_service: RefreshTokenService
+        refresh_token_service: RefreshTokenService,
+        identity_service: IdentityService
     ) -> AuthManager:
         return AuthManager(
             user_repository, credential_repository,
             dominion_repository, hash_service, access_service,
-            refresh_token_service)
+            refresh_token_service, identity_service)
 
     def management_manager(
         self, user_repository: UserRepository,

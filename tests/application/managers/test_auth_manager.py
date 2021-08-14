@@ -131,6 +131,20 @@ async def test_generate_refresh_token(auth_manager):
     assert len(credential_repository.data['default']) == 4
 
 
+async def test_auth_manager_provider_authenticate(auth_manager):
+    provider = 'google'
+    password = 'AUTHORIZATION_CODE_1234'
+
+    tokens = await auth_manager.authenticate({
+        'dominion': 'default',
+        'provider': provider,
+        'password': password})
+
+    assert isinstance(tokens, dict)
+    assert 'access_token' in tokens.keys()
+    assert 'refresh_token' in tokens.keys()
+
+
 async def test_generate_refresh_token_only_one(auth_manager):
     user_id = '1'
     client = 'mobile'

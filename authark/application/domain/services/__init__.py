@@ -5,3 +5,4 @@ from .access_service import *
 from .notification_service import *
 from .verification_service import *
 from .enrollment_service import *
+from .identity_service import *

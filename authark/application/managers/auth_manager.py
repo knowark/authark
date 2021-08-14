@@ -7,7 +7,7 @@ from ..domain.repositories import (
     UserRepository, CredentialRepository, DominionRepository)
 from ..domain.services import (
     RefreshTokenService, HashService, AccessService,
-    VerificationService, NotificationService)
+    VerificationService, NotificationService, IdentityService)
 
 
 class AuthManager:
@@ -17,7 +17,8 @@ class AuthManager:
         dominion_repository: DominionRepository,
         hash_service: HashService,
         access_service: AccessService,
-        refresh_token_service: RefreshTokenService
+        refresh_token_service: RefreshTokenService,
+        identity_service: IdentityService
     ) -> None:
         self.user_repository = user_repository
         self.credential_repository = credential_repository
@@ -25,6 +26,7 @@ class AuthManager:
         self.hash_service = hash_service
         self.access_service = access_service
         self.refresh_token_service = refresh_token_service
+        self.identity_service = identity_service
 
     async def authenticate(self, request_dict: Dict[str, str]) -> TokensDict:
         dominion = request_dict['dominion']
@@ -32,15 +34,16 @@ class AuthManager:
         username = request_dict.get('username', '')
         password = request_dict.get('password', '')
         client = request_dict.get('client', '')
+        provider = request_dict.get('provider', '')
 
         if refresh_token:
-            result = await self._refresh_authenticate(
+            return await self._refresh_authenticate(
                 refresh_token, dominion)
-        else:
-            result = await self._password_authenticate(
+        elif provider:
+            return await self._provider_authenticate(
+                provider, password, client, dominion)
+        return await self._password_authenticate(
                 username, password, client, dominion)
-
-        return result
 
     async def _password_authenticate(
             self, username: str, password: str,
@@ -63,6 +66,27 @@ class AuthManager:
         # Create new refresh token
         client = client or 'ALL'
         refresh_token_str = await self._generate_refresh_token(user.id, client)
+
+        return {
+            'refresh_token': refresh_token_str,
+            'access_token': access_token.value
+        }
+
+    async def _provider_authenticate(
+        self, provider: str, code: str,
+        client: str, dominion_name: str
+    ) -> TokensDict:
+        user = await self.identity_service.identify(provider, code)
+        [user] = await self.user_repository.search(
+            [('email', '=', user.email)])
+
+        dominion = await self._ensure_dominion(dominion_name)
+        access_token = await self.access_service.generate_token(
+            user, dominion)
+
+        client = client or 'ALL'
+        refresh_token_str = await self._generate_refresh_token(
+            user.id, client)
 
         return {
             'refresh_token': refresh_token_str,

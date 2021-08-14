@@ -20,8 +20,7 @@ from authark.application.domain.services import (
     AccessService, VerificationService, ImportService,
     MemoryImportService, NotificationService,
     MemoryNotificationService, HashService, MemoryHashService,
-    EnrollmentService
-)
+    EnrollmentService, IdentityService, MemoryIdentityService)
 from authark.application.managers import (
     AuthManager, ManagementManager, ImportManager,
     SessionManager, SecurityManager, ProcedureManager)
@@ -178,6 +177,7 @@ def mock_token_service() -> TokenService:
 def mock_refresh_token_service() -> RefreshTokenService:
     return MemoryRefreshTokenService()
 
+
 @fixture
 def mock_verification_token_service() -> VerificationTokenService:
     return MemoryVerificationTokenService()
@@ -188,10 +188,18 @@ def mock_hash_service() -> HashService:
     mock_hash_service = MemoryHashService()
     return mock_hash_service
 
+
 @fixture
 def mock_notification_service() -> NotificationService:
     mock_notification_service = MemoryNotificationService()
     return mock_notification_service
+
+
+@fixture
+def mock_identity_service() -> IdentityService:
+    user = User(id="3", email="gabeche@gmail.com")
+    mock_identity_service = MemoryIdentityService(user)
+    return mock_identity_service
 
 
 @fixture
@@ -281,11 +289,13 @@ def enrollment_service(
 @fixture
 def auth_manager(mock_user_repository, mock_credential_repository,
                  mock_dominion_repository, mock_hash_service,
-                 access_service, mock_refresh_token_service):
+                 access_service, mock_refresh_token_service,
+                 mock_identity_service):
     return AuthManager(
         mock_user_repository, mock_credential_repository,
         mock_dominion_repository, mock_hash_service,
-        access_service, mock_refresh_token_service)
+        access_service, mock_refresh_token_service,
+        mock_identity_service)
 
 
 @fixture

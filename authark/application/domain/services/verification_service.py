@@ -26,8 +26,3 @@ class VerificationService:
         token = Token(verification_dict['token'])
 
         return self.token_service.decode(token)
-
-        # [user] = await self.user_repository.search(
-            # [('id', '=', token_dict['uid'])])
-        # user.active = True
-        # await self.user_repository.add(user)
