@@ -25,7 +25,7 @@ Jinja2==3.0.1
 lockfile==0.12.2
 MarkupSafe==2.0.1
 marshmallow==3.12.1
-modelark==0.3.4
+modelark==0.6.6
 more-itertools==8.8.0
 msgpack==1.0.2
 multidict==5.1.0
