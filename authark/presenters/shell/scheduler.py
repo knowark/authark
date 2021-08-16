@@ -11,10 +11,6 @@ class Scheduler:
         self.session_manager = self.injector['SessionManager']
 
     async def run(self, options: dict) ->None:
-        # await self.session_manager.set_system({})
-
-        print('JsonQueue>>>', schedulark.JsonQueue)
-
         queue = schedulark.JsonQueue(str(Path.home() / 'tasks.json'))
         scheduler = schedulark.Scheduler(queue)
 

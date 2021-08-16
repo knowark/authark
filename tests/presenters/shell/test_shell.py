@@ -127,3 +127,22 @@ async def test_shell_load(shell, monkeypatch):
     assert users_file == 'external_users.json'
     assert default_source == 'external'
     assert default_password_field == 'password'
+
+
+async def test_shell_work(shell, monkeypatch):
+    given_options = None
+
+    class MockScheduler:
+        def __init__(self, injector):
+            pass
+
+        async def run(self, options):
+            nonlocal given_options
+            given_options = options
+
+    monkeypatch.setattr(
+        shell_module, 'Scheduler', MockScheduler)
+
+    await shell.work({})
+
+    assert given_options == {}
