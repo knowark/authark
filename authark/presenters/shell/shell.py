@@ -7,6 +7,8 @@ from ...core import Config
 from ... import __version__
 from ..rest import RestApplication
 from ..console import ConsoleApplication
+from .scheduler import Scheduler
+
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -35,6 +37,11 @@ class Shell:
         serve_parser = subparsers.add_parser(
             'serve', help='Start HTTP server.')
         serve_parser.set_defaults(func=self.serve)
+
+        # Work
+        work_parser = subparsers.add_parser(
+            'work', help='Start background worker.')
+        work_parser.set_defaults(func=self.work)
 
         # Console
         console_parser = subparsers.add_parser(
@@ -74,6 +81,11 @@ class Shell:
         app = RestApplication(self.config, self.injector)
         await RestApplication.run(app, port)
         logger.info('END SERVE')
+
+    async def work(self, options_dict: Dict[str, str]) -> None:
+        logger.info('WORK')
+        await Scheduler(self.injector).run(options_dict)
+        logger.info('END WORK')
 
     async def console(self, options_dict: Dict[str, str]) -> None:
         logger.info('CONSOLE')

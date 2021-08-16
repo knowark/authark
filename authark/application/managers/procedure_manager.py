@@ -8,6 +8,7 @@ from ..domain.repositories import (
 from ..domain.services import (
     RefreshTokenService, HashService, AccessService,
     EnrollmentService, VerificationService, NotificationService)
+from ..general import Planner
 
 
 class ProcedureManager:
@@ -15,12 +16,14 @@ class ProcedureManager:
         self, user_repository: UserRepository,
         enrollment_service: EnrollmentService,
         verification_service: VerificationService,
-        notification_service: NotificationService
+        notification_service: NotificationService,
+        planner: Planner
     ) -> None:
         self.user_repository = user_repository
         self.enrollment_service = enrollment_service
         self.verification_service = verification_service
         self.notification_service = notification_service
+        self.planner = planner
 
     async def register(self, user_dicts: RecordList) -> None:
         registration_tuples = []

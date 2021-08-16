@@ -25,6 +25,8 @@ from ..application.managers import (
 from ..application.informers import (
     AutharkInformer, StandardAutharkInformer,
     ComposingInformer, StandardComposingInformer)
+from ..application.general import (
+    Planner, MemoryPlanner)
 from ..core.common import Config
 from ..core.suppliers import (
     TenantSupplier, MemoryTenantSupplier,
@@ -158,6 +160,11 @@ class BaseFactory(Factory):
         return EnrollmentService(user_repository, credential_repository,
                                  hash_service, tenant_provider)
 
+    # Suppliers
+
+    def planner(self) -> Planner:
+        return MemoryPlanner()
+
     # Managers
 
     def auth_manager(
@@ -214,10 +221,12 @@ class BaseFactory(Factory):
         enrollment_service: EnrollmentService,
         verification_service: VerificationService,
         notification_service: NotificationService,
+        planner: Planner,
     ) -> ProcedureManager:
         return ProcedureManager(
             user_repository, enrollment_service,
-            verification_service, notification_service)
+            verification_service, notification_service,
+            planner)
 
     # Reporters
 

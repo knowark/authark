@@ -25,6 +25,7 @@ test_tuples = [
         ('AccessService', 'AccessService'),
         ('IdentityService', 'MemoryIdentityService'),
         ('EnrollmentService', 'EnrollmentService'),
+        ('Planner', 'MemoryPlanner'),
         ('AuthManager', 'AuthManager'),
         ('ManagementManager', 'ManagementManager'),
         ('ImportManager', 'ImportManager'),

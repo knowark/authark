@@ -21,6 +21,8 @@ from authark.application.domain.services import (
     MemoryImportService, NotificationService,
     MemoryNotificationService, HashService, MemoryHashService,
     EnrollmentService, IdentityService, MemoryIdentityService)
+from authark.application.general import (
+    Planner, MemoryPlanner)
 from authark.application.managers import (
     AuthManager, ManagementManager, ImportManager,
     SessionManager, SecurityManager, ProcedureManager)
@@ -165,7 +167,7 @@ def mock_ranking_repository(
     })
     return mock_ranking_repository
 
-# # SERVICES
+# SERVICES
 
 
 @fixture
@@ -283,7 +285,13 @@ def enrollment_service(
         mock_hash_service, mock_tenant_provider)
 
 
-# # COORDINATORS
+# SUPPLIERS
+
+@fixture
+def planner() -> Planner:
+    return MemoryPlanner()
+
+# COORDINATORS
 
 
 @fixture
@@ -332,7 +340,9 @@ def session_manager(mock_tenant_provider, mock_auth_provider):
 
 @fixture
 def procedure_manager(mock_user_repository, enrollment_service,
-                      verification_service, mock_notification_service):
+                      verification_service, mock_notification_service,
+                      planner):
     return ProcedureManager(
         mock_user_repository, enrollment_service,
-        verification_service, mock_notification_service)
+        verification_service, mock_notification_service,
+        planner)
