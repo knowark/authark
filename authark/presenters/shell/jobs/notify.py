@@ -6,9 +6,6 @@ from schedulark import Task
 
 
 class NotifyJob:
-    frequency = '* * * * *'
-    data = None
-
     def __init__(self, injector: Injectark) -> None:
         self.config = injector.config
         self.injector = injector

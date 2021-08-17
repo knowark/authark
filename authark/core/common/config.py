@@ -77,6 +77,12 @@ config = {
         "dir": os.environ.get('AUTHARK_EXPORT_DIR') or str(
             Path.home() / "export")
     },
+    "scheduler": {
+        "planner": {
+            "json": os.environ.get('AUTHARK_SCHEDULER_PLANNER_DIR') or str(
+                Path.home() / "data/tasks.json")
+        },
+    },
     "oauth": {
         "providers": {
             "google": {

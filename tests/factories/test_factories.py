@@ -70,6 +70,7 @@ test_tuples = [
         ('RankingRepository', 'JsonRankingRepository'),
         ('ImportService', 'JsonImportService'),
         ('TenantSupplier', 'JsonTenantSupplier'),
+        ('Planner', 'JsonPlanner'),
         ('SetupSupplier', 'JsonSetupSupplier'),
     ]),
     ('WebFactory', [
