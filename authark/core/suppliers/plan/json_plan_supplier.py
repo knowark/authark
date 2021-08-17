@@ -1,9 +1,9 @@
 import schedulark
 from typing import Callable, Dict
-from ...application.general.suppliers import Planner
+from ....application.general.suppliers import PlanSupplier
 
 
-class JsonPlanner(Planner):
+class JsonPlanSupplier(PlanSupplier):
     def __init__(self, path: str) -> None:
         self.planner = schedulark.Planner(
             schedulark.JsonQueue(path))

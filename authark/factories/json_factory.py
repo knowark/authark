@@ -6,7 +6,7 @@ from ..application.domain.repositories import (
     RankingRepository, RestrictionRepository,
     PolicyRepository)
 from ..application.domain.services import HashService, ImportService
-from ..application.general import Planner
+from ..application.general import PlanSupplier
 from ..core.data import (
     JsonCredentialRepository, JsonDominionRepository, JsonRoleRepository,
     JsonUserRepository, JsonRankingRepository, JsonImportService,
@@ -14,7 +14,7 @@ from ..core.data import (
 from ..core.common import Config
 from ..core.suppliers import (
     TenantSupplier, JsonTenantSupplier, SetupSupplier, JsonSetupSupplier)
-from ..core.suppliers import JsonPlanner
+from ..core.suppliers import JsonPlanSupplier
 from .crypto_factory import CryptoFactory
 
 
@@ -95,6 +95,6 @@ class JsonFactory(CryptoFactory):
                  self.config['zones'].items()}
         return JsonSetupSupplier(zones)
 
-    def planner(self) -> Planner:
-        path = self.config['scheduler']['planner']['json']
-        return JsonPlanner(path)
+    def plan_supplier(self) -> PlanSupplier:
+        path = self.config['scheduler']['json']
+        return JsonPlanSupplier(path)

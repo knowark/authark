@@ -26,7 +26,7 @@ from ..application.informers import (
     AutharkInformer, StandardAutharkInformer,
     ComposingInformer, StandardComposingInformer)
 from ..application.general import (
-    Planner, MemoryPlanner)
+    PlanSupplier, MemoryPlanSupplier)
 from ..core.common import Config
 from ..core.suppliers import (
     TenantSupplier, MemoryTenantSupplier,
@@ -162,8 +162,8 @@ class BaseFactory(Factory):
 
     # Suppliers
 
-    def planner(self) -> Planner:
-        return MemoryPlanner()
+    def plan_supplier(self) -> PlanSupplier:
+        return MemoryPlanSupplier()
 
     # Managers
 
@@ -221,12 +221,13 @@ class BaseFactory(Factory):
         enrollment_service: EnrollmentService,
         verification_service: VerificationService,
         notification_service: NotificationService,
-        planner: Planner,
+        identity_service: IdentityService,
+        plan_supplier: PlanSupplier,
     ) -> ProcedureManager:
         return ProcedureManager(
             user_repository, enrollment_service,
             verification_service, notification_service,
-            planner)
+            identity_service, plan_supplier)
 
     # Reporters
 

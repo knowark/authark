@@ -1,3 +1,4 @@
+from authark.application.domain.models import User
 from authark.application.managers import ProcedureManager
 
 
@@ -113,18 +114,22 @@ async def test_procedure_manager_update(procedure_manager) -> None:
         credential_repository.data['default'].values()]
 
 
-# async def test_auth_manager_update_without_password(auth_manager):
-    # user_dicts: RecordList = [{
-        # "id": "1",
-        # "username": "valenep",
-        # "email": "valenep@outlook.com",
-    # }]
+async def test_procedure_manager_identity_provider_register(procedure_manager):
+    user_dicts = [{
+        "username": "facebook@provider.oauth",
+        "password": "AUTHORIZATION_CODE_XYZ1234"
+    }]
+    procedure_manager.identity_service.user = User(
+        email="alice@outlook.com", name="Alice Wonder")
 
-    # await auth_manager.update(user_dicts)
-    # credential_repository = auth_manager.credential_repository
-    # user_repository = auth_manager.user_repository
+    await procedure_manager.register(user_dicts)
+    credential_repository = (
+        procedure_manager.enrollment_service.credential_repository)
+    user_repository = procedure_manager.user_repository
+    notification_service = procedure_manager.notification_service
 
-    # assert len(user_repository.data['default']) == 3
-    # assert len(credential_repository.data['default']) == 3
-    # assert user_repository.data['default']['1'].username == "valenep"
-    # assert user_repository.data['default']['1'].email == "valenep@outlook.com"
+    assert len(user_repository.data['default']) == 4
+    [new_user] = await user_repository.search([
+        ('name', '=', 'Alice Wonder')])
+    assert new_user.email == 'alice@outlook.com'
+    assert new_user.active is False

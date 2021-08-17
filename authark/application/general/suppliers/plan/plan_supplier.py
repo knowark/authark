@@ -2,7 +2,7 @@ from typing import Dict, Callable
 from abc import ABC, abstractmethod
 
 
-class Planner(ABC):
+class PlanSupplier(ABC):
     @abstractmethod
     async def setup(self) -> None:
         """Setup method to be implemented."""
@@ -12,7 +12,7 @@ class Planner(ABC):
         """Defer method to be implemented."""
 
 
-class MemoryPlanner(Planner):
+class MemoryPlanSupplier(PlanSupplier):
     def __init__(self) -> None:
         self._setup_calls: list = []
         self._defer_calls: list = []

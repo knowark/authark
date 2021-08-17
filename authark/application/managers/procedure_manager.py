@@ -1,3 +1,4 @@
+import uuid
 from typing import List, Dict
 from ..domain.common import (
     TokenString, TokensDict, AuthError,
@@ -7,8 +8,9 @@ from ..domain.repositories import (
     UserRepository, CredentialRepository, DominionRepository)
 from ..domain.services import (
     RefreshTokenService, HashService, AccessService,
-    EnrollmentService, VerificationService, NotificationService)
-from ..general import Planner
+    EnrollmentService, VerificationService, NotificationService,
+    IdentityService)
+from ..general import PlanSupplier
 
 
 class ProcedureManager:
@@ -17,25 +19,38 @@ class ProcedureManager:
         enrollment_service: EnrollmentService,
         verification_service: VerificationService,
         notification_service: NotificationService,
-        planner: Planner
+        identity_service: IdentityService,
+        plan_supplier: PlanSupplier
     ) -> None:
         self.user_repository = user_repository
         self.enrollment_service = enrollment_service
         self.verification_service = verification_service
         self.notification_service = notification_service
-        self.planner = planner
+        self.identity_service = identity_service
+        self.plan_supplier = plan_supplier
+        self.provider_pattern = '@provider.oauth'
 
     async def register(self, user_dicts: RecordList) -> None:
         registration_tuples = []
         for user_dict in user_dicts:
             password = user_dict.pop('password', '')
+            username = user_dict.get('username', '')
+            if username.endswith(self.provider_pattern):
+                provider = username.replace(self.provider_pattern, '')
+                user = await self.identity_service.identify(
+                    provider, password)
+                user.active = False
+                credential = Credential(value=uuid.uuid4())
+                registration_tuples.append((user, credential))
+                continue
+
             registration_tuples.append((
                 User(**user_dict, active=False), Credential(value=password)))
 
         users = await self.enrollment_service.register(registration_tuples)
 
         for user in users:
-            await self.planner.defer('NotifyJob', {
+            await self.plan_supplier.defer('NotifyJob', {
                 'type': 'activation',
                 'subject': 'Account Activation',
                 'recipient': user.email,

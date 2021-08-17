@@ -25,7 +25,7 @@ test_tuples = [
         ('AccessService', 'AccessService'),
         ('IdentityService', 'MemoryIdentityService'),
         ('EnrollmentService', 'EnrollmentService'),
-        ('Planner', 'MemoryPlanner'),
+        ('PlanSupplier', 'MemoryPlanSupplier'),
         ('AuthManager', 'AuthManager'),
         ('ManagementManager', 'ManagementManager'),
         ('ImportManager', 'ImportManager'),
@@ -70,7 +70,7 @@ test_tuples = [
         ('RankingRepository', 'JsonRankingRepository'),
         ('ImportService', 'JsonImportService'),
         ('TenantSupplier', 'JsonTenantSupplier'),
-        ('Planner', 'JsonPlanner'),
+        ('PlanSupplier', 'JsonPlanSupplier'),
         ('SetupSupplier', 'JsonSetupSupplier'),
     ]),
     ('WebFactory', [

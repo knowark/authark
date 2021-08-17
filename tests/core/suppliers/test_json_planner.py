@@ -1,12 +1,12 @@
 from pytest import raises
-from authark.application.general import Planner
-from authark.core.suppliers import JsonPlanner
-from authark.core.suppliers.json_planner import schedulark
+from authark.application.general import PlanSupplier
+from authark.core.suppliers import JsonPlanSupplier
+from authark.core.suppliers.plan.json_plan_supplier import schedulark
 
 
 async def test_json_planner_instantiation() -> None:
-    planner = JsonPlanner('tasks.json')
-    assert isinstance(planner, Planner)
+    planner = JsonPlanSupplier('tasks.json')
+    assert isinstance(planner, PlanSupplier)
 
 
 async def test_json_planner_setup(monkeypatch) -> None:
@@ -19,7 +19,7 @@ async def test_json_planner_setup(monkeypatch) -> None:
 
     monkeypatch.setattr(schedulark, 'Planner', MockPlanner)
 
-    planner = JsonPlanner('tasks.json')
+    planner = JsonPlanSupplier('tasks.json')
 
     await planner.setup()
 
@@ -37,7 +37,7 @@ async def test_json_planner_defer(monkeypatch) -> None:
 
     monkeypatch.setattr(schedulark, 'Planner', MockPlanner)
 
-    planner = JsonPlanner('tasks.json')
+    planner = JsonPlanSupplier('tasks.json')
 
     await planner.defer('DailyJob', {'task': 'data'})
 
