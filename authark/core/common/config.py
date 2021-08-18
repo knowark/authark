@@ -35,6 +35,9 @@ config = {
         "username": os.environ.get('AUTHARK_MAIL_USERNAME') or "",
         "password": os.environ.get('AUTHARK_MAIL_PASSWORD') or ""
     },
+    "notification": {
+        "url": os.environ.get('AUTHARK_NOTIFICATION_URL') or "",
+    },
     "tokens": {
         "tenant": {
             "algorithm": "HS256",

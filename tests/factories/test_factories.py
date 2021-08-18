@@ -75,6 +75,7 @@ test_tuples = [
     ]),
     ('WebFactory', [
         ('TemplateSupplier', 'JinjaTemplateSupplier'),
+        ('NotificationService', 'HttpNotificationService'),
     ]),
     ('MailFactory', [
         ('NotificationService', 'MailNotificationService'),
