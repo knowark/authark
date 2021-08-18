@@ -20,8 +20,9 @@ def test_http_notification_service_instantiation(http_notification_service):
 async def test_http_notification_service_notify(
     monkeypatch, http_notification_service):
 
-    MockClientSession = MagicMock(ClientSession, autospec=True)
-    MockClientSession.close = AsyncMock()
+    class MockClientSession(MagicMock(ClientSession)):
+        async def close(self):
+            pass
 
     monkeypatch.setattr(
         http_notification_service_module, 'ClientSession', MockClientSession)
