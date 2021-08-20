@@ -133,3 +133,13 @@ async def test_procedure_manager_identity_provider_register(procedure_manager):
         ('name', '=', 'Alice Wonder')])
     assert new_user.email == 'alice@outlook.com'
     assert new_user.active is False
+
+
+async def test_procedure_manager_deregister(procedure_manager):
+    user_repository = procedure_manager.user_repository
+    user_ids = [user.id for user in await user_repository.search(
+        [('id', '=', '2')])]
+
+    unregistered = await procedure_manager.deregister(user_ids)
+
+    assert len(user_repository.data['default']) == 2

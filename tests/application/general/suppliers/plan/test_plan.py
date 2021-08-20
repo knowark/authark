@@ -1,5 +1,6 @@
 from pytest import raises
-from authark.application.general import PlanSupplier, MemoryPlanSupplier
+from authark.application.general import (
+    PlanSupplier, MemoryPlanSupplier, Event, Job)
 
 
 def test_plan_supplier_methods() -> None:
@@ -24,3 +25,27 @@ async def test_memory_plan_supplier_defer() -> None:
     assert planner._defer_calls == [
         {'job': 'DailyJob', 'payload': {'task': 'data'}}
     ]
+
+
+async def test_memory_plan_supplier_notify() -> None:
+    planner = MemoryPlanSupplier()
+
+    class CustomEvent(Event):
+        """Custom Application Event"""
+
+    event = CustomEvent(reference_id='R001', quantity=777)
+    await planner.notify(event)
+
+    assert planner._notify_calls == [event]
+
+
+async def test_memory_plan_supplier_perform() -> None:
+    planner = MemoryPlanSupplier()
+
+    class CustomJob(Job):
+        """Custom Application Job"""
+
+    job = CustomJob(delay=3_600)
+    await planner.perform(job)
+
+    assert planner._perform_calls == [job]

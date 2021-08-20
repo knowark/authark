@@ -1,6 +1,7 @@
 import schedulark
 from typing import Callable, Dict
-from ....application.general.suppliers import PlanSupplier
+from ....application.general.suppliers import (
+    PlanSupplier, Job, Event)
 
 
 class JsonPlanSupplier(PlanSupplier):
@@ -13,3 +14,15 @@ class JsonPlanSupplier(PlanSupplier):
 
     async def defer(self, job: str, payload: Dict = None) -> None:
         await self.planner.defer(job, payload)
+
+    async def perform(self, job: Job) -> None:
+        job_name = job.__class__.__name__
+        payload = {'meta': {}, 'data': vars(job)}
+        await self.planner.defer(job_name, payload)
+
+    async def notify(self, event: Event) -> None:
+        event_meta = {
+            'name': event.__class__.__name__
+        }
+        payload = {'meta': {'event': event_meta}, 'data': vars(event)}
+        await self.planner.defer('NotifyJob', payload)
