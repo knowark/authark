@@ -1,14 +1,15 @@
 
+PROJECT = authark
+COVFILE ?= .coverage
+TESTS ?= tests/
+PART ?= patch
+
 clean:
 	find . -name '__pycache__' -exec rm -fr {} +
 	rm -rf ./.cache .mypy_cache ./schema/.mypy_cache .coverage
 
 test:
 	pytest
-
-PROJECT = authark
-COVFILE ?= .coverage
-TESTS ?= tests/
 
 mypy:
 	mypy $(PROJECT)
@@ -41,8 +42,6 @@ console:
 push:
 	git push origin HEAD && git push --tags
 
-PART ?= patch
-
 version:
 	bump2version $(PART) $(PROJECT)/__init__.py --tag --commit
 
@@ -64,6 +63,12 @@ update:
 
 deploy:
 	ansible-playbook -c local -i localhost, setup/deploy.yml
+
+status:
+	systemctl status '$(PROJECT)*' --all
+
+restart:
+	systemctl restart $(PROJECT).target && journalctl -f
 
 local:
 	./setup/local.sh
