@@ -88,6 +88,11 @@ class Shell:
         await Scheduler(self.injector).run(options_dict)
         logger.info('END WORK')
 
+    async def time(self, options_dict: Dict[str, str]) -> None:
+        logger.info('TIME')
+        await Scheduler(self.injector).run({'time': True})
+        logger.info('END TIME')
+
     async def console(self, options_dict: Dict[str, str]) -> None:
         logger.info('CONSOLE')
         app = ConsoleApplication(config=self.config, injector=self.injector)
