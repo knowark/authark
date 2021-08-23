@@ -36,6 +36,7 @@ class Shell:
         # Serve
         serve_parser = subparsers.add_parser(
             'serve', help='Start HTTP server.')
+        serve_parser.add_argument('-p', '--port')
         serve_parser.set_defaults(func=self.serve)
 
         # Work

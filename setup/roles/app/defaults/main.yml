@@ -4,8 +4,6 @@ app_user: "{{ app_user }}"
 
 app_home: /opt/{{ app_user }}
 
-app_port: 8090
-
 # Directories
 
 app_configuration_directory: /etc/opt/{{ app_user }}
@@ -41,3 +39,9 @@ sites_enabled: "/etc/nginx/sites-enabled"
 # Service
 
 service_path: "/etc/systemd/system"
+
+app_servers:
+  - 8090
+
+app_workers:
+  - 1

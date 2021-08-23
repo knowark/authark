@@ -1,18 +1,54 @@
-- name: "Deploy {{ app_user }} Systemd Service File"
+- name: "Deploy {{ app_user }} Systemd Server Service File"
   template:
-    src: service.j2
-    dest: "{{ service_path }}/{{ app_user }}.service"
+    src: "systemd/server.j2"
+    dest: "{{ service_path }}/{{ app_user }}-server@.service"
+    mode: 0644
+
+- name: "Deploy {{ app_user }} Systemd Worker Service File"
+  template:
+    src: "systemd/worker.j2"
+    dest: "{{ service_path }}/{{ app_user }}-worker@.service"
+    mode: 0644
+
+- name: "Deploy {{ app_user }} Systemd Timer Service File"
+  template:
+    src: "systemd/timer.j2"
+    dest: "{{ service_path }}/{{ app_user }}-timer.service"
+    mode: 0644
+
+- name: "Deploy {{ app_user }} Systemd Target Unit File"
+  template:
+    src: "systemd/target.j2"
+    dest: "{{ service_path }}/{{ app_user }}.target"
     mode: 0644
 
 - name: "Deploy Environment Variables Empty File"
   template:
-    src: authark.j2
+    src: authark.env.j2
     dest: "/etc/opt/{{ app_user }}/{{ app_user }}.env"
     mode: 0644
+    force: no
 
-- name: "Restart {{ app_user }} Service"
+- name: "Enable {{ app_user | title }} Server Services"
   systemd:
-    name: "{{ app_user }}"
+    name: "{{ app_user }}-server@{{ item }}.service"
+    enabled: true
+  loop: "{{ app_servers }}"
+
+- name: "Enable {{ app_user | title }} Worker Services"
+  systemd:
+    name: "{{ app_user }}-worker@{{ item }}.service"
+    enabled: true
+  loop: "{{ app_workers }}"
+
+- name: "Enable {{ app_user | title }} Timer Service"
+  systemd:
+    name: "{{ app_user }}-timer.service"
+    enabled: true
+
+- name: "Restart {{ app_user }} Target"
+  systemd:
+    name: "{{ app_user }}.target"
     enabled: true
     state: restarted
     daemon_reload: true

@@ -8,6 +8,8 @@ from authark.presenters.rest import RestApplication
 @fixture
 def app(loop, aiohttp_client):
     config['factory'] = 'CheckFactory'
+    config['tokens']['verification']['secret'] = (
+        'DEVSECRET123')
     factory = factory_builder.build(config)
 
     injector = Injectark(factory)

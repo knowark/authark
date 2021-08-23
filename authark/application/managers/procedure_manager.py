@@ -11,6 +11,7 @@ from ..domain.services import (
     EnrollmentService, VerificationService, NotificationService,
     IdentityService)
 from ..general import PlanSupplier
+from ..general.suppliers.plan.events import UserRegistered
 
 
 class ProcedureManager:
@@ -50,14 +51,14 @@ class ProcedureManager:
         users = await self.enrollment_service.register(registration_tuples)
 
         for user in users:
-            await self.plan_supplier.defer('NotifyJob', {
+            await self.plan_supplier.notify(UserRegistered(**{
                 'type': 'activation',
                 'subject': 'Account Activation',
                 'recipient': user.email,
                 'owner': user.name,
                 'token': self.verification_service.generate_token(
                     user, 'activation').value
-            })
+            }))
 
         for user in users:
             await self.notification_service.notify({
