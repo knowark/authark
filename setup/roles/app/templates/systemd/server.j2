@@ -1,5 +1,6 @@
 [Unit]
 Description={{ app_user | title }} Server Service
+PartOf={{ app_user }}.target
 
 [Service]
 EnvironmentFile=/etc/opt/{{ app_user }}/{{ app_user }}.env
