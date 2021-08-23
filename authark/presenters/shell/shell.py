@@ -44,6 +44,11 @@ class Shell:
             'work', help='Start background worker.')
         work_parser.set_defaults(func=self.work)
 
+        # Time
+        time_parser = subparsers.add_parser(
+            'time', help='Start system timer.')
+        time_parser.set_defaults(func=self.time)
+
         # Console
         console_parser = subparsers.add_parser(
             'console', help='Open console interface.')
