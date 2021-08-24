@@ -102,5 +102,5 @@ def test_standard_auth_provider_tenant_properties(auth_provider):
     assert auth_provider.user.name == 'asb123'
     assert auth_provider.user.tid == 'T003'
     assert auth_provider.reference == 'U001'
-    assert auth_provider.location == 'T003'
+    assert auth_provider.location == 'solo_por_servicio'
     assert auth_provider.zone == 'north'

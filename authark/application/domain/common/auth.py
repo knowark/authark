@@ -34,7 +34,7 @@ class AuthProvider(ABC):
 
     @property
     def location(self) -> str:
-        return self.user.tid
+        return self.user.tenant
 
     @property
     def zone(self) -> str:
