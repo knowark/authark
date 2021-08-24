@@ -60,16 +60,6 @@ class ProcedureManager:
                     user, 'activation').value
             }))
 
-        for user in users:
-            await self.notification_service.notify({
-                'type': 'activation',
-                'subject': 'Account Activation',
-                'recipient': user.email,
-                'owner': user.name,
-                'token': self.verification_service.generate_token(
-                    user, 'activation').value
-            })
-
     async def fulfill(self, requisition_dicts: RecordList) -> None:
         reset_records = [
             requisition for requisition in requisition_dicts
