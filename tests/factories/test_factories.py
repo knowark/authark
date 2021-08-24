@@ -21,7 +21,6 @@ test_tuples = [
         ('RefreshTokenService', 'MemoryRefreshTokenService'),
         ('VerificationTokenService', 'MemoryVerificationTokenService'),
         ('ImportService', 'MemoryImportService'),
-        ('NotificationService', 'MemoryNotificationService'),
         ('AccessService', 'AccessService'),
         ('IdentityService', 'MemoryIdentityService'),
         ('EnrollmentService', 'EnrollmentService'),
@@ -75,10 +74,6 @@ test_tuples = [
     ]),
     ('WebFactory', [
         ('TemplateSupplier', 'JinjaTemplateSupplier'),
-        ('NotificationService', 'HttpNotificationService'),
-    ]),
-    ('MailFactory', [
-        ('NotificationService', 'MailNotificationService'),
     ]),
     ('OauthFactory', [
         ('IdentityService', 'OauthIdentityService'),

@@ -28,13 +28,6 @@ config = {
     "verification": {
         "url": os.environ.get('AUTHARK_VERIFICATION_URL') or "",
     },
-    "mail": {
-        "sender": os.environ.get('AUTHARK_MAIL_SENDER') or "",
-        "host": os.environ.get('AUTHARK_MAIL_HOST') or "",
-        "port": int(os.environ.get('AUTHARK_MAIL_PORT') or 0),
-        "username": os.environ.get('AUTHARK_MAIL_USERNAME') or "",
-        "password": os.environ.get('AUTHARK_MAIL_PASSWORD') or ""
-    },
     "tokens": {
         "tenant": {
             "algorithm": "HS256",

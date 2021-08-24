@@ -15,7 +15,6 @@ from ..application.domain.services import (
     AccessTokenService, MemoryAccessTokenService,
     RefreshTokenService, MemoryRefreshTokenService,
     VerificationTokenService, MemoryVerificationTokenService,
-    NotificationService, MemoryNotificationService,
     ImportService, MemoryImportService, EnrollmentService,
     AccessService, VerificationService, IdentityService,
     MemoryIdentityService)
@@ -125,11 +124,6 @@ class BaseFactory(Factory):
     def identity_service(self) -> IdentityService:
         return MemoryIdentityService()
 
-    def notification_service(
-        self, template_supplier: TemplateSupplier
-    ) -> NotificationService:
-        return MemoryNotificationService()
-
     def access_service(
         self, ranking_repository: RankingRepository,
         role_repository: RoleRepository,
@@ -220,14 +214,12 @@ class BaseFactory(Factory):
         self, user_repository: UserRepository,
         enrollment_service: EnrollmentService,
         verification_service: VerificationService,
-        notification_service: NotificationService,
         identity_service: IdentityService,
         plan_supplier: PlanSupplier,
     ) -> ProcedureManager:
         return ProcedureManager(
             user_repository, enrollment_service,
-            verification_service, notification_service,
-            identity_service, plan_supplier)
+            verification_service, identity_service, plan_supplier)
 
     # Reporters
 

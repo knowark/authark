@@ -18,8 +18,7 @@ from authark.application.domain.services import (
     RefreshTokenService, AccessTokenService, VerificationTokenService,
     MemoryVerificationTokenService, MemoryAccessTokenService,
     AccessService, VerificationService, ImportService,
-    MemoryImportService, NotificationService,
-    MemoryNotificationService, HashService, MemoryHashService,
+    MemoryImportService, HashService, MemoryHashService,
     EnrollmentService, IdentityService, MemoryIdentityService)
 from authark.application.general import (
     PlanSupplier, MemoryPlanSupplier)
@@ -192,12 +191,6 @@ def mock_hash_service() -> HashService:
 
 
 @fixture
-def mock_notification_service() -> NotificationService:
-    mock_notification_service = MemoryNotificationService()
-    return mock_notification_service
-
-
-@fixture
 def mock_identity_service() -> IdentityService:
     user = User(id="3", email="gabeche@gmail.com")
     mock_identity_service = MemoryIdentityService(user)
@@ -341,9 +334,8 @@ def session_manager(mock_tenant_provider, mock_auth_provider):
 
 @fixture
 def procedure_manager(mock_user_repository, enrollment_service,
-                      verification_service, mock_notification_service,
-                      mock_identity_service, plan_supplier):
+                      verification_service, mock_identity_service,
+                      plan_supplier):
     return ProcedureManager(
         mock_user_repository, enrollment_service,
-        verification_service, mock_notification_service,
-        mock_identity_service, plan_supplier)
+        verification_service, mock_identity_service, plan_supplier)

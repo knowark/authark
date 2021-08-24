@@ -14,12 +14,13 @@ async def test_procedure_manager_fulfill(procedure_manager):
             'email': 'gabeche@gmail.com'
         }
     }
+    plan_supplier = procedure_manager.plan_supplier
 
     await procedure_manager.fulfill([requisition_dict])
 
-    notification = procedure_manager.notification_service.notification
-
-    assert notification == {
+    assert plan_supplier._notify_calls[0].__class__.__name__ == (
+        'PasswordReset')
+    assert vars(plan_supplier._notify_calls[0]) == {
         'type': 'reset',
         'subject': 'Password Reset',
         'recipient': 'gabeche@gmail.com',
@@ -65,13 +66,11 @@ async def test_procedure_manager_verify_activation(procedure_manager):
         "tenant": "default",
         'token': '{"type": "activation", "tenant": "default", "uid": "1"}'
     }]
-
     user_repository = procedure_manager.user_repository
 
     await procedure_manager.verify(verification_dicts)
 
     [user] = await user_repository.search([('id', '=', '1')])
-
     assert user.active is True
 
 
@@ -81,17 +80,15 @@ async def test_procedure_manager_verify_reset(procedure_manager):
         'token': '{"type": "reset", "tenant": "default", "uid": "1"}',
         'data': {'password': 'NEW_PASSWORD'}
     }]
-
-    await procedure_manager.verify(verification_dicts)
-
     user_repository = procedure_manager.user_repository
     credential_repository = (
         procedure_manager.enrollment_service.credential_repository)
 
+    await procedure_manager.verify(verification_dicts)
+
     [user] = await user_repository.search([('id', '=', '1')])
     [credential] = await credential_repository.search(
         [('user_id', '=', user.id)])
-
     assert credential.value == 'HASHED: NEW_PASSWORD'
 
 
@@ -128,7 +125,6 @@ async def test_procedure_manager_identity_provider_register(procedure_manager):
     credential_repository = (
         procedure_manager.enrollment_service.credential_repository)
     user_repository = procedure_manager.user_repository
-    notification_service = procedure_manager.notification_service
 
     assert len(user_repository.data['default']) == 4
     [new_user] = await user_repository.search([

@@ -8,10 +8,10 @@ from ..domain.repositories import (
     UserRepository, CredentialRepository, DominionRepository)
 from ..domain.services import (
     RefreshTokenService, HashService, AccessService,
-    EnrollmentService, VerificationService, NotificationService,
-    IdentityService)
+    EnrollmentService, VerificationService, IdentityService)
 from ..general import PlanSupplier
-from ..general.suppliers.plan.events import UserRegistered
+from ..general.suppliers.plan.events import (
+    UserRegistered, PasswordReset)
 
 
 class ProcedureManager:
@@ -19,14 +19,12 @@ class ProcedureManager:
         self, user_repository: UserRepository,
         enrollment_service: EnrollmentService,
         verification_service: VerificationService,
-        notification_service: NotificationService,
         identity_service: IdentityService,
         plan_supplier: PlanSupplier
     ) -> None:
         self.user_repository = user_repository
         self.enrollment_service = enrollment_service
         self.verification_service = verification_service
-        self.notification_service = notification_service
         self.identity_service = identity_service
         self.plan_supplier = plan_supplier
         self.provider_pattern = '@provider.oauth'
@@ -71,13 +69,13 @@ class ProcedureManager:
                 [('email', '=', data['email'])])
             token = self.verification_service.generate_token(user, 'reset')
 
-            await self.notification_service.notify({
+            await self.plan_supplier.notify(PasswordReset(**{
                 'type': 'reset',
                 'subject': 'Password Reset',
                 'recipient': user.email,
                 'owner': user.name,
                 'token': token.value
-            })
+            }))
 
     async def verify(self, verification_dicts: RecordList) -> None:
         for record in verification_dicts:

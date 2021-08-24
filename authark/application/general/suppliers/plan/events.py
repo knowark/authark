@@ -7,3 +7,7 @@ class Event:
 
 class UserRegistered(Event):
     """User Registered Event"""
+
+
+class PasswordReset(Event):
+    """Password Reset Event"""

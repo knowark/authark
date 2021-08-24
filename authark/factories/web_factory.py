@@ -1,7 +1,5 @@
-from ..application.domain.services import NotificationService
 from ..core.suppliers import TemplateSupplier, JinjaTemplateSupplier
 from ..core.common import Config
-from ..core.mail import HttpNotificationService
 from .json_factory import JsonFactory
 
 
@@ -16,8 +14,3 @@ class WebFactory(JsonFactory):
     def template_supplier(self) -> TemplateSupplier:
         templates = self.config.get('templates', [])
         return JinjaTemplateSupplier(templates)
-
-    def notification_service(
-        self, template_supplier: TemplateSupplier) -> NotificationService:
-        config = self.config['notification']
-        return HttpNotificationService(config)

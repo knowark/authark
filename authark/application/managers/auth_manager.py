@@ -7,7 +7,7 @@ from ..domain.repositories import (
     UserRepository, CredentialRepository, DominionRepository)
 from ..domain.services import (
     RefreshTokenService, HashService, AccessService,
-    VerificationService, NotificationService, IdentityService)
+    VerificationService, IdentityService)
 
 
 class AuthManager:
