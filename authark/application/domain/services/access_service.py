@@ -1,5 +1,5 @@
 from typing import Dict, Any, List
-from ..models import User, Token, Tenant, Dominion
+from ..models import User, Tenant, Token, Dominion
 from ..repositories import (
     RankingRepository, RoleRepository, DominionRepository)
 from .token_service import AccessTokenService

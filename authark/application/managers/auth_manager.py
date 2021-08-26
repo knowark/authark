@@ -8,6 +8,7 @@ from ..domain.repositories import (
 from ..domain.services import (
     RefreshTokenService, HashService, AccessService,
     VerificationService, IdentityService)
+from ..general.suppliers import TenantSupplier
 
 
 class AuthManager:
@@ -18,6 +19,7 @@ class AuthManager:
         hash_service: HashService,
         access_service: AccessService,
         refresh_token_service: RefreshTokenService,
+        tenant_supplier: TenantSupplier,
         identity_service: IdentityService
     ) -> None:
         self.user_repository = user_repository
@@ -27,6 +29,7 @@ class AuthManager:
         self.access_service = access_service
         self.refresh_token_service = refresh_token_service
         self.identity_service = identity_service
+        self.tenant_supplier = tenant_supplier
         self.provider_pattern = '@provider.oauth'
 
     async def authenticate(self, request_dict: Dict[str, str]) -> TokensDict:
@@ -35,6 +38,13 @@ class AuthManager:
         username = request_dict.get('username', '')
         password = request_dict.get('password', '')
         client = request_dict.get('client', '')
+
+        tenant = request_dict['tenant']
+        token_request['dominion'] = token_request.get(
+            'dominion', request.headers.get('Dominion', ''))
+        tenant_dict = self.tenant_supplier.resolve_tenant(tenant)
+        self.session_manager.set_tenant(tenant_dict)
+
 
         if refresh_token:
             return await self._refresh_authenticate(
@@ -61,7 +71,8 @@ class AuthManager:
 
         dominion = await self._ensure_dominion(dominion_name)
 
-        access_token = await self.access_service.generate_token(user, dominion)
+        access_token = await self.access_service.generate_token(
+            user, dominion)
 
         # Create new refresh token
         client = client or 'ALL'

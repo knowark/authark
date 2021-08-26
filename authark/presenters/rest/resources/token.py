@@ -11,11 +11,11 @@ class TokenResource:
 
     async def put(self, request: web.Request) -> web.Response:
         token_request = TokenRequestSchema().loads(await request.text())
-        tenant = token_request['tenant']
-        token_request['dominion'] = token_request.get(
-            'dominion', request.headers.get('Dominion', ''))
-        tenant_dict = self.tenant_supplier.resolve_tenant(tenant)
-        self.session_manager.set_tenant(tenant_dict)
+        # tenant = token_request['tenant']
+        # token_request['dominion'] = token_request.get(
+            # 'dominion', request.headers.get('Dominion', ''))
+        # tenant_dict = self.tenant_supplier.resolve_tenant(tenant)
+        # self.session_manager.set_tenant(tenant_dict)
 
         token_pair = await self.auth_manager.authenticate(token_request)
         return web.json_response(TokenSchema().dump(token_pair))

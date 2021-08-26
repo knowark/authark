@@ -40,7 +40,8 @@ def parser():
 @fixture
 def mock_auth_provider() -> StandardAuthProvider:
     mock_auth_provider = StandardAuthProvider()
-    mock_auth_provider.setup(CUser(id='001', name='johndoe'))
+    mock_auth_provider.setup(
+        CUser(id='001',  name='johndoe', tid='001', tenant='default'))
     return mock_auth_provider
 
 
@@ -252,11 +253,9 @@ def access_service(mock_ranking_repository, mock_role_repository,
 
 @fixture
 def verification_service(
-        mock_user_repository, mock_verification_token_service,
-        mock_auth_provider):
+        mock_user_repository, mock_verification_token_service):
     return VerificationService(
-        mock_user_repository, mock_verification_token_service,
-        mock_auth_provider)
+        mock_user_repository, mock_verification_token_service)
 
 
 @fixture

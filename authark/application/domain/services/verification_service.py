@@ -1,22 +1,19 @@
 from typing import Dict, Any, List
-from ..models import User, Token, Dominion
+from ..models import User, Tenant, Token, Dominion
 from ..repositories import UserRepository
-from ..common import TenantProvider, Tenant
 from .token_service import VerificationTokenService
 
 
 class VerificationService:
     def __init__(self, user_repository: UserRepository,
-                 token_service: VerificationTokenService,
-                 tenant_provider: TenantProvider) -> None:
+                 token_service: VerificationTokenService) -> None:
         self.user_repository = user_repository
         self.token_service = token_service
-        self.tenant_provider = tenant_provider
 
-    def generate_token(self, user: User, type: str) -> Token:
-        tenant = self.tenant_provider.tenant
-        verification_token = self.token_service.generate_token(
-            {'type': type, 'tenant': tenant.slug, 'uid': user.id})
+    def generate_token(self, tenant: Tenant, user: User, type: str) -> Token:
+        verification_token = self.token_service.generate_token({
+            'type': type, 'tenant': tenant.slug,
+            'tid': tenant.id, 'uid': user.id})
         return verification_token
 
     async def verify(

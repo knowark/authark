@@ -3,7 +3,7 @@ from typing import List, Dict
 from ..domain.common import (
     TokenString, TokensDict, AuthError,
     UserCreationError, RecordList, QueryDomain)
-from ..domain.models import Token, User, Credential, Dominion
+from ..domain.models import Token, User, Tenant, Credential, Dominion
 from ..domain.repositories import (
     UserRepository, CredentialRepository, DominionRepository)
 from ..domain.services import (
@@ -42,14 +42,12 @@ class ProcedureManager:
             if not registration_dict['enroll']:
                 self.tenant_supplier.create_tenant(tenant_dict)
 
-            tenant_dict = self.tenant_supplier.resolve_tenant(tenant_dict['name'])
+            tenant_dict = self.tenant_supplier.resolve_tenant(
+                tenant_dict['name'])
 
+            tenant = Tenant(**tenant_dict)
 
             self.session_manager.set_tenant(tenant_dict)
-
-
-
-
 
             password = user_dict.pop('password', '')
             username = user_dict.get('username', '')
@@ -74,7 +72,7 @@ class ProcedureManager:
                 'recipient': user.email,
                 'owner': user.name,
                 'token': self.verification_service.generate_token(
-                    user, 'activation').value
+                    tenant, user, 'activation').value
             }))
 
     async def fulfill(self, requisition_dicts: RecordList) -> None:
