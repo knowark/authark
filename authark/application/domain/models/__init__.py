@@ -1,6 +1,7 @@
 from .credential import Credential
 from .dominion import Dominion
 from .user import User
+from .tenant import Tenant
 from .token import Token
 from .role import Role
 from .ranking import Ranking

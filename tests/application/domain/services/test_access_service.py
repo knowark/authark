@@ -12,10 +12,11 @@ async def test_access_service_generate_token(access_service) -> None:
 
 
 async def test_access_service_build_payload(access_service) -> None:
-    tenant = Tenant(name='Default')
-    user = User(id='1', username='johndoe', email='johndoe')
+    # tenant = Tenant(name='Default')
+    user = User(id='1', username='johndoe', tid='T1', organization='Default',
+                tenant='default', email='johndoe')
     dominion = Dominion(id='1', name='Data Server')
-    payload = await access_service._build_payload(tenant, user, dominion)
+    payload = await access_service._build_payload(user, dominion)
 
     assert isinstance(payload, dict)
     assert 'tid' in payload

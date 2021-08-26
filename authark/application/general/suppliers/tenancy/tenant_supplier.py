@@ -18,4 +18,4 @@ class TenantSupplier(ABC):
 
     @abstractmethod
     def search_tenants(self, domain: List[Any]) -> List[Dict[str, Any]]:
-        """Search tenant method to be implemented."""
+        """Searh tenant method to be implemented."""

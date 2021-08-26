@@ -32,6 +32,25 @@ class ProcedureManager:
     async def register(self, user_dicts: RecordList) -> None:
         registration_tuples = []
         for user_dict in user_dicts:
+
+            tenant_dict = {
+                'name': registration_dict.pop('organization'),
+                'zone': registration_dict.pop('zone', ''),
+                'email': registration_dict['email'],
+                'attributes': registration_dict.get('attributes', {})
+            }
+            if not registration_dict['enroll']:
+                self.tenant_supplier.create_tenant(tenant_dict)
+
+            tenant_dict = self.tenant_supplier.resolve_tenant(tenant_dict['name'])
+
+
+            self.session_manager.set_tenant(tenant_dict)
+
+
+
+
+
             password = user_dict.pop('password', '')
             username = user_dict.get('username', '')
             if username.endswith(self.provider_pattern):

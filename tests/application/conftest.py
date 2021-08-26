@@ -3,8 +3,7 @@ from authark.application.domain.models import (
     User, Credential, Dominion, Role, Ranking,
     Restriction, Policy)
 from authark.application.domain.common import (
-    QueryParser, StandardTenantProvider, Tenant,
-    StandardAuthProvider, User as CUser)
+    QueryParser, StandardAuthProvider, User as CUser)
 from authark.application.domain.repositories import (
     UserRepository, MemoryUserRepository,
     CredentialRepository, MemoryCredentialRepository,
@@ -45,18 +44,11 @@ def mock_auth_provider() -> StandardAuthProvider:
     return mock_auth_provider
 
 
-@fixture
-def mock_tenant_provider() -> StandardTenantProvider:
-    mock_tenant_provider = StandardTenantProvider()
-    mock_tenant_provider.setup(Tenant(id='001', name='Default'))
-    return mock_tenant_provider
-
-
 # # REPOSITORIES
 
 @fixture
-def mock_user_repository(mock_tenant_provider, parser) -> UserRepository:
-    mock_user_repository = MemoryUserRepository(parser, mock_tenant_provider)
+def mock_user_repository(mock_auth_provider, parser) -> UserRepository:
+    mock_user_repository = MemoryUserRepository(parser, mock_auth_provider)
     mock_user_repository.load({
         "default": {
             "1": User(id='1', name="Valentina", username='valenep',
@@ -74,9 +66,9 @@ def mock_user_repository(mock_tenant_provider, parser) -> UserRepository:
 
 @fixture
 def mock_credential_repository(
-        mock_tenant_provider, parser) -> CredentialRepository:
+        mock_auth_provider, parser) -> CredentialRepository:
     mock_credential_repository = MemoryCredentialRepository(
-        parser, mock_tenant_provider)
+        parser, mock_auth_provider)
     mock_credential_repository.load({
         "default": {
             "1": Credential(id='1', user_id='1', value="HASHED: PASS1"),
@@ -89,9 +81,9 @@ def mock_credential_repository(
 
 @fixture
 def mock_dominion_repository(
-        mock_tenant_provider, parser) -> DominionRepository:
+        mock_auth_provider, parser) -> DominionRepository:
     mock_dominion_repository = MemoryDominionRepository(
-        parser, mock_tenant_provider)
+        parser, mock_auth_provider)
     mock_dominion_repository.load({
         "default": {
             "1": Dominion(id='1', name='default')
@@ -102,9 +94,9 @@ def mock_dominion_repository(
 
 @fixture
 def mock_restriction_repository(
-        mock_tenant_provider, parser) -> RestrictionRepository:
+        mock_auth_provider, parser) -> RestrictionRepository:
     mock_restriction_repository = MemoryRestrictionRepository(
-        parser, mock_tenant_provider)
+        parser, mock_auth_provider)
     mock_restriction_repository.load({
         "default": {
             "1": Restriction(
@@ -122,9 +114,9 @@ def mock_restriction_repository(
 
 @fixture
 def mock_policy_repository(
-        mock_tenant_provider, parser) -> PolicyRepository:
+        mock_auth_provider, parser) -> PolicyRepository:
     mock_policy_repository = MemoryPolicyRepository(
-        parser, mock_tenant_provider)
+        parser, mock_auth_provider)
     mock_policy_repository.load({
         "default": {
             "1": Policy(
@@ -140,8 +132,8 @@ def mock_policy_repository(
 
 
 @fixture
-def mock_role_repository(mock_tenant_provider, parser) -> RoleRepository:
-    mock_role_repository = MemoryRoleRepository(parser, mock_tenant_provider)
+def mock_role_repository(mock_auth_provider, parser) -> RoleRepository:
+    mock_role_repository = MemoryRoleRepository(parser, mock_auth_provider)
     mock_role_repository.load({
         "default": {
             "1": Role(id='1',
@@ -155,9 +147,9 @@ def mock_role_repository(mock_tenant_provider, parser) -> RoleRepository:
 
 @fixture
 def mock_ranking_repository(
-        mock_tenant_provider, parser) -> RankingRepository:
+        mock_auth_provider, parser) -> RankingRepository:
     mock_ranking_repository = MemoryRankingRepository(
-        parser, mock_tenant_provider)
+        parser, mock_auth_provider)
     mock_ranking_repository.load({
         "default": {
             "1": Ranking(id='1', user_id='1', role_id='1'),
@@ -252,30 +244,28 @@ def mock_import_service() -> ImportService:  # duda
 def access_service(mock_ranking_repository, mock_role_repository,
                    mock_dominion_repository,
                    mock_token_service,
-                   mock_tenant_provider):
+                   mock_auth_provider):
     return AccessService(
         mock_ranking_repository, mock_role_repository,
-        mock_dominion_repository,
-        mock_token_service,
-        mock_tenant_provider)
+        mock_dominion_repository, mock_token_service)
 
 
 @fixture
 def verification_service(
         mock_user_repository, mock_verification_token_service,
-        mock_tenant_provider):
+        mock_auth_provider):
     return VerificationService(
         mock_user_repository, mock_verification_token_service,
-        mock_tenant_provider)
+        mock_auth_provider)
 
 
 @fixture
 def enrollment_service(
         mock_user_repository, mock_credential_repository,
-        mock_hash_service, mock_tenant_provider) -> EnrollmentService:
+        mock_hash_service, mock_auth_provider) -> EnrollmentService:
     return EnrollmentService(
         mock_user_repository, mock_credential_repository,
-        mock_hash_service, mock_tenant_provider)
+        mock_hash_service, mock_auth_provider)
 
 
 # SUPPLIERS
@@ -328,8 +318,8 @@ def import_manager(
 
 
 @fixture
-def session_manager(mock_tenant_provider, mock_auth_provider):
-    return SessionManager(mock_tenant_provider, mock_auth_provider)
+def session_manager(mock_auth_provider):
+    return SessionManager(mock_auth_provider, mock_auth_provider)
 
 
 @fixture

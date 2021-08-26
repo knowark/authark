@@ -15,11 +15,13 @@ config = sanitize(config)
 
 async def main(args=None):
     factory = factory_builder.build(config)
-
     injector = Injectark(factory)
     injector['SetupSupplier'].setup()
 
     await Shell(config, injector).run(args or [])
+
+    del injector
+    await asyncio.gather(*asyncio.all_tasks())
 
 
 if __name__ == '__main__':

@@ -12,12 +12,12 @@ class RegistrationSchema(EntitySchema):
         required=True, metadata=dict(example="Servagro"))
     email = fields.Str(
         required=True, metadata=dict(example="jarango@ops.servagro.com.co"))
-    username = fields.Str(
-        required=True, metadata=dict(example="jarango"))
     password = fields.Str(
         required=True, metadata=dict(example="secret"))
+    username = fields.Str(
+        metadata=dict(example="jarango"))
     name = fields.Str(
-        required=True, metadata=dict(example="Jaime Arango"))
+        metadata=dict(example="Jaime Arango"))
     zone = fields.Str(
         metadata=dict(example="default"))
     attributes = fields.Mapping()

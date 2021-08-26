@@ -1,7 +1,8 @@
 from typing import Dict, Any, List
-from ..models import User, Token, Tenant, Dominion
+from ..models import User, Token, Dominion
 from ..repositories import (
     RankingRepository, RoleRepository, DominionRepository)
+from ..common import TenantProvider, Tenant
 from .token_service import AccessTokenService
 
 
@@ -10,29 +11,35 @@ class AccessService:
     def __init__(self, ranking_repository: RankingRepository,
                  role_repository: RoleRepository,
                  dominion_repository: DominionRepository,
-                 token_service: AccessTokenService) -> None:
+                 token_service: AccessTokenService,
+                 # tenant_supplier: TenantSupplier
+                 ) -> None:
         self.ranking_repository = ranking_repository
         self.role_repository = role_repository
         self.dominion_repository = dominion_repository
         self.token_service = token_service
+        # self.tenant_supplier = tenant_supplier
 
-    async def generate_token(self, tenant: Tenant, user: User,
-                             dominion: Dominion) -> Token:
-        access_payload = await self._build_payload(tenant, user, dominion)
+        # self.tenant_provider = tenant_provider
+
+    async def generate_token(self, user: User, dominion: Dominion) -> Token:
+        # tenant = self.tenant_provider.tenant
+        access_payload = await self._build_payload(user, dominion)
         access_token = self.token_service.generate_token(access_payload)
+
         return access_token
 
-    async def _build_payload(self, tenant: Tenant, user: User,
+    async def _build_payload(self, user: User,
                              dominion: Dominion) -> Dict[str, Any]:
-        payload = self._build_basic_info(tenant, user)
+        payload = self._build_basic_info(user)
         payload['roles'] = await self._build_roles(user, dominion)
         return payload
 
-    def _build_basic_info(self, tenant: Tenant, user: User) -> Dict[str, Any]:
+    def _build_basic_info(self, user: User) -> Dict[str, Any]:
         return {
-            'tid': tenant.id,
-            'tenant': tenant.slug,
-            'organization': tenant.name,
+            'tid': user.tid,
+            'tenant': user.tenant,
+            'organization': user.organization,
             'uid': user.id,
             'username': user.username,
             'name': user.name,
