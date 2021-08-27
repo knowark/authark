@@ -8,7 +8,6 @@ test_tuples = [
     ('BaseFactory', [
         ('QueryParser', 'QueryParser'),
         ('AuthProvider', 'StandardAuthProvider'),
-        ('TenantProvider', 'StandardTenantProvider'),
         ('UserRepository', 'MemoryUserRepository'),
         ('CredentialRepository', 'MemoryCredentialRepository'),
         ('DominionRepository', 'MemoryDominionRepository'),
@@ -38,7 +37,6 @@ test_tuples = [
         ('TemplateSupplier', 'MemoryTemplateSupplier'),
     ]),
     ('CheckFactory', [
-        ('TenantProvider', 'StandardTenantProvider'),
         ('AuthProvider', 'StandardAuthProvider'),
         ('TenantSupplier', 'MemoryTenantSupplier'),
         ('HashService', 'MemoryHashService'),

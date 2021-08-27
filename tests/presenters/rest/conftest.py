@@ -23,19 +23,20 @@ def app(loop, aiohttp_client):
 def headers() -> dict:
     return {
         "Authorization":  (
-            # Password: INTEGRARK_SECRET
+            # Password: KNOWARK
             # Payload:
             # {
-            #     "tid": "001",
-            #     "uid": "001",
-            #     "tenant": "Knowark",
-            #     "name": "John Doe",
-            #     "email": "john@doe.com"
+                # "tid": "001",
+                # "uid": "001",
+                # "organization": "Default",
+                # "tenant": "default",
+                # "name": "John Doe",
+                # "email": "john@doe.com"
             # }
-            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0aWQiOiIwMDEiLCJ1aWQiOi"
-            "IwMDEiLCJ0ZW5hbnQiOiJLbm93YXJrIiwibmFtZSI6IkpvaG4gRG9lIiwiZW1ha"
-            "WwiOiJqb2huQGRvZS5jb20ifQ.udlkUWVOatst5IoDRlJsQVn"
-            "U_atCAltOelOJvRCr8BY"
+            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0aWQiOiIwMDEiLCJ1aWQi"
+            "OiIwMDEiLCJvcmdhbml6YXRpb24iOiJEZWZhdWx0IiwidGVuYW50IjoiZGVmY"
+            "XVsdCIsIm5hbWUiOiJKb2huIERvZSIsImVtYWlsIjoiam9obkBkb2UuY29tIn"
+            "0.dKyIjylPESVk6Msh1z2DRBu9R0Arc0JfZ46iDCpQa0w"
         )
 
     }

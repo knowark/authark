@@ -1,9 +1,8 @@
 import jwt
 from typing import Callable, Dict, Any
 from aiohttp import web
-from injectark import Injectark
+from injectark import Injectark, Config
 from ....application.managers import SessionManager
-from ....core import Config, TenantSupplier
 
 
 def authenticate_middleware_factory(
@@ -28,7 +27,7 @@ def authenticate_middleware_factory(
                 token, secret, algorithms=['HS256'],
                 options={"verify_signature": bool(secret)})
 
-            session_manager.set_user(payload)
+            session_manager.set_user({'data': payload})
 
         except Exception as error:
             reason = f"{error.__class__.__name__}: {str(error)}"

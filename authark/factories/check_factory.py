@@ -2,8 +2,7 @@ import jwt
 from ..core.common import Config
 from .crypto_factory import CryptoFactory
 from ..application.domain.common import (
-    QueryParser, TenantProvider, StandardTenantProvider, Tenant,
-    AuthProvider, StandardAuthProvider, User as CUser)
+    QueryParser, AuthProvider, StandardAuthProvider, User as CUser)
 from ..application.domain.models import (
     User, Credential, Ranking, Role, Dominion, Restriction, Policy)
 from ..application.domain.repositories import (
@@ -26,11 +25,6 @@ class CheckFactory(CryptoFactory):
     def __init__(self, config: Config) -> None:
         super().__init__(config)
 
-    def tenant_provider(self) -> TenantProvider:
-        tenant_provider = StandardTenantProvider()
-        tenant_provider.setup(Tenant(id='001', name="Default"))
-        return tenant_provider
-
     def auth_provider(self) -> AuthProvider:
         auth_provider = StandardAuthProvider()
         auth_provider.setup(CUser(
@@ -51,11 +45,10 @@ class CheckFactory(CryptoFactory):
 
     def user_repository(
             self, query_parser: QueryParser,
-            tenant_provider: TenantProvider,
             auth_provider: AuthProvider
     ) -> UserRepository:
         user_repository = super().user_repository(
-            query_parser, tenant_provider, auth_provider)
+            query_parser, auth_provider)
         user_repository.load({'default': {
             '1': User(
                 id="1",
@@ -70,11 +63,10 @@ class CheckFactory(CryptoFactory):
 
     def credential_repository(
             self, query_parser: QueryParser,
-            tenant_provider: TenantProvider,
             auth_provider: AuthProvider
     ) -> CredentialRepository:
         credential_repository = super().credential_repository(
-            query_parser, tenant_provider, auth_provider)
+            query_parser, auth_provider)
         refresh_token = jwt.encode(
             {'user': "pepe"}, 'REFRESHSECRET')
         credential_repository.load({'default': {
@@ -87,11 +79,10 @@ class CheckFactory(CryptoFactory):
 
     def role_repository(
         self, query_parser: QueryParser,
-        tenant_provider: TenantProvider,
         auth_provider: AuthProvider
     ) -> RoleRepository:
         role_repository = super().role_repository(
-            query_parser, tenant_provider, auth_provider)
+            query_parser, auth_provider)
         role_repository.load({'default': {
             "1": Role(id='1', name='admin', dominion_id='1',
                       description="Service's Administrator")
@@ -100,11 +91,10 @@ class CheckFactory(CryptoFactory):
 
     def ranking_repository(
             self, query_parser: QueryParser,
-            tenant_provider: TenantProvider,
             auth_provider: AuthProvider
     ) -> RankingRepository:
         ranking_repository = super().ranking_repository(
-            query_parser, tenant_provider, auth_provider)
+            query_parser, auth_provider)
         ranking_repository.load({'default': {
             "1": Ranking(id='1', user_id='1', role_id='1',
                          description="Service's Administrator")
@@ -113,11 +103,10 @@ class CheckFactory(CryptoFactory):
 
     def restriction_repository(
             self, query_parser: QueryParser,
-            tenant_provider: TenantProvider,
             auth_provider: AuthProvider
     ) -> RestrictionRepository:
         restriction_repository = super().restriction_repository(
-            query_parser, tenant_provider, auth_provider)
+            query_parser, auth_provider)
         restriction_repository.load({'default': {
             "1": Restriction(id='1', sequence='1',
                              name="name group", policy_id='1',
@@ -127,11 +116,10 @@ class CheckFactory(CryptoFactory):
 
     def policy_repository(
             self, query_parser: QueryParser,
-            tenant_provider: TenantProvider,
             auth_provider: AuthProvider
     ) -> PolicyRepository:
         policy_repository = super().policy_repository(
-            query_parser, tenant_provider, auth_provider)
+            query_parser, auth_provider)
         policy_repository.load({'default': {
             "1": Policy(id='1', resource='resource', privilege='privilege',
                         role_id="1")
@@ -140,11 +128,10 @@ class CheckFactory(CryptoFactory):
 
     def dominion_repository(
             self, query_parser: QueryParser,
-            tenant_provider: TenantProvider,
             auth_provider: AuthProvider
     ) -> DominionRepository:
         dominion_repository = super().dominion_repository(
-            query_parser, tenant_provider, auth_provider)
+            query_parser, auth_provider)
         dominion_repository.load({'default': {
             "1": Dominion(id='1', name='default')
         }})

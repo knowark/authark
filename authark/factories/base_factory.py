@@ -1,7 +1,6 @@
 from injectark import Factory
 from ..application.domain.common import (
-    QueryParser, TenantProvider, StandardTenantProvider,
-    AuthProvider, StandardAuthProvider)
+    QueryParser, AuthProvider, StandardAuthProvider)
 from ..application.domain.repositories import (
     UserRepository, MemoryUserRepository,
     CredentialRepository, MemoryCredentialRepository,
@@ -46,64 +45,54 @@ class BaseFactory(Factory):
     def auth_provider(self) -> AuthProvider:
         return StandardAuthProvider()
 
-    def tenant_provider(self) -> TenantProvider:
-        return StandardTenantProvider()
-
     def user_repository(
         self, query_parser: QueryParser,
-        tenant_provider: TenantProvider,
         auth_provider: AuthProvider
     ) -> UserRepository:
         return MemoryUserRepository(
-            query_parser, tenant_provider, auth_provider)
+            query_parser, auth_provider, auth_provider)
 
     def credential_repository(
         self, query_parser: QueryParser,
-        tenant_provider: TenantProvider,
         auth_provider: AuthProvider
     ) -> CredentialRepository:
         return MemoryCredentialRepository(
-            query_parser, tenant_provider, auth_provider)
+            query_parser, auth_provider, auth_provider)
 
     def dominion_repository(
         self, query_parser: QueryParser,
-        tenant_provider: TenantProvider,
         auth_provider: AuthProvider
     ) -> DominionRepository:
         return MemoryDominionRepository(
-            query_parser, tenant_provider, auth_provider)
+            query_parser, auth_provider, auth_provider)
 
     def role_repository(
         self, query_parser: QueryParser,
-        tenant_provider: TenantProvider,
         auth_provider: AuthProvider
     ) -> RoleRepository:
         return MemoryRoleRepository(
-            query_parser, tenant_provider, auth_provider)
+            query_parser, auth_provider, auth_provider)
 
     def restriction_repository(
         self, query_parser: QueryParser,
-        tenant_provider: TenantProvider,
         auth_provider: AuthProvider
     ) -> RestrictionRepository:
         return MemoryRestrictionRepository(
-            query_parser, tenant_provider, auth_provider)
+            query_parser, auth_provider, auth_provider)
 
     def policy_repository(
         self, query_parser: QueryParser,
-        tenant_provider: TenantProvider,
         auth_provider: AuthProvider
     ) -> PolicyRepository:
         return MemoryPolicyRepository(
-            query_parser, tenant_provider, auth_provider)
+            query_parser, auth_provider, auth_provider)
 
     def ranking_repository(
         self, query_parser: QueryParser,
-        tenant_provider: TenantProvider,
         auth_provider: AuthProvider
     ) -> RankingRepository:
         return MemoryRankingRepository(
-            query_parser, tenant_provider, auth_provider)
+            query_parser, auth_provider, auth_provider)
 
     # Services
 
@@ -147,10 +136,9 @@ class BaseFactory(Factory):
         credential_repository: CredentialRepository,
         hash_service: HashService,
         token_service: VerificationTokenService,
-        tenant_provider: TenantProvider
     ) -> EnrollmentService:
-        return EnrollmentService(user_repository, credential_repository,
-                                 hash_service, tenant_provider)
+        return EnrollmentService(
+            user_repository, credential_repository, hash_service )
 
     # Suppliers
 

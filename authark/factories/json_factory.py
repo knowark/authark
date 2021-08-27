@@ -1,19 +1,19 @@
 from ..application.domain.common import (
-    QueryParser, TenantProvider, AuthProvider)
+    QueryParser, AuthProvider)
 from ..application.domain.repositories import (
     UserRepository, CredentialRepository,
     DominionRepository, RoleRepository,
     RankingRepository, RestrictionRepository,
     PolicyRepository)
 from ..application.domain.services import HashService, ImportService
-from ..application.general import PlanSupplier
+from ..application.general import PlanSupplier, TenantSupplier
 from ..core.data import (
     JsonCredentialRepository, JsonDominionRepository, JsonRoleRepository,
     JsonUserRepository, JsonRankingRepository, JsonImportService,
     JsonRestrictionRepository, JsonPolicyRepository)
 from ..core.common import Config
 from ..core.suppliers import (
-    TenantSupplier, JsonTenantSupplier, SetupSupplier, JsonSetupSupplier)
+    JsonTenantSupplier, SetupSupplier, JsonSetupSupplier)
 from ..core.suppliers import JsonPlanSupplier
 from .crypto_factory import CryptoFactory
 
@@ -27,59 +27,52 @@ class JsonFactory(CryptoFactory):
 
     def user_repository(
             self, query_parser: QueryParser,
-            tenant_provider: TenantProvider,
             auth_provider: AuthProvider
     ) -> UserRepository:
-        return JsonUserRepository(self.data_path, query_parser,
-                                  tenant_provider, auth_provider)
+        return JsonUserRepository(
+            self.data_path, query_parser, auth_provider)
 
     def credential_repository(
             self, query_parser: QueryParser,
-            tenant_provider: TenantProvider,
             auth_provider: AuthProvider
     ) -> CredentialRepository:
-        return JsonCredentialRepository(self.data_path, query_parser,
-                                        tenant_provider, auth_provider)
+        return JsonCredentialRepository(
+            self.data_path, query_parser, auth_provider)
 
     def dominion_repository(
             self, query_parser: QueryParser,
-            tenant_provider: TenantProvider,
             auth_provider: AuthProvider
     ) -> DominionRepository:
-        return JsonDominionRepository(self.data_path, query_parser,
-                                      tenant_provider, auth_provider)
+        return JsonDominionRepository(
+            self.data_path, query_parser, auth_provider)
 
     def role_repository(
             self, query_parser: QueryParser,
-            tenant_provider: TenantProvider,
             auth_provider: AuthProvider
     ) -> RoleRepository:
-        return JsonRoleRepository(self.data_path, query_parser,
-                                  tenant_provider, auth_provider)
+        return JsonRoleRepository(
+            self.data_path, query_parser, auth_provider)
 
     def restriction_repository(
             self, query_parser: QueryParser,
-            tenant_provider: TenantProvider,
             auth_provider: AuthProvider
     ) -> RestrictionRepository:
-        return JsonRestrictionRepository(self.data_path, query_parser,
-                                         tenant_provider, auth_provider)
+        return JsonRestrictionRepository(
+            self.data_path, query_parser, auth_provider)
 
     def policy_repository(
             self, query_parser: QueryParser,
-            tenant_provider: TenantProvider,
             auth_provider: AuthProvider
     ) -> PolicyRepository:
-        return JsonPolicyRepository(self.data_path, query_parser,
-                                    tenant_provider, auth_provider)
+        return JsonPolicyRepository(
+            self.data_path, query_parser, auth_provider)
 
     def ranking_repository(
             self, query_parser: QueryParser,
-            tenant_provider: TenantProvider,
             auth_provider: AuthProvider
     ) -> RankingRepository:
-        return JsonRankingRepository(self.data_path, query_parser,
-                                     tenant_provider, auth_provider)
+        return JsonRankingRepository(
+            self.data_path, query_parser, auth_provider)
 
     def import_service(self, hash_service: HashService) -> ImportService:
         return JsonImportService(hash_service)

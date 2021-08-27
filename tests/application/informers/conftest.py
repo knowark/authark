@@ -3,7 +3,7 @@ from authark.application.domain.models import (
     User, Credential, Dominion, Role, Ranking,
     Restriction, Policy)
 from authark.application.domain.common import (
-    QueryParser, Tenant, StandardTenantProvider)
+    QueryParser, AuthProvider, StandardAuthProvider, User as CUser)
 from authark.application.domain.repositories import (
     UserRepository, MemoryUserRepository,
     CredentialRepository, MemoryCredentialRepository,
@@ -23,15 +23,16 @@ def parser():
 
 
 @fixture
-def tenant_provider():
-    tenant_provider = StandardTenantProvider()
-    tenant_provider.setup(Tenant(name="Default"))
-    return tenant_provider
+def auth_provider():
+    auth_provider = StandardAuthProvider()
+    auth_provider.setup(CUser(
+        tid='T1', tenant='default', organization="Default"))
+    return auth_provider
 
 
 @fixture
-def user_repository(tenant_provider, parser) -> UserRepository:
-    user_repository = MemoryUserRepository(parser, tenant_provider)
+def user_repository(auth_provider, parser) -> UserRepository:
+    user_repository = MemoryUserRepository(parser, auth_provider)
     user_repository.load({
         "default": {
             "valenep": User(id='1', username='valenep',
@@ -46,8 +47,8 @@ def user_repository(tenant_provider, parser) -> UserRepository:
 
 
 @fixture
-def credential_repository(tenant_provider, parser) -> CredentialRepository:
-    credential_repository = MemoryCredentialRepository(parser, tenant_provider)
+def credential_repository(auth_provider, parser) -> CredentialRepository:
+    credential_repository = MemoryCredentialRepository(parser, auth_provider)
     credential_repository.load({
         "default": {
             "1": Credential(id='1', user_id='1', value="PASS1"),
@@ -59,8 +60,8 @@ def credential_repository(tenant_provider, parser) -> CredentialRepository:
 
 
 @fixture
-def dominion_repository(tenant_provider, parser) -> DominionRepository:
-    dominion_repository = MemoryDominionRepository(parser, tenant_provider)
+def dominion_repository(auth_provider, parser) -> DominionRepository:
+    dominion_repository = MemoryDominionRepository(parser, auth_provider)
     dominion_repository.load({
         "default": {
             "1": Dominion(id='1', name='Data Server')
@@ -70,8 +71,8 @@ def dominion_repository(tenant_provider, parser) -> DominionRepository:
 
 
 @fixture
-def role_repository(tenant_provider, parser) -> RoleRepository:
-    role_repository = MemoryRoleRepository(parser, tenant_provider)
+def role_repository(auth_provider, parser) -> RoleRepository:
+    role_repository = MemoryRoleRepository(parser, auth_provider)
     role_repository.load({
         "default": {
             "1": Role(id='1', name='admin', dominion_id='1',
@@ -82,9 +83,9 @@ def role_repository(tenant_provider, parser) -> RoleRepository:
 
 
 @fixture
-def restriction_repository(tenant_provider, parser) -> RestrictionRepository:
+def restriction_repository(auth_provider, parser) -> RestrictionRepository:
     restriction_repository = MemoryRestrictionRepository(
-        parser, tenant_provider)
+        parser, auth_provider)
     restriction_repository.load({
         "default": {
             "1": Restriction(id='1', group='group name', name='group name',
@@ -96,8 +97,8 @@ def restriction_repository(tenant_provider, parser) -> RestrictionRepository:
 
 
 @fixture
-def policy_repository(tenant_provider, parser) -> PolicyRepository:
-    policy_repository = MemoryPolicyRepository(parser, tenant_provider)
+def policy_repository(auth_provider, parser) -> PolicyRepository:
+    policy_repository = MemoryPolicyRepository(parser, auth_provider)
     policy_repository.load({
         "default": {
             "1": Policy(id='1', resource='resource name',
@@ -109,8 +110,8 @@ def policy_repository(tenant_provider, parser) -> PolicyRepository:
 
 
 @fixture
-def ranking_repository(tenant_provider, parser) -> RankingRepository:
-    ranking_repository = MemoryRankingRepository(parser, tenant_provider)
+def ranking_repository(auth_provider, parser) -> RankingRepository:
+    ranking_repository = MemoryRankingRepository(parser, auth_provider)
     ranking_repository.load({
         "default": {
             "1": Ranking(id='1', user_id='1', role_id='1',

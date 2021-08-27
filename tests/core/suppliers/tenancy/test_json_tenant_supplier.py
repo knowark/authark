@@ -1,5 +1,5 @@
 from typing import Dict, Any
-from authark.core.suppliers import json_tenant_supplier
+from authark.core.suppliers.tenancy import json_tenant_supplier
 from authark.core.suppliers import JsonTenantSupplier
 
 

@@ -1,5 +1,5 @@
 from typing import Dict, List, Tuple, Any
-from ..common import TenantProvider, Tenant, RecordList, UserCreationError
+from ..common import RecordList, UserCreationError
 from ..models import User, Credential, Token, Dominion
 from ..repositories import UserRepository, CredentialRepository
 from .hash_service import HashService
@@ -8,12 +8,10 @@ from .hash_service import HashService
 class EnrollmentService:
     def __init__(self, user_repository: UserRepository,
                  credential_repository: CredentialRepository,
-                 hash_service: HashService,
-                 tenant_provider: TenantProvider) -> None:
+                 hash_service: HashService) -> None:
         self.user_repository = user_repository
         self.credential_repository = credential_repository
         self.hash_service = hash_service
-        self.tenant_provider = tenant_provider
 
     async def register(
         self, registration_tuples: List[Tuple[User, Credential]]

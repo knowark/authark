@@ -263,10 +263,10 @@ def verification_service(
 @fixture
 def enrollment_service(
         mock_user_repository, mock_credential_repository,
-        mock_hash_service, mock_auth_provider) -> EnrollmentService:
+        mock_hash_service) -> EnrollmentService:
     return EnrollmentService(
         mock_user_repository, mock_credential_repository,
-        mock_hash_service, mock_auth_provider)
+        mock_hash_service)
 
 
 # SUPPLIERS

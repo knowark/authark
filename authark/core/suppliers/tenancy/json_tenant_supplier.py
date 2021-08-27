@@ -1,7 +1,7 @@
 from pathlib import Path
 from typing import Dict
 from tenark.resolver import resolve_managers
-from .memory_tenant_supplier import MemoryTenantSupplier
+from ....application.general.suppliers import MemoryTenantSupplier
 
 
 class JsonTenantSupplier(MemoryTenantSupplier):
