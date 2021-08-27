@@ -1,32 +1,37 @@
 import uuid
 from typing import List, Dict
 from ..domain.common import (
-    TokenString, TokensDict, AuthError,
-    UserCreationError, RecordList, QueryDomain)
+    TokenString, TokensDict, AuthError, AuthProvider,
+    UserCreationError, RecordList, QueryDomain,
+    AnonymousUser)
 from ..domain.models import Token, User, Tenant, Credential, Dominion
 from ..domain.repositories import (
     UserRepository, CredentialRepository, DominionRepository)
 from ..domain.services import (
     RefreshTokenService, HashService, AccessService,
     EnrollmentService, VerificationService, IdentityService)
-from ..general import PlanSupplier
+from ..general import PlanSupplier, TenantSupplier
 from ..general.suppliers.plan.events import (
     UserRegistered, PasswordReset)
 
 
 class ProcedureManager:
     def __init__(
-        self, user_repository: UserRepository,
+        self, auth_provider: AuthProvider,
+        user_repository: UserRepository,
         enrollment_service: EnrollmentService,
         verification_service: VerificationService,
         identity_service: IdentityService,
-        plan_supplier: PlanSupplier
+        plan_supplier: PlanSupplier,
+        tenant_supplier: TenantSupplier
     ) -> None:
+        self.auth_provider = auth_provider
         self.user_repository = user_repository
         self.enrollment_service = enrollment_service
         self.verification_service = verification_service
         self.identity_service = identity_service
         self.plan_supplier = plan_supplier
+        self.tenant_supplier = tenant_supplier
         self.provider_pattern = '@provider.oauth'
 
     async def register(self, user_dicts: RecordList) -> None:
@@ -34,20 +39,15 @@ class ProcedureManager:
         for user_dict in user_dicts:
 
             tenant_dict = {
-                'name': registration_dict.pop('organization'),
-                'zone': registration_dict.pop('zone', ''),
-                'email': registration_dict['email'],
-                'attributes': registration_dict.get('attributes', {})
+                'name': user_dict.pop('organization'),
+                'zone': user_dict.pop('zone', ''),
+                'email': user_dict['email'],
+                'attributes': user_dict.get('attributes', {})
             }
-            if not registration_dict['enroll']:
+            if not user_dict.get('enroll'):
                 self.tenant_supplier.create_tenant(tenant_dict)
 
-            tenant_dict = self.tenant_supplier.resolve_tenant(
-                tenant_dict['name'])
-
-            tenant = Tenant(**tenant_dict)
-
-            self.session_manager.set_tenant(tenant_dict)
+            tenant = await self._session_tenant(tenant_dict['name'])
 
             password = user_dict.pop('password', '')
             username = user_dict.get('username', '')
@@ -81,10 +81,13 @@ class ProcedureManager:
             if requisition['type'] == 'reset']
 
         for record in reset_records:
+            tenant = await self._session_tenant(record['tenant'])
+
             data = record['data']
             [user] = await self.user_repository.search(
                 [('email', '=', data['email'])])
-            token = self.verification_service.generate_token(user, 'reset')
+            token = self.verification_service.generate_token(
+                tenant,    user, 'reset')
 
             await self.plan_supplier.notify(PasswordReset(**{
                 'type': 'reset',
@@ -96,6 +99,7 @@ class ProcedureManager:
 
     async def verify(self, verification_dicts: RecordList) -> None:
         for record in verification_dicts:
+            tenant = await self._session_tenant(record['tenant'])
             token_dict = await self.verification_service.verify(dict(record))
             [user] = await self.user_repository.search(
                 [('id', '=', token_dict['uid'])])
@@ -118,3 +122,12 @@ class ProcedureManager:
     async def deregister(self, user_ids: List[str]) -> bool:
         users = await self.user_repository.search([('id', 'in', user_ids)])
         return await self.enrollment_service.deregister(users)
+
+    async def _session_tenant(self, tenant_name: str) -> Tenant:
+        tenant_dict = self.tenant_supplier.resolve_tenant(tenant_name)
+        tenant = Tenant(**tenant_dict)
+        anonymouns_session = AnonymousUser(
+            tid=tenant.id, tenant=tenant.slug,
+            organization=tenant.name)
+        self.auth_provider.setup(anonymouns_session)
+        return tenant

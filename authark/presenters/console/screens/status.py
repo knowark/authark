@@ -25,9 +25,9 @@ class StatusScreen(Frame):
         self.tenant_slug = Label(self).grid(0, 3).weight(col=2)
 
     async def load(self) -> None:
-        tenant = self.session_manager.get_tenant()
-        self.tenant_name.setup(content=tenant['name']).render()
-        self.tenant_slug.setup(content=tenant['slug']).render()
+        user = self.session_manager.get_user()
+        self.tenant_name.setup(content=user['organization']).render()
+        self.tenant_slug.setup(content=user['tenant']).render()
 
     async def on_switch(self, event: Event) -> None:
         self.modal = TenantsModal(

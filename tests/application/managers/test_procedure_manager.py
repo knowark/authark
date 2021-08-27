@@ -25,13 +25,15 @@ async def test_procedure_manager_fulfill(procedure_manager):
         'subject': 'Password Reset',
         'recipient': 'gabeche@gmail.com',
         'owner': 'Gabriel',
-        'token': '{"type": "reset", "tenant": "default", "uid": "3"}'
+        'token': ('{"type": "reset", "tenant": "default", '
+                  '"tid": "001", "uid": "3"}')
     }
 
 
 async def test_procedure_manager_register(procedure_manager):
     user_dicts = [{
         "id": "007",
+        "organization": "Manzanar",
         "name": "Miguel Vivas",
         "username": "mvp",
         "email": "mvp@gmail.com",
@@ -43,22 +45,23 @@ async def test_procedure_manager_register(procedure_manager):
     user_repository = procedure_manager.user_repository
     plan_supplier = procedure_manager.plan_supplier
 
-    assert len(user_repository.data['default']) == 4
+    assert len(user_repository.data['manzanar']) == 1
     [new_user] = await user_repository.search([('id', '=', '007')])
     assert new_user.username == 'mvp'
     assert new_user.active is False
 
-    assert len(credential_repository.data['default']) == 4
+    assert len(credential_repository.data['manzanar']) == 1
     assert len(plan_supplier._notify_calls) == 1
     assert plan_supplier._notify_calls[0].__class__.__name__ == (
         'UserRegistered')
-    assert vars(plan_supplier._notify_calls[0]) == {
-        'owner': 'Miguel Vivas',
-        'recipient': 'mvp@gmail.com',
-        'subject': 'Account Activation',
-        'token': '{"type": "activation", "tenant": "default", "uid": "007"}',
-        'type': 'activation',
-    }
+    assert vars(plan_supplier._notify_calls[0])['owner'] == 'Miguel Vivas'
+    assert vars(plan_supplier._notify_calls[0])['recipient'] == (
+        'mvp@gmail.com')
+    assert vars(plan_supplier._notify_calls[0])['subject'] == (
+        'Account Activation')
+    assert vars(plan_supplier._notify_calls[0])['type'] == (
+        'activation')
+    assert vars(plan_supplier._notify_calls[0])['token'] is not None
 
 
 async def test_procedure_manager_verify_activation(procedure_manager):
@@ -115,6 +118,8 @@ async def test_procedure_manager_update(procedure_manager) -> None:
 
 async def test_procedure_manager_identity_provider_register(procedure_manager):
     user_dicts = [{
+        "organization": "Wonderland",
+        "email": "facebook@provider.oauth",
         "username": "facebook@provider.oauth",
         "password": "AUTHORIZATION_CODE_XYZ1234"
     }]
@@ -126,7 +131,7 @@ async def test_procedure_manager_identity_provider_register(procedure_manager):
         procedure_manager.enrollment_service.credential_repository)
     user_repository = procedure_manager.user_repository
 
-    assert len(user_repository.data['default']) == 4
+    assert len(user_repository.data['wonderland']) == 1
     [new_user] = await user_repository.search([
         ('name', '=', 'Alice Wonder')])
     assert new_user.email == 'alice@outlook.com'

@@ -15,9 +15,13 @@ config = {
     },
     "system": {
         "id": os.environ.get(
-            'AUTHARK_SYSTEM_ID') or "3180ba1e-db99-499f-82c0-a881f55fd636",
+            'AUTHARK_SYSTEM_ID') or "11111111-1111-1111-1111-111111111111",
         "username": os.environ.get(
             'AUTHARK_SYSTEM_USERNAME') or "system",
+        "tid": os.environ.get(
+            'AUTHARK_SYSTEM_TID') or "11111111-1111-1111-1111-111111111111",
+        "tenant": os.environ.get(
+            'AUTHARK_SYSTEM_TENANT') or "system",
         "name": os.environ.get(
             'AUTHARK_SYSTEM_NAME') or "System User",
         "email": os.environ.get(
@@ -29,6 +33,12 @@ config = {
         "url": os.environ.get('AUTHARK_VERIFICATION_URL') or "",
     },
     "tokens": {
+        "rest": {
+            "algorithm": "HS256",
+            "secret": (os.environ.get('AUTHARK_TOKENS_SECRET') or
+                       ""),
+            "lifetime": 86400
+        },
         "tenant": {
             "algorithm": "HS256",
             "secret": (os.environ.get('AUTHARK_TOKENS_SECRET') or

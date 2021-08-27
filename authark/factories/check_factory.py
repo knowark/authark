@@ -17,8 +17,9 @@ from ..application.domain.repositories import (
 from ..application.domain.services import (
     HashService, MemoryHashService,
     AccessService, AccessTokenService)
-from ..core import (
-    TenantSupplier, MemoryTenantSupplier, PyJWTAccessTokenService)
+from ..application.general.suppliers import (
+    TenantSupplier, MemoryTenantSupplier)
+from ..core import PyJWTAccessTokenService
 
 
 class CheckFactory(CryptoFactory):
@@ -32,7 +33,9 @@ class CheckFactory(CryptoFactory):
 
     def auth_provider(self) -> AuthProvider:
         auth_provider = StandardAuthProvider()
-        auth_provider.setup(CUser(id='001', name='johndoe'))
+        auth_provider.setup(CUser(
+            id='001', tid='001', name='johndoe',
+            tenant='default', organization='Default'))
         return auth_provider
 
     def tenant_supplier(self) -> TenantSupplier:
@@ -156,8 +159,7 @@ class CheckFactory(CryptoFactory):
             self, ranking_repository: RankingRepository,
             role_repository: RoleRepository,
             dominion_repository: DominionRepository,
-            token_service: AccessTokenService,
-            tenant_provider: TenantProvider) -> AccessService:
+            token_service: AccessTokenService) -> AccessService:
         return AccessService(
             ranking_repository, role_repository,
-            dominion_repository, token_service, tenant_provider)
+            dominion_repository, token_service)

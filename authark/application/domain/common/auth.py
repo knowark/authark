@@ -5,8 +5,9 @@ from .exceptions import AuthenticationError, AuthorizationError
 
 
 class User:
-    def __init__(self, **attributes):
+    def __init__(self, **attributes) -> None:
         self.id = attributes.get('id', '')
+        self.username = attributes.get('username', '')
         self.name = attributes.get('name', '')
         self.email = attributes.get('email', '')
         self.tid = attributes.get('tid', '')
@@ -55,3 +56,27 @@ class StandardAuthProvider(AuthProvider):
         if not user:
             raise AuthenticationError("Not authenticated.")
         return user
+
+
+ZeroID = '00000000-0000-0000-0000-000000000000'
+
+
+OneID = '11111111-1111-1111-1111-111111111111'
+
+
+class AnonymousUser(User):
+    def __init__(self, **attributes) -> None:
+        self.id = ZeroID,
+        self.name = 'anonymous',
+        self.tid = ZeroID
+        self.tenant = 'anonymous'
+        super().__init__(**attributes)
+
+
+class SystemUser(User):
+    def __init__(self, **attributes) -> None:
+        self.id = OneID,
+        self.name = 'system',
+        self.tid = OneID
+        self.tenant = 'system'
+        super().__init__(**attributes)

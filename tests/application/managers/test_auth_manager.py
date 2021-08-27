@@ -11,6 +11,7 @@ def test_auth_manager_creation(auth_manager):
 async def test_auth_manager_authenticate(auth_manager):
     request_dict = {
         'dominion': 'default',
+        'tenant': 'default',
         'username': 'tebanep',
         'password': 'PASS2',
         'client': 'mobile'
@@ -26,6 +27,7 @@ async def test_auth_manager_authenticate(auth_manager):
 async def test_auth_manager_authenticate_new_dominion(auth_manager):
     request_dict = {
         'dominion': 'platformxyz',
+        'tenant': 'default',
         'username': 'tebanep',
         'password': 'PASS2',
         'client': 'mobile'
@@ -63,6 +65,7 @@ async def test_auth_manager_authenticate_no_credentials(auth_manager):
     credential_repository.data['default'] = {}
     request_dict = {
         'dominion': 'default',
+        'tenant': 'default',
         'username': 'tebanep',
         'password': 'PASS2',
         'client': 'mobile'
@@ -80,6 +83,7 @@ async def test_auth_manager_refresh_authenticate_no_renewal(auth_manager):
 
     tokens = await auth_manager.authenticate({
         'dominion': 'default',
+        'tenant': 'default',
         'refresh_token': refresh_token})
 
     assert isinstance(tokens, dict)
@@ -99,6 +103,7 @@ async def test_auth_manager_refresh_authenticate_renewal(
 
     tokens = await auth_manager.authenticate({
         'dominion': 'default',
+        'tenant': 'default',
         'refresh_token': refresh_token})
 
     assert isinstance(tokens, dict)
@@ -117,6 +122,7 @@ async def test_auth_manager_refresh_authenticate_refresh_token_not_found(
     with raises(AuthError):
         await auth_manager.authenticate({
             'dominion': 'default',
+            'tenant': 'default',
             'refresh_token': "BAD_TOKEN"})
 
 
@@ -137,6 +143,7 @@ async def test_auth_manager_provider_authenticate(auth_manager):
 
     tokens = await auth_manager.authenticate({
         'dominion': 'default',
+        'tenant': 'default',
         'username': username,
         'password': password})
 
@@ -163,6 +170,7 @@ async def test_generate_refresh_token_only_one(auth_manager):
 async def test_auth_manager_fail_to_authenticate(auth_manager):
     request_dict = {
         'dominion': 'default',
+        'tenant': 'default',
         'username': 'tebanep',
         'password': 'WRONG_PASSWORD',
         'client': 'web'
@@ -174,6 +182,7 @@ async def test_auth_manager_fail_to_authenticate(auth_manager):
 async def test_auth_manager_fail_to_authenticate_missing_user(auth_manager):
     request_dict = {
         'dominion': 'default',
+        'tenant': 'default',
         'username': 'MISSING_USER',
         'password': 'WRONG_PASSWORD',
         'client': 'web'
@@ -188,6 +197,7 @@ async def test_auth_manager_fail_to_authenticate_missing_credentials(
     credential_repository.data['default'] = {}
     request_dict = {
         'dominion': 'default',
+        'tenant': 'default',
         'username': 'tebanep',
         'password': 'NO_CREDENTIALS',
         'client': 'terminal'

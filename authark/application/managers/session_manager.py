@@ -1,21 +1,21 @@
 from typing import Dict, Any
-from ..domain.common import TenantProvider, Tenant, AuthProvider, User
+from ..domain.common.auth import (
+    AuthProvider, User, AnonymousUser, SystemUser)
 
 
 class SessionManager:
-    def __init__(self, tenant_provider: TenantProvider,
-                 auth_provider: AuthProvider) -> None:
-        self.tenant_provider = tenant_provider
+    def __init__(self, auth_provider: AuthProvider) -> None:
         self.auth_provider = auth_provider
 
-    def set_tenant(self, tenant_dict: Dict[str, Any]) -> None:
-        tenant = Tenant(**tenant_dict)
-        self.tenant_provider.setup(tenant)
-
-    def get_tenant(self) -> Dict[str, Any]:
-        current = self.tenant_provider.tenant
+    def get_user(self) -> Dict[str, Any]:
+        current = self.auth_provider.user
         return vars(current)
 
-    def set_user(self, user_dict: Dict[str, Any]) -> None:
-        user = User(**user_dict)
+    def set_user(self, entry: Dict[str, Any]) -> None:
+        user: User = SystemUser()
+        if entry.get('data'):
+            user = User(**entry['data'])
+        elif entry.get('meta', {}).get('anonymous'):
+            user = AnonymousUser(**entry.get('data', {}))
+
         self.auth_provider.setup(user)

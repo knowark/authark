@@ -114,7 +114,9 @@ class Shell:
         tenant_dict = tenant_supplier.resolve_tenant(tenant)
 
         session_manager = self.injector['SessionManager']
-        session_manager.set_tenant(tenant_dict)
+        entry = {'meta': {'anonymous': True}, 'data': {
+            'tid': tenant_dict['id'], 'tenat': tenant_dict['name']}}
+        session_manager.set_user(entry)
 
         import_manager = self.injector['ImportManager']
         await import_manager.import_users(input_file, source, password_field)

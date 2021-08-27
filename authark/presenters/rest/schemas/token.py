@@ -8,6 +8,8 @@ class TokenRequestSchema(Schema):
         required=True, metadata=dict(example="knowark"))
     username = fields.Str(
         metadata=dict(example="amlopez"))
+    email = fields.Str(
+        metadata=dict(example="amlopez@example.com"))
     password = fields.Str(
         metadata=dict(example="secret"))
     refresh_token = fields.Str(

@@ -1,8 +1,8 @@
 from typing import List, Dict
 from ..domain.common import (
-    TokenString, TokensDict, AuthError,
-    UserCreationError, RecordList, QueryDomain)
-from ..domain.models import Token, User, Credential, Dominion
+    TokenString, TokensDict, AuthError, AnonymousUser,
+    UserCreationError, AuthProvider, RecordList, QueryDomain)
+from ..domain.models import Token, User, Tenant, Credential, Dominion
 from ..domain.repositories import (
     UserRepository, CredentialRepository, DominionRepository)
 from ..domain.services import (
@@ -13,15 +13,17 @@ from ..general.suppliers import TenantSupplier
 
 class AuthManager:
     def __init__(
-        self, user_repository: UserRepository,
+        self, auth_provider: AuthProvider,
+        user_repository: UserRepository,
         credential_repository: CredentialRepository,
         dominion_repository: DominionRepository,
         hash_service: HashService,
         access_service: AccessService,
         refresh_token_service: RefreshTokenService,
-        tenant_supplier: TenantSupplier,
-        identity_service: IdentityService
+        identity_service: IdentityService,
+        tenant_supplier: TenantSupplier
     ) -> None:
+        self.auth_provider = auth_provider
         self.user_repository = user_repository
         self.credential_repository = credential_repository
         self.dominion_repository = dominion_repository
@@ -33,31 +35,35 @@ class AuthManager:
         self.provider_pattern = '@provider.oauth'
 
     async def authenticate(self, request_dict: Dict[str, str]) -> TokensDict:
-        dominion = request_dict['dominion']
-        refresh_token = request_dict.get('refresh_token', '')
-        username = request_dict.get('username', '')
-        password = request_dict.get('password', '')
-        client = request_dict.get('client', '')
-
-        tenant = request_dict['tenant']
-        token_request['dominion'] = token_request.get(
-            'dominion', request.headers.get('Dominion', ''))
-        tenant_dict = self.tenant_supplier.resolve_tenant(tenant)
-        self.session_manager.set_tenant(tenant_dict)
-
+        data = request_dict
+        tenant = data.get('tenant', '')
+        dominion = data.get('dominion', '')
+        refresh_token = data.get('refresh_token', '')
+        username = data.get('username', '')
+        password = data.get('password', '')
+        client = data.get('client', '')
 
         if refresh_token:
             return await self._refresh_authenticate(
-                refresh_token, dominion)
+                refresh_token, dominion, tenant)
         elif username.endswith(self.provider_pattern):
             return await self._provider_authenticate(
-                username, password, client, dominion)
+                username, password, client, dominion, tenant)
         return await self._password_authenticate(
-                username, password, client, dominion)
+                username, password, client, dominion, tenant)
 
     async def _password_authenticate(
             self, username: str, password: str,
-            client: str, dominion_name: str) -> TokensDict:
+        client: str, dominion_name: str, tenant_name: str) -> TokensDict:
+
+        tenant = Tenant(
+            **self.tenant_supplier.resolve_tenant(tenant_name))
+        anonymouns_session = AnonymousUser(
+            tid=tenant.id, tenant=tenant.slug,
+            organization=tenant.name)
+        self.auth_provider.setup(anonymouns_session)
+
+
         user = await self._find_user(username)
         credentials = await self.credential_repository.search([
             ('user_id', '=', user.id), ('type', '=', 'password')])
@@ -72,11 +78,12 @@ class AuthManager:
         dominion = await self._ensure_dominion(dominion_name)
 
         access_token = await self.access_service.generate_token(
-            user, dominion)
+            tenant, user, dominion)
 
         # Create new refresh token
         client = client or 'ALL'
-        refresh_token_str = await self._generate_refresh_token(user.id, client)
+        refresh_token_str = await self._generate_refresh_token(
+            user.id, client)
 
         return {
             'refresh_token': refresh_token_str,
@@ -85,9 +92,16 @@ class AuthManager:
 
     async def _provider_authenticate(
         self, username: str, password: str,
-        client: str, dominion_name: str
+        client: str, dominion_name: str, tenant_name: str
     ) -> TokensDict:
         provider, code = username.replace(self.provider_pattern, ''), password
+
+        tenant = Tenant(
+            **self.tenant_supplier.resolve_tenant(tenant_name))
+        anonymouns_session = AnonymousUser(
+            tid=tenant.id, tenant=tenant.slug,
+            organization=tenant.name)
+        self.auth_provider.setup(anonymouns_session)
 
         user = await self.identity_service.identify(provider, code)
 
@@ -96,7 +110,7 @@ class AuthManager:
 
         dominion = await self._ensure_dominion(dominion_name)
         access_token = await self.access_service.generate_token(
-            user, dominion)
+            tenant, user, dominion)
 
         client = client or 'ALL'
         refresh_token_str = await self._generate_refresh_token(
@@ -107,8 +121,17 @@ class AuthManager:
             'access_token': access_token.value
         }
 
-    async def _refresh_authenticate(self, refresh_token: TokenString,
-                                    dominion_name: str) -> TokensDict:
+    async def _refresh_authenticate(
+        self, refresh_token: TokenString,
+        dominion_name: str, tenant_name: str) -> TokensDict:
+
+        tenant = Tenant(
+            **self.tenant_supplier.resolve_tenant(tenant_name))
+        anonymouns_session = AnonymousUser(
+            tid=tenant.id, tenant=tenant.slug,
+            organization=tenant.name)
+        self.auth_provider.setup(anonymouns_session)
+
         credentials = await self.credential_repository.search([
             ('value', '=', refresh_token), ('type', '=', 'refresh_token')])
         if not credentials:
@@ -129,7 +152,7 @@ class AuthManager:
         dominion = await self._ensure_dominion(dominion_name)
 
         access_token = await self.access_service.generate_token(
-            user[0], dominion)
+            tenant, user[0], dominion)
         tokens_dict['access_token'] = access_token.value
 
         return tokens_dict
@@ -143,7 +166,7 @@ class AuthManager:
         [dominion] = dominions
         return dominion
 
-    async def _find_user(self, username: str):
+    async def _find_user(self, username: str) -> User:
         domain: QueryDomain = [('username', '=', username)]
         if '@' in username:
             domain = [('email', '=', username)]

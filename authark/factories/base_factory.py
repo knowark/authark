@@ -18,6 +18,8 @@ from ..application.domain.services import (
     ImportService, MemoryImportService, EnrollmentService,
     AccessService, VerificationService, IdentityService,
     MemoryIdentityService)
+from ..application.general.suppliers import (
+    TenantSupplier, MemoryTenantSupplier)
 from ..application.managers import (
     AuthManager, ManagementManager, ImportManager,
     SessionManager, SecurityManager, ProcedureManager)
@@ -28,7 +30,6 @@ from ..application.general import (
     PlanSupplier, MemoryPlanSupplier)
 from ..core.common import Config
 from ..core.suppliers import (
-    TenantSupplier, MemoryTenantSupplier,
     SetupSupplier, MemorySetupSupplier,
     TemplateSupplier, MemoryTemplateSupplier)
 
@@ -128,21 +129,18 @@ class BaseFactory(Factory):
         self, ranking_repository: RankingRepository,
         role_repository: RoleRepository,
         dominion_repository: DominionRepository,
-        token_service: AccessTokenService,
-        tenant_provider: TenantProvider
+        token_service: AccessTokenService
     ) -> AccessService:
         return AccessService(
             ranking_repository, role_repository,
-            dominion_repository,
-            token_service, tenant_provider)
+            dominion_repository, token_service)
 
     def verification_service(
         self, user_repository: UserRepository,
-        token_service: VerificationTokenService,
-        tenant_provider: TenantProvider
+        token_service: VerificationTokenService
     ) -> VerificationService:
         return VerificationService(
-            user_repository, token_service, tenant_provider)
+            user_repository, token_service)
 
     def enrollment_service(
         self, user_repository: UserRepository,
@@ -162,18 +160,21 @@ class BaseFactory(Factory):
     # Managers
 
     def auth_manager(
-        self, user_repository: UserRepository,
+        self, auth_provider: AuthProvider,
+        user_repository: UserRepository,
         credential_repository: CredentialRepository,
         dominion_repository: DominionRepository,
         hash_service: HashService,
         access_service: AccessService,
         refresh_token_service: RefreshTokenService,
-        identity_service: IdentityService
+        identity_service: IdentityService,
+        tenant_supplier: TenantSupplier
     ) -> AuthManager:
         return AuthManager(
-            user_repository, credential_repository,
+            auth_provider, user_repository, credential_repository,
             dominion_repository, hash_service, access_service,
-            refresh_token_service, identity_service)
+            refresh_token_service, identity_service,
+            tenant_supplier)
 
     def management_manager(
         self, user_repository: UserRepository,
@@ -199,10 +200,9 @@ class BaseFactory(Factory):
                              ranking_repository, dominion_repository)
 
     def session_manager(
-        self, tenant_provider: TenantProvider,
-        auth_provider: AuthProvider
+        self, auth_provider: AuthProvider
     ) -> SessionManager:
-        return SessionManager(tenant_provider, auth_provider)
+        return SessionManager(auth_provider)
 
     def security_manager(
         self, restriction_repository: RestrictionRepository,
@@ -211,15 +211,18 @@ class BaseFactory(Factory):
         return SecurityManager(restriction_repository, policy_repository)
 
     def procedure_manager(
-        self, user_repository: UserRepository,
+        self,  auth_provider: AuthProvider,
+        user_repository: UserRepository,
         enrollment_service: EnrollmentService,
         verification_service: VerificationService,
         identity_service: IdentityService,
         plan_supplier: PlanSupplier,
+        tenant_supplier: TenantSupplier,
     ) -> ProcedureManager:
         return ProcedureManager(
-            user_repository, enrollment_service,
-            verification_service, identity_service, plan_supplier)
+            auth_provider, user_repository, enrollment_service,
+            verification_service, identity_service, plan_supplier,
+            tenant_supplier)
 
     # Reporters
 

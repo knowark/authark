@@ -143,10 +143,10 @@ async def test_registrations_put_route(app):
         '/registrations',
         data=dumps(dict(
             organization="Knowark",
-            username="eecheverry",
-            email="eecheverry@knowark.com",
+            username="gecheverry",
+            email="gecheverry@knowark.com",
             password="ABC1234",
-            name="Esteban Echeverry"
+            name="Gabriel Echeverry"
         )))
     data = await response.text()
     assert response.status == 200

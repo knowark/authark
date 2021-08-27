@@ -22,8 +22,20 @@ def app(loop, aiohttp_client):
 @fixture
 def headers() -> dict:
     return {
-        "From": "john@doe.com",
-        "TenantId": "001",
-        "UserId": "001",
-        "Roles": "user"
+        "Authorization":  (
+            # Password: INTEGRARK_SECRET
+            # Payload:
+            # {
+            #     "tid": "001",
+            #     "uid": "001",
+            #     "tenant": "Knowark",
+            #     "name": "John Doe",
+            #     "email": "john@doe.com"
+            # }
+            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0aWQiOiIwMDEiLCJ1aWQiOi"
+            "IwMDEiLCJ0ZW5hbnQiOiJLbm93YXJrIiwibmFtZSI6IkpvaG4gRG9lIiwiZW1ha"
+            "WwiOiJqb2huQGRvZS5jb20ifQ.udlkUWVOatst5IoDRlJsQVn"
+            "U_atCAltOelOJvRCr8BY"
+        )
+
     }

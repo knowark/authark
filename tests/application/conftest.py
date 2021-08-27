@@ -20,7 +20,8 @@ from authark.application.domain.services import (
     MemoryImportService, HashService, MemoryHashService,
     EnrollmentService, IdentityService, MemoryIdentityService)
 from authark.application.general import (
-    PlanSupplier, MemoryPlanSupplier)
+    PlanSupplier, MemoryPlanSupplier,
+    TenantSupplier, MemoryTenantSupplier)
 from authark.application.managers import (
     AuthManager, ManagementManager, ImportManager,
     SessionManager, SecurityManager, ProcedureManager)
@@ -40,8 +41,9 @@ def parser():
 @fixture
 def mock_auth_provider() -> StandardAuthProvider:
     mock_auth_provider = StandardAuthProvider()
-    mock_auth_provider.setup(
-        CUser(id='001',  name='johndoe', tid='001', tenant='default'))
+    mock_auth_provider.setup(CUser(
+        id='001',  name='johndoe',
+        tid='001', organization='Default', tenant='default'))
     return mock_auth_provider
 
 
@@ -274,19 +276,30 @@ def plan_supplier() -> PlanSupplier:
     return MemoryPlanSupplier()
 
 
+@fixture
+def tenant_supplier() -> TenantSupplier:
+    tenant_supplier = MemoryTenantSupplier()
+    tenant_supplier.create_tenant({
+        'id': '001',
+        'name': 'Default'
+    })
+    return tenant_supplier
+
+
 # COORDINATORS
 
 
 @fixture
-def auth_manager(mock_user_repository, mock_credential_repository,
-                 mock_dominion_repository, mock_hash_service,
-                 access_service, mock_refresh_token_service,
-                 mock_identity_service):
+def auth_manager(
+    mock_auth_provider, mock_user_repository,
+    mock_credential_repository, mock_dominion_repository,
+    mock_hash_service, access_service, mock_refresh_token_service,
+    mock_identity_service, tenant_supplier):
     return AuthManager(
-        mock_user_repository, mock_credential_repository,
-        mock_dominion_repository, mock_hash_service,
-        access_service, mock_refresh_token_service,
-        mock_identity_service)
+        mock_auth_provider, mock_user_repository,
+        mock_credential_repository, mock_dominion_repository,
+        mock_hash_service, access_service, mock_refresh_token_service,
+        mock_identity_service, tenant_supplier)
 
 
 @fixture
@@ -318,13 +331,15 @@ def import_manager(
 
 @fixture
 def session_manager(mock_auth_provider):
-    return SessionManager(mock_auth_provider, mock_auth_provider)
+    return SessionManager(mock_auth_provider)
 
 
 @fixture
-def procedure_manager(mock_user_repository, enrollment_service,
-                      verification_service, mock_identity_service,
-                      plan_supplier):
+def procedure_manager(
+    mock_auth_provider, mock_user_repository, enrollment_service,
+    verification_service, mock_identity_service, plan_supplier,
+        tenant_supplier):
     return ProcedureManager(
-        mock_user_repository, enrollment_service,
-        verification_service, mock_identity_service, plan_supplier)
+        mock_auth_provider, mock_user_repository, enrollment_service,
+        verification_service, mock_identity_service, plan_supplier,
+        tenant_supplier)
