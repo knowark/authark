@@ -1,7 +1,7 @@
 from typing import Dict, List, Tuple, Any
 from ..common import RecordList, UserCreationError
 from ..models import User, Credential, Token, Dominion
-from ..repositories import UserRepository, CredentialRepository
+from .repositories import UserRepository, CredentialRepository
 from .hash_service import HashService
 
 

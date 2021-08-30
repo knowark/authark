@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from ...domain.repositories import (
+from ...domain.services.repositories import (
     DominionRepository, RoleRepository, RankingRepository)
 from ...domain.common import ExtendedRankingDictList
 

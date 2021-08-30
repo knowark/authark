@@ -5,7 +5,7 @@ from ...domain.common import (
     UserCreationError, RecordList, QueryDomain,
     AnonymousUser)
 from ...domain.models import Token, User, Tenant, Credential, Dominion
-from ...domain.repositories import (
+from ...domain.services.repositories import (
     UserRepository, CredentialRepository, DominionRepository)
 from ...domain.services import (
     RefreshTokenService, HashService, AccessService,

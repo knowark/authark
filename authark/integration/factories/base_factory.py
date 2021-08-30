@@ -1,7 +1,7 @@
 from injectark import Factory
 from ...application.domain.common import (
     QueryParser, AuthProvider, StandardAuthProvider)
-from ...application.domain.repositories import (
+from ...application.domain.services.repositories import (
     UserRepository, MemoryUserRepository,
     CredentialRepository, MemoryCredentialRepository,
     DominionRepository, MemoryDominionRepository,

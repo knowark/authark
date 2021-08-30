@@ -1,6 +1,6 @@
 from typing import List
 from ...domain.models import Restriction, Policy
-from ...domain.repositories import (
+from ...domain.services.repositories import (
     RestrictionRepository, PolicyRepository)
 from ...domain.common import RecordList
 

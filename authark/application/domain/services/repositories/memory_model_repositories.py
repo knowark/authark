@@ -1,5 +1,5 @@
 from modelark import Repository, MemoryRepository
-from ..models import (
+from ...models import (
     Credential, Dominion, Ranking, Role, User, Restriction, Policy)
 
 

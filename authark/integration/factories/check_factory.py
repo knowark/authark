@@ -5,7 +5,7 @@ from ...application.domain.common import (
     QueryParser, AuthProvider, StandardAuthProvider, User as CUser)
 from ...application.domain.models import (
     User, Credential, Ranking, Role, Dominion, Restriction, Policy)
-from ...application.domain.repositories import (
+from ...application.domain.services.repositories import (
     UserRepository, MemoryUserRepository,
     CredentialRepository, MemoryCredentialRepository,
     RankingRepository, MemoryRankingRepository,
