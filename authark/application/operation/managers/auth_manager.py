@@ -1,14 +1,14 @@
 from typing import List, Dict
-from ..domain.common import (
+from ...domain.common import (
     TokenString, TokensDict, AuthError, AnonymousUser,
     UserCreationError, AuthProvider, RecordList, QueryDomain)
-from ..domain.models import Token, User, Tenant, Credential, Dominion
-from ..domain.repositories import (
+from ...domain.models import Token, User, Tenant, Credential, Dominion
+from ...domain.repositories import (
     UserRepository, CredentialRepository, DominionRepository)
-from ..domain.services import (
+from ...domain.services import (
     RefreshTokenService, HashService, AccessService,
     VerificationService, IdentityService)
-from ..general.suppliers import TenantSupplier
+from ...general.suppliers import TenantSupplier
 
 
 class AuthManager:

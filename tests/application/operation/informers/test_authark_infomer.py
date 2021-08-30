@@ -1,5 +1,6 @@
 from authark.application.domain.common import QueryDomain
-from authark.application.informers.authark_informer import AutharkInformer
+from authark.application.operation.informers.authark_informer import (
+    AutharkInformer)
 
 
 def test_authark_informer_methods():

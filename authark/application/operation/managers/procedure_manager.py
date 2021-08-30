@@ -1,17 +1,17 @@
 import uuid
 from typing import List, Dict
-from ..domain.common import (
+from ...domain.common import (
     TokenString, TokensDict, AuthError, AuthProvider,
     UserCreationError, RecordList, QueryDomain,
     AnonymousUser)
-from ..domain.models import Token, User, Tenant, Credential, Dominion
-from ..domain.repositories import (
+from ...domain.models import Token, User, Tenant, Credential, Dominion
+from ...domain.repositories import (
     UserRepository, CredentialRepository, DominionRepository)
-from ..domain.services import (
+from ...domain.services import (
     RefreshTokenService, HashService, AccessService,
     EnrollmentService, VerificationService, IdentityService)
-from ..general import PlanSupplier, TenantSupplier
-from ..general.suppliers.plan.events import (
+from ...general import PlanSupplier, TenantSupplier
+from ...general.suppliers.plan.events import (
     UserRegistered, PasswordReset)
 
 

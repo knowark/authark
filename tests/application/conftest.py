@@ -22,7 +22,7 @@ from authark.application.domain.services import (
 from authark.application.general import (
     PlanSupplier, MemoryPlanSupplier,
     TenantSupplier, MemoryTenantSupplier)
-from authark.application.managers import (
+from authark.application.operation.managers import (
     AuthManager, ManagementManager, ImportManager,
     SessionManager, SecurityManager, ProcedureManager)
 

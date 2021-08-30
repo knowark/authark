@@ -1,5 +1,5 @@
 # from authark.application.domain.models import Restriction, Policy
-from authark.application.managers import SecurityManager
+from authark.application.operation.managers import SecurityManager
 from authark.application.domain.common import RecordList
 
 

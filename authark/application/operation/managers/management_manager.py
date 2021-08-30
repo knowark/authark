@@ -1,8 +1,8 @@
 from typing import List
-from ..domain.models import Dominion, Role, Ranking
-from ..domain.repositories import (
+from ...domain.models import Dominion, Role, Ranking
+from ...domain.repositories import (
     UserRepository, DominionRepository, RoleRepository, RankingRepository)
-from ..domain.common import RecordList
+from ...domain.common import RecordList
 
 
 class ManagementManager:

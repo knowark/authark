@@ -2,7 +2,7 @@ import jwt
 from typing import Callable, Dict, Any
 from aiohttp import web
 from injectark import Injectark, Config
-from ....application.managers import SessionManager
+from ....application.operation.managers import SessionManager
 
 
 def authenticate_middleware_factory(

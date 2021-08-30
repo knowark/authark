@@ -1,5 +1,5 @@
 from typing import Dict, Any
-from ..domain.common.auth import (
+from ...domain.common.auth import (
     AuthProvider, User, AnonymousUser, SystemUser)
 
 

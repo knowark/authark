@@ -1,5 +1,5 @@
 from authark.application.domain.models import User
-from authark.application.managers import ProcedureManager
+from authark.application.operation.managers import ProcedureManager
 
 
 def test_procedure_manager_creation(procedure_manager):
