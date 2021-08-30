@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from typing import Union, List, Tuple, Any, overload
-from ...domain.repositories import (
+from ...domain.services.repositories import (
     UserRepository, CredentialRepository,
     DominionRepository, RoleRepository,
     RestrictionRepository, PolicyRepository, RankingRepository)

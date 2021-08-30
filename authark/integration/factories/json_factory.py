@@ -1,6 +1,6 @@
 from ...application.domain.common import (
     QueryParser, AuthProvider)
-from ...application.domain.repositories import (
+from ...application.domain.services.repositories import (
     UserRepository, CredentialRepository,
     DominionRepository, RoleRepository,
     RankingRepository, RestrictionRepository,

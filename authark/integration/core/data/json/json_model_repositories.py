@@ -3,7 +3,7 @@ from .....application.domain.common import (
     QueryParser, AuthProvider)
 from .....application.domain.models import (
     Credential, Dominion, Ranking, Role, User, Restriction, Policy)
-from .....application.domain.repositories import (
+from .....application.domain.services.repositories import (
     CredentialRepository, DominionRepository, RankingRepository,
     RoleRepository, UserRepository, RestrictionRepository, PolicyRepository)
 

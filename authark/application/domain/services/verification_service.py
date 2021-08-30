@@ -1,6 +1,6 @@
 from typing import Dict, Any, List
 from ..models import User, Tenant, Token, Dominion
-from ..repositories import UserRepository
+from .repositories import UserRepository
 from .token_service import VerificationTokenService
 
 

@@ -1,6 +1,6 @@
 from typing import List
 from ...domain.models import Dominion, Role, Ranking
-from ...domain.repositories import (
+from ...domain.services.repositories import (
     UserRepository, DominionRepository, RoleRepository, RankingRepository)
 from ...domain.common import RecordList
 

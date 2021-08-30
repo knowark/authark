@@ -4,7 +4,7 @@ from authark.application.domain.models import (
     Restriction, Policy)
 from authark.application.domain.common import (
     QueryParser, StandardAuthProvider, User as CUser)
-from authark.application.domain.repositories import (
+from authark.application.domain.services.repositories import (
     UserRepository, MemoryUserRepository,
     CredentialRepository, MemoryCredentialRepository,
     DominionRepository, MemoryDominionRepository,
