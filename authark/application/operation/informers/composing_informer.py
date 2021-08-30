@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
-from ..domain.repositories import (
+from ...domain.repositories import (
     DominionRepository, RoleRepository, RankingRepository)
-from ..domain.common import ExtendedRankingDictList
+from ...domain.common import ExtendedRankingDictList
 
 
 class ComposingInformer(ABC):

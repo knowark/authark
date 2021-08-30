@@ -19,10 +19,10 @@ from ...application.domain.services import (
     MemoryIdentityService)
 from ...application.general.suppliers import (
     TenantSupplier, MemoryTenantSupplier)
-from ...application.managers import (
+from ...application.operation.managers import (
     AuthManager, ManagementManager, ImportManager,
     SessionManager, SecurityManager, ProcedureManager)
-from ...application.informers import (
+from ...application.operation.informers import (
     AutharkInformer, StandardAutharkInformer,
     ComposingInformer, StandardComposingInformer)
 from ...application.general import (

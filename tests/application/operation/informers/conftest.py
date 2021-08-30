@@ -12,7 +12,7 @@ from authark.application.domain.repositories import (
     RankingRepository, MemoryRankingRepository,
     RestrictionRepository, MemoryRestrictionRepository,
     PolicyRepository, MemoryPolicyRepository)
-from authark.application.informers import (
+from authark.application.operation.informers import (
     AutharkInformer, StandardAutharkInformer,
     ComposingInformer, StandardComposingInformer)
 

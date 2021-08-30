@@ -1,9 +1,9 @@
 from typing import List, Optional, Any
-from ..domain.services import ImportService
-from ..domain.repositories import (
+from ...domain.services import ImportService
+from ...domain.repositories import (
     UserRepository, CredentialRepository, RoleRepository, RankingRepository,
     DominionRepository)
-from ..domain.models import User, Credential, Ranking, Dominion
+from ...domain.models import User, Credential, Ranking, Dominion
 
 
 class ImportManager:

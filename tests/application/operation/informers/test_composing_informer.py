@@ -1,4 +1,4 @@
-from authark.application.informers import ComposingInformer
+from authark.application.operation.informers import ComposingInformer
 
 
 def test_composing_informer_methods():

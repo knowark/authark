@@ -1,8 +1,8 @@
 from typing import List
-from ..domain.models import Restriction, Policy
-from ..domain.repositories import (
+from ...domain.models import Restriction, Policy
+from ...domain.repositories import (
     RestrictionRepository, PolicyRepository)
-from ..domain.common import RecordList
+from ...domain.common import RecordList
 
 
 class SecurityManager:

@@ -1,5 +1,5 @@
 from authark.application.domain.models import User
-from authark.application.managers import ImportManager
+from authark.application.operation.managers import ImportManager
 
 
 async def test_import_manager_creation(import_manager) -> None:
