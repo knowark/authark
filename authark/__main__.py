@@ -5,7 +5,7 @@ import sys
 import asyncio
 import uvloop
 from injectark import Injectark
-from .presentation.shell import Shell
+from .presentation.system.shell import Shell
 from .integration.factories import factory_builder
 from .integration.core import config, sanitize
 
