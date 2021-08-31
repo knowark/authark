@@ -6,6 +6,7 @@ from authark.presentation.platform.rest import rest as rest_module
 
 async def test_rest_application_run(monkeypatch):
     called = False
+    app_called = False
 
     class web:
         @staticmethod
@@ -13,11 +14,22 @@ async def test_rest_application_run(monkeypatch):
             nonlocal called
             called = True
 
-    monkeypatch.setattr(rest_module, 'web', web)
+    class MockRestApplication(RestApplication):
+        def __init__(self) -> None:
+            pass
 
-    await RestApplication.run(None)
+        @property
+        def app(self):
+            nonlocal app_called
+            app_called = True
+
+    monkeypatch.setattr(rest_module, 'web', web)
+    rest = MockRestApplication()
+
+    await RestApplication.run(rest)
 
     assert called is True
+    assert app_called is True
 
 
 async def test_root(app) -> None:
@@ -44,7 +56,7 @@ async def test_users_get_unauthorized(app) -> None:
 
     assert response.status == 401
     data_dict = loads(content)
-    assert 'errors' in data_dict
+    assert 'error' in data_dict
 
 
 async def test_users_head(app, headers) -> None:
@@ -100,12 +112,16 @@ async def test_users_register_put_route(app, headers) -> None:
 async def test_tokens_put_route_with_password(app):
     response = await app.put(
         '/tokens',
-        data=dumps(dict(
-            dominion="default",
-            tenant="default",
-            username="eecheverry",
-            password="ABC1234"
-        )))
+        data=dumps({
+            "meta": {},
+            "data": {
+                "dominion":"default",
+                "tenant":"default",
+                "username":"eecheverry",
+                "password":"ABC1234"
+            }
+        })
+    )
     data = await response.text()
     assert response.status == 200
     assert len(data) > 0
@@ -200,41 +216,6 @@ async def test_restrictions_delete(app, headers) -> None:
 
     assert len(data_dict) == 0
 
-async def test_policies_head(app, headers) -> None:
-    response = await app.head('/policies', headers=headers)
-    count = response.headers.get('Total-Count')
-
-    assert response.status == 200
-    assert int(count) == 1
-
-async def test_policies_get(app, headers) -> None:
-    response = await app.get('/policies', headers=headers)
-    content = await response.text()
-    assert response.status == 200
-
-    data_dict = loads(content)
-
-    assert len(data_dict) == 1
-    assert data_dict[0]['id'] == '1'
-
-
-async def test_policies_put_route(app, headers) -> None:
-    response = await app.put(
-        '/policies',
-        data=dumps([dict(
-            resource="Resource name",
-            privilege="Privilege name",
-            roleId="1",
-            active=True
-        )]),
-        headers=headers)
-
-    assert response.status == 200
-
-    response = await app.head('/policies', headers=headers)
-    count = response.headers.get('Total-Count')
-
-    assert int(count) == 2
 
 async def test_policies_delete(app, headers) -> None:
     response = await app.delete('/policies/1', headers=headers)
@@ -274,12 +255,6 @@ async def test_users_get_route_filter(app, headers) -> None:
     data_dict = loads(content)
     assert len(data_dict) == 0
 
-async def test_dominions_head(app, headers) -> None:
-    response = await app.head('/dominions', headers=headers)
-    count = response.headers.get('Total-Count')
-
-    assert response.status == 200
-    assert int(count) == 1
 
 async def test_dominions_get(app, headers) -> None:
     response = await app.get('/dominions', headers=headers)
@@ -310,143 +285,10 @@ async def test_dominions_not_implemented_put(app, headers) -> None:
             name="cloudapp"
         )), headers=headers)
     content = await response.text()
-    assert response.status == 405
+    assert response.status == 500
 
 
 async def test_dominions_not_implemented_delete(app, headers) -> None:
     response = await app.delete('/dominions/platform', headers=headers)
     content = await response.text()
     assert response.status == 500
-
-async def test_ranking_head(app, headers) -> None:
-    response = await app.head('/rankings', headers=headers)
-    count = response.headers.get('Total-Count')
-
-    assert response.status == 200
-    assert int(count) == 1
-
-async def test_ranking_get(app, headers) -> None:
-    response = await app.get('/rankings', headers=headers)
-    content = await response.text()
-    assert response.status == 200
-
-    data_dict = loads(content)
-
-    assert len(data_dict) == 1
-    assert data_dict[0]['id'] == '1'
-
-
-async def test_ranking_put_route(app, headers) -> None:
-    response = await app.put(
-        '/rankings',
-        data=dumps([dict(
-            userId='1',
-            roleId='1'
-        )]),
-        headers=headers)
-
-    assert response.status == 200
-
-    response = await app.head('/rankings', headers=headers)
-    count = response.headers.get('Total-Count')
-
-    assert int(count) == 1
-
-async def test_ranking_delete(app, headers) -> None:
-    response = await app.delete('/rankings/1', headers=headers)
-    assert response.status == 204
-
-    response = await app.get('/rankings', headers=headers)
-    data_dict = loads(await response.text())
-
-    assert len(data_dict) == 0
-
-async def test_restriction_head(app, headers) -> None:
-    response = await app.head('/restrictions', headers=headers)
-    count = response.headers.get('Total-Count')
-
-    assert response.status == 200
-    assert int(count) == 1
-
-async def test_restriction_get(app, headers) -> None:
-    response = await app.get('/restrictions', headers=headers)
-    content = await response.text()
-    assert response.status == 200
-
-    data_dict = loads(content)
-
-    assert len(data_dict) == 1
-    assert data_dict[0]['id'] == '1'
-
-
-async def test_restrictions_put_route(app, headers) -> None:
-    response = await app.put(
-        '/restrictions',
-        data=dumps([dict(
-            policyId="1",
-            name="Restriction name",
-            sequence="1",
-            target="Target name",
-            domain="domain"
-        )]),
-        headers=headers)
-
-    assert response.status == 200
-
-    response = await app.head('/restrictions', headers=headers)
-    count = response.headers.get('Total-Count')
-
-    assert int(count) == 2
-
-async def test_restriction_delete(app, headers) -> None:
-    response = await app.delete('/restrictions/1', headers=headers)
-    assert response.status == 204
-
-    response = await app.get('/restrictions', headers=headers)
-    data_dict = loads(await response.text())
-
-    assert len(data_dict) == 0
-
-async def test_role_head(app, headers) -> None:
-    response = await app.head('/roles', headers=headers)
-    count = response.headers.get('Total-Count')
-
-    assert response.status == 200
-    assert int(count) == 1
-
-async def test_role_get(app, headers) -> None:
-    response = await app.get('/roles', headers=headers)
-    content = await response.text()
-    assert response.status == 200
-
-    data_dict = loads(content)
-
-    assert len(data_dict) == 1
-    assert data_dict[0]['id'] == '1'
-
-
-async def test_role_put_route(app, headers) -> None:
-    response = await app.put(
-        '/roles',
-        data=dumps([dict(
-            name='admin',
-            dominionId='1',
-            description='Systems Administrator'
-        )]),
-        headers=headers)
-
-    assert response.status == 200
-
-    response = await app.head('/roles', headers=headers)
-    count = response.headers.get('Total-Count')
-
-    assert int(count) == 2
-
-async def test_roles_delete(app, headers) -> None:
-    response = await app.delete('/roles/1', headers=headers)
-    assert response.status == 204
-
-    response = await app.get('/roles', headers=headers)
-    data_dict = loads(await response.text())
-
-    assert len(data_dict) == 0

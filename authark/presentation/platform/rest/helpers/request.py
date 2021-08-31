@@ -27,5 +27,5 @@ async def get_request_ids(request: web.Request) -> List[str]:
     return ids
 
 
-async def missing(value: Any) -> None:
-    raise ValueError('Not implemented endpoint.')
+# async def missing(value: Any) -> None:
+    # raise ValueError('Not implemented endpoint.')

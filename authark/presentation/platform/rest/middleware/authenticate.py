@@ -5,8 +5,7 @@ from injectark import Injectark, Config
 from .....application.operation.managers import SessionManager
 
 
-def authenticate_middleware_factory(
-        config: Config, injector: Injectark) -> Callable:
+def authenticate_middleware_factory(injector: Injectark) -> Callable:
     session_manager: SessionManager = injector['SessionManager']
     secret = injector.config['tokens']['rest']['secret']
 

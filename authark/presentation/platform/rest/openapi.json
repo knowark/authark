@@ -1,0 +1,22 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Authark",
+    "x-logo": {
+      "url": "https://avatars.githubusercontent.com/u/44503575"    },
+    "version": "latest",
+    "description": "Authark Server",
+    "license": {
+      "name": "GNU GPLv3",
+      "url": "https://github.com/knowark/authark/blob/master/LICENSE"
+    },
+    "contact": {
+      "name": "Knowark",
+      "url": "https://www.knowark.com",
+      "email": "it@knowark.com"
+    }
+  },
+
+  "paths": {}
+
+}
