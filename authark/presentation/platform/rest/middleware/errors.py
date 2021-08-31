@@ -1,14 +1,12 @@
 import logging
-from traceback import format_tb
-from typing import Callable
-from aiohttp import web
 from json import dumps
+from traceback import format_tb
+from typing import Callable, Dict, Any
+from aiohttp import web
 from injectark import Injectark
-from .....integration.core import Config
 
 
-def errors_middleware_factory(
-        config: Config, injector: Injectark) -> Callable:
+def errors_middleware_factory(injector: Injectark) -> Callable:
 
     @web.middleware
     async def middleware(request: web.Request, handler: Callable):
@@ -22,10 +20,10 @@ def errors_middleware_factory(
 
             logging.exception('Service Error')
 
-            return web.json_response({"error": {
+            return web.json_response({"errors": [{
                 "type": type_,
                 "message": message,
                 "trace": traceback
-            }}, status=status, dumps=dumps)
+            }]}, status=status, dumps=dumps)
 
     return middleware

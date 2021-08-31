@@ -1,4 +1,5 @@
 aiohttp==3.7.4.post0
+aiohttp-jinja2==1.2.0
 aiosmtplib==1.1.6
 apispec==4.6.0
 appdirs==1.4.4
@@ -62,6 +63,7 @@ typed-ast==1.4.3
 typing-extensions==3.10.0.0
 urllib3==1.26.5
 uvloop==0.15.2
+validark==0.2.0
 webencodings==0.5.1
 widark==0.3.3
 yarl==1.6.3
