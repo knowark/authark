@@ -26,12 +26,7 @@ class DominionsScreen(Frame):
         ).grid(3).span(col=3).weight(9)
 
     async def load(self) -> None:
-        dominions = (await self.authark_informer.search({
-            "meta": {
-                "model": "dominion",
-                "domain": []
-            }
-            }))['data']
+        dominions = await self.authark_informer.search('dominion')
         self.body.setup(
             data=dominions, fields=['id', 'name'], limit=10).connect()
 
@@ -98,10 +93,7 @@ class DominionDetailsModal(Modal):
         await self.done({'result': 'cancelled'})
 
     async def on_delete(self, event: Event) -> None:
-        await self.management_manager.remove_dominion({
-            "meta": {},
-            "data": [self.dominion['id']]
-        })
+        await self.management_manager.remove_dominion([self.dominion['id']])
         await self.done({'result': 'deleted'})
 
     async def on_roles(self, event: Event) -> None:

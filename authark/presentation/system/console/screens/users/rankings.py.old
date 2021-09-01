@@ -31,12 +31,8 @@ class RankingsModal(Modal):
         for ranking, [role] in await self.authark_informer.join(
             'ranking', [('user_id', '=', self.user['id'])],
                 join='role', link='ranking'):
-            [dominion] = (await self.authark_informer.search({
-                "meta": {
-                    "model": "dominion",
-                    "domain": [('id', '=', role['dominion_id'])]
-                }
-            }))['data']
+            [dominion] = await self.authark_informer.search(
+                'dominion', [('id', '=', role['dominion_id'])])
             ranking['role_name'] = role['name']
             ranking['dominion_name'] = dominion['name']
             rankings.append(ranking)
@@ -84,21 +80,12 @@ class RoleSelectionModal(Modal):
         self.body = Listbox(self, command=self.on_body).grid(1).weight(9)
 
     async def load(self) -> None:
-        roles = (await self.authark_informer.search({
-            "meta": {
-                "model": "role",
-                "domain": []
-            }
-            }))['data']
+        roles = await self.authark_informer.search('role', [])
         dominions_map = {
             dominion['id']: dominion for dominion
-            in (await self.authark_informer.search({
-                "meta": {
-                    "model": "dominion",
-                    "domain": [('id', 'in', [
-                    role['dominion_id'] for role in roles])]
-                }
-            }))['data']}
+            in await self.authark_informer.search(
+                'dominion', [('id', 'in', [
+                    role['dominion_id'] for role in roles])])}
         for role in roles:
             role['dominion_name'] = dominions_map[role['dominion_id']]['name']
 

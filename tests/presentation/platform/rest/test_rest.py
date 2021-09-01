@@ -49,7 +49,7 @@ async def test_users_get_unauthorized(app) -> None:
 
 async def test_users_head(app, headers) -> None:
     response = await app.head('/users', headers=headers)
-    count = response.headers.get('Total-Count')
+    count = response.headers.get('Count')
 
     assert response.status == 200
     assert int(count) == 2
@@ -61,7 +61,7 @@ async def test_get_users_filter(app, headers) -> None:
     content = await response.text()
     assert response.status == 200
 
-    data_dict = loads(content)
+    data_dict = loads(content)['data']
 
     assert len(data_dict) == 1
     assert data_dict[0]['id'] == '1'
@@ -72,27 +72,29 @@ async def test_users_get(app, headers) -> None:
     content = await response.text()
     assert response.status == 200
 
-    data_dict = loads(content)
+    data_dict = loads(content)['data']
 
     assert len(data_dict) == 2
     assert data_dict[1]['id'] == '2'
 
 
-async def test_users_register_put_route(app, headers) -> None:
-    response = await app.put(
+async def test_users_register_patch_route(app, headers) -> None:
+    response = await app.patch(
         '/users',
-        data=dumps([dict(
-            tenant="default",
-            username="gecheverry",
-            email="gecheverry@gmail.com",
-            password="POI123"
-        )]),
+        data=dumps({
+            "data":[{
+                "tenant":"default",
+                "username":"gecheverry",
+                "email":"gecheverry@gmail.com",
+                "password":"POI123"
+            }]
+        }),
         headers=headers)
 
     assert response.status == 200
 
     response = await app.head('/users', headers=headers)
-    count = response.headers.get('Total-Count')
+    count = response.headers.get('Count')
 
     assert int(count) == 3
 
@@ -183,26 +185,26 @@ async def test_registrations_enroll_put_route(app):
 
 async def test_users_delete(app, headers) -> None:
     response = await app.delete('/users/1', headers=headers)
-    assert response.status == 204
+    assert response.status == 200
 
     response = await app.get('/users', headers=headers)
-    data_dict = loads(await response.text())
+    data_dict = loads(await response.text())['data']
 
     assert len(data_dict) == 1
 
 
 async def test_restrictions_delete(app, headers) -> None:
     response = await app.delete('/restrictions/1', headers=headers)
-    assert response.status == 204
+    assert response.status == 200
 
     response = await app.get('/restrictions', headers=headers)
-    data_dict = loads(await response.text())
+    data_dict = loads(await response.text())['data']
 
     assert len(data_dict) == 0
 
 async def test_policies_head(app, headers) -> None:
     response = await app.head('/policies', headers=headers)
-    count = response.headers.get('Total-Count')
+    count = response.headers.get('Count')
 
     assert response.status == 200
     assert int(count) == 1
@@ -212,45 +214,47 @@ async def test_policies_get(app, headers) -> None:
     content = await response.text()
     assert response.status == 200
 
-    data_dict = loads(content)
+    data_dict = loads(content)['data']
 
     assert len(data_dict) == 1
     assert data_dict[0]['id'] == '1'
 
 
-async def test_policies_put_route(app, headers) -> None:
-    response = await app.put(
+async def test_policies_patch_route(app, headers) -> None:
+    response = await app.patch(
         '/policies',
-        data=dumps([dict(
-            resource="Resource name",
-            privilege="Privilege name",
-            roleId="1",
-            active=True
-        )]),
+        data=dumps({
+            "data": [{
+                "resource":"Resource name",
+                "privilege":"Privilege name",
+                "roleId":"1",
+                "active":True
+            }]
+        }),
         headers=headers)
 
     assert response.status == 200
 
     response = await app.head('/policies', headers=headers)
-    count = response.headers.get('Total-Count')
+    count = response.headers.get('Count')
 
     assert int(count) == 2
 
 async def test_policies_delete(app, headers) -> None:
     response = await app.delete('/policies/1', headers=headers)
-    assert response.status == 204
+    assert response.status == 200
 
     response = await app.get('/policies', headers=headers)
-    data_dict = loads(await response.text())
+    data_dict = loads(await response.text())['data']
 
     assert len(data_dict) == 0
 
 
 async def test_users_delete_body(app, headers) -> None:
-    ids = dumps(["1"])
+    entry = {"data": ["1"]}
     response = await app.delete(
-        '/users', data=ids, headers=headers)
-    assert response.status == 204
+        '/users', data=dumps(entry), headers=headers)
+    assert response.status == 200
 
     response = await app.get('/users', headers=headers)
     data_dict = loads(await response.text())
@@ -262,7 +266,7 @@ async def test_bad_filter_get_route_filter(app, headers) -> None:
     response = await app.get('/users?filter=[[**BAD FILTER**]]',
                              headers=headers)
     content = await response.text()
-    data_dict = loads(content)
+    data_dict = loads(content)['data']
     assert len(data_dict) == 2
 
 
@@ -271,12 +275,12 @@ async def test_users_get_route_filter(app, headers) -> None:
         ('/users?filter=["|", ["name", "=", "John"], '
          '["createdAt", "=", 9999999999]]'), headers=headers)
     content = await response.text()
-    data_dict = loads(content)
+    data_dict = loads(content)['data']
     assert len(data_dict) == 0
 
 async def test_dominions_head(app, headers) -> None:
     response = await app.head('/dominions', headers=headers)
-    count = response.headers.get('Total-Count')
+    count = response.headers.get('Count')
 
     assert response.status == 200
     assert int(count) == 1
@@ -286,7 +290,7 @@ async def test_dominions_get(app, headers) -> None:
     content = await response.text()
     assert response.status == 200
 
-    data_dict = loads(content)
+    data_dict = loads(content)['data']
 
     assert len(data_dict) == 1
     assert data_dict[0]['name'] == 'default'
@@ -320,7 +324,7 @@ async def test_dominions_not_implemented_delete(app, headers) -> None:
 
 async def test_ranking_head(app, headers) -> None:
     response = await app.head('/rankings', headers=headers)
-    count = response.headers.get('Total-Count')
+    count = response.headers.get('Count')
 
     assert response.status == 200
     assert int(count) == 1
@@ -330,40 +334,42 @@ async def test_ranking_get(app, headers) -> None:
     content = await response.text()
     assert response.status == 200
 
-    data_dict = loads(content)
+    data_dict = loads(content)['data']
 
     assert len(data_dict) == 1
     assert data_dict[0]['id'] == '1'
 
 
-async def test_ranking_put_route(app, headers) -> None:
-    response = await app.put(
+async def test_ranking_patch_route(app, headers) -> None:
+    response = await app.patch(
         '/rankings',
-        data=dumps([dict(
-            userId='1',
-            roleId='1'
-        )]),
+        data=dumps({
+            "data":[{
+                "userId":"1",
+                "roleId":"1"
+            }]
+        }),
         headers=headers)
 
     assert response.status == 200
 
     response = await app.head('/rankings', headers=headers)
-    count = response.headers.get('Total-Count')
+    count = response.headers.get('Count')
 
     assert int(count) == 1
 
 async def test_ranking_delete(app, headers) -> None:
     response = await app.delete('/rankings/1', headers=headers)
-    assert response.status == 204
+    assert response.status == 200
 
     response = await app.get('/rankings', headers=headers)
-    data_dict = loads(await response.text())
+    data_dict = loads(await response.text())['data']
 
     assert len(data_dict) == 0
 
 async def test_restriction_head(app, headers) -> None:
     response = await app.head('/restrictions', headers=headers)
-    count = response.headers.get('Total-Count')
+    count = response.headers.get('Count')
 
     assert response.status == 200
     assert int(count) == 1
@@ -373,43 +379,45 @@ async def test_restriction_get(app, headers) -> None:
     content = await response.text()
     assert response.status == 200
 
-    data_dict = loads(content)
+    data_dict = loads(content)['data']
 
     assert len(data_dict) == 1
     assert data_dict[0]['id'] == '1'
 
 
-async def test_restrictions_put_route(app, headers) -> None:
-    response = await app.put(
+async def test_restrictions_patch_route(app, headers) -> None:
+    response = await app.patch(
         '/restrictions',
-        data=dumps([dict(
-            policyId="1",
-            name="Restriction name",
-            sequence="1",
-            target="Target name",
-            domain="domain"
-        )]),
+        data=dumps({
+            "data":[{
+                "policyId":"1",
+                "name":"Restriction name",
+                "sequence":"1",
+                "target":"Target name",
+                "domain":"domain"
+            }]
+        }),
         headers=headers)
 
     assert response.status == 200
 
     response = await app.head('/restrictions', headers=headers)
-    count = response.headers.get('Total-Count')
+    count = response.headers.get('Count')
 
     assert int(count) == 2
 
 async def test_restriction_delete(app, headers) -> None:
     response = await app.delete('/restrictions/1', headers=headers)
-    assert response.status == 204
+    assert response.status == 200
 
     response = await app.get('/restrictions', headers=headers)
-    data_dict = loads(await response.text())
+    data_dict = loads(await response.text())['data']
 
     assert len(data_dict) == 0
 
 async def test_role_head(app, headers) -> None:
     response = await app.head('/roles', headers=headers)
-    count = response.headers.get('Total-Count')
+    count = response.headers.get('Count')
 
     assert response.status == 200
     assert int(count) == 1
@@ -419,34 +427,36 @@ async def test_role_get(app, headers) -> None:
     content = await response.text()
     assert response.status == 200
 
-    data_dict = loads(content)
+    data_dict = loads(content)['data']
 
     assert len(data_dict) == 1
     assert data_dict[0]['id'] == '1'
 
 
-async def test_role_put_route(app, headers) -> None:
-    response = await app.put(
+async def test_role_patch_route(app, headers) -> None:
+    response = await app.patch(
         '/roles',
-        data=dumps([dict(
-            name='admin',
-            dominionId='1',
-            description='Systems Administrator'
-        )]),
+        data=dumps({
+            "data":[{
+                "name": "admin",
+                "dominionId": "1",
+                "description": "Systems Administrator"
+            }]
+        }),
         headers=headers)
 
     assert response.status == 200
 
     response = await app.head('/roles', headers=headers)
-    count = response.headers.get('Total-Count')
+    count = response.headers.get('Count')
 
     assert int(count) == 2
 
 async def test_roles_delete(app, headers) -> None:
     response = await app.delete('/roles/1', headers=headers)
-    assert response.status == 204
+    assert response.status == 200
 
     response = await app.get('/roles', headers=headers)
-    data_dict = loads(await response.text())
+    data_dict = loads(await response.text())['data']
 
     assert len(data_dict) == 0

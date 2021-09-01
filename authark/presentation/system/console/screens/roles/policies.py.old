@@ -44,12 +44,8 @@ class PoliciesModal(Modal):
         self.render()
 
     async def load(self) -> None:
-        roles = (await self.authark_informer.search({
-            "meta": {
-                "model": "policy",
-                "domain": [('role_id', '=', self.role['id'])]
-                }
-        }))['data']
+        roles = await self.authark_informer.search(
+            'policy', [('role_id', '=', self.role['id'])])
         self.body.setup(data=roles, fields=[
             'resource', 'privilege', 'active'], limit=10).connect()
 
@@ -129,12 +125,7 @@ class PolicyDetailsModal(Modal):
         await self.done({'result': 'cancelled'})
 
     async def on_delete(self, event: Event) -> None:
-        await self.security_manager.remove_policy({
-            "meta": {
-                "model": "policy"
-            },
-            "data": [self.policy['id']]
-        })
+        await self.security_manager.remove_policy([self.policy['id']])
         await self.done({'result': 'deleted'})
 
     async def on_restrictions(self, event: Event) -> None:

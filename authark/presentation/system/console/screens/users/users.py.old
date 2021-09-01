@@ -31,12 +31,7 @@ class UsersScreen(Frame):
         self.search.listen('keydown', self.on_search, True)
 
     async def load(self) -> None:
-        users = (await self.authark_informer.search({
-            "meta": {
-                "model": "user",
-                "domain": self.domain
-            }
-        }))['data']
+        users = await self.authark_informer.search('user', self.domain)
         self.body.setup(
             data=users, fields=['id', 'name', 'email'], limit=20).connect()
 
@@ -147,10 +142,7 @@ class UserDetailsModal(Modal):
         await self.done({'result': 'cancelled'})
 
     async def on_delete(self, event: Event) -> None:
-        await self.procedure_manager.deregister({
-            "meta": {},
-            "data": [self.user['id']]
-        })
+        await self.procedure_manager.deregister([self.user['id']])
         await self.done({'result': 'deleted'})
 
     async def on_roles(self, event: Event) -> None:
