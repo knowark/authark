@@ -17,16 +17,6 @@ class AutharkInformer(ABC):
     @abstractmethod
     async def search(self, entry: dict) -> dict:
         """Standard search method"""
-    # async def count(self,
-                    # model: str,
-                    # domain: QueryDomain = None) -> int:
-        # """Standard count method"""
-
-    # @abstractmethod
-    # async def search(self, model: str, domain: QueryDomain,
-                     # limit: int = None, offset: int = None,
-                     # order: str = None) -> RecordList:
-        # """Standard search method"""
 
     @abstractmethod
     async def join(self, model: str, domain: QueryDomain,
@@ -58,7 +48,6 @@ class StandardAutharkInformer(AutharkInformer):
         model = meta['model']
         domain = meta['domain']
         repository = getattr(self, f'{model}_repository')
-        #repository = self.repository_service.resolve(meta.pop('model'))
         result = await repository.search(domain=domain)
         return {'data': [vars(item) for item in result]}
 
@@ -67,28 +56,8 @@ class StandardAutharkInformer(AutharkInformer):
         model = meta['model']
 
         repository = getattr(self, f'{model}_repository')
-        #repository = self.repository_service.resolve(meta.pop('model'))
         result = await repository.count(meta['domain'])
         return {'data': result}
-
-    # async def count(self,
-                    # collection: str,
-                    # domain: QueryDomain = None) -> int:
-        # repository = getattr(self, f'{collection}_repository')
-        # return await repository.count(domain or [])
-
-    # async def search(self,  model: str, domain: QueryDomain = None,
-
-                     # limit: int = None, offset: int = None,
-                     # order: str = None) -> RecordList:
-        # """Standard search method"""
-
-        # repository = getattr(self, f'{model}_repository')
-
-        # items = await repository.search(
-            # domain or [], limit=limit, offset=offset, order=order)
-
-        # return [vars(item) for item in items]
 
     async def join(self, model: str, domain: QueryDomain = None,
                    join: str = None, link: str = None,
