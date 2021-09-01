@@ -20,12 +20,8 @@ class ImportManager:
         self.ranking_repository = ranking_repository
         self.dominion_repository = dominion_repository
 
-    async def import_users(self, entry: dict) -> None:
-        meta, data = entry['meta'], entry['data']
-        filepath = data['filepath']
-        source = data['source']
-        password_field = data['password_field']
-
+    async def import_users(self, filepath: str, source: str,
+                           password_field: str) -> None:
         users_list = self.import_service.import_users(
             filepath, source, password_field)
         for user, credential, roles in users_list:

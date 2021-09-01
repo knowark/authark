@@ -2,7 +2,7 @@ from aiohttp import web
 from pathlib import Path
 from aiohttp_jinja2 import render_template
 from ..... import __version__
-from .token import TokenResource
+#from .token import TokenResource
 from .resource import Resource
 #from .user import UserResource
 #from .dominion import DominionResource

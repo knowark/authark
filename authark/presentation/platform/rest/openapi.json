@@ -455,6 +455,51 @@
       }
     },
 
+    "/tokens": {
+      "patch": {
+        "operationId": "tokensPatchId",
+        "summary": "Set tokens",
+        "description": "Create or update tokens records",
+        "tags": ["Token"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {"$ref": "#/components/schemas/Message"},
+                  {
+                    "type": "object",
+                    "properties": {
+                      "data": {
+                        "type": "array",
+                        "items": {
+                          "$ref": "#/components/schemas/Token"
+                        }
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "parameters": [{
+          "name": "Action",
+          "description": "Specialized application actions",
+          "in": "header",
+          "schema": {
+            "type": "string",
+            "enum": ["default"]
+          }
+        }],
+        "responses": {
+          "200": {
+            "description": "Successful PUT response"
+          }
+        }
+      }
+    },
+
     "/users": {
       "head": {
         "operationId": "usersHeadId",
@@ -662,6 +707,14 @@
             "type": "string"
           },
           "description": {
+            "type": "string"
+          }
+        }
+      },
+      "Token": {
+        "type": "object",
+        "properties": {
+          "value": {
             "type": "string"
           }
         }

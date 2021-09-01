@@ -99,15 +99,17 @@ async def test_users_register_patch_route(app, headers) -> None:
     assert int(count) == 3
 
 
-async def test_tokens_put_route_with_password(app):
-    response = await app.put(
+async def test_tokens_patch_route_with_password(app):
+    response = await app.patch(
         '/tokens',
-        data=dumps(dict(
-            dominion="default",
-            tenant="default",
-            username="eecheverry",
-            password="ABC1234"
-        )))
+        data=dumps({
+            "data": {
+                "dominion":"default",
+                "tenant":"default",
+                "username":"eecheverry",
+                "password":"ABC1234"
+            }
+        }))
     data = await response.text()
     assert response.status == 200
     assert len(data) > 0
