@@ -2,18 +2,11 @@ from aiohttp import web
 from pathlib import Path
 from aiohttp_jinja2 import render_template
 from ..... import __version__
-#from .token import TokenResource
 from .resource import Resource
-#from .user import UserResource
-#from .dominion import DominionResource
-#from .restriction import RestrictionResource
-#from .policy import PolicyResource
-#from .ranking import RankingResource
 from .registration import RegistrationResource
 from .tenant import TenantResource
 from .verification import VerificationResource
 from .requisition import RequisitionResource
-#from .role import RoleResource
 
 
 class RootResource:
