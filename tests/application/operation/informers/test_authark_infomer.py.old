@@ -12,40 +12,35 @@ def test_authark_informer_methods():
 async def test_authark_informer_search_users(
         authark_informer: AutharkInformer) -> None:
     domain: QueryDomain = []
-    users = await authark_informer.search(
-    {'meta': dict(model='user', domain=domain)})
-    assert len(users['data']) == 3
+    users = await authark_informer.search('user', domain)
+    assert len(users) == 3
 
 
 async def test_authark_informer_search_credentials(
         authark_informer: AutharkInformer) -> None:
     domain: QueryDomain = []
-    credentials = await authark_informer.search(
-    {'meta': dict(model='credential', domain=domain)})
-    assert len(credentials['data']) == 3
+    credentials = await authark_informer.search('credential', domain)
+    assert len(credentials) == 3
 
 
 async def test_authark_informer_search_dominions(
         authark_informer: AutharkInformer) -> None:
     domain: QueryDomain = []
-    dominions = await authark_informer.search(
-    {'meta': dict(model='dominion', domain=domain)})
+    dominions = await authark_informer.search('dominion', domain)
     assert len(dominions) == 1
 
 
 async def test_authark_informer_search_roles(
         authark_informer: AutharkInformer) -> None:
     domain: QueryDomain = []
-    roles = await authark_informer.search(
-    {'meta': dict(model='role', domain=domain)})
+    roles = await authark_informer.search('role', domain)
     assert len(roles) == 1
 
 
 async def test_authark_informer_count_users(
         authark_informer: AutharkInformer) -> None:
-    users_count = await authark_informer.count(
-    {'meta': dict(model='user', domain=[])})
-    assert users_count['data'] == 3
+    users_count = await authark_informer.count('user')
+    assert users_count == 3
 
 
 async def test_authark_informer_join_users_and_roles(

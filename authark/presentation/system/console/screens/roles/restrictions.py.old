@@ -36,12 +36,8 @@ class RestrictionsModal(Modal):
         self.render()
 
     async def load(self) -> None:
-        roles = (await self.authark_informer.search({
-            "meta": {
-                "model": "restriction",
-                "domain": [('policy_id', '=', self.policy['id'])]
-            }
-            }))['data']
+        roles = await self.authark_informer.search(
+            'restriction', [('policy_id', '=', self.policy['id'])])
         self.body.setup(data=roles, fields=[
             'sequence', 'name', 'target', 'domain'], limit=10).connect()
 
@@ -126,8 +122,5 @@ class RestrictionDetailsModal(Modal):
         await self.done({'result': 'cancelled'})
 
     async def on_delete(self, event: Event) -> None:
-        await self.security_manager.remove_restriction({
-            "meta": {},
-            "data": [self.restriction['id']]
-        })
+        await self.security_manager.remove_restriction([self.restriction['id']])
         await self.done({'result': 'deleted'})

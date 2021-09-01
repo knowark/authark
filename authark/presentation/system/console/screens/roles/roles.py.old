@@ -52,21 +52,11 @@ class RolesScreen(Frame):
 
     async def load(self) -> None:
         self.dominion = self.dominion or next(iter(
-            (await self.authark_informer.search({
-                "meta": {
-                    "model": "dominion",
-                    "domain": []
-                }
-            }))['data']), {'id': 'None'})
-        roles = (await self.authark_informer.search({
-            "meta": {
-                "model": "role",
-                "domain": [('dominion_id', '=', self.dominion.get('id'))]
-            }
-            }))['data']
+            await self.authark_informer.search('dominion')), {'id': 'None'})
+        roles = await self.authark_informer.search(
+            'role', [('dominion_id', '=', self.dominion.get('id'))])
         self.body.setup(
-            data=roles,
-            fields=['name', 'description'], limit=20).connect()
+            data=roles, fields=['name', 'description'], limit=20).connect()
         self.dominion_label.setup(
             content=f'{self.dominion.get("name")}').render()
 
@@ -113,12 +103,7 @@ class DominionsModal(Modal):
         self.body = Listbox(self, command=self.on_body).grid(1).weight(4)
 
     async def load(self) -> None:
-        dominions = (await self.authark_informer.search({
-            "meta": {
-                "model": "dominion",
-                "domain": []
-            }
-        }))['data']
+        dominions = await self.authark_informer.search('dominion')
         self.body.setup(data=dominions, fields=['id', 'name']).connect()
 
     async def on_body(self, event: Event) -> None:
@@ -180,10 +165,7 @@ class RoleDetailsModal(Modal):
         await self.done({'result': 'cancelled'})
 
     async def on_delete(self, event: Event) -> None:
-        await self.management_manager.remove_role({
-            "meta": {},
-            "data": [self.role['id']]
-        })
+        await self.management_manager.remove_role([self.role['id']])
         await self.done({'result': 'deleted'})
 
     async def on_policies(self, event: Event) -> None:
@@ -283,28 +265,12 @@ class UsersSelectionModal(Modal):
 
     async def load(self) -> None:
         current_user_ids = [ranking['user_id'] for ranking in
-                            (await self.authark_informer.search({
-                                "meta": {
-                                    "model": "ranking",
-                                    "domain": [
-                                        ('role_id', '=', self.role['id'])]
-                                }
-                                }))['data']
-                            ]
-        available_users = (await self.authark_informer.search({
-            "meta": {
-                "model": "user",
-                "domain": [
-            '!', ('id', 'in', current_user_ids)] + self.available_domain
-            }
-        }))['data']
-        chosen_users = (await self.authark_informer.search({
-            "meta": {
-                "model": "user",
-                "domain": [
-            ('id', 'in', current_user_ids)] + self.chosen_domain
-            }
-        }))['data']
+                            await self.authark_informer.search('ranking', [
+                                ('role_id', '=', self.role['id'])])]
+        available_users = await self.authark_informer.search('user', [
+            '!', ('id', 'in', current_user_ids)] + self.available_domain)
+        chosen_users = await self.authark_informer.search('user', [
+            ('id', 'in', current_user_ids)] + self.chosen_domain)
 
         self.available.setup(data=available_users,
                              fields=['username', 'email'],
@@ -353,22 +319,14 @@ class UsersSelectionModal(Modal):
 
     async def on_save(self, event: Event) -> None:
         removing_ranking_ids = [
-            ranking['id'] for ranking in (await self.authark_informer.search({
-                "meta": {
-                    "model": "ranking",
-                    "domain": [('role_id', '=', self.role['id']),
+            ranking['id'] for ranking in await self.authark_informer.search(
+                'ranking', [('role_id', '=', self.role['id']),
                             ('user_id', 'in', [user['id'] for user in
-                                               self.available.data])]
-                    }
-                }))['data']
-        ]
+                                               self.available.data])])]
         await self.management_manager.deassign_role(removing_ranking_ids)
         adding_rankings = [{'role_id': self.role['id'], 'user_id': user['id']}
                            for user in self.chosen.data]
-        await self.management_manager.assign_role({
-            "meta": {},
-            "data": adding_rankings
-        })
+        await self.management_manager.assign_role(adding_rankings)
         await self.done({'result': 'saved'})
 
     async def on_cancel(self, event: Event) -> None:

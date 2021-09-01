@@ -17,6 +17,710 @@
     }
   },
 
-  "paths": {}
+  "paths": {
+    "/dominions": {
+      "head": {
+        "operationId": "dominionsHeadId",
+        "summary": "Head dominions",
+        "description": "Return dominions headers",
+        "tags": ["Dominion"],
+        "responses": {
+          "200": {
+            "description": "Dominios metadata records"
+          }
+        }
+      },
+      "get": {
+        "operationId": "dominionsGetId",
+        "summary": "Get dominions",
+        "description": "Show all dominions metadata records",
+        "tags": ["Dominion"],
+        "responses": {
+          "200": {
+            "description": "Get Order records",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {"$ref": "#/components/schemas/Message"},
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/Dominion"
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
 
-}
+    "/policies": {
+      "head": {
+        "operationId": "policiesHeadId",
+        "summary": "Head Policy",
+        "description": "Return policies headers",
+        "tags": ["Policy"],
+        "responses": {
+          "200": {
+            "description": "Policy metadata records"
+          }
+        }
+      },
+      "get": {
+        "operationId": "policiesGetId",
+        "summary": "Get policies",
+        "description": "Show all policies metadata records",
+        "tags": ["Policy"],
+        "responses": {
+          "200": {
+            "description": "Get Policy records",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {"$ref": "#/components/schemas/Message"},
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/Policy"
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "operationId": "policiesPatchId",
+        "summary": "Set policies",
+        "description": "Create or update policies records",
+        "tags": ["Policy"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {"$ref": "#/components/schemas/Message"},
+                  {
+                    "type": "object",
+                    "properties": {
+                      "data": {
+                        "type": "array",
+                        "items": {
+                          "$ref": "#/components/schemas/Policy"
+                        }
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "parameters": [{
+          "name": "Action",
+          "description": "Specialized application actions",
+          "in": "header",
+          "schema": {
+            "type": "string",
+            "enum": ["default"]
+          }
+        }],
+        "responses": {
+          "200": {
+            "description": "Successful PUT response"
+          }
+        }
+      },
+      "delete": {
+        "operationId": "policiesDeleteId",
+        "summary": "Delete policies",
+        "description": "Delete policies record",
+        "tags": ["Policy"],
+        "responses": {
+          "200": {
+            "description": "Successful DELETE response"
+          }
+        }
+      }
+    },
+
+    "/rankings": {
+      "head": {
+        "operationId": "rankingsHeadId",
+        "summary": "Head Ranking",
+        "description": "Return rankings headers",
+        "tags": ["Ranking"],
+        "responses": {
+          "200": {
+            "description": "Ranking metadata records"
+          }
+        }
+      },
+      "get": {
+        "operationId": "rankingsGetId",
+        "summary": "Get rankings",
+        "description": "Show all rankings metadata records",
+        "tags": ["Ranking"],
+        "responses": {
+          "200": {
+            "description": "Get Ranking records",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {"$ref": "#/components/schemas/Message"},
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/Ranking"
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "operationId": "rankingsPatchId",
+        "summary": "Set rankings",
+        "description": "Create or update rankings records",
+        "tags": ["Ranking"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {"$ref": "#/components/schemas/Message"},
+                  {
+                    "type": "object",
+                    "properties": {
+                      "data": {
+                        "type": "array",
+                        "items": {
+                          "$ref": "#/components/schemas/Ranking"
+                        }
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "parameters": [{
+          "name": "Action",
+          "description": "Specialized application actions",
+          "in": "header",
+          "schema": {
+            "type": "string",
+            "enum": ["default"]
+          }
+        }],
+        "responses": {
+          "200": {
+            "description": "Successful PUT response"
+          }
+        }
+      },
+      "delete": {
+        "operationId": "rankingsDeleteId",
+        "summary": "Delete rankings",
+        "description": "Delete rankings record",
+        "tags": ["Ranking"],
+        "responses": {
+          "200": {
+            "description": "Successful DELETE response"
+          }
+        }
+      }
+    },
+
+    "/restrictions": {
+      "head": {
+        "operationId": "restrictionsHeadId",
+        "summary": "Head Restriction",
+        "description": "Return restrictions headers",
+        "tags": ["Restriction"],
+        "responses": {
+          "200": {
+            "description": "Restriction metadata records"
+          }
+        }
+      },
+      "get": {
+        "operationId": "restrictionsGetId",
+        "summary": "Get restrictions",
+        "description": "Show all restrictions metadata records",
+        "tags": ["Restriction"],
+        "responses": {
+          "200": {
+            "description": "Get Restriction records",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {"$ref": "#/components/schemas/Message"},
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/Restriction"
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "operationId": "restrictionsPatchId",
+        "summary": "Set restrictions",
+        "description": "Create or update restrictions records",
+        "tags": ["Restriction"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {"$ref": "#/components/schemas/Message"},
+                  {
+                    "type": "object",
+                    "properties": {
+                      "data": {
+                        "type": "array",
+                        "items": {
+                          "$ref": "#/components/schemas/Restriction"
+                        }
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "parameters": [{
+          "name": "Action",
+          "description": "Specialized application actions",
+          "in": "header",
+          "schema": {
+            "type": "string",
+            "enum": ["default"]
+          }
+        }],
+        "responses": {
+          "200": {
+            "description": "Successful PUT response"
+          }
+        }
+      },
+      "delete": {
+        "operationId": "restrictionsDeleteId",
+        "summary": "Delete restrictions",
+        "description": "Delete restrictions record",
+        "tags": ["Restriction"],
+        "responses": {
+          "200": {
+            "description": "Successful DELETE response"
+          }
+        }
+      }
+    },
+
+    "/roles": {
+      "head": {
+        "operationId": "rolesHeadId",
+        "summary": "Head Role",
+        "description": "Return roles headers",
+        "tags": ["Role"],
+        "responses": {
+          "200": {
+            "description": "Role metadata records"
+          }
+        }
+      },
+      "get": {
+        "operationId": "rolesGetId",
+        "summary": "Get roles",
+        "description": "Show all roles metadata records",
+        "tags": ["Role"],
+        "responses": {
+          "200": {
+            "description": "Get Role records",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {"$ref": "#/components/schemas/Message"},
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/Role"
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "operationId": "rolesPatchId",
+        "summary": "Set roles",
+        "description": "Create or update roles records",
+        "tags": ["Role"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {"$ref": "#/components/schemas/Message"},
+                  {
+                    "type": "object",
+                    "properties": {
+                      "data": {
+                        "type": "array",
+                        "items": {
+                          "$ref": "#/components/schemas/Role"
+                        }
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "parameters": [{
+          "name": "Action",
+          "description": "Specialized application actions",
+          "in": "header",
+          "schema": {
+            "type": "string",
+            "enum": ["default"]
+          }
+        }],
+        "responses": {
+          "200": {
+            "description": "Successful PUT response"
+          }
+        }
+      },
+      "delete": {
+        "operationId": "rolesDeleteId",
+        "summary": "Delete roles",
+        "description": "Delete roles record",
+        "tags": ["Role"],
+        "responses": {
+          "200": {
+            "description": "Successful DELETE response"
+          }
+        }
+      }
+    },
+
+    "/users": {
+      "head": {
+        "operationId": "usersHeadId",
+        "summary": "Head users",
+        "description": "Return users headers",
+        "tags": ["User"],
+        "responses": {
+          "200": {
+            "description": "User metadata records"
+          }
+        }
+      },
+      "get": {
+        "operationId": "usersGetId",
+        "summary": "Get users",
+        "description": "Show all user metadata records",
+        "tags": ["User"],
+        "responses": {
+          "200": {
+            "description": "Get User records",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {"$ref": "#/components/schemas/Message"},
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/User"
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "operationId": "usersPatchId",
+        "summary": "Set users",
+        "description": "Create or update user records",
+        "tags": ["User"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {"$ref": "#/components/schemas/Message"},
+                  {
+                    "type": "object",
+                    "properties": {
+                      "data": {
+                        "type": "array",
+                        "items": {
+                          "$ref": "#/components/schemas/User"
+                        }
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "parameters": [{
+          "name": "Action",
+          "description": "Specialized application actions",
+          "in": "header",
+          "schema": {
+            "type": "string",
+            "enum": ["default"]
+          }
+        }],
+        "responses": {
+          "200": {
+            "description": "Successful PUT response"
+          }
+        }
+      },
+      "delete": {
+        "operationId": "usersDeleteId",
+        "summary": "Delete user",
+        "description": "Delete users record",
+        "tags": ["User"],
+        "responses": {
+          "200": {
+            "description": "Successful DELETE response"
+          }
+        }
+      }
+    }
+
+
+
+  },
+
+"x-webhooks": {
+    "WebsiteCompiled": {
+      "patch": {
+        "operationId": "websiteCompiledId",
+        "summary": "Website Compiled",
+        "tags": ["Events"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WebsiteCompiledMessage"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Return 200 on succesful receipt"
+          }
+        }
+      }
+    }
+  },
+
+
+  "components": {
+    "schemas": {
+      "Message": {
+        "type": "object",
+        "properties": {
+          "meta": {
+            "type": "object",
+            "description": "Message metadata"
+          },
+          "data": {
+            "description": "Message main data"
+          }
+        }
+      },
+      "Dominion": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          }
+        }
+      },
+      "Policy": {
+        "type": "object",
+        "properties": {
+          " roleId": {
+            "type": "string"
+          },
+          "resource": {
+            "type": "string"
+          },
+          "active": {
+            "type": "boolean"
+          },
+          "privilege": {
+            "type": "string"
+          }
+        }
+      },
+      "Ranking": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "string"
+          },
+          "roleId": {
+            "type": "string"
+          }
+        }
+      },
+      "Restriction": {
+        "type": "object",
+        "properties": {
+          "policyId": {
+            "type": "string"
+          },
+          "sequence": {
+            "type": "int"
+          },
+          "name": {
+            "type": "string"
+          },
+          "target": {
+            "type": "string"
+          },
+          "domain": {
+            "type": "string"
+          }
+        }
+      },
+      "Role": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "dominionId": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          }
+        }
+      },
+      "User": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "username": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "picture": {
+            "type": "string"
+          },
+          "active": {
+            "type": "boolean"
+          },
+          "atributes": {
+            "type": "json"
+          }
+        }
+      },
+
+      "WebsiteCompiledMessage": {
+        "allOf": [
+          {"$ref": "#/components/schemas/Message"},
+          {
+            "type": "object",
+            "properties": {
+              "meta": {
+                "type": "object",
+                "properties": {
+                  "event": {
+                    "type": "object",
+                    "properties": {
+                      "name": {
+                        "type": "string",
+                        "enum": ["WebsiteCompiled"]
+                      },
+                      "channel": {
+                        "type": "string",
+                        "enum": ["Websites"]
+                      }
+                    }
+                  }
+                }
+              },
+              "data": {
+                "type": "object"
+              }
+            }
+          }
+        ]
+      }
+
+    }
+  }}
