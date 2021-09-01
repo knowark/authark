@@ -7,7 +7,7 @@ from aiohttp import web, ClientSession
 from injectark import Injectark
 from .middleware import middlewares
 from .resources import (Resource,
-    RootResource, TokenResource, TenantResource,
+    RootResource, TenantResource,
     RegistrationResource, VerificationResource, RequisitionResource)
 
 class RestApplication(web.Application):
@@ -30,9 +30,9 @@ class RestApplication(web.Application):
             (Path(__file__).parent / 'openapi.json').read_text())
 
         # Resources
-        self.router.add_route(
-            "put", '/tokens',
-            getattr(TokenResource(self.injector), "put", None))
+        # self.router.add_route(
+            # "put", '/tokens',
+            # getattr(TokenResource(self.injector), "put", None))
 
         # self.router.add_route(
             # "head", '/users',

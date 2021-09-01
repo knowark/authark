@@ -34,8 +34,8 @@ class AuthManager:
         self.tenant_supplier = tenant_supplier
         self.provider_pattern = '@provider.oauth'
 
-    async def authenticate(self, entry: dict) -> TokensDict:
-        meta, data = entry['meta'], entry['data']
+    async def authenticate(self, request_dict: Dict[str, str]) -> TokensDict:
+        data = request_dict
         tenant = data.get('tenant', '')
         dominion = data.get('dominion', '')
         refresh_token = data.get('refresh_token', '')

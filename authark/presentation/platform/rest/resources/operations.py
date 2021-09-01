@@ -155,6 +155,15 @@ def operations():
             }
         },
 
+        # Token
+        'tokensPatchId': {
+            'actions':{
+                'default':{
+                    'handler': 'AuthManager.authenticate',
+                    'meta': {'model': 'token'}
+                 }
+             }
+        },
         # User
         'usersHeadId': {
             'actions':{
