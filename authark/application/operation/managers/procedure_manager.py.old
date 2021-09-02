@@ -34,7 +34,7 @@ class ProcedureManager:
         self.tenant_supplier = tenant_supplier
         self.provider_pattern = '@provider.oauth'
 
-    async def register(self, entry: dict) -> dict:
+    async def register(self, entry: dict) -> None:
         meta, data = entry['meta'], entry['data']
         user_dicts = data
         registration_tuples = []
@@ -77,9 +77,7 @@ class ProcedureManager:
                     tenant, user, 'activation').value
             }))
 
-        return {}
-
-    async def fulfill(self, entry: dict) -> dict:
+    async def fulfill(self, entry: dict) -> None:
         meta, data = entry['meta'], entry['data']
         requisition_dicts = data
         reset_records = [
@@ -103,9 +101,7 @@ class ProcedureManager:
                 'token': token.value
             }))
 
-        return {}
-
-    async def verify(self, entry: dict) -> dict:
+    async def verify(self, entry: dict) -> None:
         meta, data = entry['meta'], entry['data']
         verification_dicts = data
         for record in verification_dicts:
@@ -120,9 +116,8 @@ class ProcedureManager:
                 credential = Credential(value=record['data']['password'])
                 await self.enrollment_service.set_credentials(
                     [user], [credential])
-        return {}
 
-    async def update(self, entry: dict) -> dict:
+    async def update(self, entry: dict) -> None:
         meta, data = entry['meta'], entry['data']
         user_dicts = data
         credentials = [Credential(value=user_dict.pop('password', ''))
@@ -132,13 +127,11 @@ class ProcedureManager:
         users = await self.user_repository.add(users)
         await self.enrollment_service.set_credentials(users, credentials)
 
-        return {}
-
-    async def deregister(self, entry: dict) -> dict:
+    async def deregister(self, entry: dict) -> bool:
         meta, data = entry['meta'], entry['data']
         user_ids = data
         users = await self.user_repository.search([('id', 'in', user_ids)])
-        return {"data": await self.enrollment_service.deregister(users)}
+        return await self.enrollment_service.deregister(users)
 
     async def _session_tenant(self, tenant_name: str) -> Tenant:
         tenant_dict = self.tenant_supplier.resolve_tenant(tenant_name)

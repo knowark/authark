@@ -34,7 +34,7 @@ class AuthManager:
         self.tenant_supplier = tenant_supplier
         self.provider_pattern = '@provider.oauth'
 
-    async def authenticate(self, entry: dict) -> dict:
+    async def authenticate(self, entry: dict) -> TokensDict:
         meta, data = entry['meta'], entry['data']
         tenant = data.get('tenant', '')
         dominion = data.get('dominion', '')
@@ -44,13 +44,13 @@ class AuthManager:
         client = data.get('client', '')
 
         if refresh_token:
-            return {"data": await self._refresh_authenticate(
-                refresh_token, dominion, tenant)}
+            return await self._refresh_authenticate(
+                refresh_token, dominion, tenant)
         elif username.endswith(self.provider_pattern):
-            return {"data": await self._provider_authenticate(
-                username, password, client, dominion, tenant)}
-        return {"data": await self._password_authenticate(
-                username, password, client, dominion, tenant)}
+            return await self._provider_authenticate(
+                username, password, client, dominion, tenant)
+        return await self._password_authenticate(
+                username, password, client, dominion, tenant)
 
     async def _password_authenticate(
             self, username: str, password: str,

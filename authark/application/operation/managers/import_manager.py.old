@@ -20,7 +20,7 @@ class ImportManager:
         self.ranking_repository = ranking_repository
         self.dominion_repository = dominion_repository
 
-    async def import_users(self, entry: dict) -> dict:
+    async def import_users(self, entry: dict) -> None:
         meta, data = entry['meta'], entry['data']
         filepath = data['filepath']
         source = data['source']
@@ -35,8 +35,6 @@ class ImportManager:
                 await self._update_credential(credential)
             if roles:
                 await self._generate_ranking_user(roles, user)
-
-        return {}
 
     async def _update_credential(self, credential: Credential):
         domain = [

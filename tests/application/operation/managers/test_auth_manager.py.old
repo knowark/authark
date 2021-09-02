@@ -20,7 +20,7 @@ async def test_auth_manager_authenticate(auth_manager):
         }
     }
 
-    tokens = (await auth_manager.authenticate(request_dict))['data']
+    tokens = await auth_manager.authenticate(request_dict)
 
     assert isinstance(tokens, dict)
     assert 'refresh_token' in tokens.keys()
@@ -39,7 +39,7 @@ async def test_auth_manager_authenticate_new_dominion(auth_manager):
         }
     }
 
-    tokens = (await auth_manager.authenticate(request_dict))['data']
+    tokens = await auth_manager.authenticate(request_dict)
     dominions = await auth_manager.dominion_repository.search([])
 
     assert isinstance(tokens, dict)
@@ -90,14 +90,14 @@ async def test_auth_manager_refresh_authenticate_no_renewal(auth_manager):
     credential_repository.data['default']['4'] = Credential(
         id='4', user_id=user_id, value=refresh_token, type='refresh_token')
 
-    tokens = (await auth_manager.authenticate({
+    tokens = await auth_manager.authenticate({
         "meta": {},
         "data": {
             "dominion": "default",
             "tenant": "default",
             "refresh_token": refresh_token
         }
-    }))['data']
+    })
 
     assert isinstance(tokens, dict)
     assert 'access_token' in tokens.keys()
@@ -114,14 +114,14 @@ async def test_auth_manager_refresh_authenticate_renewal(
     auth_manager.refresh_token_service.renew = (  # type: ignore
         lambda token: True)
 
-    tokens = (await auth_manager.authenticate({
+    tokens = await auth_manager.authenticate({
         "meta": {},
         "data": {
             "dominion": "default",
             "tenant": "default",
             "refresh_token": refresh_token
         }
-    }))['data']
+    })
 
     assert isinstance(tokens, dict)
     assert 'access_token' in tokens.keys()
@@ -162,7 +162,7 @@ async def test_auth_manager_provider_authenticate(auth_manager):
     username = 'google@provider.oauth'
     password = 'AUTHORIZATION_CODE_1234'
 
-    tokens = (await auth_manager.authenticate({
+    tokens = await auth_manager.authenticate({
         "meta": {},
         "data": {
             "dominion": "default",
@@ -170,7 +170,7 @@ async def test_auth_manager_provider_authenticate(auth_manager):
             "username": username,
             "password": password
         }
-    }))['data']
+    })
 
     assert isinstance(tokens, dict)
     assert 'access_token' in tokens.keys()
