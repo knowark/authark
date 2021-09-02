@@ -16,38 +16,34 @@ class ManagementManager:
         self.role_repository = role_repository
         self.ranking_repository = ranking_repository
 
-    async def create_dominion(self, entry: dict) -> dict:
+    async def create_dominion(self, entry: dict) -> None:
         meta, data = entry['meta'], entry['data']
         dominion_dicts = data
         dominions = ([Dominion(**dominion_dict)
                       for dominion_dict in dominion_dicts])
         await self.dominion_repository.add(dominions)
 
-        return {}
-
-    async def remove_dominion(self, entry: dict) -> dict:
+    async def remove_dominion(self, entry: dict) -> bool:
         meta, data = entry['meta'], entry['data']
         dominion_ids = data
         dominions = await self.dominion_repository.search(
             [('id', 'in', dominion_ids)])
-        return {"data": await self.dominion_repository.remove(dominions)}
+        return await self.dominion_repository.remove(dominions)
 
-    async def create_role(self, entry: dict) -> dict:
+    async def create_role(self, entry: dict) -> None:
         meta, data = entry['meta'], entry['data']
         role_dicts = data
         roles = [Role(**role_dict) for role_dict in role_dicts]
         await self.role_repository.add(roles)
 
-        return {}
-
-    async def remove_role(self, entry: dict) -> dict:
+    async def remove_role(self, entry: dict) -> bool:
         meta, data = entry['meta'], entry['data']
         role_ids = data
         roles = await self.role_repository.search(
             [('id', 'in', role_ids)])
-        return {"data": await self.role_repository.remove(roles)}
+        return await self.role_repository.remove(roles)
 
-    async def assign_role(self, entry: dict) -> dict:
+    async def assign_role(self, entry: dict) -> None:
         meta, data = entry['meta'], entry['data']
         ranking_dicts = data
         user_set = {
@@ -81,11 +77,9 @@ class ManagementManager:
 
         await self.ranking_repository.add(rankings)
 
-        return {}
-
-    async def deassign_role(self, entry: dict) -> dict:
+    async def deassign_role(self, entry: dict) -> bool:
         meta, data = entry['meta'], entry['data']
         ranking_ids = data
         rankings = await self.ranking_repository.search(
             [('id', 'in', ranking_ids)])
-        return {"data": await self.ranking_repository.remove(rankings)}
+        return await self.ranking_repository.remove(rankings)
