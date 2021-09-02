@@ -34,7 +34,9 @@ class ProcedureManager:
         self.tenant_supplier = tenant_supplier
         self.provider_pattern = '@provider.oauth'
 
-    async def register(self, user_dicts: RecordList) -> None:
+    async def register(self, entry: dict) -> None:
+        meta, data = entry['meta'], entry['data']
+        user_dicts = data
         registration_tuples = []
         for user_dict in user_dicts:
 
@@ -75,7 +77,9 @@ class ProcedureManager:
                     tenant, user, 'activation').value
             }))
 
-    async def fulfill(self, requisition_dicts: RecordList) -> None:
+    async def fulfill(self, entry: dict) -> None:
+        meta, data = entry['meta'], entry['data']
+        requisition_dicts = data
         reset_records = [
             requisition for requisition in requisition_dicts
             if requisition['type'] == 'reset']
@@ -97,7 +101,9 @@ class ProcedureManager:
                 'token': token.value
             }))
 
-    async def verify(self, verification_dicts: RecordList) -> None:
+    async def verify(self, entry: dict) -> None:
+        meta, data = entry['meta'], entry['data']
+        verification_dicts = data
         for record in verification_dicts:
             tenant = await self._session_tenant(record['tenant'])
             token_dict = await self.verification_service.verify(dict(record))
