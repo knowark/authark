@@ -545,6 +545,40 @@
       }
     },
 
+    "/tenants": {
+      "get": {
+        "operationId": "tenantsGetId",
+        "summary": "Get tenant",
+        "description": "Show all tenant metadata records",
+        "tags": ["Tenant"],
+        "responses": {
+          "200": {
+            "description": "Get Role records",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {"$ref": "#/components/schemas/Message"},
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/Tenant"
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+
     "/tokens": {
       "patch": {
         "operationId": "tokensPatchId",
@@ -875,6 +909,26 @@
             "type": "string"
           },
           "description": {
+            "type": "string"
+          }
+        }
+      },
+      "Tenant": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "active": {
+            "type": "boolean"
+          },
+          "slug": {
+            "type": "string"
+          },
+          "zone": {
             "type": "string"
           }
         }

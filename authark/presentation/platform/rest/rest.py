@@ -6,8 +6,7 @@ from jinja2 import FileSystemLoader
 from aiohttp import web, ClientSession
 from injectark import Injectark
 from .middleware import middlewares
-from .resources import (Resource,
-    RootResource, TenantResource)
+from .resources import (Resource, RootResource)
 
 class RestApplication(web.Application):
     def __init__(self, injector: Injectark) -> None:
@@ -27,11 +26,6 @@ class RestApplication(web.Application):
 
         spec = json.loads(
             (Path(__file__).parent / 'openapi.json').read_text())
-
-        # Resources
-        self.router.add_route(
-            "get", '/tenants',
-            getattr(TenantResource(self.injector), "get", None))
 
         self._create_api(spec)
 

@@ -174,7 +174,15 @@ def operations():
                 }
             }
         },
-
+        # Tenant
+        'tenantsGetId': {
+            'actions':{
+                'default':{
+                    'handler': 'TenantInformer.search_tenants',
+                    'meta': {'model': 'tenant'}
+                 }
+             }
+        },
         # Token
         'tokensPatchId': {
             'actions':{
