@@ -33,18 +33,6 @@ class RestApplication(web.Application):
             "get", '/tenants',
             getattr(TenantResource(self.injector), "get", None))
 
-        # self.router.add_route(
-            # "put", '/registrations',
-            # getattr(RegistrationResource(self.injector), "put", None))
-
-        # self.router.add_route(
-            # "put", '/verifications',
-            # getattr(VerificationResource(self.injector), "put", None))
-
-        # self.router.add_route(
-            # "put", '/requisitions',
-            # getattr(RequisitionResource(self.injector), "put", None))
-
         self._create_api(spec)
 
     @staticmethod
