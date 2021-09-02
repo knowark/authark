@@ -7,8 +7,7 @@ from aiohttp import web, ClientSession
 from injectark import Injectark
 from .middleware import middlewares
 from .resources import (Resource,
-    RootResource, TenantResource,
-    RegistrationResource, VerificationResource, RequisitionResource)
+    RootResource, TenantResource)
 
 class RestApplication(web.Application):
     def __init__(self, injector: Injectark) -> None:
@@ -34,17 +33,17 @@ class RestApplication(web.Application):
             "get", '/tenants',
             getattr(TenantResource(self.injector), "get", None))
 
-        self.router.add_route(
-            "put", '/registrations',
-            getattr(RegistrationResource(self.injector), "put", None))
+        # self.router.add_route(
+            # "put", '/registrations',
+            # getattr(RegistrationResource(self.injector), "put", None))
 
-        self.router.add_route(
-            "put", '/verifications',
-            getattr(VerificationResource(self.injector), "put", None))
+        # self.router.add_route(
+            # "put", '/verifications',
+            # getattr(VerificationResource(self.injector), "put", None))
 
-        self.router.add_route(
-            "put", '/requisitions',
-            getattr(RequisitionResource(self.injector), "put", None))
+        # self.router.add_route(
+            # "put", '/requisitions',
+            # getattr(RequisitionResource(self.injector), "put", None))
 
         self._create_api(spec)
 

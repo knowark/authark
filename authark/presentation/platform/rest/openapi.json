@@ -259,6 +259,96 @@
       }
     },
 
+    "/registrations": {
+      "patch": {
+        "operationId": "registrationsPatchId",
+        "summary": "Set registrations",
+        "description": "Create or update registrations records",
+        "tags": ["Registration"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {"$ref": "#/components/schemas/Message"},
+                  {
+                    "type": "object",
+                    "properties": {
+                      "data": {
+                        "type": "array",
+                        "items": {
+                          "$ref": "#/components/schemas/Registration"
+                        }
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "parameters": [{
+          "name": "Action",
+          "description": "Specialized application actions",
+          "in": "header",
+          "schema": {
+            "type": "string",
+            "enum": ["default"]
+          }
+        }],
+        "responses": {
+          "200": {
+            "description": "Successful PUT response"
+          }
+        }
+      }
+    },
+
+    "/requisitions": {
+      "patch": {
+        "operationId": "requisitionsPatchId",
+        "summary": "Set requisitions",
+        "description": "Create or update requisitions records",
+        "tags": ["Requisition"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {"$ref": "#/components/schemas/Message"},
+                  {
+                    "type": "object",
+                    "properties": {
+                      "data": {
+                        "type": "array",
+                        "items": {
+                          "$ref": "#/components/schemas/Requisition"
+                        }
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "parameters": [{
+          "name": "Action",
+          "description": "Specialized application actions",
+          "in": "header",
+          "schema": {
+            "type": "string",
+            "enum": ["default"]
+          }
+        }],
+        "responses": {
+          "200": {
+            "description": "Successful PUT response"
+          }
+        }
+      }
+    },
+
     "/restrictions": {
       "head": {
         "operationId": "restrictionsHeadId",
@@ -596,8 +686,52 @@
           }
         }
       }
-    }
+    },
 
+    "/verifications": {
+      "patch": {
+        "operationId": "verificationsPatchId",
+        "summary": "Set verifications",
+        "description": "Create or update verifications records",
+        "tags": ["Verfication"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {"$ref": "#/components/schemas/Message"},
+                  {
+                    "type": "object",
+                    "properties": {
+                      "data": {
+                        "type": "array",
+                        "items": {
+                          "$ref": "#/components/schemas/Verfication"
+                        }
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "parameters": [{
+          "name": "Action",
+          "description": "Specialized application actions",
+          "in": "header",
+          "schema": {
+            "type": "string",
+            "enum": ["default"]
+          }
+        }],
+        "responses": {
+          "200": {
+            "description": "Successful PUT response"
+          }
+        }
+      }
+    }
 
 
   },
@@ -677,6 +811,40 @@
           }
         }
       },
+      "Registration": {
+        "type": "object",
+        "properties": {
+          "organization": {
+            "type": "string"
+          },
+          "username": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          }
+        }
+      },
+      "Requisition": {
+        "type": "object",
+        "properties": {
+          "tenant": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "data": {
+            "type": "string"
+          }
+        }
+      },
       "Restriction": {
         "type": "object",
         "properties": {
@@ -714,7 +882,16 @@
       "Token": {
         "type": "object",
         "properties": {
-          "value": {
+          "dominion": {
+            "type": "string"
+          },
+          "tenant": {
+            "type": "string"
+          },
+          "username": {
+            "type": "string"
+          },
+          "password": {
             "type": "string"
           }
         }
@@ -742,7 +919,17 @@
           }
         }
       },
-
+      "Verfication": {
+        "type": "object",
+        "properties": {
+          "tenant": {
+            "type": "string"
+          },
+          "token": {
+            "type": "string"
+          }
+        }
+      },
       "WebsiteCompiledMessage": {
         "allOf": [
           {"$ref": "#/components/schemas/Message"},

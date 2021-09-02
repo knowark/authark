@@ -16,7 +16,10 @@ async def test_procedure_manager_fulfill(procedure_manager):
     }
     plan_supplier = procedure_manager.plan_supplier
 
-    await procedure_manager.fulfill([requisition_dict])
+    await procedure_manager.fulfill({
+        "meta": {},
+        "data": [requisition_dict]
+    })
 
     assert plan_supplier._notify_calls[0].__class__.__name__ == (
         'PasswordReset')
@@ -39,7 +42,10 @@ async def test_procedure_manager_register(procedure_manager):
         "email": "mvp@gmail.com",
         "password": "PASS4"
     }]
-    await procedure_manager.register(user_dicts)
+    await procedure_manager.register({
+        "meta": {},
+        "data": user_dicts
+    })
     credential_repository = (
         procedure_manager.enrollment_service.credential_repository)
     user_repository = procedure_manager.user_repository
@@ -71,7 +77,10 @@ async def test_procedure_manager_verify_activation(procedure_manager):
     }]
     user_repository = procedure_manager.user_repository
 
-    await procedure_manager.verify(verification_dicts)
+    await procedure_manager.verify({
+        "meta": {},
+        "data": verification_dicts
+    })
 
     [user] = await user_repository.search([('id', '=', '1')])
     assert user.active is True
@@ -87,7 +96,10 @@ async def test_procedure_manager_verify_reset(procedure_manager):
     credential_repository = (
         procedure_manager.enrollment_service.credential_repository)
 
-    await procedure_manager.verify(verification_dicts)
+    await procedure_manager.verify({
+        "meta": {},
+        "data": verification_dicts
+    })
 
     [user] = await user_repository.search([('id', '=', '1')])
     [credential] = await credential_repository.search(
@@ -126,7 +138,10 @@ async def test_procedure_manager_identity_provider_register(procedure_manager):
     procedure_manager.identity_service.user = User(
         email="alice@outlook.com", name="Alice Wonder")
 
-    await procedure_manager.register(user_dicts)
+    await procedure_manager.register({
+        "meta": {},
+        "data": user_dicts
+    })
     credential_repository = (
         procedure_manager.enrollment_service.credential_repository)
     user_repository = procedure_manager.user_repository

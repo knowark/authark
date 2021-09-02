@@ -130,57 +130,64 @@ async def xtest_tokens_put_route_with_refresh_token(app):
     assert len(data) > 0
 
 
-async def test_registrations_put_route(app):
-    response = await app.put(
+async def test_registrations_patch_route(app):
+    response = await app.patch(
         '/registrations',
-        data=dumps(dict(
-            organization="Knowark",
-            username="gecheverry",
-            email="gecheverry@knowark.com",
-            password="ABC1234",
-            name="Gabriel Echeverry"
-        )))
+        data=dumps({
+            "data": [{
+                "organization":"Knowark",
+                "username":"gecheverry",
+                "email":"gecheverry@knowark.com",
+                "password":"ABC1234",
+                "name":"Gabriel Echeverry"}]
+        }))
     data = await response.text()
     assert response.status == 200
 
 
-async def test_verifications_put_route(app):
+async def test_verifications_patch_route(app):
     token = ("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0eXBlIjoiYWN0aXZhdG"
              "lvbiIsInRlbmFudCI6ImRlZmF1bHQiLCJ1aWQiOiIxIn0.KcmGMRHDhIJMv"
              "BdgIk18iMySbFw_JP_YhVtdLAJi8_s")
-    response = await app.put(
+    response = await app.patch(
         '/verifications',
-        data=dumps(dict(
-            tenant="default",
-            token=token,
-        )))
+        data=dumps({
+            "data": [{
+                "tenant":"default",
+                "token":token
+            }]
+        }))
     data = await response.text()
     assert response.status == 200
 
 
-async def test_requisitions_put_route(app):
-    response = await app.put(
+async def test_requisitions_patch_route(app):
+    response = await app.patch(
         '/requisitions',
-        data=dumps(dict(
-            tenant="default",
-            type='reset',
-            data={'email': 'eecheverry@knowark.com'}
-        )))
+        data=dumps({
+            "data": [{
+                "tenant":"default",
+                "type":'reset',
+                "data":{'email': 'eecheverry@knowark.com'}
+            }]
+        }))
     data = await response.text()
     assert response.status == 200
 
 
-async def test_registrations_enroll_put_route(app):
-    response = await app.put(
+async def test_registrations_enroll_patch_route(app):
+    response = await app.patch(
         '/registrations',
-        data=dumps(dict(
-            organization="Default",
-            username="masolano",
-            email="masolano@knowark.com",
-            password="XYZ1234",
-            name="Miguel Alexis Solano",
-            enroll=True
-        )))
+        data=dumps({
+            "data": [{
+                "organization":"Default",
+                "username":"masolano",
+                "email":"masolano@knowark.com",
+                "password":"XYZ1234",
+                "name":"Miguel Alexis Solano",
+                "enroll":True
+            }]
+        }))
     data = await response.text()
     assert response.status == 200
 

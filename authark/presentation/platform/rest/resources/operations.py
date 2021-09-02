@@ -87,6 +87,26 @@ def operations():
             }
         },
 
+        # Registration
+        'registrationsPatchId': {
+            'actions':{
+                'default':{
+                    'handler': 'ProcedureManager.register',
+                    'meta': {'model': 'registration'}
+                 }
+             }
+        },
+
+        # Requisition
+        'requisitionsPatchId': {
+            'actions':{
+                'default':{
+                    'handler': 'ProcedureManager.fulfill',
+                    'meta': {'model': 'requisitions'}
+                 }
+             }
+        },
+
         # Restriction
         'restrictionsHeadId': {
             'actions':{
@@ -198,6 +218,15 @@ def operations():
             }
         },
 
+        # Verification
+        'verificationsPatchId': {
+            'actions':{
+                'default':{
+                    'handler': 'ProcedureManager.verify',
+                    'meta': {'model': 'verification'}
+                 }
+             }
+        },
 
 
     }
