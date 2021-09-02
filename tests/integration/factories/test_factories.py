@@ -32,6 +32,7 @@ test_tuples = [
         ('ProcedureManager', 'ProcedureManager'),
         ('AutharkInformer', 'StandardAutharkInformer'),
         ('ComposingInformer', 'StandardComposingInformer'),
+        ('TenantInformer', 'TenantInformer'),
         ('TenantSupplier', 'MemoryTenantSupplier'),
         ('SetupSupplier', 'MemorySetupSupplier'),
         ('TemplateSupplier', 'MemoryTemplateSupplier'),

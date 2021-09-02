@@ -312,8 +312,8 @@ async def test_tenants_get(app, headers) -> None:
 
     data_dict = loads(content)
 
-    assert len(data_dict) == 1
-    assert data_dict[0]['slug'] == 'default'
+    assert len(data_dict['data']) == 1
+    assert data_dict['data'][0]['slug'] == 'default'
 
 
 async def test_dominions_not_implemented_put(app, headers) -> None:
