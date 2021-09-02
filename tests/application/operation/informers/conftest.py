@@ -15,8 +15,8 @@ from authark.application.domain.services.repositories import (
 from authark.application.general.suppliers.tenancy import (
     TenantSupplier,MemoryTenantSupplier)
 from authark.application.operation.informers import (
-    AutharkInformer, StandardAutharkInformer,
-    ComposingInformer, StandardComposingInformer, TenantInformer)
+    StandardInformer, ComposingInformer,
+    StandardComposingInformer, TenantInformer)
 
 
 @fixture
@@ -129,7 +129,7 @@ def ranking_repository(auth_provider, parser) -> RankingRepository:
 
 
 @fixture
-def authark_informer(user_repository: UserRepository,
+def standard_informer(user_repository: UserRepository,
                      credential_repository: CredentialRepository,
                      dominion_repository: DominionRepository,
                      role_repository: RoleRepository,
@@ -137,8 +137,8 @@ def authark_informer(user_repository: UserRepository,
                      policy_repository: PolicyRepository,
                      ranking_repository: RankingRepository
 
-                     ) -> AutharkInformer:
-    return StandardAutharkInformer(
+                     ) -> StandardInformer:
+    return StandardInformer(
         user_repository,
         credential_repository,
         dominion_repository,

@@ -1,3 +1,3 @@
-from .authark_informer import AutharkInformer, StandardAutharkInformer
+from .standard_informer import StandardInformer
 from .composing_informer import ComposingInformer, StandardComposingInformer
 from .tenant_informer import TenantInformer

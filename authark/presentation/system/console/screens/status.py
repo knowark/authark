@@ -5,7 +5,7 @@ from widark import (
 class StatusScreen(Frame):
     def setup(self, **context) -> 'StatusScreen':
         self.injector = context['injector']
-        self.authark_informer = self.injector['AutharkInformer']
+        self.authark_informer = self.injector['StandardInformer']
         self.tenancy_supplier = self.injector['TenantSupplier']
         self.session_manager = self.injector['SessionManager']
         return super().setup(**context) and self

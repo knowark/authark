@@ -23,9 +23,8 @@ from ...application.operation.managers import (
     AuthManager, ManagementManager, ImportManager,
     SessionManager, SecurityManager, ProcedureManager)
 from ...application.operation.informers import (
-    AutharkInformer, StandardAutharkInformer,
-    ComposingInformer, StandardComposingInformer,
-    TenantInformer)
+    StandardInformer, ComposingInformer,
+    StandardComposingInformer, TenantInformer)
 from ...application.general import (
     PlanSupplier, MemoryPlanSupplier)
 from ..core.common import Config
@@ -215,7 +214,7 @@ class BaseFactory(Factory):
 
     # Reporters
 
-    def authark_informer(
+    def standard_informer(
         self, user_repository: UserRepository,
         credential_repository: CredentialRepository,
         dominion_repository: DominionRepository,
@@ -223,8 +222,8 @@ class BaseFactory(Factory):
         restriction_repository: RestrictionRepository,
         policy_repository: PolicyRepository,
         ranking_repository: RankingRepository
-    ) -> AutharkInformer:
-        return StandardAutharkInformer(
+    ) -> StandardInformer:
+        return StandardInformer(
             user_repository, credential_repository,
             dominion_repository, role_repository,
             restriction_repository, policy_repository,

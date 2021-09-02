@@ -9,7 +9,7 @@ from .credentials import CredentialsModal
 class UsersScreen(Frame):
     def setup(self, **context) -> 'UsersScreen':
         self.injector = context['injector']
-        self.authark_informer = self.injector['AutharkInformer']
+        self.authark_informer = self.injector['StandardInformer']
         self.user = None
         self.domain: List[Any] = []
         return super().setup(**context) and self

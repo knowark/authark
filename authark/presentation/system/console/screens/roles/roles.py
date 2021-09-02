@@ -8,7 +8,7 @@ from .policies import PoliciesModal
 class RolesScreen(Frame):
     def setup(self, **context) -> 'RolesScreen':
         self.injector = context['injector']
-        self.authark_informer = self.injector['AutharkInformer']
+        self.authark_informer = self.injector['StandardInformer']
         self.management_manager = self.injector['ManagementManager']
         self.dominion: Dict = {}
         self.role = None
@@ -103,7 +103,7 @@ class RolesScreen(Frame):
 
 class DominionsModal(Modal):
     def setup(self, **context) -> 'DominionsModal':
-        self.authark_informer = context['injector']['AutharkInformer']
+        self.authark_informer = context['injector']['StandardInformer']
         return super().setup(**context) and self
 
     def build(self) -> None:
@@ -196,7 +196,7 @@ class RoleDetailsModal(Modal):
 class UsersSelectionModal(Modal):
     def setup(self, **context) -> 'RoleDetailsModal':
         self.injector = context['injector']
-        self.authark_informer = self.injector['AutharkInformer']
+        self.authark_informer = self.injector['StandardInformer']
         self.management_manager = self.injector['ManagementManager']
         self.role = context['role']
         self.focused: Dict = {}
