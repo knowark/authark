@@ -5,7 +5,7 @@ def operations():
         'dominionsHeadId': {
             'actions':{
                 'default':{
-                    'handler': 'AutharkInformer.count',
+                    'handler': 'StandardInformer.count',
                     'meta': {'model': 'dominion'}
                  }
              }
@@ -13,7 +13,7 @@ def operations():
         "dominionsGetId": {
             'actions':{
                 'default':{
-                    'handler': 'AutharkInformer.search',
+                    'handler': 'StandardInformer.search',
                     'meta': {'model': 'dominion'}
                 }
             }
@@ -23,7 +23,7 @@ def operations():
         'policiesHeadId': {
             'actions':{
                 'default':{
-                    'handler': 'AutharkInformer.count',
+                    'handler': 'StandardInformer.count',
                     'meta': {'model': 'policy'}
                  }
              }
@@ -31,7 +31,7 @@ def operations():
         "policiesGetId": {
             'actions':{
                 'default':{
-                    'handler': 'AutharkInformer.search',
+                    'handler': 'StandardInformer.search',
                     'meta': {'model': 'policy'}
                 }
             }
@@ -57,7 +57,7 @@ def operations():
         'rankingsHeadId': {
             'actions':{
                 'default':{
-                    'handler': 'AutharkInformer.count',
+                    'handler': 'StandardInformer.count',
                     'meta': {'model': 'ranking'}
                  }
              }
@@ -65,7 +65,7 @@ def operations():
         "rankingsGetId": {
             'actions':{
                 'default':{
-                    'handler': 'AutharkInformer.search',
+                    'handler': 'StandardInformer.search',
                     'meta': {'model': 'ranking'}
                 }
             }
@@ -111,7 +111,7 @@ def operations():
         'restrictionsHeadId': {
             'actions':{
                 'default':{
-                    'handler': 'AutharkInformer.count',
+                    'handler': 'StandardInformer.count',
                     'meta': {'model': 'restriction'}
                  }
              }
@@ -119,7 +119,7 @@ def operations():
         "restrictionsGetId": {
             'actions':{
                 'default':{
-                    'handler': 'AutharkInformer.search',
+                    'handler': 'StandardInformer.search',
                     'meta': {'model': 'restriction'}
                 }
             }
@@ -145,7 +145,7 @@ def operations():
         'rolesHeadId': {
             'actions':{
                 'default':{
-                    'handler': 'AutharkInformer.count',
+                    'handler': 'StandardInformer.count',
                     'meta': {'model': 'role'}
                  }
              }
@@ -153,7 +153,7 @@ def operations():
         "rolesGetId": {
             'actions':{
                 'default':{
-                    'handler': 'AutharkInformer.search',
+                    'handler': 'StandardInformer.search',
                     'meta': {'model': 'role'}
                 }
             }
@@ -196,7 +196,7 @@ def operations():
         'usersHeadId': {
             'actions':{
                 'default':{
-                    'handler': 'AutharkInformer.count',
+                    'handler': 'StandardInformer.count',
                     'meta': {'model': 'user'}
                  }
              }
@@ -204,7 +204,7 @@ def operations():
         "usersGetId": {
             'actions':{
                 'default':{
-                    'handler': 'AutharkInformer.search',
+                    'handler': 'StandardInformer.search',
                     'meta': {'model': 'user'}
                 }
             }

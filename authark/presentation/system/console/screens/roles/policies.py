@@ -7,7 +7,7 @@ from .restrictions import RestrictionsModal
 class PoliciesModal(Modal):
     def setup(self, **context) -> 'PoliciesModal':
         self.injector = context['injector']
-        self.authark_informer = self.injector['AutharkInformer']
+        self.authark_informer = self.injector['StandardInformer']
         self.security_manager = self.injector['SecurityManager']
         self.role = context['role']
         self.policy = None

@@ -6,7 +6,7 @@ from widark import (
 class DominionsScreen(Frame):
     def setup(self, **context) -> 'DominionsScreen':
         self.injector = context['injector']
-        self.authark_informer = self.injector['AutharkInformer']
+        self.authark_informer = self.injector['StandardInformer']
         self.dominion = None
         return super().setup(**context) and self
 

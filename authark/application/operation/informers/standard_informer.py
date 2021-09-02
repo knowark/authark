@@ -7,26 +7,7 @@ from ...domain.services.repositories import (
 from ...domain.common import QueryDomain, DataDict, RecordList
 
 
-class AutharkInformer(ABC):
-
-    @abstractmethod
-
-    async def count(self, entry: dict) -> dict:
-        """Standard count method"""
-
-    @abstractmethod
-    async def search(self, entry: dict) -> dict:
-        """Standard search method"""
-
-    @abstractmethod
-    async def join(self, model: str, domain: QueryDomain,
-                   join: str = None, link: str = None,
-                   source: str = None, target: str = None
-                   ) -> List[Tuple[DataDict, RecordList]]:
-        """Standard join method"""
-
-
-class StandardAutharkInformer(AutharkInformer):
+class StandardInformer():
     def __init__(self, user_repository: UserRepository,
                  credential_repository: CredentialRepository,
                  dominion_repository: DominionRepository,

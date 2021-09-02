@@ -6,7 +6,7 @@ from widark import (
 class RestrictionsModal(Modal):
     def setup(self, **context) -> 'RestrictionsModal':
         self.injector = context['injector']
-        self.authark_informer = self.injector['AutharkInformer']
+        self.authark_informer = self.injector['StandardInformer']
         self.security_manager = self.injector['SecurityManager']
         self.policy = context['policy']
         self.restriction = None

@@ -6,7 +6,7 @@ from widark import (Frame, Listbox, Event, Modal, Label, Button, Color)
 class RankingsModal(Modal):
     def setup(self, **context) -> 'RankingsModal':
         self.injector = context['injector']
-        self.authark_informer = self.injector['AutharkInformer']
+        self.authark_informer = self.injector['StandardInformer']
         self.management_manager = self.injector['ManagementManager']
         self.user = context['user']
         return super().setup(**context) and self
@@ -75,7 +75,7 @@ class RankingsModal(Modal):
 class RoleSelectionModal(Modal):
     def setup(self, **context) -> 'RoleSelectionModal':
         self.injector = context['injector']
-        self.authark_informer = self.injector['AutharkInformer']
+        self.authark_informer = self.injector['StandardInformer']
         return super().setup(**context) and self
 
     def build(self) -> None:
