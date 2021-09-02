@@ -12,9 +12,11 @@ from authark.application.domain.services.repositories import (
     RankingRepository, MemoryRankingRepository,
     RestrictionRepository, MemoryRestrictionRepository,
     PolicyRepository, MemoryPolicyRepository)
+from authark.application.general.suppliers.tenancy import (
+    TenantSupplier,MemoryTenantSupplier)
 from authark.application.operation.informers import (
     AutharkInformer, StandardAutharkInformer,
-    ComposingInformer, StandardComposingInformer)
+    ComposingInformer, StandardComposingInformer, TenantInformer)
 
 
 @fixture
@@ -28,6 +30,11 @@ def auth_provider():
     auth_provider.setup(CUser(
         tid='T1', tenant='default', organization="Default"))
     return auth_provider
+
+
+@fixture
+def tenant_supplier():
+    return MemoryTenantSupplier()
 
 
 @fixture
@@ -150,3 +157,8 @@ def composing_informer(dominion_repository: DominionRepository,
         dominion_repository,
         role_repository,
         ranking_repository)
+
+@fixture
+def tenant_informer(tenant_supplier: TenantSupplier,
+                     ) -> TenantInformer:
+    return TenantInformer(tenant_supplier)
