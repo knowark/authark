@@ -15,8 +15,7 @@ from authark.application.domain.services.repositories import (
 from authark.application.general.suppliers.tenancy import (
     TenantSupplier,MemoryTenantSupplier)
 from authark.application.operation.informers import (
-    StandardInformer, ComposingInformer,
-    StandardComposingInformer, TenantInformer)
+    StandardInformer, ComposingInformer, TenantInformer)
 
 
 @fixture
@@ -153,7 +152,7 @@ def composing_informer(dominion_repository: DominionRepository,
                        role_repository: RoleRepository,
                        ranking_repository: RankingRepository
                        ) -> ComposingInformer:
-    return StandardComposingInformer(
+    return ComposingInformer(
         dominion_repository,
         role_repository,
         ranking_repository)

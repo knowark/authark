@@ -23,8 +23,7 @@ from ...application.operation.managers import (
     AuthManager, ManagementManager, ImportManager,
     SessionManager, SecurityManager, ProcedureManager)
 from ...application.operation.informers import (
-    StandardInformer, ComposingInformer,
-    StandardComposingInformer, TenantInformer)
+    StandardInformer, ComposingInformer, TenantInformer)
 from ...application.general import (
     PlanSupplier, MemoryPlanSupplier)
 from ..core.common import Config
@@ -234,7 +233,7 @@ class BaseFactory(Factory):
         role_repository: RoleRepository,
         ranking_repository: RankingRepository
     ) -> ComposingInformer:
-        return StandardComposingInformer(
+        return ComposingInformer(
             dominion_repository, role_repository, ranking_repository)
 
     def tenant_informer(

@@ -44,8 +44,14 @@ async def test_standard_informer_count_users(
 async def test_standard_informer_join_users_and_roles(
         standard_informer: StandardInformer) -> None:
     domain: QueryDomain = []
-    items = await standard_informer.join(
-        'user', domain, join='role', link='ranking')
-    assert len(items) == 3
-    assert items[0][0]['id'] == '1'
-    assert items[0][1][0]['name'] == 'admin'
+    items = await standard_informer.join({
+        "meta":{
+            "model": "user",
+            "domain": domain,
+            "join": "role",
+            "link": "ranking"
+        }
+        })
+    assert len(items['data']) == 3
+    assert items['data'][0][0]['id'] == '1'
+    assert items['data'][0][1][0]['name'] == 'admin'
