@@ -21,10 +21,12 @@ from authark.application.domain.services import (
     EnrollmentService, IdentityService, MemoryIdentityService)
 from authark.application.general import (
     PlanSupplier, MemoryPlanSupplier,
+    SetupSupplier, MemorySetupSupplier,
     TenantSupplier, MemoryTenantSupplier)
 from authark.application.operation.managers import (
     AuthManager, ManagementManager, ImportManager,
-    SessionManager, SecurityManager, ProcedureManager)
+    SessionManager, SecurityManager, ProcedureManager,
+    TenantManager, SetupManager)
 
 
 # # ###########
@@ -285,6 +287,9 @@ def tenant_supplier() -> TenantSupplier:
     })
     return tenant_supplier
 
+@fixture
+def setup_supplier() -> SetupSupplier:
+    return MemorySetupSupplier()
 
 # COORDINATORS
 
@@ -343,3 +348,11 @@ def procedure_manager(
         mock_auth_provider, mock_user_repository, enrollment_service,
         verification_service, mock_identity_service, plan_supplier,
         tenant_supplier)
+
+@fixture
+def tenant_manager(tenant_supplier):
+    return TenantManager(tenant_supplier)
+
+@fixture
+def setup_manager(setup_supplier):
+    return SetupManager(setup_supplier)

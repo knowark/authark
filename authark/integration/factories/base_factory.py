@@ -18,23 +18,31 @@ from ...application.domain.services import (
     AccessService, VerificationService, IdentityService,
     MemoryIdentityService)
 from ...application.general.suppliers import (
-    TenantSupplier, MemoryTenantSupplier)
+    TenantSupplier, MemoryTenantSupplier,
+    SetupSupplier, MemorySetupSupplier)
 from ...application.operation.managers import (
     AuthManager, ManagementManager, ImportManager,
-    SessionManager, SecurityManager, ProcedureManager)
+    SessionManager, SecurityManager, ProcedureManager,
+    TenantManager, SetupManager)
 from ...application.operation.informers import (
     StandardInformer, ComposingInformer, TenantInformer)
 from ...application.general import (
     PlanSupplier, MemoryPlanSupplier)
 from ..core.common import Config
 from ..core.suppliers import (
-    SetupSupplier, MemorySetupSupplier,
     TemplateSupplier, MemoryTemplateSupplier)
 
 
 class BaseFactory(Factory):
     def __init__(self, config: Config) -> None:
         self.config = config
+        self.public = [
+            'StandardInformer', 'ComposingInformer', 'TenantInformer',
+            'AuthManager', 'ImportManager', 'ManagementManager',
+            'TenantManager', 'ProcedureManager', 'SecurityManager',
+            'SetupManager', 'SessionManager'
+        ]
+
 
     # Repositories
 
@@ -210,6 +218,16 @@ class BaseFactory(Factory):
             auth_provider, user_repository, enrollment_service,
             verification_service, identity_service, plan_supplier,
             tenant_supplier)
+
+    def tenant_manager(
+        self, tenant_supplier: TenantSupplier
+    ) -> TenantManager:
+        return TenantManager(tenant_supplier)
+
+    def setup_manager(
+        self, setup_supplier: SetupSupplier
+    ) -> SetupManager:
+        return SetupManager(setup_supplier)
 
     # Reporters
 

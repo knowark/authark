@@ -75,10 +75,13 @@ class Shell:
 
     async def provision(self, options_dict: Dict[str, str]) -> None:
         logger.info('PROVISION')
-        tenant_supplier = self.injector['TenantSupplier']
+        tenant_supplier = self.injector['TenantManager']
         tenant_dict = json.loads(options_dict['data'])
         logger.info("Creating tenant:", tenant_dict)
-        tenant_supplier.create_tenant(tenant_dict)
+        await tenant_supplier.create_tenant({
+            "meta": {},
+            "data": tenant_dict
+        })
         logger.info('END PROVISION')
 
     async def serve(self, options_dict: Dict[str, str]) -> None:
@@ -110,8 +113,10 @@ class Shell:
         source = options_dict.get('source', 'external')
         password_field = options_dict.get('password_field', 'password')
 
-        tenant_supplier = self.injector['TenantSupplier']
-        tenant_dict = tenant_supplier.resolve_tenant(tenant)
+        tenant_supplier = self.injector['TenantManager']
+        tenant_dict = (await tenant_supplier.resolve_tenant({
+            "data": tenant
+        }))['data']
 
         session_manager = self.injector['SessionManager']
         entry = {'meta': {'anonymous': True}, 'data': {

@@ -4,3 +4,5 @@ from .import_manager import ImportManager
 from .session_manager import SessionManager
 from .security_manager import SecurityManager
 from .procedure_manager import ProcedureManager
+from .tenant_manager import TenantManager
+from .setup_manager import SetupManager

@@ -1,4 +1,6 @@
-from authark.integration.core import SetupSupplier, MemorySetupSupplier
+
+from authark.application.general.suppliers import (
+    SetupSupplier, MemorySetupSupplier)
 
 
 def test_setup_supplier_methods() -> None:
