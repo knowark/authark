@@ -12,14 +12,17 @@ class ConsoleApplication(Application):
 
     async def prepare(self) -> None:
         self.session_manager.set_user(self.config['system'])
-        tenancy_supplier = self.injector['TenantInformer']
-        tenants = (await tenancy_supplier.search_tenants({
+        tenancy_informer = self.injector['TenantInformer']
+        tenants = (await tenancy_informer.search_tenants({
             "meta": {
                 "domain": []
             }
         }))['data']
         tenant_dict = next(iter(tenants), {'name': 'None'})
-        self.session_manager.set_tenant(tenant_dict)
+        tenant_manager = self.injector['TenantManager']
+        self.session_manager.set_user({
+            "data": tenant_dict
+        })
 
     def build(self) -> None:
         self._build_menu()
@@ -41,7 +44,10 @@ class ConsoleApplication(Application):
 
     async def on_tenant_switch(self, event: Event) -> None:
         if event.details.get('name'):
-            self.session_manager.set_tenant(event.details)
+            self.session_manager.set_user({
+                "data": event.details
+            })
+            #self.session_manager.set_tenant(event.details)
         self.connect()
 
     def _build_status(self) -> None:

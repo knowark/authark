@@ -34,7 +34,7 @@ async def test_application_prepare(application):
     await application.prepare()
     await asyncio.sleep(0)
 
-    assert given_tenant is not None
+    assert given_tenant is not {}
 
 
 async def test_application_on_menu_click(application):
@@ -89,4 +89,4 @@ async def test_application_on_tenant_switch(application):
     await application.on_tenant_switch(event)
     await asyncio.sleep(0)
 
-    assert given_tenant is not None
+    assert given_tenant is not {}
