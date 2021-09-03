@@ -40,10 +40,14 @@ class StandardInformer():
         result = await repository.count(meta['domain'])
         return {'data': result}
 
-    async def join(self, model: str, domain: QueryDomain = None,
-                   join: str = None, link: str = None,
-                   source: str = None, target: str = None
-                   ) -> List[Tuple[DataDict, RecordList]]:
+    async def join(self, entry: dict) -> dict:
+        meta = entry['meta']
+        model = meta['model']
+        domain = meta['domain']
+        join = meta['join']
+        link = meta['link']
+        source = meta.get('source', None)
+        target = meta.get('target', None)
 
         repository = getattr(self, f'{model}_repository')
         reference = getattr(self, f'{join}_repository', None)
@@ -53,5 +57,5 @@ class StandardInformer():
             domain or [], join=reference, link=pivot,
             source=source, target=target)
 
-        return [(vars(item[0]), [vars(i) for i in item[1]])
-                for item in items]
+        return {"data": [(vars(item[0]), [vars(i) for i in item[1]])
+                for item in items]}

@@ -4,14 +4,7 @@ from ...domain.services.repositories import (
 from ...domain.common import ExtendedRankingDictList
 
 
-class ComposingInformer(ABC):
-
-    @abstractmethod
-    async def list_user_roles(self, user_id: str) -> ExtendedRankingDictList:
-        """List user roles, resolving model references"""
-
-
-class StandardComposingInformer(ComposingInformer):
+class ComposingInformer():
 
     def __init__(self, dominion_repository: DominionRepository,
                  role_repository: RoleRepository,
@@ -20,7 +13,9 @@ class StandardComposingInformer(ComposingInformer):
         self.role_repository = role_repository
         self.ranking_repository = ranking_repository
 
-    async def list_user_roles(self, user_id: str) -> ExtendedRankingDictList:
+    async def list_user_roles(self, entry: dict) -> dict:
+        data = entry['data']
+        user_id = data
         rankings = await self.ranking_repository.search(
             [('user_id', '=', user_id)])
 
@@ -39,4 +34,4 @@ class StandardComposingInformer(ComposingInformer):
             result.append({'ranking_id': ranking.id, 'role': role.name,
                            'dominion': dominion.name})
 
-        return result
+        return {"data": result}
