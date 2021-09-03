@@ -6,14 +6,15 @@ from ...application.domain.services.repositories import (
     RankingRepository, RestrictionRepository,
     PolicyRepository)
 from ...application.domain.services import HashService, ImportService
-from ...application.general import PlanSupplier, TenantSupplier
+from ...application.general import (
+    PlanSupplier, TenantSupplier, SetupSupplier)
 from ..core.data import (
     JsonCredentialRepository, JsonDominionRepository, JsonRoleRepository,
     JsonUserRepository, JsonRankingRepository, JsonImportService,
     JsonRestrictionRepository, JsonPolicyRepository)
 from ..core.common import Config
 from ..core.suppliers import (
-    JsonTenantSupplier, SetupSupplier, JsonSetupSupplier)
+    JsonTenantSupplier, JsonSetupSupplier)
 from ..core.suppliers import JsonPlanSupplier
 from .crypto_factory import CryptoFactory
 

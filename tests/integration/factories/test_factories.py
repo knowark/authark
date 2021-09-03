@@ -30,6 +30,7 @@ test_tuples = [
         ('SessionManager', 'SessionManager'),
         ('SecurityManager', 'SecurityManager'),
         ('ProcedureManager', 'ProcedureManager'),
+        ('SetupManager', 'SetupManager'),
         ('StandardInformer', 'StandardInformer'),
         ('ComposingInformer', 'ComposingInformer'),
         ('TenantInformer', 'TenantInformer'),

@@ -1,6 +1,6 @@
 from typing import Dict, Any
 from pathlib import Path
-from .setup_supplier import MemorySetupSupplier
+from .....application.general.suppliers import MemorySetupSupplier
 
 
 class JsonSetupSupplier(MemorySetupSupplier):

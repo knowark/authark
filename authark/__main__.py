@@ -16,7 +16,7 @@ config = sanitize(config)
 async def main(args=None):
     factory = factory_builder.build(config)
     injector = Injectark(factory)
-    injector['SetupSupplier'].setup()
+    await injector['SetupManager'].setup({})
 
     await Shell(config, injector).run(args or [])
 

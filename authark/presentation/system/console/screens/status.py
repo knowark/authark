@@ -6,7 +6,7 @@ class StatusScreen(Frame):
     def setup(self, **context) -> 'StatusScreen':
         self.injector = context['injector']
         self.authark_informer = self.injector['StandardInformer']
-        self.tenancy_supplier = self.injector['TenantSupplier']
+        self.tenancy_supplier = self.injector['TenantInformer']
         self.session_manager = self.injector['SessionManager']
         return super().setup(**context) and self
 
@@ -50,7 +50,7 @@ class StatusScreen(Frame):
 
 class TenantsModal(Modal):
     def setup(self, **context) -> 'TenantsModal':
-        self.tenant_supplier = context['injector']['TenantSupplier']
+        self.tenant_supplier = context['injector']['TenantInformer']
         return super().setup(**context) and self
 
     def build(self) -> None:
@@ -60,7 +60,11 @@ class TenantsModal(Modal):
         self.body = Listbox(self, command=self.on_body).grid(1).weight(4)
 
     async def load(self) -> None:
-        tenants = self.tenant_supplier.search_tenants([])
+        tenants = (await self.tenant_supplier.search_tenants({
+            "meta": {
+                "domain": []
+            }
+        }))['data']
         self.body.setup(data=tenants, fields=['id', 'name']).connect()
 
     async def on_body(self, event: Event) -> None:
@@ -70,7 +74,7 @@ class TenantsModal(Modal):
 
 class TenantProvisionModal(Modal):
     def setup(self, **context) -> 'TenantsModal':
-        self.tenant_supplier = context['injector']['TenantSupplier']
+        self.tenant_supplier = context['injector']['TenantManager']
         return super().setup(**context) and self
 
     def build(self) -> None:
@@ -98,7 +102,10 @@ class TenantProvisionModal(Modal):
         if self.id.text.strip():
             tenant['id'] = self.id.text.strip()
 
-        self.tenant_supplier.create_tenant(tenant)
+        self.tenant_supplier.create_tenant({
+            "meta": {},
+            "data": tenant
+        })
         await self.done({'result': 'saved'})
 
     async def on_cancel(self, event: Event) -> None:
