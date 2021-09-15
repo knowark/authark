@@ -24,5 +24,11 @@ class JsonPlanSupplier(PlanSupplier):
         event_meta = {
             'name': event.__class__.__name__
         }
-        payload = {'meta': {'event': event_meta}, 'data': vars(event)}
+        event_data = vars(event)
+        payload = {
+            'meta': {
+                'event': event_meta,
+                'authorization': str(event_data.pop('authorization'))
+            }, 'data': event_data
+        }
         await self.planner.defer('NotifyJob', payload)

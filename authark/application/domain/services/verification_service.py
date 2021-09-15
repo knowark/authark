@@ -16,6 +16,13 @@ class VerificationService:
             'tid': tenant.id, 'uid': user.id})
         return verification_token
 
+    def generate_authorization(self, tenant: Tenant, user: User) -> Token:
+        authorization_token = self.token_service.generate_token({
+            'type': 'authorization', 'tenant': tenant.slug,
+            'tid': tenant.id, 'uid': user.id,
+            'name': user.name, 'email': user.email})
+        return authorization_token
+
     async def verify(
         self, verification_dict: Dict[str, Any]
     ) -> Dict[str, Any]:

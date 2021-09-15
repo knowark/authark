@@ -71,10 +71,14 @@ class ProcedureManager:
             await self.plan_supplier.notify(UserRegistered(**{
                 'type': 'activation',
                 'subject': 'Account Activation',
+                'template': 'mail/auth/email_verification.html',
                 'recipient': user.email,
                 'owner': user.name,
                 'token': self.verification_service.generate_token(
-                    tenant, user, 'activation').value
+                    tenant, user, 'activation').value,
+                'authorization': (
+                    self.verification_service.generate_authorization(
+                    tenant, user).value)
             }))
 
         return {}

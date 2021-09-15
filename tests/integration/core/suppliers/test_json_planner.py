@@ -59,11 +59,14 @@ async def test_json_planner_notify(monkeypatch) -> None:
     class ModelUpdated(Event):
         """Model Updated Event"""
 
-    await planner.notify(ModelUpdated(**{'event': 'data'}))
+    await planner.notify(ModelUpdated(**{
+        'event': 'data',
+        'authorization': 'authorization_token'}))
 
     assert planner.planner._job == 'NotifyJob'
     assert planner.planner._payload == {
         'meta': {
+            'authorization': 'authorization_token',
             'event': {
                 'name': 'ModelUpdated'
             }
