@@ -23,7 +23,8 @@ class ProcedureManager:
         verification_service: VerificationService,
         identity_service: IdentityService,
         plan_supplier: PlanSupplier,
-        tenant_supplier: TenantSupplier
+        tenant_supplier: TenantSupplier,
+        config: dict,
     ) -> None:
         self.auth_provider = auth_provider
         self.user_repository = user_repository
@@ -33,6 +34,7 @@ class ProcedureManager:
         self.plan_supplier = plan_supplier
         self.tenant_supplier = tenant_supplier
         self.provider_pattern = '@provider.oauth'
+        self.config = config
 
     async def register(self, entry: dict) -> dict:
         meta, data = entry['meta'], entry['data']
@@ -74,11 +76,17 @@ class ProcedureManager:
                 'template': 'mail/auth/email_verification.html',
                 'recipient': user.email,
                 'owner': user.name,
-                'token': self.verification_service.generate_token(
-                    tenant, user, 'activation').value,
                 'authorization': (
                     self.verification_service.generate_authorization(
-                    tenant, user).value)
+                    tenant, user).value),
+                'context':{
+                    'user_name': user.name,
+                    'tempos_email': self.config['tempos_email'],
+                    'unsubscribe_link': self.config['unsubscribe_link'],
+                    'verify_link': (self.config['url']+"/verify?token="+
+                                    self.verification_service.generate_token(
+                                        tenant, user, 'activation').value)
+                }
             }))
 
         return {}
