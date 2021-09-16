@@ -67,7 +67,6 @@ async def test_procedure_manager_register(procedure_manager):
         'Account Activation')
     assert vars(plan_supplier._notify_calls[0])['type'] == (
         'activation')
-    assert vars(plan_supplier._notify_calls[0])['token'] is not None
 
 
 async def test_procedure_manager_verify_activation(procedure_manager):
