@@ -26,11 +26,21 @@ async def test_procedure_manager_fulfill(procedure_manager):
     assert vars(plan_supplier._notify_calls[0]) == {
         'type': 'reset',
         'subject': 'Password Reset',
+        'template': 'mail/auth/reset_pasword.html',
         'recipient': 'gabeche@gmail.com',
         'owner': 'Gabriel',
-        'token': ('{"type": "reset", "tenant": "default", '
-                  '"tid": "001", "uid": "3"}')
-    }
+        'authorization': ('{"type": "authorization", '
+                          '"tenant": "default", "tid": "001", "uid": "3", '
+                          '"name": "Gabriel", "email": "gabeche@gmail.com"}'),
+        'context': {
+                 'reset_link': ('http://dash.tempos.local'
+                                 '/reset?token={"type": "reset",'
+                                 ' "tenant": "default", "tid": "001",'
+                                 ' "uid": "3"}'),
+                 'unsubscribe_link': 'unsubscribe_link.com',
+                 'user_name': 'Gabriel',
+             }
+         }
 
 
 async def test_procedure_manager_register(procedure_manager):

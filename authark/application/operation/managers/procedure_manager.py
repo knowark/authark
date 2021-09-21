@@ -110,9 +110,18 @@ class ProcedureManager:
             await self.plan_supplier.notify(PasswordReset(**{
                 'type': 'reset',
                 'subject': 'Password Reset',
+                'template': 'mail/auth/reset_pasword.html',
                 'recipient': user.email,
                 'owner': user.name,
-                'token': token.value
+                'authorization': (
+                    self.verification_service.generate_authorization(
+                    tenant, user).value),
+                'context':{
+                    'user_name': user.name,
+                    'unsubscribe_link': self.config['unsubscribe_link'],
+                    'reset_link': (self.config['url']+"/reset?token="+
+                                    token.value)
+                }
             }))
 
         return {}
