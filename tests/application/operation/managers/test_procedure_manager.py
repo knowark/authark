@@ -34,7 +34,7 @@ async def test_procedure_manager_fulfill(procedure_manager):
                           '"name": "Gabriel", "email": "gabeche@gmail.com"}'),
         'context': {
                  'reset_link': ('http://dash.tempos.local'
-                                 '/reset?token={"type": "reset",'
+                                 '/login/reset?verification_token={"type": "reset",'
                                  ' "tenant": "default", "tid": "001",'
                                  ' "uid": "3"}'),
                  'unsubscribe_link': 'unsubscribe_link.com',
