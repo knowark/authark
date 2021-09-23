@@ -83,7 +83,8 @@ class ProcedureManager:
                     'user_name': user.name,
                     'tempos_email': self.config['tempos_email'],
                     'unsubscribe_link': self.config['unsubscribe_link'],
-                    'verify_link': (self.config['url']+"/verify?token="+
+                    'verify_link': (self.config['url']+
+                                    "/login?verification_token="+
                                     self.verification_service.generate_token(
                                         tenant, user, 'activation').value)
                 }
@@ -119,7 +120,8 @@ class ProcedureManager:
                 'context':{
                     'user_name': user.name,
                     'unsubscribe_link': self.config['unsubscribe_link'],
-                    'reset_link': (self.config['url']+"/reset?token="+
+                    'reset_link': (self.config['url']
+                                   +"/login/reset?verification_token="+
                                     token.value)
                 }
             }))
