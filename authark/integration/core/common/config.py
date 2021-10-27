@@ -31,8 +31,8 @@ config = {
     },
     "verification": {
         "url": os.environ.get('AUTHARK_VERIFICATION_URL') or "",
-        "tempos_email": os.environ.get(
-            'AUTHARK_VERIFICATION_TEMPOS_EMAIL') or "",
+        "email_link": os.environ.get(
+            'AUTHARK_VERIFICATION_EMAIL') or "",
         "unsubscribe_link": os.environ.get(
             'AUTHARK_VERIFICATION_UNSUBSCRIBE_LINK') or "",
     },

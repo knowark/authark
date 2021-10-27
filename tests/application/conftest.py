@@ -348,8 +348,8 @@ def procedure_manager(
         mock_auth_provider, mock_user_repository, enrollment_service,
         verification_service, mock_identity_service, plan_supplier,
         tenant_supplier, {
-            "url": "http://dash.tempos.local",
-            "tempos_email": "info@example.com",
+            "url": "http://dash.example.local",
+            "email_link": "info@example.com",
             "unsubscribe_link": "unsubscribe_link.com"
         })
 
