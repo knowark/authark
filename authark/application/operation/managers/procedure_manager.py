@@ -81,7 +81,7 @@ class ProcedureManager:
                     tenant, user).value),
                 'context':{
                     'user_name': user.name,
-                    'tempos_email': self.config['tempos_email'],
+                    'email_link': self.config['email_link'],
                     'unsubscribe_link': self.config['unsubscribe_link'],
                     'verify_link': (self.config['url']+
                                     "/login?verification_token="+

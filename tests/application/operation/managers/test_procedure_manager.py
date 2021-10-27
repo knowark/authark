@@ -33,7 +33,7 @@ async def test_procedure_manager_fulfill(procedure_manager):
                           '"tenant": "default", "tid": "001", "uid": "3", '
                           '"name": "Gabriel", "email": "gabeche@gmail.com"}'),
         'context': {
-                 'reset_link': ('http://dash.tempos.local'
+                 'reset_link': ('http://dash.example.local'
                                  '/login/reset?verification_token={"type": "reset",'
                                  ' "tenant": "default", "tid": "001",'
                                  ' "uid": "3"}'),
