@@ -64,11 +64,15 @@ update:
 deploy:
 	ansible-playbook -c local -i localhost, setup/deploy.yml
 
-status:
-	systemctl status '$(PROJECT)*' --all
+prepare:
+	@echo "Not Found Command"
 
 restart:
-	systemctl restart $(PROJECT).target && journalctl -f
+	systemctl daemon-reload && systemctl restart $(PROJECT).target \
+	&& journalctl -f
+
+status:
+	systemctl status '$(PROJECT)*' --all
 
 local:
 	./setup/local.sh
