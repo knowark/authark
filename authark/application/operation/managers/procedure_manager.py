@@ -54,13 +54,13 @@ class ProcedureManager:
             tenant = await self._session_tenant(tenant_dict['name'])
 
             password = user_dict.pop('password', '')
-            username = user_dict.get('username', '')
-            if username.endswith(self.provider_pattern):
-                provider = username.replace(self.provider_pattern, '')
+            email = user_dict.get('email', '')
+            if email.endswith(self.provider_pattern):
+                provider = email.replace(self.provider_pattern, '')
                 user = await self.identity_service.identify(
                     provider, password)
                 user.active = False
-                credential = Credential(value=uuid.uuid4())
+                credential = Credential(value=password)
                 registration_tuples.append((user, credential))
                 continue
 
