@@ -116,9 +116,9 @@ class ProcedureManager:
                 token = self.verification_service.generate_token_tenant(
                     tenant, 'reset')
                 config_url = self.config['url']
-                url = (f'<a href=\"{config_url}\"'
+                url = (f'<a href=\"{config_url}'
                        f'/login/reset?verification_token='
-                       f'{token.value}>{tenant.name}</a>')
+                       f'{token.value}\">{tenant.name}</a><br>')
                 multiple_links.append(url)
 
             await self.plan_supplier.notify(PasswordReset(**{

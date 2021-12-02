@@ -50,10 +50,10 @@ async def test_procedure_manager_fulfill(procedure_manager):
             ' "tid": "", "uid": "", "name": "", "email": ""}'),
         'context': {
                  'multiple_links':(
-                     '<a href="http://dash.example.local"/login/'
+                     '<a href="http://dash.example.local/login/'
                      'reset?verification_token={"type": "reset", '
                      '"tenant": "default", "tid": "001", "temail": '
-                     '"gabeche@gmail.com"}>Default</a>'),
+                     '"gabeche@gmail.com"}">Default</a><br>'),
                  'unsubscribe_link': 'unsubscribe_link.com',
                  'user_name': 'gabeche',
              }
