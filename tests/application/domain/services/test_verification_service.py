@@ -14,6 +14,16 @@ def test_verification_service_generate_token(
         '{"type": "activation", "tenant": "default", '
         '"tid": "1", "uid": "1"}')
 
+def test_verification_service_generate_token_tenant(
+    verification_service) -> None:
+    tenant = Tenant(id='1', name='Default', email='default@example.com')
+
+    token = verification_service.generate_token_tenant(tenant, 'reset')
+
+    assert isinstance(token, Token)
+    assert token.value == (
+        '{"type": "reset", "tenant": "default", '
+        '"tid": "1", "temail": "default@example.com"}')
 
 async def test_verification_service_verify(verification_service) -> None:
     verification_dict = {

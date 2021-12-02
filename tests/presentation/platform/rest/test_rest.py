@@ -166,9 +166,8 @@ async def test_requisitions_patch_route(app):
         '/requisitions',
         data=dumps({
             "data": [{
-                "tenant":"default",
                 "type":'reset',
-                "data":{'email': 'eecheverry@knowark.com'}
+                "data":{'email': 'gabeche@gmail.com'}
             }]
         }))
     data = await response.text()

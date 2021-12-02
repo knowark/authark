@@ -70,6 +70,7 @@ class AnonymousUser(User):
         self.name = 'anonymous',
         self.tid = ZeroID
         self.tenant = 'anonymous'
+        self.slug = 'anonymous'
         super().__init__(**attributes)
 
 
@@ -79,4 +80,5 @@ class SystemUser(User):
         self.name = 'system',
         self.tid = OneID
         self.tenant = 'system'
+        self.slug = 'system'
         super().__init__(**attributes)

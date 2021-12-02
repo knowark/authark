@@ -1,8 +1,8 @@
-from pytest import fixture
+from pytest import fixture, raises
 from authark.application.domain.models import (
     User, Credential, Dominion, Role, Ranking,
     Restriction, Policy)
-from authark.application.domain.common import (
+from authark.application.domain.common import ( EmailExistsError,
     QueryParser, StandardAuthProvider, User as CUser)
 from authark.application.domain.services.repositories import (
     UserRepository, MemoryUserRepository,
@@ -283,7 +283,8 @@ def tenant_supplier() -> TenantSupplier:
     tenant_supplier = MemoryTenantSupplier()
     tenant_supplier.create_tenant({
         'id': '001',
-        'name': 'Default'
+        'name': 'Default',
+        'email':'gabeche@gmail.com'
     })
     return tenant_supplier
 

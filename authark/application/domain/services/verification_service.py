@@ -16,6 +16,12 @@ class VerificationService:
             'tid': tenant.id, 'uid': user.id})
         return verification_token
 
+    def generate_token_tenant(self, tenant: Tenant, type: str) -> Token:
+        verification_token = self.token_service.generate_token({
+            'type': type, 'tenant': tenant.slug,
+            'tid': tenant.id, 'temail': tenant.email})
+        return verification_token
+
     def generate_authorization(self, tenant: Tenant, user: User) -> Token:
         authorization_token = self.token_service.generate_token({
             'type': 'authorization', 'tenant': tenant.slug,

@@ -3,7 +3,7 @@ from typing import List, Dict
 from ...domain.common import (
     TokenString, TokensDict, AuthError, AuthProvider,
     UserCreationError, RecordList, QueryDomain,
-    AnonymousUser)
+    AnonymousUser, EmailExistsError)
 from ...domain.models import Token, User, Tenant, Credential, Dominion
 from ...domain.services.repositories import (
     UserRepository, CredentialRepository, DominionRepository)
@@ -100,29 +100,40 @@ class ProcedureManager:
             if requisition['type'] == 'reset']
 
         for record in reset_records:
-            tenant = await self._session_tenant(record['tenant'])
-
             data = record['data']
-            [user] = await self.user_repository.search(
-                [('email', '=', data['email'])])
-            token = self.verification_service.generate_token(
-                tenant,    user, 'reset')
+
+            tenants = await self._email_tenants(data['email'])
+            user_anonymous = User (**AnonymousUser().__dict__)
+            tenant_anonymous = Tenant(**AnonymousUser().__dict__)
+
+            if not tenants:
+                raise EmailExistsError(
+                    f"The email not existing")
+
+            multiple_links = []
+            for tenant in tenants:
+                tenant = Tenant(**tenant)
+                token = self.verification_service.generate_token_tenant(
+                    tenant, 'reset')
+                config_url = self.config['url']
+                url = (f'<a href=\"{config_url}\"'
+                       f'/login/reset?verification_token='
+                       f'{token.value}>{tenant.name}</a>')
+                multiple_links.append(url)
 
             await self.plan_supplier.notify(PasswordReset(**{
                 'type': 'reset',
                 'subject': 'Password Reset',
                 'template': 'mail/auth/reset_pasword.html',
-                'recipient': user.email,
-                'owner': user.name,
+                'recipient': data['email'],
+                'owner': data['email'].split('@')[0],
                 'authorization': (
                     self.verification_service.generate_authorization(
-                    tenant, user).value),
+                    tenant_anonymous, user_anonymous).value),
                 'context':{
-                    'user_name': user.name,
+                    'user_name': data['email'].split('@')[0],
                     'unsubscribe_link': self.config['unsubscribe_link'],
-                    'reset_link': (self.config['url']
-                                   +"/login/reset?verification_token="+
-                                    token.value)
+                    'multiple_links': ''.join(multiple_links)
                 }
             }))
 
@@ -171,3 +182,10 @@ class ProcedureManager:
             organization=tenant.name)
         self.auth_provider.setup(anonymouns_session)
         return tenant
+
+    async def _email_tenants(self, email: str) -> list:
+        tenants = self.tenant_supplier.search_tenants(
+            [('email', '=', email)])
+        anonymouns_session = User(**AnonymousUser().__dict__)
+        self.auth_provider.setup(anonymouns_session)
+        return tenants
