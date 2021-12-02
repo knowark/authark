@@ -4,7 +4,7 @@ from authark.application.domain.services import Tenant
 
 def test_verification_service_generate_token(
     verification_service) -> None:
-    tenant = Tenant(id='1', name='Default')
+    tenant = Tenant(id='1', name='Default', email='gabeche@gmail.com')
     user = User(id='1', username='johndoe', email='johndoe')
 
     token = verification_service.generate_token(tenant, user, 'activation')
@@ -12,7 +12,7 @@ def test_verification_service_generate_token(
     assert isinstance(token, Token)
     assert token.value == (
         '{"type": "activation", "tenant": "default", '
-        '"tid": "1", "uid": "1"}')
+        '"tid": "1", "uid": "1", "temail": "gabeche@gmail.com"}')
 
 def test_verification_service_generate_token_tenant(
     verification_service) -> None:

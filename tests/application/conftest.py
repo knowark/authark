@@ -63,7 +63,7 @@ def mock_user_repository(mock_auth_provider, parser) -> UserRepository:
                       email='tebanep@gmail.com', external_source='erp.users'),
             "3": User(id='3', name="Gabriel", username='gabeche',
                       email='gabeche@gmail.com', external_source='erp.users',
-                      external_id='3')
+                      external_id='3', active=False)
         }
     })
     return mock_user_repository

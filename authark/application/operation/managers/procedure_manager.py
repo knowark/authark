@@ -146,7 +146,7 @@ class ProcedureManager:
             tenant = await self._session_tenant(record['tenant'])
             token_dict = await self.verification_service.verify(dict(record))
             [user] = await self.user_repository.search(
-                [('id', '=', token_dict['uid'])])
+                [('email', '=', token_dict['temail'])])
             if token_dict['type'] == 'activation':
                 user.active = True
                 await self.user_repository.add(user)

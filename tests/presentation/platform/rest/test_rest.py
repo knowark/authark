@@ -158,7 +158,7 @@ async def test_verifications_patch_route(app):
             }]
         }))
     data = await response.text()
-    assert response.status == 200
+    assert response.status == 500
 
 
 async def test_requisitions_patch_route(app):
