@@ -59,3 +59,6 @@ class UserCreationError(ApplicationError):
 
 class TenantAlreadyExistsError(ApplicationError):
     """Raised when attempting to create an already existing tenant"""
+
+class EmailExistsError(ApplicationError):
+    """Email Exists Error"""

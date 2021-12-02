@@ -1,3 +1,5 @@
+from pytest import fixture, raises
+from authark.application.domain.common import  EmailExistsError
 from authark.application.domain.models import User
 from authark.application.operation.managers import ProcedureManager
 
@@ -6,10 +8,24 @@ def test_procedure_manager_creation(procedure_manager):
     assert hasattr(procedure_manager, 'fulfill')
 
 
+async def test_procedure_manager_fulfill_not_tenant(procedure_manager):
+    requisition_dict = {
+        'type': 'reset',
+        'data':  {
+            'email': 'gabeche2@gmail.com'
+        }
+    }
+    plan_supplier = procedure_manager.plan_supplier
+
+    with raises(EmailExistsError):
+        await procedure_manager.fulfill({
+            "meta": {},
+            "data": [requisition_dict]
+        })
+
 async def test_procedure_manager_fulfill(procedure_manager):
     requisition_dict = {
         'type': 'reset',
-        'tenant': 'default',
         'data':  {
             'email': 'gabeche@gmail.com'
         }
@@ -28,17 +44,18 @@ async def test_procedure_manager_fulfill(procedure_manager):
         'subject': 'Password Reset',
         'template': 'mail/auth/reset_pasword.html',
         'recipient': 'gabeche@gmail.com',
-        'owner': 'Gabriel',
-        'authorization': ('{"type": "authorization", '
-                          '"tenant": "default", "tid": "001", "uid": "3", '
-                          '"name": "Gabriel", "email": "gabeche@gmail.com"}'),
+        'owner': 'gabeche',
+        'authorization': (
+            '{"type": "authorization", "tenant": "anonymous",'
+            ' "tid": "", "uid": "", "name": "", "email": ""}'),
         'context': {
-                 'reset_link': ('http://dash.example.local'
-                                 '/login/reset?verification_token={"type": "reset",'
-                                 ' "tenant": "default", "tid": "001",'
-                                 ' "uid": "3"}'),
+                 'multiple_links':(
+                     '<a href="http://dash.example.local/login/'
+                     'reset?verification_token={"type": "reset", '
+                     '"tenant": "default", "tid": "001", "temail": '
+                     '"gabeche@gmail.com"}">Default</a><br>'),
                  'unsubscribe_link': 'unsubscribe_link.com',
-                 'user_name': 'Gabriel',
+                 'user_name': 'gabeche',
              }
          }
 
@@ -82,23 +99,27 @@ async def test_procedure_manager_register(procedure_manager):
 async def test_procedure_manager_verify_activation(procedure_manager):
     verification_dicts: RecordList = [{
         "tenant": "default",
-        'token': '{"type": "activation", "tenant": "default", "uid": "1"}'
+        'token': ('{"type": "activation",'
+                  ' "tenant": "default",'
+                  ' "uid": "3", "temail": "gabeche@gmail.com"}')
     }]
     user_repository = procedure_manager.user_repository
 
-    await procedure_manager.verify({
+    result =  await procedure_manager.verify({
         "meta": {},
         "data": verification_dicts
     })
 
-    [user] = await user_repository.search([('id', '=', '1')])
+    [user] = await user_repository.search([('id', '=', '3')])
     assert user.active is True
 
 
 async def test_procedure_manager_verify_reset(procedure_manager):
     verification_dicts: RecordList = [{
         "tenant": "default",
-        'token': '{"type": "reset", "tenant": "default", "uid": "1"}',
+        'token': ('{"type": "reset", '
+                  '"tenant": "default",'
+                  ' "uid": "3", "temail": "gabeche@gmail.com"}'),
         'data': {'password': 'NEW_PASSWORD'}
     }]
     user_repository = procedure_manager.user_repository
@@ -110,7 +131,7 @@ async def test_procedure_manager_verify_reset(procedure_manager):
         "data": verification_dicts
     })
 
-    [user] = await user_repository.search([('id', '=', '1')])
+    [user] = await user_repository.search([('id', '=', '3')])
     [credential] = await credential_repository.search(
         [('user_id', '=', user.id)])
     assert credential.value == 'HASHED: NEW_PASSWORD'

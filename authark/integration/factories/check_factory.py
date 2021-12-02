@@ -36,7 +36,8 @@ class CheckFactory(CryptoFactory):
         tenant_supplier = MemoryTenantSupplier()
         tenant_supplier.create_tenant({
             'id': '001',
-            'name': 'Default'
+            'name': 'Default',
+            'email': 'gabeche@gmail.com'
         })
         return tenant_supplier
 
