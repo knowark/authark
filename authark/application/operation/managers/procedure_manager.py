@@ -25,6 +25,10 @@ class ProcedureManager:
         plan_supplier: PlanSupplier,
         tenant_supplier: TenantSupplier,
         config: dict,
+        access_service: AccessService,
+        dominion_repository: DominionRepository,
+        refresh_token_service: RefreshTokenService,
+        credential_repository: CredentialRepository,
     ) -> None:
         self.auth_provider = auth_provider
         self.user_repository = user_repository
@@ -35,6 +39,10 @@ class ProcedureManager:
         self.tenant_supplier = tenant_supplier
         self.provider_pattern = '@provider.oauth'
         self.config = config
+        self.access_service = access_service
+        self.dominion_repository = dominion_repository
+        self.refresh_token_service = refresh_token_service
+        self.credential_repository = credential_repository
 
     async def register(self, entry: dict) -> dict:
         meta, data = entry['meta'], entry['data']
@@ -90,7 +98,24 @@ class ProcedureManager:
                 }
             }))
 
-        return {}
+        for user_dict in user_dicts:
+            dominion_name = user_dict.get('dominion', '')
+            client = user_dict.get('client', '')
+
+            dominion = await self._ensure_dominion(dominion_name)
+
+            access_token = await self.access_service.generate_token(
+                tenant, user, dominion)
+
+            # Create new refresh token
+            client = client or 'ALL'
+            refresh_token_str = await self._generate_refresh_token(
+                user.id, client)
+
+            return {
+                'refresh_token': refresh_token_str,
+                'access_token': access_token.value
+            }
 
     async def fulfill(self, entry: dict) -> dict:
         meta, data = entry['meta'], entry['data']
@@ -189,3 +214,34 @@ class ProcedureManager:
         anonymouns_session = User(**AnonymousUser().__dict__)
         self.auth_provider.setup(anonymouns_session)
         return tenants
+
+    async def _ensure_dominion(self, dominion_name: str) -> Dominion:
+        dominions = await self.dominion_repository.search(
+            [('name', '=', dominion_name)])
+        if not dominions:
+            dominions = await self.dominion_repository.add(
+               Dominion(name=dominion_name))
+        [dominion] = dominions
+        return dominion
+
+    async def _generate_refresh_token(
+        self, user_id: str, client: str) -> TokenString:
+        refresh_payload = {'type': 'refresh_token',
+                           'client': client,
+                           'sub': user_id}
+        refresh_token = self.refresh_token_service.generate_token(
+            refresh_payload)
+
+        # Remove previous refresh tokens as a user should have only one
+        previous_tokens = await self.credential_repository.search([
+            ('user_id', '=', user_id), ('type', '=', 'refresh_token'),
+            ('client', '=', client)])
+        for token in previous_tokens:
+            await self.credential_repository.remove(token)
+
+        credential = Credential(user_id=user_id,
+                                value=refresh_token.value,
+                                type='refresh_token', client=client)
+        await self.credential_repository.add(credential)
+
+        return refresh_token.value

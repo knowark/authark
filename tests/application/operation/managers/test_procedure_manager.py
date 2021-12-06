@@ -83,7 +83,7 @@ async def test_procedure_manager_register(procedure_manager):
     assert new_user.username == 'mvp'
     assert new_user.active is False
 
-    assert len(credential_repository.data['manzanar']) == 1
+    assert len(credential_repository.data['manzanar']) == 2
     assert len(plan_supplier._notify_calls) == 1
     assert plan_supplier._notify_calls[0].__class__.__name__ == (
         'UserRegistered')
