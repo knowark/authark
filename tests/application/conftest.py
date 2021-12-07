@@ -78,7 +78,10 @@ def mock_credential_repository(
         "default": {
             "1": Credential(id='1', user_id='1', value="HASHED: PASS1"),
             "2": Credential(id='2', user_id='2', value="HASHED: PASS2"),
-            "3": Credential(id='3', user_id='3', value="HASHED: PASS3")
+            "3": Credential(id='3', user_id='3', value="HASHED: PASS3"),
+            "4": Credential(
+                id='4', user_id='4', value="HASHED: PASS4",
+                client='tempos', type='refresh_token')
         }
     })
     return mock_credential_repository

@@ -48,34 +48,38 @@ class ProcedureManager:
         meta, data = entry['meta'], entry['data']
         user_dicts = data
         registration_tuples = []
-        for user_dict in user_dicts:
+        dominion_name = data.get('dominion', '')
+        client = data.get('client', '')
 
-            tenant_dict = {
-                'name': user_dict.pop('organization'),
-                'zone': user_dict.pop('zone', ''),
-                'email': user_dict['email'],
-                'attributes': user_dict.get('attributes', {})
-            }
-            if not user_dict.get('enroll'):
-                self.tenant_supplier.create_tenant(tenant_dict)
+        tenant_dict = {
+            'name': data.pop('organization'),
+            'zone': data.pop('zone', ''),
+            'email': data['email'],
+            'attributes': data.get('attributes', {})
+        }
+        if not data.get('enroll'):
+            self.tenant_supplier.create_tenant(tenant_dict)
 
-            tenant = await self._session_tenant(tenant_dict['name'])
+        tenant = await self._session_tenant(tenant_dict['name'])
 
-            password = user_dict.pop('password', '')
-            email = user_dict.get('email', '')
-            if email.endswith(self.provider_pattern):
-                provider = email.replace(self.provider_pattern, '')
-                user = await self.identity_service.identify(
-                    provider, password)
-                user.active = False
-                credential = Credential(value=password)
-                registration_tuples.append((user, credential))
-                continue
+        password = data.pop('password', '')
+        email = data.get('email', '')
+        if email.endswith(self.provider_pattern):
+            provider = email.replace(self.provider_pattern, '')
+            user = await self.identity_service.identify(
+                provider, password)
+            user.active = False
+            credential = Credential(value=password)
+            registration_tuples.append((user, credential))
 
-            registration_tuples.append((
-                User(**user_dict, active=False), Credential(value=password)))
+        registration_tuples.append((
+            User(**data, active=False), Credential(value=password)))
 
         users = await self.enrollment_service.register(registration_tuples)
+        dominion = await self._ensure_dominion(dominion_name)
+
+        # Create new refresh token
+        client = client or 'ALL'
 
         for user in users:
             await self.plan_supplier.notify(UserRegistered(**{
@@ -98,24 +102,17 @@ class ProcedureManager:
                 }
             }))
 
-        for user_dict in user_dicts:
-            dominion_name = user_dict.get('dominion', '')
-            client = user_dict.get('client', '')
-
-            dominion = await self._ensure_dominion(dominion_name)
-
             access_token = await self.access_service.generate_token(
-                tenant, user, dominion)
+                 tenant, user, dominion)
 
             # Create new refresh token
-            client = client or 'ALL'
             refresh_token_str = await self._generate_refresh_token(
                 user.id, client)
 
-            return {'data': {
+        return {'data': {
                 'refresh_token': refresh_token_str,
                 'access_token': access_token.value
-            }}
+        }}
 
     async def fulfill(self, entry: dict) -> dict:
         meta, data = entry['meta'], entry['data']

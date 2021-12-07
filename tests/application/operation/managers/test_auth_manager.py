@@ -155,7 +155,7 @@ async def test_generate_refresh_token(auth_manager):
     credential_repository = auth_manager.credential_repository
 
     assert isinstance(refresh_token, str)
-    assert len(credential_repository.data['default']) == 4
+    assert len(credential_repository.data['default']) == 5
 
 
 async def test_auth_manager_provider_authenticate(auth_manager):
