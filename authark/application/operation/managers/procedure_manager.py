@@ -112,10 +112,10 @@ class ProcedureManager:
             refresh_token_str = await self._generate_refresh_token(
                 user.id, client)
 
-            return {
+            return {'data': {
                 'refresh_token': refresh_token_str,
                 'access_token': access_token.value
-            }
+            }}
 
     async def fulfill(self, entry: dict) -> dict:
         meta, data = entry['meta'], entry['data']
