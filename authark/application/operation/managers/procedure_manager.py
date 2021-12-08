@@ -29,7 +29,6 @@ class ProcedureManager:
         dominion_repository: DominionRepository,
         refresh_token_service: RefreshTokenService,
         credential_repository: CredentialRepository,
-        hash_service: HashService,
     ) -> None:
         self.auth_provider = auth_provider
         self.user_repository = user_repository
@@ -44,7 +43,6 @@ class ProcedureManager:
         self.dominion_repository = dominion_repository
         self.refresh_token_service = refresh_token_service
         self.credential_repository = credential_repository
-        self.hash_service = hash_service
 
     async def register(self, entry: dict) -> dict:
         meta, data = entry['meta'], entry['data']
@@ -52,7 +50,8 @@ class ProcedureManager:
         registration_tuples = []
         dominion_name = data.get('dominion', '')
         client = data.get('client', '')
-        username = data.get('email')
+        email = data.get('email')
+        password = data.pop('password', '')
 
         tenant_dict = {
             'name': data.pop('organization'),
@@ -65,8 +64,6 @@ class ProcedureManager:
 
         tenant = await self._session_tenant(tenant_dict['name'])
 
-        password = data.pop('password', '')
-        email = data.get('email', '')
         if email.endswith(self.provider_pattern):
             provider = email.replace(self.provider_pattern, '')
             user = await self.identity_service.identify(
@@ -79,49 +76,45 @@ class ProcedureManager:
             User(**data, active=False), Credential(value=password)))
 
         users = await self.enrollment_service.register(registration_tuples)
-        # dominion = await self._ensure_dominion(dominion_name)
+        dominion = await self._ensure_dominion(dominion_name)
 
         # Create new refresh token
         client = client or 'ALL'
 
         for user in users:
-            await self.plan_supplier.notify(UserRegistered(**{
-                'type': 'activation',
-                'subject': 'Account Activation',
-                'template': 'mail/auth/email_verification.html',
-                'recipient': user.email,
-                'owner': user.name,
-                'authorization': (
-                    self.verification_service.generate_authorization(
-                    tenant, user).value),
-                'context':{
-                    'user_name': user.name,
-                    'email_link': self.config['email_link'],
-                    'unsubscribe_link': self.config['unsubscribe_link'],
-                    'verify_link': (self.config['url']+
+            if user.email.split('@')[1] != 'provider.oauth':
+                await self.plan_supplier.notify(UserRegistered(**{
+                    'type': 'activation',
+                    'subject': 'Account Activation',
+                    'template': 'mail/auth/email_verification.html',
+                    'recipient': user.email,
+                    'owner': user.name,
+                    'authorization': (
+                        self.verification_service.generate_authorization(
+                        tenant, user).value),
+                    'context':{
+                        'user_name': user.name,
+                        'email_link': self.config['email_link'],
+                        'unsubscribe_link': self.config['unsubscribe_link'],
+                        'verify_link': (self.config['url']+
                                     "/login?verification_token="+
                                     self.verification_service.generate_token(
                                         tenant, user, 'activation').value)
-                }
-            }))
+                    }
+                 }))
 
-            # access_token = await self.access_service.generate_token(
-                 # tenant, user, dominion)
+                access_token = await self.access_service.generate_token(
+                    tenant, user, dominion)
 
-            # # Create new refresh token
-            # refresh_token_str = await self._generate_refresh_token(
-                # user.id, client)
+            # Create new refresh token
+                refresh_token_str = await self._generate_refresh_token(
+                    user.id, client)
 
-        # return {'data': {
-                # 'refresh_token': refresh_token_str,
-                # 'access_token': access_token.value
-        # }}
+        return {'data': {
+                'refresh_token': refresh_token_str,
+                'access_token': access_token.value
+        }}
 
-        if username.endswith(self.provider_pattern):
-            return {"data": await self._provider_authenticate(
-                username, password, client, dominion_name, tenant.name)}
-        return {"data": await self._password_authenticate(
-                username, password, client, dominion_name, tenant.name)}
 
     async def fulfill(self, entry: dict) -> dict:
         meta, data = entry['meta'], entry['data']
@@ -251,82 +244,3 @@ class ProcedureManager:
         await self.credential_repository.add(credential)
 
         return refresh_token.value
-
-    async def _find_user(self, username: str) -> User:
-        domain: QueryDomain = [('username', '=', username)]
-        if '@' in username:
-            domain = [('email', '=', username)]
-
-        users = await self.user_repository.search(domain)
-        if not users:
-            raise AuthError("Authentication Error: User not found.")
-        return users[0]
-
-    async def _password_authenticate(
-            self, username: str, password: str,
-        client: str, dominion_name: str, tenant_name: str) -> TokensDict:
-
-        tenant = Tenant(
-            **self.tenant_supplier.resolve_tenant(tenant_name))
-        anonymouns_session = AnonymousUser(
-            tid=tenant.id, tenant=tenant.slug,
-            organization=tenant.name)
-        self.auth_provider.setup(anonymouns_session)
-
-
-        user = await self._find_user(username)
-        credentials = await self.credential_repository.search([
-            ('user_id', '=', user.id), ('type', '=', 'password')])
-
-        if not credentials:
-            raise AuthError("Authentication Error: No credentials found.")
-
-        user_password = credentials[0].value
-        if not self.hash_service.verify_password(password, user_password):
-            raise AuthError("Authentication Error: Password mismatch.")
-
-        dominion = await self._ensure_dominion(dominion_name)
-
-        access_token = await self.access_service.generate_token(
-            tenant, user, dominion)
-
-        # Create new refresh token
-        client = client or 'ALL'
-        refresh_token_str = await self._generate_refresh_token(
-            user.id, client)
-
-        return {
-            'refresh_token': refresh_token_str,
-            'access_token': access_token.value
-        }
-
-    async def _provider_authenticate(
-        self, username: str, password: str,
-        client: str, dominion_name: str, tenant_name: str
-    ) -> TokensDict:
-        provider, code = username.replace(self.provider_pattern, ''), password
-
-        tenant = Tenant(
-            **self.tenant_supplier.resolve_tenant(tenant_name))
-        anonymouns_session = AnonymousUser(
-            tid=tenant.id, tenant=tenant.slug,
-            organization=tenant.name)
-        self.auth_provider.setup(anonymouns_session)
-
-        user = await self.identity_service.identify(provider, code)
-
-        [user] = await self.user_repository.search(
-            [('email', '=', user.email)])
-
-        dominion = await self._ensure_dominion(dominion_name)
-        access_token = await self.access_service.generate_token(
-            tenant, user, dominion)
-
-        client = client or 'ALL'
-        refresh_token_str = await self._generate_refresh_token(
-            user.id, client)
-
-        return {
-            'refresh_token': refresh_token_str,
-            'access_token': access_token.value
-        }
