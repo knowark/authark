@@ -1,6 +1,6 @@
 from pytest import fixture, raises
 from authark.application.domain.common import  EmailExistsError
-from authark.application.domain.models import User
+from authark.application.domain.models import User, Credential
 from authark.application.operation.managers import ProcedureManager
 
 
@@ -61,14 +61,14 @@ async def test_procedure_manager_fulfill(procedure_manager):
 
 
 async def test_procedure_manager_register(procedure_manager):
-    user_dicts = [{
+    user_dicts = {
         "id": "007",
         "organization": "Manzanar",
         "name": "Miguel Vivas",
         "username": "mvp",
         "email": "mvp@gmail.com",
         "password": "PASS4"
-    }]
+    }
     await procedure_manager.register({
         "meta": {},
         "data": user_dicts
@@ -83,7 +83,7 @@ async def test_procedure_manager_register(procedure_manager):
     assert new_user.username == 'mvp'
     assert new_user.active is False
 
-    assert len(credential_repository.data['manzanar']) == 1
+    assert len(credential_repository.data['manzanar']) == 2
     assert len(plan_supplier._notify_calls) == 1
     assert plan_supplier._notify_calls[0].__class__.__name__ == (
         'UserRegistered')
@@ -151,7 +151,7 @@ async def test_procedure_manager_update(procedure_manager) -> None:
     user_repository = procedure_manager.user_repository
 
     assert len(user_repository.data['default']) == 3
-    assert len(credential_repository.data['default']) == 3
+    assert len(credential_repository.data['default']) == 4
     assert user_repository.data['default']['1'].username == "valenep"
     assert "HASHED: NEW: PASS1" in [
         credential.value for credential in
@@ -159,12 +159,12 @@ async def test_procedure_manager_update(procedure_manager) -> None:
 
 
 async def test_procedure_manager_identity_provider_register(procedure_manager):
-    user_dicts = [{
+    user_dicts = {
         "organization": "Wonderland",
         "email": "facebook@provider.oauth",
-        "username": "facebook@provider.oauth",
+        "username": "",
         "password": "AUTHORIZATION_CODE_XYZ1234"
-    }]
+    }
     procedure_manager.identity_service.user = User(
         email="alice@outlook.com", name="Alice Wonder")
 
@@ -176,7 +176,7 @@ async def test_procedure_manager_identity_provider_register(procedure_manager):
         procedure_manager.enrollment_service.credential_repository)
     user_repository = procedure_manager.user_repository
 
-    assert len(user_repository.data['wonderland']) == 1
+    assert len(user_repository.data['wonderland']) == 2
     [new_user] = await user_repository.search([
         ('name', '=', 'Alice Wonder')])
     assert new_user.email == 'alice@outlook.com'
@@ -194,3 +194,19 @@ async def test_procedure_manager_deregister(procedure_manager):
     })
 
     assert len(user_repository.data['default']) == 2
+
+async def test_procedure_manager_register_not_dominion(procedure_manager):
+
+    dominion = (await procedure_manager._ensure_dominion('default'))
+
+    assert 'default' in dominion.name
+
+async def test_auth_manager_refresh_register_refresh_token_not_found(
+        procedure_manager):
+    refresh_token = await procedure_manager._generate_refresh_token(
+        '4', 'tempos')
+
+    credential_repository = procedure_manager.credential_repository
+
+    assert isinstance(refresh_token, str)
+    assert len(credential_repository.data['default']) == 4

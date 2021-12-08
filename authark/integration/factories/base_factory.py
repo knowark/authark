@@ -213,12 +213,17 @@ class BaseFactory(Factory):
         identity_service: IdentityService,
         plan_supplier: PlanSupplier,
         tenant_supplier: TenantSupplier,
+        access_service: AccessService,
+        dominion_repository: DominionRepository,
+        refresh_token_service: RefreshTokenService,
+        credential_repository: CredentialRepository,
     ) -> ProcedureManager:
         config = self.config['verification']
         return ProcedureManager(
             auth_provider, user_repository, enrollment_service,
             verification_service, identity_service, plan_supplier,
-            tenant_supplier, config)
+            tenant_supplier, config, access_service, dominion_repository,
+            refresh_token_service, credential_repository)
 
     def tenant_manager(
         self, tenant_supplier: TenantSupplier

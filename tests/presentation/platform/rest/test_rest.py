@@ -134,12 +134,12 @@ async def test_registrations_patch_route(app):
     response = await app.patch(
         '/registrations',
         data=dumps({
-            "data": [{
+            "data": {
                 "organization":"Knowark",
                 "username":"gecheverry",
                 "email":"gecheverry@knowark.com",
                 "password":"ABC1234",
-                "name":"Gabriel Echeverry"}]
+                "name":"Gabriel Echeverry"}
         }))
     data = await response.text()
     assert response.status == 200
@@ -178,14 +178,14 @@ async def test_registrations_enroll_patch_route(app):
     response = await app.patch(
         '/registrations',
         data=dumps({
-            "data": [{
+            "data": {
                 "organization":"Default",
                 "username":"masolano",
                 "email":"masolano@knowark.com",
                 "password":"XYZ1234",
                 "name":"Miguel Alexis Solano",
                 "enroll":True
-            }]
+            }
         }))
     data = await response.text()
     assert response.status == 200

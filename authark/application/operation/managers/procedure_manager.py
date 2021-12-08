@@ -25,6 +25,10 @@ class ProcedureManager:
         plan_supplier: PlanSupplier,
         tenant_supplier: TenantSupplier,
         config: dict,
+        access_service: AccessService,
+        dominion_repository: DominionRepository,
+        refresh_token_service: RefreshTokenService,
+        credential_repository: CredentialRepository,
     ) -> None:
         self.auth_provider = auth_provider
         self.user_repository = user_repository
@@ -35,62 +39,82 @@ class ProcedureManager:
         self.tenant_supplier = tenant_supplier
         self.provider_pattern = '@provider.oauth'
         self.config = config
+        self.access_service = access_service
+        self.dominion_repository = dominion_repository
+        self.refresh_token_service = refresh_token_service
+        self.credential_repository = credential_repository
 
     async def register(self, entry: dict) -> dict:
         meta, data = entry['meta'], entry['data']
         user_dicts = data
         registration_tuples = []
-        for user_dict in user_dicts:
+        dominion_name = data.get('dominion', '')
+        client = data.get('client', '')
+        email = data.get('email')
+        password = data.pop('password', '')
 
-            tenant_dict = {
-                'name': user_dict.pop('organization'),
-                'zone': user_dict.pop('zone', ''),
-                'email': user_dict['email'],
-                'attributes': user_dict.get('attributes', {})
-            }
-            if not user_dict.get('enroll'):
-                self.tenant_supplier.create_tenant(tenant_dict)
+        tenant_dict = {
+            'name': data.pop('organization'),
+            'zone': data.pop('zone', ''),
+            'email': data['email'],
+            'attributes': data.get('attributes', {})
+        }
+        if not data.get('enroll'):
+            self.tenant_supplier.create_tenant(tenant_dict)
 
-            tenant = await self._session_tenant(tenant_dict['name'])
+        tenant = await self._session_tenant(tenant_dict['name'])
 
-            password = user_dict.pop('password', '')
-            email = user_dict.get('email', '')
-            if email.endswith(self.provider_pattern):
-                provider = email.replace(self.provider_pattern, '')
-                user = await self.identity_service.identify(
-                    provider, password)
-                user.active = False
-                credential = Credential(value=password)
-                registration_tuples.append((user, credential))
-                continue
+        if email.endswith(self.provider_pattern):
+            provider = email.replace(self.provider_pattern, '')
+            user = await self.identity_service.identify(
+                provider, password)
+            user.active = False
+            credential = Credential(value=password)
+            registration_tuples.append((user, credential))
 
-            registration_tuples.append((
-                User(**user_dict, active=False), Credential(value=password)))
+        registration_tuples.append((
+            User(**data, active=False), Credential(value=password)))
 
         users = await self.enrollment_service.register(registration_tuples)
+        dominion = await self._ensure_dominion(dominion_name)
+
+        # Create new refresh token
+        client = client or 'ALL'
 
         for user in users:
-            await self.plan_supplier.notify(UserRegistered(**{
-                'type': 'activation',
-                'subject': 'Account Activation',
-                'template': 'mail/auth/email_verification.html',
-                'recipient': user.email,
-                'owner': user.name,
-                'authorization': (
-                    self.verification_service.generate_authorization(
-                    tenant, user).value),
-                'context':{
-                    'user_name': user.name,
-                    'email_link': self.config['email_link'],
-                    'unsubscribe_link': self.config['unsubscribe_link'],
-                    'verify_link': (self.config['url']+
+            if user.email.split('@')[1] != 'provider.oauth':
+                await self.plan_supplier.notify(UserRegistered(**{
+                    'type': 'activation',
+                    'subject': 'Account Activation',
+                    'template': 'mail/auth/email_verification.html',
+                    'recipient': user.email,
+                    'owner': user.name,
+                    'authorization': (
+                        self.verification_service.generate_authorization(
+                        tenant, user).value),
+                    'context':{
+                        'user_name': user.name,
+                        'email_link': self.config['email_link'],
+                        'unsubscribe_link': self.config['unsubscribe_link'],
+                        'verify_link': (self.config['url']+
                                     "/login?verification_token="+
                                     self.verification_service.generate_token(
                                         tenant, user, 'activation').value)
-                }
-            }))
+                    }
+                 }))
 
-        return {}
+                access_token = await self.access_service.generate_token(
+                    tenant, user, dominion)
+
+            # Create new refresh token
+                refresh_token_str = await self._generate_refresh_token(
+                    user.id, client)
+
+        return {'data': {
+                'refresh_token': refresh_token_str,
+                'access_token': access_token.value
+        }}
+
 
     async def fulfill(self, entry: dict) -> dict:
         meta, data = entry['meta'], entry['data']
@@ -189,3 +213,34 @@ class ProcedureManager:
         anonymouns_session = User(**AnonymousUser().__dict__)
         self.auth_provider.setup(anonymouns_session)
         return tenants
+
+    async def _ensure_dominion(self, dominion_name: str) -> Dominion:
+        dominions = await self.dominion_repository.search(
+            [('name', '=', dominion_name)])
+        if not dominions:
+            dominions = await self.dominion_repository.add(
+               Dominion(name=dominion_name))
+        [dominion] = dominions
+        return dominion
+
+    async def _generate_refresh_token(
+        self, user_id: str, client: str) -> TokenString:
+        refresh_payload = {'type': 'refresh_token',
+                           'client': client,
+                           'sub': user_id}
+        refresh_token = self.refresh_token_service.generate_token(
+            refresh_payload)
+
+        # Remove previous refresh tokens as a user should have only one
+        previous_tokens = await self.credential_repository.search([
+            ('user_id', '=', user_id), ('type', '=', 'refresh_token'),
+            ('client', '=', client)])
+        for token in previous_tokens:
+            await self.credential_repository.remove(token)
+
+        credential = Credential(user_id=user_id,
+                                value=refresh_token.value,
+                                type='refresh_token', client=client)
+        await self.credential_repository.add(credential)
+
+        return refresh_token.value

@@ -78,7 +78,10 @@ def mock_credential_repository(
         "default": {
             "1": Credential(id='1', user_id='1', value="HASHED: PASS1"),
             "2": Credential(id='2', user_id='2', value="HASHED: PASS2"),
-            "3": Credential(id='3', user_id='3', value="HASHED: PASS3")
+            "3": Credential(id='3', user_id='3', value="HASHED: PASS3"),
+            "4": Credential(
+                id='4', user_id='4', value="HASHED: PASS4",
+                client='tempos', type='refresh_token')
         }
     })
     return mock_credential_repository
@@ -344,7 +347,8 @@ def session_manager(mock_auth_provider):
 def procedure_manager(
     mock_auth_provider, mock_user_repository, enrollment_service,
     verification_service, mock_identity_service, plan_supplier,
-        tenant_supplier):
+    tenant_supplier, access_service, mock_dominion_repository,
+    mock_refresh_token_service, mock_credential_repository):
     return ProcedureManager(
         mock_auth_provider, mock_user_repository, enrollment_service,
         verification_service, mock_identity_service, plan_supplier,
@@ -352,7 +356,8 @@ def procedure_manager(
             "url": "http://dash.example.local",
             "email_link": "info@example.com",
             "unsubscribe_link": "unsubscribe_link.com"
-        })
+        }, access_service, mock_dominion_repository,
+        mock_refresh_token_service, mock_credential_repository)
 
 @fixture
 def tenant_manager(tenant_supplier):

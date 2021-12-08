@@ -31,7 +31,7 @@ async def test_enrollment_service_set_credentials(enrollment_service) -> None:
 
     credential_repository = enrollment_service.credential_repository
 
-    assert len(credential_repository.data['default']) == 3
+    assert len(credential_repository.data['default']) == 4
 
     [new_credential] = await credential_repository.search(
         [('user_id', '=', '1')])
@@ -97,7 +97,7 @@ async def test_enrollment_service_deregister(enrollment_service):
 
     assert unregistered is True
     assert len(user_repository.data['default']) == 2
-    assert len(credential_repository.data['default']) == 2
+    assert len(credential_repository.data['default']) == 3
 
 
 async def test_enrollment_service_deregister_without_users(enrollment_service):
@@ -107,4 +107,4 @@ async def test_enrollment_service_deregister_without_users(enrollment_service):
 
     assert unregistered is False
     assert len(user_repository.data['default']) == 3
-    assert len(credential_repository.data['default']) == 3
+    assert len(credential_repository.data['default']) == 4
