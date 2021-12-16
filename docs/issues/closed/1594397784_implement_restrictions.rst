@@ -12,6 +12,6 @@ Validation Criteria
 -------------------
 
 - [x] Restrictions are documented in the docs
-- [ ] Restrictions models and repositories are in place
-- [ ] Restrictions can be managed through console ui
-- [ ] Restrictions can be fetch through the rest api
+- [x] Restrictions models and repositories are in place
+- [x] Restrictions can be managed through console ui
+- [x] Restrictions can be fetch through the rest api
