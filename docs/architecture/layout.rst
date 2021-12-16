@@ -4,12 +4,10 @@ Project layout
 .. code-block:: bash
 
     authark/
-      app/               # Application and logic
-        coordinators/    
-        models/
-        repositories/
-        services/
-      infra/             # Infrastructure and implementation
+      authark/               # Application and logic
+        application/
+        integration/
+        presentation/
       docs/              # Documentation
       setup/             # Setup and deployment helpers
       tests/             # Unit and integration tests

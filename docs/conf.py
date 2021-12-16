@@ -20,8 +20,8 @@
 # -- Project information -----------------------------------------------------
 
 project = 'Authark'
-copyright = '2018, Nubark'
-author = 'Nubark'
+copyright = '2021, Knowark'
+author = 'Knowark'
 
 with open('../authark/__init__.py') as f:
     exec(f.read())
