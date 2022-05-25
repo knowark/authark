@@ -42,7 +42,7 @@ pprintpp==0.4.0
 progress==1.5
 py==1.10.0
 Pygments==2.9.0
-PyJWT==2.1.0
+PyJWT==2.4.0
 pynvim==0.4.3
 pyparsing==2.4.7
 pytest==6.2.4
